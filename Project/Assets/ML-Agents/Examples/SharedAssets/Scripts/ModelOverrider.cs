@@ -10,8 +10,7 @@ using Unity.MLAgents.Policies;
 using UnityEditor;
 #endif
 
-namespace Unity.MLAgentsExamples
-{
+
     /// <summary>
     /// Utility class to allow the NNModel file for an agent to be overriden during inference.
     /// This is used internally to validate the file after training is done.
@@ -375,4 +374,4 @@ namespace Unity.MLAgentsExamples
 
         }
     }
-}
+
