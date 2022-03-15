@@ -1,7 +1,7 @@
 using UnityEngine;
 using Unity.MLAgentsExamples;
 
-public class PyramidArea : Area
+public class PFArea : Area
 {
     public GameObject pyramid;
     public GameObject stonePyramid;

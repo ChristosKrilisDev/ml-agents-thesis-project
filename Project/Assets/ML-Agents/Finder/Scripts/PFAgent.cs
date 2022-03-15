@@ -6,20 +6,21 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
-public class PyramidAgent : Agent
+
+public class PFAgent : Agent
 {
     public GameObject area;
-    PyramidArea m_MyArea;
+    PFArea m_MyArea;
     Rigidbody m_AgentRb;
-    PyramidSwitch m_SwitchLogic;
+    CheckPoint m_SwitchLogic;
     public GameObject areaSwitch;
     public bool useVectorObs;
 
     public override void Initialize()
     {
         m_AgentRb = GetComponent<Rigidbody>();
-        m_MyArea = area.GetComponent<PyramidArea>();
-        m_SwitchLogic = areaSwitch.GetComponent<PyramidSwitch>();
+        m_MyArea = area.GetComponent<PFArea>();
+        m_SwitchLogic = areaSwitch.GetComponent<CheckPoint>();
     }
 
     public override void CollectObservations(VectorSensor sensor)
