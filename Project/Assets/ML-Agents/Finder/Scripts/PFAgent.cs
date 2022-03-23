@@ -85,24 +85,29 @@ public class PFAgent : Agent
         }
     }
 
+
     public override void OnEpisodeBegin()
     {
         var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
         var items = enumerable.ToArray();
 
-        m_MyArea.CleanPyramidArea();
+        m_MyArea.CleanArea();
 
         m_AgentRb.velocity = Vector3.zero;
-        m_MyArea.PlaceObject(gameObject, items[0]);
+        m_MyArea.PlaceObject(gameObject, items[0]); //place agent
+
         transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
 
-        m_SwitchLogic.ResetSwitch(items[1], items[2]);
-        m_MyArea.CreateStonePyramid(1, items[3]);
-        m_MyArea.CreateStonePyramid(1, items[4]);
-        m_MyArea.CreateStonePyramid(1, items[5]);
-        m_MyArea.CreateStonePyramid(1, items[6]);
-        m_MyArea.CreateStonePyramid(1, items[7]);
-        m_MyArea.CreateStonePyramid(1, items[8]);
+        m_SwitchLogic.ResetSwitch(items[1], items[2]);  //place cp and send pos for goal
+
+
+        //rest are blocks
+        m_MyArea.CreateBlockObject(1, items[3]);
+        m_MyArea.CreateBlockObject(1, items[4]);
+        m_MyArea.CreateBlockObject(1, items[5]);
+        m_MyArea.CreateBlockObject(1, items[6]);
+        m_MyArea.CreateBlockObject(1, items[7]);
+        m_MyArea.CreateBlockObject(1, items[8]);
     }
 
     void OnCollisionEnter(Collision collision)

@@ -7,9 +7,6 @@ using UnityEngine;
 /// The Path.
 /// </summary>
 
-
-
-
 namespace Dijstra.path
 {
 

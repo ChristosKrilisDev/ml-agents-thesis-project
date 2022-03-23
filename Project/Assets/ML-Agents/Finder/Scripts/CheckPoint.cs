@@ -8,7 +8,7 @@ public class CheckPoint : MonoBehaviour
     bool m_State;
     GameObject m_Area;
     PFArea m_AreaComponent;
-    int m_PyramidIndex;
+    int m_goalIndex;
 
     public bool GetState()
     {
@@ -21,11 +21,11 @@ public class CheckPoint : MonoBehaviour
         m_AreaComponent = m_Area.GetComponent<PFArea>();
     }
 
-    public void ResetSwitch(int spawnAreaIndex, int pyramidSpawnIndex)
+    public void ResetSwitch(int cpSpawnAreaIndex, int goalSpawnIndex)
     {
-        m_AreaComponent.PlaceObject(gameObject, spawnAreaIndex);
+        m_AreaComponent.PlaceObject(gameObject, cpSpawnAreaIndex);
         m_State = false;
-        m_PyramidIndex = pyramidSpawnIndex;
+        m_goalIndex = goalSpawnIndex;
         tag = "switchOff";
         transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         myButton.GetComponent<Renderer>().material = offMaterial;
@@ -37,7 +37,7 @@ public class CheckPoint : MonoBehaviour
         {
             myButton.GetComponent<Renderer>().material = onMaterial;
             m_State = true;
-            m_AreaComponent.CreatePyramid(1, m_PyramidIndex);
+            m_AreaComponent.CreateGoalObject(1, m_goalIndex);   //create final goal
             tag = "switchOn";
         }
     }

@@ -3,28 +3,27 @@ using Unity.MLAgentsExamples;
 
 public class PFArea : Area
 {
-    public GameObject pyramid;
-    public GameObject stonePyramid;
+    public GameObject goalPref;
+    public GameObject blockPref;
     public GameObject[] spawnAreas;
     public int numPyra;
     public float range;
 
-    public void CreatePyramid(int numObjects, int spawnAreaIndex)
+    public void CreateGoalObject(int numObjects, int spawnAreaIndex)
     {
-        CreateObject(numObjects, pyramid, spawnAreaIndex);
+        CreateObject(numObjects, goalPref, spawnAreaIndex);
     }
 
-    public void CreateStonePyramid(int numObjects, int spawnAreaIndex)
+    public void CreateBlockObject(int numObjects, int spawnAreaIndex)
     {
-        CreateObject(numObjects, stonePyramid, spawnAreaIndex);
+        CreateObject(numObjects, blockPref, spawnAreaIndex);
     }
 
     void CreateObject(int numObjects, GameObject desiredObject, int spawnAreaIndex)
     {
         for (var i = 0; i < numObjects; i++)
         {
-            var newObject = Instantiate(desiredObject, Vector3.zero,
-                Quaternion.Euler(0f, 0f, 0f), transform);
+            var newObject = Instantiate(desiredObject, Vector3.zero,Quaternion.Euler(0f, 0f, 0f), transform);
             PlaceObject(newObject, spawnAreaIndex);
         }
     }
@@ -39,10 +38,10 @@ public class PFArea : Area
             + spawnTransform.position;
     }
 
-    public void CleanPyramidArea()
+    public void CleanArea()
     {
         foreach (Transform child in transform)
-            if (child.CompareTag("pyramid"))
+            if (child.CompareTag("pfobj"))
             {
                 Destroy(child.gameObject);
             }

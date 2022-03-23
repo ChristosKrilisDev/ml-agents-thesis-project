@@ -71,14 +71,14 @@ namespace Dijstra.path
             EditorGUILayout.Separator();
             m_From = (Node)EditorGUILayout.ObjectField("From", m_From, typeof(Node), true);
             m_To = (Node)EditorGUILayout.ObjectField("To", m_To, typeof(Node), true);
-            m_Follower = (Follower)EditorGUILayout.ObjectField("Follower", m_Follower, typeof(Follower), true);
+            //m_Follower = (Follower)EditorGUILayout.ObjectField("Follower", m_Follower, typeof(Follower), true);
             if (GUILayout.Button("Show Shortest Path"))
             {
                 m_Path = m_Graph.GetShortestPath(m_From, m_To);
-                if (m_Follower != null)
-                {
-                    m_Follower.Follow(m_Path);
-                }
+                //if (m_Follower != null)
+                //{
+                //    m_Follower.Follow(m_Path);
+                //}
                 Debug.Log(m_Path);
                 SceneView.RepaintAll();
             }

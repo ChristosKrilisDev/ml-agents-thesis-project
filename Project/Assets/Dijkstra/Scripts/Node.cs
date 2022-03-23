@@ -24,10 +24,8 @@ namespace Dijstra.path
         /// <value>The connections.</value>
         public virtual List<Node> connections
         {
-            get
-            {
-                return m_Connections;
-            }
+            get { return m_Connections; }
+            set { m_Connections = value; }
         }
 
         public Node this[int index]

@@ -2363,7 +2363,7 @@ GameObject:
   - component: {fileID: 4009295745737424}
   m_Layer: 0
   m_Name: FinalGoal
-  m_TagString: pyramid
+  m_TagString: pfobj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
