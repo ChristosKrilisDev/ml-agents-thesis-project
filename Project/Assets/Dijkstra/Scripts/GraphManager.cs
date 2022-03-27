@@ -7,27 +7,47 @@ namespace Dijstra.path
 {
     public class GraphManager : MonoBehaviour
     {
+        [Tooltip("Step : the incresment the pointer should take to connect above/below nodes")]
+        private int step = 3;
+
+
+
+        //private int rangeOfConnections = 1; // connect nodes 1 step distance
+
         public List<Node> nodes = new List<Node>();
-        public Node[,] nodes2D;
-        //Dictionary<int, int> graphs = new Dictionary<int, int>();
+
+        //2D array
+
+        // step = +1
+
+        // search for node[i,j]
+        // where availabe node on
+        // [i+1,j] , [i-1,j] , [i, j +1] and [i, j-1]
+        //limits :
+        // i|j -1 < 0 break;
+        // i|j +1 > list.count break;
 
         public void ConnectNodes()
         {
+            int cp = 0; //check point, 2 == right edge, 0 == right edge
+
             for (int i = 0; i < nodes.Count; i++)
             {
-                for (int j = 0; j < nodes.Count; j++)
-                {
-                    
-                    if(nodes2D[i, j] != nodes2D[i, j])
-                    {
-                        if (nodes2D.GetValue(j) == nodes2D.GetValue(j)) //right
-                            nodes[i].connections.Add(nodes[i+1]); 
-                        if (nodes2D[i, j] == nodes2D[i+1, j])   //above
-                            nodes[i].connections.Add(nodes[j + 1]);
+                if (cp >= step)     //reset checkpoint when reache step value
+                    cp = 0;
 
-                        else break;
-                    }
-                }
+                //right
+                if (i + 1 < nodes.Count)
+                    if (cp < step - 1) nodes[i].connections.Add(nodes[i + 1]);
+                //left
+                if (i - 1 >= 0)
+                    if (cp != 0) nodes[i].connections.Add(nodes[i - 1]);
+                //up
+                if (i + step < nodes.Count) nodes[i].connections.Add(nodes[i + step]);
+                //down
+                if (i - step >= 0) nodes[i].connections.Add(nodes[i - step]);
+
+                cp++;
             }
 
         }
@@ -36,5 +56,6 @@ namespace Dijstra.path
         {
             ConnectNodes();
         }
+
     }
 }
