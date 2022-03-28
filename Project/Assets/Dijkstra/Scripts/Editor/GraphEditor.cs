@@ -14,7 +14,7 @@ namespace Dijstra.path
         protected Graph m_Graph;
         protected Node m_From;
         protected Node m_To;
-        protected Follower m_Follower;
+        //protected Follower m_Follower;
         protected Path m_Path = new Path();
 
         void OnEnable()
@@ -74,12 +74,19 @@ namespace Dijstra.path
             //m_Follower = (Follower)EditorGUILayout.ObjectField("Follower", m_Follower, typeof(Follower), true);
             if (GUILayout.Button("Show Shortest Path"))
             {
+                if (m_From == null || m_To == null)
+                {
+                    Debug.LogError("From/To nodes are null");
+                    return;
+                }
+
                 m_Path = m_Graph.GetShortestPath(m_From, m_To);
                 //if (m_Follower != null)
                 //{
                 //    m_Follower.Follow(m_Path);
                 //}
                 Debug.Log(m_Path);
+                Debug.Log(m_Path.length);
                 SceneView.RepaintAll();
             }
         }

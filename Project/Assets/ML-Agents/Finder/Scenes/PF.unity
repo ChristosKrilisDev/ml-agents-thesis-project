@@ -3496,36 +3496,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1761445700}
   - component: {fileID: 1761445699}
-  - component: {fileID: 1761445698}
   m_Layer: 0
-  m_Name: GraphUI - Dijktra
+  m_Name: Graph - Dijktra
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1761445698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761445697}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fb26e6fd20ebaa478c09d7c858448d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nodes:
-  - {fileID: 1172658246}
-  - {fileID: 583092021}
-  - {fileID: 590003059}
-  - {fileID: 391126048}
-  - {fileID: 2053127430}
-  - {fileID: 1425301930}
-  - {fileID: 379409677}
-  - {fileID: 545079931}
-  - {fileID: 1279681640}
 --- !u!114 &1761445699
 MonoBehaviour:
   m_ObjectHideFlags: 0
