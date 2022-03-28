@@ -30,10 +30,7 @@ namespace Dijstra.path
 
         public Node this[int index]
         {
-            get
-            {
-                return m_Connections[index];
-            }
+            get { return m_Connections[index]; }
         }
 
     }

@@ -13,25 +13,64 @@ namespace Dijstra.path
     public class Graph : MonoBehaviour
     {
 
-        /// <summary>
-        /// The nodes.
-        /// </summary>
+
         [SerializeField]
         protected List<Node> m_Nodes = new List<Node>();
 
-        /// <summary>
-        /// Gets the nodes.
-        /// </summary>
-        /// <value>The nodes.</value>
+
         public virtual List<Node> nodes
         {
-            get
-            {
-                return m_Nodes;
-            }
+            get { return m_Nodes; }
         }
 
+
+        //test
+        private void Start()
+        {
+            ConnectNodes();
+        }
+
+        #region ConnectNodes
         /// <summary>
+        /// auto connect nodes of a 1D list
+        /// in a 2D grid, connect the nodes based on the "connectionRange" var
+        /// </summary>
+        ///
+        [Tooltip("Step : the incresment the pointer should take to connect above/below nodes")]
+        const int gridStep = 3;                   // for up/down connections
+        const int connectionRange = 1;            // for left/right connections
+        public void ConnectNodes()
+        {
+            int cp = 0; //check point, 2 == right edge, 0 == right edge
+
+            for (int i = 0; i < m_Nodes.Count; i++)
+            {
+                if (cp >= gridStep)     //reset checkpoint when reache step value
+                    cp = 0;
+
+                //right
+                if (i + connectionRange < m_Nodes.Count)
+                    if (cp < gridStep - 1) m_Nodes[i].connections.Add(m_Nodes[i + connectionRange]);
+                //left
+                if (i - connectionRange >= 0)
+                    if (cp != 0) m_Nodes[i].connections.Add(m_Nodes[i - connectionRange]);
+                //up
+                if (i + gridStep < m_Nodes.Count) m_Nodes[i].connections.Add(m_Nodes[i + gridStep]);
+                //down
+                if (i - gridStep >= 0) m_Nodes[i].connections.Add(m_Nodes[i - gridStep]);
+
+                cp++;
+            }
+
+        }
+
+        #endregion
+
+
+        #region Dijktra
+
+        /// <summary>
+        /// DIJKSTRA
         /// Gets the shortest path from the starting Node to the ending Node.
         /// </summary>
         /// <returns>The shortest path.</returns>
@@ -130,6 +169,8 @@ namespace Dijstra.path
             path.Bake();
             return path;
         }
+
+        #endregion
 
     }
 }
