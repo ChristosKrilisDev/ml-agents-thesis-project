@@ -5,6 +5,7 @@ public class CheckPoint : MonoBehaviour
     public Material onMaterial;
     public Material offMaterial;
     public GameObject myButton;
+    public GameObject goalObj = null;
 
     private Transform nodeGoal;
 
@@ -24,16 +25,17 @@ public class CheckPoint : MonoBehaviour
         m_AreaComponent = m_Area.GetComponent<PFArea>();
     }
 
-    public void ResetSwitch(int cpSpawnAreaIndex, int goalSpawnIndex , Transform nodeSwitch , Transform nodeGoal)
+    public void ResetSwitch(int cpSpawnAreaIndex, int goalSpawnIndex)
     {
-        m_AreaComponent.PlaceObject(gameObject, cpSpawnAreaIndex , nodeSwitch);
+        m_AreaComponent.PlaceObject(gameObject, cpSpawnAreaIndex);
+        goalObj =  m_AreaComponent.CreateGoalObject(1, goalSpawnIndex);   //pre-create final goal to get all nodes 
+        goalObj.gameObject.SetActive(false);
+        //m_goalIndex = goalSpawnIndex;
+
         m_State = false;
-        m_goalIndex = goalSpawnIndex;
         tag = "switchOff";
         transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         myButton.GetComponent<Renderer>().material = offMaterial;
-
-        this.nodeGoal = nodeGoal;
     }
 
     void OnCollisionEnter(Collision other)
@@ -42,7 +44,9 @@ public class CheckPoint : MonoBehaviour
         {
             myButton.GetComponent<Renderer>().material = onMaterial;
             m_State = true;
-            m_AreaComponent.CreateGoalObject(1, m_goalIndex , nodeGoal);   //create final goal
+            //m_AreaComponent.CreateGoalObject(1, m_goalIndex);   //create final goal
+            goalObj.gameObject.SetActive(true);
+
             tag = "switchOn";
         }
     }

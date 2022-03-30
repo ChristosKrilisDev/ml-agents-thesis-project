@@ -4,8 +4,7 @@ using System.Collections.Generic;
 
 public class PFArea : Area
 {
-    public List<Transform> spawnedObjects;
-
+    Transform[] nodes;
 
     public GameObject goalPref;
     public GameObject blockPref;
@@ -13,26 +12,31 @@ public class PFArea : Area
     public int numPyra;
     public float range;
 
-    public void CreateGoalObject(int numObjects, int spawnAreaIndex, Transform node)
+    public GameObject CreateGoalObject(int numObjects, int spawnAreaIndex )
     {
-        CreateObject(numObjects, goalPref, spawnAreaIndex, node);
+        GameObject goal = CreateObject(numObjects, goalPref, spawnAreaIndex);
+        return goal;
     }
 
-    public void CreateBlockObject(int numObjects, int spawnAreaIndex, Transform node)
+    public void CreateBlockObject(int numObjects, int spawnAreaIndex )
     {
-        CreateObject(numObjects, blockPref, spawnAreaIndex, node);
+        CreateObject(numObjects, blockPref, spawnAreaIndex);
     }
 
-    void CreateObject(int numObjects, GameObject desiredObject, int spawnAreaIndex, Transform node)
+    GameObject CreateObject(int numObjects, GameObject desiredObject, int spawnAreaIndex )
     {
+        GameObject goal = null; // get the goal object and use it on CheckPoint.cs
         for (var i = 0; i < numObjects; i++)
         {
             var newObject = Instantiate(desiredObject, Vector3.zero, Quaternion.Euler(0f, 0f, 0f), transform);
-            PlaceObject(newObject, spawnAreaIndex, node);
+            goal = newObject as GameObject;
+            PlaceObject(newObject, spawnAreaIndex);
+
         }
+        return goal;
     }
 
-    public void PlaceObject(GameObject objectToPlace, int spawnAreaIndex, Transform node)
+    public void PlaceObject(GameObject objectToPlace, int spawnAreaIndex)
     {
         var spawnTransform = spawnAreas[spawnAreaIndex].transform;
         var xRange = spawnTransform.localScale.x / 2.1f;
@@ -41,32 +45,30 @@ public class PFArea : Area
         objectToPlace.transform.position = new Vector3(Random.Range(-xRange, xRange), 2f, Random.Range(-zRange, zRange))
             + spawnTransform.position;
 
-        spawnedObjects.Add(objectToPlace.transform);
 
-        //move node to the same location as the object
-        //node.position = objectToPlace.transform.position;
-    }
-
-    void CreateArea(Transform[] nodes)
-    {
-        CreateBlockObject(1, 0, nodes[3].transform);
-        CreateBlockObject(1, 1, nodes[3].transform);
-        CreateBlockObject(1, 2, nodes[3].transform);
-        CreateBlockObject(1, 3, nodes[3].transform);
-        CreateBlockObject(1, 4, nodes[3].transform);
-        CreateBlockObject(1, 5, nodes[3].transform);
-
-
-
+        SetNodePos(spawnAreaIndex, objectToPlace);
     }
 
 
-    public Transform[] GetNodesPosition(Transform[] nodes)
+
+    void SetNodePos(int spawnIndex ,GameObject obj)
     {
-        for (int i = 0; i < spawnedObjects.Count; i++)
-        {
-            nodes[i].position = spawnedObjects[i].position;
-        }
+        nodes[spawnIndex].transform.position = obj.transform.position;
+    }
+
+
+    public int SetNodesPosition(Transform[] nodes)
+    {
+        this.nodes = nodes;
+        return 0;
+        //for (int i = 0; i < nodes.Length; i++)
+        //{
+        //    this.nodes[i] = nodes[i];
+        //}
+    }
+
+    public Transform[] GetNodesNewPosition()
+    {
         return nodes;
     }
 

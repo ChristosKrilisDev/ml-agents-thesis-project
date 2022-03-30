@@ -95,32 +95,43 @@ public class PFAgent : Agent
     {
         var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
         var items = enumerable.ToArray();
+        int next = 0;
 
         m_MyArea.CleanArea();
-
-        m_AgentRb.velocity = Vector3.zero;
-        m_MyArea.PlaceObject(gameObject, items[0], m_Graph.nodes[0].transform); //place agent
-
-        transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
-
-        m_SwitchLogic.ResetSwitch(items[1], items[2] ,
-            m_Graph.nodes[1].transform, m_Graph.nodes[2].transform);  //place cp and send pos for goal
-
-        //rest are blocks
-        //m_MyArea.CreateBlockObject(1, items[3], m_Graph.nodes[3].transform);
-        //m_MyArea.CreateBlockObject(1, items[4], m_Graph.nodes[4].transform);
-        //m_MyArea.CreateBlockObject(1, items[5], m_Graph.nodes[5].transform);
-        //m_MyArea.CreateBlockObject(1, items[6], m_Graph.nodes[6].transform);
-        //m_MyArea.CreateBlockObject(1, items[7], m_Graph.nodes[7].transform);
-        //m_MyArea.CreateBlockObject(1, items[8], m_Graph.nodes[8].transform);
 
 
         Transform[] nodeTransforms = new Transform[m_Graph.nodes.Count];
         for (int i = 0; i < m_Graph.nodes.Count; i++)
             nodeTransforms[i] = m_Graph.nodes[i].transform;
 
-        nodeTransforms = m_MyArea.GetNodesPosition(nodeTransforms);
+        m_MyArea.SetNodesPosition(nodeTransforms);
 
+
+        m_AgentRb.velocity = Vector3.zero;
+        m_MyArea.PlaceObject(gameObject, items[next++]); //place agent
+
+        transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
+
+        m_SwitchLogic.ResetSwitch(items[next++], items[next++]);  //place cp and send pos for goal
+
+
+        //rest are blocks
+        for (int i = 0; i < 6; i++)
+            m_MyArea.CreateBlockObject(1, items[next++]);
+
+        //m_MyArea.CreateBlockObject(1, items[next++]);
+        //m_MyArea.CreateBlockObject(1, items[next++]);
+        //m_MyArea.CreateBlockObject(1, items[next++]);
+        //m_MyArea.CreateBlockObject(1, items[next++]);
+        //m_MyArea.CreateBlockObject(1, items[next++]);
+        //m_MyArea.CreateBlockObject(1, items[next++]);
+
+
+
+        //after all objects are placed, gather the new node pos
+        nodeTransforms = m_MyArea.GetNodesNewPosition();
+
+        // set the new pos of the nodes
         for (int i = 0; i < m_Graph.nodes.Count; i++)
             m_Graph.nodes[i].transform.position = nodeTransforms[i].transform.position;
 
