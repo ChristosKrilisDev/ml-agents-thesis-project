@@ -23,12 +23,11 @@ namespace Dijstra.path
             get { return m_Nodes; }
         }
 
-
         //test
-        private void Start()
-        {
-            ConnectNodes();
-        }
+        //private void Start()
+        //{
+        //    ConnectNodes();
+        //}
 
         #region ConnectNodes
         /// <summary>
