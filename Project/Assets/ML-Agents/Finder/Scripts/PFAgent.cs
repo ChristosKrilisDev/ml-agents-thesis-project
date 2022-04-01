@@ -91,8 +91,6 @@ public class PFAgent : Agent
         }
     }
 
-
-
     public override void OnEpisodeBegin()
     {
         //create a array with random unique values with range 0 to 9
@@ -158,6 +156,23 @@ public class PFAgent : Agent
         return path.length;
     }
 
+    float CalculateRewards(bool hasFindGoal , bool hasFindCp , bool isOnPath)
+    {
+        //if agent completed the episode succefuly get max reward
+        if (hasFindGoal && isOnPath)
+            return 2f;
+        else if (hasFindGoal && !isOnPath)
+            return 1.5f;
+        //half way there
+        else if (hasFindCp && isOnPath)
+            return 1f;
+        else if (hasFindCp && !isOnPath)
+            return 0.5f;
+
+
+
+        return 0;
+    }
 
 
     void OnCollisionEnter(Collision collision)
