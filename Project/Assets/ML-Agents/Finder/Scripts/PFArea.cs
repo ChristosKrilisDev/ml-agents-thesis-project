@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.MLAgentsExamples;
 using System.Collections.Generic;
+using Dijstra.path;
 
 public class PFArea : Area
 {
@@ -12,6 +13,8 @@ public class PFArea : Area
     public int numPyra;
     public float range;
 
+
+    //CHANGE
     public GameObject CreateGoalObject(int numObjects, int spawnAreaIndex )
     {
         GameObject goal = CreateObject(numObjects, goalPref, spawnAreaIndex);
@@ -33,7 +36,7 @@ public class PFArea : Area
             PlaceObject(newObject, spawnAreaIndex);
 
         }
-        return goal;
+        return goal;//CHANGE
     }
 
     public void PlaceObject(GameObject objectToPlace, int spawnAreaIndex)
@@ -57,7 +60,7 @@ public class PFArea : Area
     }
 
 
-    public int SetNodesPosition(Transform[] nodes)
+    public int SetNodesPosition(ref Transform[] nodes)
     {
         this.nodes = nodes;
         return 0;

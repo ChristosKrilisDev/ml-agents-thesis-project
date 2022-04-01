@@ -25,7 +25,7 @@ public class CheckPoint : MonoBehaviour
         m_AreaComponent = m_Area.GetComponent<PFArea>();
     }
 
-    public void ResetSwitch(int cpSpawnAreaIndex, int goalSpawnIndex)
+    public void ResetSwitch(int cpSpawnAreaIndex, int goalSpawnIndex)//CHANGE
     {
         m_AreaComponent.PlaceObject(gameObject, cpSpawnAreaIndex);
         goalObj =  m_AreaComponent.CreateGoalObject(1, goalSpawnIndex);   //pre-create final goal to get all nodes 

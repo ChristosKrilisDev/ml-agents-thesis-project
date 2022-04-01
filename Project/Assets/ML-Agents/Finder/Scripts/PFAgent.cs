@@ -18,7 +18,9 @@ public class PFAgent : Agent
     public GameObject areaSwitch;
     public bool useVectorObs;
 
+   
     public Graph m_Graph;
+    Path path = new Path();
 
     public override void Initialize()
     {
@@ -93,50 +95,70 @@ public class PFAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        //create a array with random unique values with range 0 to 9
         var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
         var items = enumerable.ToArray();
+        //holds the count of spawned objects
         int next = 0;
 
-        m_MyArea.CleanArea();
+        //whenever the episodes begin, destroy precreated objs
+        m_MyArea.CleanArea();       
 
-
+        
         Transform[] nodeTransforms = new Transform[m_Graph.nodes.Count];
-        for (int i = 0; i < m_Graph.nodes.Count; i++)
+        //nodeTransforms = m_Graph.nodes.ConvertAll<Transform>(Converter<Node,Transform>(Transform t));
+        //copy nodes.transform to new array to use that array by reference below
+        for (int i = 0; i < m_Graph.nodes.Count; i++)       
             nodeTransforms[i] = m_Graph.nodes[i].transform;
 
-        m_MyArea.SetNodesPosition(nodeTransforms);
+        //pass the array by reference to modify directly within PFArea.cs
+        m_MyArea.SetNodesPosition(ref nodeTransforms);
 
-
+        //replace agent tranform
         m_AgentRb.velocity = Vector3.zero;
-        m_MyArea.PlaceObject(gameObject, items[next++]); //place agent
-
+        m_MyArea.PlaceObject(gameObject, items[next++]); 
         transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
 
-        m_SwitchLogic.ResetSwitch(items[next++], items[next++]);  //place cp and send pos for goal
+        //Create CheckPoint and Goal objs, and hide the goal.obj
+        m_SwitchLogic.ResetSwitch(items[next++], items[next++]);  
 
-
-        //rest are blocks
+        //Create all the other objects
         for (int i = 0; i < 6; i++)
             m_MyArea.CreateBlockObject(1, items[next++]);
 
-        //m_MyArea.CreateBlockObject(1, items[next++]);
-        //m_MyArea.CreateBlockObject(1, items[next++]);
-        //m_MyArea.CreateBlockObject(1, items[next++]);
-        //m_MyArea.CreateBlockObject(1, items[next++]);
-        //m_MyArea.CreateBlockObject(1, items[next++]);
-        //m_MyArea.CreateBlockObject(1, items[next++]);
-
-
-
-        //after all objects are placed, gather the new node pos
-        nodeTransforms = m_MyArea.GetNodesNewPosition();
-
-        // set the new pos of the nodes
-        for (int i = 0; i < m_Graph.nodes.Count; i++)
-            m_Graph.nodes[i].transform.position = nodeTransforms[i].transform.position;
-
+        //nodes transform has updated through the PFArea.cs above(ref nodeTransforms)
+        //create's the 2D graph 
         m_Graph.ConnectNodes();
+
+        //calculate the distance player - Checkpoint - goal
+        //set start-end nodes
+        // _pd = path distance calculated after running dijkstra
+        // _ps = list of the nodes in the shortest path
+        float _pd1 = CalculateShortestPathLength(m_Graph.nodes[items[0]] , m_Graph.nodes[items[1]]);
+        string _ps1 = path.ToString();
+        float _pd2 = CalculateShortestPathLength(m_Graph.nodes[items[1]], m_Graph.nodes[items[2]]);
+        string _ps2 = path.ToString();
+
+        _pd1 = _pd1 + _pd2;
+        _ps1 = _ps1 + _ps2;
+        Debug.Log(" length" + _pd1 + "\t" + _ps1);
+
     }
+
+    float CalculateShortestPathLength(Node from , Node to)
+    {
+        //m_Graph.m_Start = from;
+        //m_Graph.m_End = to;
+        path = m_Graph.GetShortestPath(from, to);
+        //Debug.Log(path.length + " --- " + path.ToString());
+
+        if (path.length <= 0)
+            Debug.LogError("Path length <= 0");
+
+        return path.length;
+    }
+
+
 
     void OnCollisionEnter(Collision collision)
     {

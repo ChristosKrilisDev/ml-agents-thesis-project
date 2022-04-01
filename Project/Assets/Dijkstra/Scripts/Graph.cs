@@ -12,11 +12,15 @@ namespace Dijstra.path
 {
     public class Graph : MonoBehaviour
     {
-
-
         [SerializeField]
         protected List<Node> m_Nodes = new List<Node>();
 
+        [HideInInspector]
+        public Node m_Start;
+        [HideInInspector]
+        public Node m_End;
+
+        protected Path m_Path = new Path();
 
         public virtual List<Node> nodes
         {

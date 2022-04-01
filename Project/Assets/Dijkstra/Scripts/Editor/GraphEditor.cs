@@ -40,7 +40,7 @@ namespace Dijstra.path
                     }
                     float distance = Vector3.Distance(node.transform.position, connection.transform.position);
                     Vector3 diff = connection.transform.position - node.transform.position;
-                    Handles.Label(node.transform.position + (diff / 2), distance.ToString(), EditorStyles.whiteBoldLabel);
+                    Handles.Label(node.transform.position + (diff / 2), distance.ToString("f2"), EditorStyles.whiteBoldLabel);
                     if (m_Path.nodes.Contains(node) && m_Path.nodes.Contains(connection))
                     {
                         Color color = Handles.color;
