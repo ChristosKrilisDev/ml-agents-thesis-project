@@ -81,12 +81,12 @@ namespace Dijstra.path
         /// <filterpriority>2</filterpriority>
         public override string ToString()
         {
+            //\nLength: {1}
             return string.Format(
-                "Nodes: {0}\nLength: {1}",
+                "Nodes: {0}",
                 string.Join(
                     ", ",
-                    nodes.Select(node => node.name).ToArray()),
-                length);
+                    nodes.Select(node => node.name).ToArray())/*,length*/);
         }
 
     }

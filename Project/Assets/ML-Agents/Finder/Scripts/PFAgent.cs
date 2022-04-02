@@ -21,6 +21,12 @@ public class PFAgent : Agent
    
     public Graph m_Graph;
     Path path = new Path();
+    private static float episodeCounter = 0;
+    private float pLength = 0;
+    private float mLength = 0;
+    private bool hasFindGoal = false;
+    private bool isFirstTake = true;
+
 
     public override void Initialize()
     {
@@ -93,6 +99,10 @@ public class PFAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        //send any data from the previous round before reseting them
+        SendData();
+
+        #region Spawning
         //create a array with random unique values with range 0 to 9
         var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
         var items = enumerable.ToArray();
@@ -127,6 +137,7 @@ public class PFAgent : Agent
         //nodes transform has updated through the PFArea.cs above(ref nodeTransforms)
         //create's the 2D graph 
         m_Graph.ConnectNodes();
+        #endregion
 
         //calculate the distance player - Checkpoint - goal
         //set start-end nodes
@@ -138,9 +149,15 @@ public class PFAgent : Agent
         string _ps2 = path.ToString();
 
         _pd1 = _pd1 + _pd2;
-        _ps1 = _ps1 + _ps2;
-        Debug.Log(" length" + _pd1 + "\t" + _ps1);
+        _ps1 = _ps1 + " -|- " + _ps2;
+        Debug.Log(" length : " + _pd1 + "\t" + _ps1);
 
+        episodeCounter++;
+        mLength = 0;
+        pLength = _pd1;
+        hasFindGoal = false;
+        isFirstTake = false;
+        Debug.Log(episodeCounter);
     }
 
     float CalculateShortestPathLength(Node from , Node to)
@@ -154,6 +171,12 @@ public class PFAgent : Agent
             Debug.LogError("Path length <= 0");
 
         return path.length;
+    }
+
+    void SendData()
+    {
+        if(!isFirstTake)
+            GameManager.instance.WriteData(episodeCounter, mLength, pLength, hasFindGoal, 0);
     }
 
     float CalculateRewards(bool hasFindGoal , bool hasFindCp , bool isOnPath)
@@ -174,11 +197,11 @@ public class PFAgent : Agent
         return 0;
     }
 
-
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("goal"))
         {
+            hasFindGoal = true;
             SetReward(2f);
             EndEpisode();
         }

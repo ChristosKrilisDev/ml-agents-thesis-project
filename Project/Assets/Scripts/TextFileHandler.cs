@@ -8,16 +8,16 @@ public class TextFileHandler
     const string m_Header = "Episode , agent distance , dijkstra distance ,  goal , avr rewards";
 
 
-    public TextFileHandler()
+    public TextFileHandler(string index)
     {
         StreamWriter writer = new StreamWriter(m_path, true);
-        writer.WriteLine(m_Header + "\n");
+        writer.WriteLine("\n\nTake : " + index + "\t" + m_Header + "\n\n");
         writer.Close();
     }
 
 
     //[MenuItem("Tools/Write file")]
-    public void WriteString( int episodeCounter, string agentDistance, string dijkstraDistance, bool hasFindTarget, float avrRewards)
+    public void WriteString(float episodeCounter, float agentDistance, float dijkstraDistance, bool hasFindTarget, float avrRewards)
     {
 
         string formatedText = getFormatedString(episodeCounter, agentDistance, dijkstraDistance, hasFindTarget, avrRewards);
@@ -30,9 +30,9 @@ public class TextFileHandler
     }
 
 
-    private string getFormatedString(int episodeCounter, string agentDistance, string dijkstraDistance, bool hasFindTarget, float avrRewards)
+    private string getFormatedString(float episodeCounter, float agentDistance, float dijkstraDistance, bool hasFindTarget, float avrRewards)
     {
-        return string.Format("\n{0}",
+        return string.Format("{0}",
             string.Join(", ",
             episodeCounter,
             agentDistance,
