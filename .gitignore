@@ -6,6 +6,9 @@
 # Output Builds
 /Builds
 
+#Resourses
+Project/Assets/Resources/*
+
 # Training environments
 /envs
 

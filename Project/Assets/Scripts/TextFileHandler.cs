@@ -2,37 +2,49 @@ using UnityEngine;
 using System.IO;
 using UnityEditor;
 
-public class TextFileHandler : MonoBehaviour
+public class TextFileHandler
 {
-    const string m_path = "D:/RL_Vs_Dijktra_Thesis_Project/Thesis/Project/Assets/Resources";
-    const string m_name = "RL_DATA";
+    const string m_path = "D:/RL_Vs_Dijktra_Thesis_Project/Thesis/Project/Assets/Resources/RL_DATA.txt";
+    const string m_Header = "Episode , agent distance , dijkstra distance ,  goal , avr rewards";
 
 
-    [MenuItem("Tools/Write file")]
-    public static void WriteString()
+    public TextFileHandler()
     {
-        string path = m_path + "/RL_DATA.txt";
-        print(path);
-
-        //Write some text to the test.txt file
-        StreamWriter writer = new StreamWriter(path, true);
-        writer.WriteLine("Test");
+        StreamWriter writer = new StreamWriter(m_path, true);
+        writer.WriteLine(m_Header + "\n");
         writer.Close();
-
-
-        //StreamReader reader = new StreamReader(path);
-        ////Print the text from the file
-        //Debug.Log(reader.ReadToEnd());
-        //reader.Close();
     }
 
-    //[MenuItem("Tools/Read file")]
-    //public static void ReadString()
+
+    //[MenuItem("Tools/Write file")]
+    public void WriteString( int episodeCounter, string agentDistance, string dijkstraDistance, bool hasFindTarget, float avrRewards)
+    {
+
+        string formatedText = getFormatedString(episodeCounter, agentDistance, dijkstraDistance, hasFindTarget, avrRewards);
+
+        //Write some text to the .txt file
+        StreamWriter writer = new StreamWriter(m_path, true);
+        writer.WriteLine(formatedText);
+        writer.Close();
+
+    }
+
+
+    private string getFormatedString(int episodeCounter, string agentDistance, string dijkstraDistance, bool hasFindTarget, float avrRewards)
+    {
+        return string.Format("\n{0}",
+            string.Join(", ",
+            episodeCounter,
+            agentDistance,
+            dijkstraDistance,
+            hasFindTarget,
+            avrRewards));
+    }
+
+    //string UnitTest()
     //{
-    //    string path = Application.persistentDataPath + "/test.txt";
-    //    //Read the text from directly from the test.txt file
-    //    StreamReader reader = new StreamReader(path);
-    //    Debug.Log(reader.ReadToEnd());
-    //    reader.Close();
+    //    string s = getString(1, "134", "45", true, 2);
+    //    return s;
     //}
+
 }
