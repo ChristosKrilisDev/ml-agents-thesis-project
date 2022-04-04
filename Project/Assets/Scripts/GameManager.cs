@@ -24,11 +24,13 @@ public class GameManager : MonoBehaviour
         if (instance == null)
             instance = this;
 
+        if (!canWriteData)
+            return;
 
-        if (!PlayerPrefs.HasKey("Index"))
-            index = PlayerPrefs.GetInt("Index");
-        else
+            if (!PlayerPrefs.HasKey("Index"))
             PlayerPrefs.SetInt("Index", index);
+        else
+            index = PlayerPrefs.GetInt("Index");
 
 
         PlayerPrefs.SetInt("Index", ++index);
@@ -47,11 +49,8 @@ public class GameManager : MonoBehaviour
 
     public void WriteData(float episodeCounter, float agentDistance, float dijkstraDistance, bool hasFindTarget, float avrRewards)
     {
-        if(canWriteData)
-        {
+        if (canWriteData)
             fileHandler.WriteString(episodeCounter, agentDistance, dijkstraDistance, hasFindTarget, avrRewards);
-        }
-
     }
 
 

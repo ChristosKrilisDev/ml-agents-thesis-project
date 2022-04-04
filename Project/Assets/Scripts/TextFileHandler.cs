@@ -11,7 +11,7 @@ public class TextFileHandler
     public TextFileHandler(string index)
     {
         StreamWriter writer = new StreamWriter(m_path, true);
-        writer.WriteLine("\n\nTake : " + index + "\t" + m_Header + "\n\n");
+        writer.WriteLine("\n----------\nTake : " + index + "\t" + m_Header + "\n----------\n");
         writer.Close();
     }
 

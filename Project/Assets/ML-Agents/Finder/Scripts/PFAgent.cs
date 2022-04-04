@@ -23,7 +23,7 @@ public class PFAgent : Agent
     Path path = new Path();
     private static float episodeCounter = 0;
     private float pLength = 0;
-    private float mLength = 0;
+    //private float mLength = 0;
     private bool hasFindGoal = false;
     private bool isFirstTake = true;
 
@@ -150,14 +150,15 @@ public class PFAgent : Agent
 
         _pd1 = _pd1 + _pd2;
         _ps1 = _ps1 + " -|- " + _ps2;
-        Debug.Log(" length : " + _pd1 + "\t" + _ps1);
+        Debug.Log("Path Length : " + _pd1 + "\t ==" + _ps1);
 
         episodeCounter++;
-        mLength = 0;
+        //mLength = 0;
+        GetComponent<DistanceRecorder>().totalDistance = 0;
         pLength = _pd1;
         hasFindGoal = false;
         isFirstTake = false;
-        Debug.Log(episodeCounter);
+        //Debug.Log(episodeCounter);
     }
 
     float CalculateShortestPathLength(Node from , Node to)
@@ -176,7 +177,7 @@ public class PFAgent : Agent
     void SendData()
     {
         if(!isFirstTake)
-            GameManager.instance.WriteData(episodeCounter, mLength, pLength, hasFindGoal, 0);
+            GameManager.instance.WriteData(episodeCounter, GetComponent<DistanceRecorder>().totalDistance, pLength, hasFindGoal, 0);
     }
 
     float CalculateRewards(bool hasFindGoal , bool hasFindCp , bool isOnPath)
@@ -196,6 +197,29 @@ public class PFAgent : Agent
 
         return 0;
     }
+
+    void DemoReward()
+    {
+
+    }
+
+    void SparseReward()
+    {
+
+    }
+
+    void ShapedReward()
+    {
+        //m_Reward = 0;
+    }
+
+    void TerminalConditions()
+    {
+        //timi limits
+        //positive terminals
+        //negative terminals
+    }
+
 
     void OnCollisionEnter(Collision collision)
     {
