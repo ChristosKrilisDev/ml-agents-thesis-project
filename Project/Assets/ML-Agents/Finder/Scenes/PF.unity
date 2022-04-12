@@ -1332,6 +1332,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 32
       objectReference: {fileID: 0}
+    - target: {fileID: 114937736047215868, guid: bd804431e808a492bb5658bcd296e58e,
+        type: 3}
+      propertyPath: MaxStep
+      value: 2000
+      objectReference: {fileID: 0}
     - target: {fileID: 2882567601611453222, guid: bd804431e808a492bb5658bcd296e58e,
         type: 3}
       propertyPath: m_Enabled

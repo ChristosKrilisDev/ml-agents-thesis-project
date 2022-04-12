@@ -5,7 +5,8 @@ using UnityEngine;
 public class DistanceRecorder : MonoBehaviour
 {
     public float totalDistance = 0;
-    public bool record = true;
+    [SerializeField]
+    private bool record = true;
     private Vector3 previousLoc;
     void FixedUpdate()
     {
@@ -18,4 +19,5 @@ public class DistanceRecorder : MonoBehaviour
         previousLoc = transform.position;
     }
     public void ToggleRecord() => record = !record;
+
 }

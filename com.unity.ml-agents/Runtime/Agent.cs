@@ -39,6 +39,7 @@ namespace Unity.MLAgents
         /// </summary>
         public float groupReward;
 
+
         /// <summary>
         /// Whether the agent is done or not.
         /// </summary>
