@@ -7,16 +7,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance; //singleton
-
-
-    private TextFileHandler fileHandler;
-    [SerializeField]
-    private int index = 0;
     [SerializeField]
     private bool canWriteData = false;
 
-    //DateTime datetime;
+    public static GameManager instance; //singleton
+
+    private TextFileHandler fileHandler;
+    private int index = 0;
+
     DateTime localDate = DateTime.Now;
 
     void Awake()
@@ -32,9 +30,7 @@ public class GameManager : MonoBehaviour
         else
             index = PlayerPrefs.GetInt("Index");
 
-
         PlayerPrefs.SetInt("Index", ++index);
-
 
         if (fileHandler == null)
         {

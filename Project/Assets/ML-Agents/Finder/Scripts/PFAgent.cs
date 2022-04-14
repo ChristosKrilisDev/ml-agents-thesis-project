@@ -13,20 +13,22 @@ public class PFAgent : Agent
 {
 
     #region Vars
+    [Header("Agent behavior Vars")]
+    public bool useVectorObs;
+
+    [Header("Area Vars")]
     public GameObject area;
+    public GameObject areaSwitch;
     PFArea m_MyArea;
     Rigidbody m_AgentRb;
     CheckPoint m_SwitchLogic;
-    public GameObject areaSwitch;
-    public bool useVectorObs;
-
 
     public Graph m_Graph;
     Path path = new Path();
     DistanceRecorder m_DistanceRecorder;
     float p_totalLength = 0;
 
-    //for record data
+    // record data
     bool isFirstTake = true;
     static float episodeCounter = 0;
     bool hasFindGoal = false;
@@ -35,7 +37,6 @@ public class PFAgent : Agent
     float distanceR = 0;
     readonly float epsilon = 0.4f;
     float boostReward = 100;
-
 
     GameObject[] goalsToFind = new GameObject [2];
     float[] goalDistances = new float[2];
@@ -189,7 +190,7 @@ public class PFAgent : Agent
     void ResetTmpVars()
     {
         //mLength = 0;
-        m_DistanceRecorder.totalDistance = 0;
+        m_DistanceRecorder.GetTraveledDistance = 0;
         episodeCounter++;
         hasFindGoal = false;
         goalIndex = 0;
@@ -306,7 +307,7 @@ public class PFAgent : Agent
     /// <returns>true if the distance that agent did is less than dijstras shortest path length</returns>
     bool IsDistanceLessThanDijstra()
     {
-        return m_DistanceRecorder.totalDistance <= p_totalLength * 2;
+        return m_DistanceRecorder.GetTraveledDistance <= p_totalLength * 2;
     }
 
     /// <summary>
@@ -331,7 +332,7 @@ public class PFAgent : Agent
         if (!isFirstTake)
         {
             isFirstTake = false;
-            GameManager.instance.WriteData(episodeCounter, GetComponent<DistanceRecorder>().totalDistance, p_totalLength, hasFindGoal, 0);
+            GameManager.instance.WriteData(episodeCounter, GetComponent<DistanceRecorder>().GetTraveledDistance, p_totalLength, hasFindGoal, 0);
         }
     }
 }
