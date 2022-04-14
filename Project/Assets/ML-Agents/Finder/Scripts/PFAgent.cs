@@ -120,7 +120,7 @@ public class PFAgent : Agent
 
     void OnCollisionEnter(Collision collision)
     {
-        if(TryGetComponent<CheckPoint>(out CheckPoint cp)) //collision.gameObject.CompareTag("swichOff")
+        if(collision.gameObject.CompareTag("switchOff")) //collision.gameObject.CompareTag("swichOff")
         {
             goalIndex++;
             SwitchGoalToFind();
@@ -180,9 +180,9 @@ public class PFAgent : Agent
         SetUpPath(items[0], items[1], items[2]);
         SetUpDistanceDifrences(items[1], items[2]);
         ResetTmpVars();
-        f_goal = goalsToFind[0] = m_Graph.nodes[1].gameObject;
-        goalsToFind[1] = m_Graph.nodes[2].gameObject;
-        SwitchGoalToFind();
+        f_goal = goalsToFind[0] = m_Graph.nodes[items[1]].gameObject;
+        goalsToFind[1] = m_Graph.nodes[items[2]].gameObject;
+        //SwitchGoalToFind();
     }
     #endregion
 
