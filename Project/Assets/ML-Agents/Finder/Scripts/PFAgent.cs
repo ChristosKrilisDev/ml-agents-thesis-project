@@ -23,14 +23,25 @@ public class PFAgent : Agent
 
     public Graph m_Graph;
     Path path = new Path();
-    private static float episodeCounter = 0;
-    private float pLength = 0;
-    //private float mLength = 0;
-    private bool hasFindGoal = false;
-    private bool isFirstTake = true;
     DistanceRecorder m_DistanceRecorder;
+    float p_totalLength = 0;
 
-    private Transform goal;
+    //for record data
+    bool isFirstTake = true;
+    static float episodeCounter = 0;
+    bool hasFindGoal = false;
+
+    [Header("Reward Function Vars")]
+    float distanceR = 0;
+    readonly float epsilon = 0.4f;
+    float boostReward = 100;
+
+
+    GameObject[] goalsToFind = new GameObject [2];
+    float[] goalDistances = new float[2];
+    GameObject f_goal;
+    int goalIndex = 0;
+
 
     #endregion
 
@@ -50,8 +61,8 @@ public class PFAgent : Agent
             sensor.AddObservation(m_SwitchLogic.GetState());
             sensor.AddObservation(transform.InverseTransformDirection(m_AgentRb.velocity));
 
-            sensor.AddObservation(transform.position.x);
-            sensor.AddObservation(transform.position.y);
+            //sensor.AddObservation(transform.position.x);
+            //sensor.AddObservation(transform.position.y);
         }
     }
 
@@ -82,8 +93,7 @@ public class PFAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        RewardFunction(DistanceDiffrence(this.transform.position, goal.transform.position));
-        //AddReward(-1f / MaxStep);
+        RewardFunction(DistanceDiffrence(this.gameObject, f_goal));
         MoveAgent(actionBuffers.DiscreteActions);
     }
 
@@ -107,15 +117,23 @@ public class PFAgent : Agent
             discreteActionsOut[0] = 2;
         }
     }
+
     void OnCollisionEnter(Collision collision)
     {
+        if(TryGetComponent<CheckPoint>(out CheckPoint cp)) //collision.gameObject.CompareTag("swichOff")
+        {
+            goalIndex++;
+            SwitchGoalToFind();
+        }
+
         if (collision.gameObject.CompareTag("goal"))
         {
             hasFindGoal = true;
-            //SetReward(2f);
+            RewardFunction(DistanceDiffrence(this.gameObject, f_goal.gameObject));
             EndEpisode();
         }
     }
+
 
     public override void OnEpisodeBegin()
     {
@@ -159,33 +177,40 @@ public class PFAgent : Agent
         m_Graph.ConnectNodes();
         #endregion
 
+        SetUpPath(items[0], items[1], items[2]);
+        SetUpDistanceDifrences(items[1], items[2]);
+        ResetTmpVars();
+        f_goal = goalsToFind[0] = m_Graph.nodes[1].gameObject;
+        goalsToFind[1] = m_Graph.nodes[2].gameObject;
+        SwitchGoalToFind();
+    }
+    #endregion
+
+    void ResetTmpVars()
+    {
+        //mLength = 0;
+        m_DistanceRecorder.totalDistance = 0;
+        episodeCounter++;
+        hasFindGoal = false;
+        goalIndex = 0;
+    }
+
+    void SetUpPath(int n_agent , int n_checkPoint , int n_finalGoal)
+    {
         //calculate the distance player - Checkpoint - goal
         //set start-end nodes
         // _pd = path distance calculated after running dijkstra
         // _ps = list of the nodes in the shortest path
-        float _pd1 = CalculateShortestPathLength(m_Graph.nodes[items[0]], m_Graph.nodes[items[1]]);
-        string _ps1 = path.ToString();
-        float _pd2 = CalculateShortestPathLength(m_Graph.nodes[items[1]], m_Graph.nodes[items[2]]);
-        string _ps2 = path.ToString();
+        float p_len1 = CalculateShortestPathLength(m_Graph.nodes[n_agent], m_Graph.nodes[n_checkPoint]);
+        float p_len2 = CalculateShortestPathLength(m_Graph.nodes[n_checkPoint], m_Graph.nodes[n_finalGoal]);
+        p_len1 = p_len1 + p_len2;
+        p_totalLength = p_len1;
 
-        _pd1 = _pd1 + _pd2;
-        _ps1 = _ps1 + " -|- " + _ps2;
-        Debug.Log("Path Length : " + _pd1 + "\t ==" + _ps1);
-
-        //set goal to search
-        goal = m_Graph.nodes[items[1]].transform;
-
-        episodeCounter++;
-        //mLength = 0;
-        GetComponent<DistanceRecorder>().totalDistance = 0;
-        pLength = _pd1;
-        hasFindGoal = false;
-        isFirstTake = false;
-        //Debug.Log(episodeCounter);
+        //string _ps2 = path.ToString();
+        //string _ps1 = path.ToString();
+        //_ps1 = _ps1 + " -|- " + _ps2;
+        //Debug.Log("Path Length : " + _pd1 + "\t ==" + _ps1);
     }
-    #endregion
-
-
     float CalculateShortestPathLength(Node from, Node to)
     {
         //m_Graph.m_Start = from;
@@ -199,16 +224,20 @@ public class PFAgent : Agent
         return path.length;
     }
 
-    void SendData()
+    void SwitchGoalToFind()
     {
-        if (!isFirstTake)
-            GameManager.instance.WriteData(episodeCounter, GetComponent<DistanceRecorder>().totalDistance, pLength, hasFindGoal, 0);
+        f_goal = goalsToFind[goalIndex];
     }
 
+    void SetUpDistanceDifrences(int n_checkPoint, int n_finalGoal)
+    {
+        //get the distance from agent to cp
+        goalDistances[0] = DistanceDiffrence(this.gameObject, m_Graph.nodes[n_checkPoint].gameObject);
+        //get the distance from agent to final goal
+        goalDistances[1] = DistanceDiffrence(m_Graph.nodes[n_checkPoint].gameObject, m_Graph.nodes[n_finalGoal].gameObject);
+    }
 
-    readonly float epsilon = 0.4f;
-    float distanceR = 0;
-    float boostReward = 100;
+    #region RewardFunction
 
     /// <summary>
     /// 
@@ -230,11 +259,11 @@ public class PFAgent : Agent
         //agent reward is reseted to 0 after every step
         // Additionally, the magnitude of the reward should not exceed 1.0
         float stepFactor = Math.Abs(this.StepCount - this.MaxStep) / (float)this.MaxStep;
-        Debug.LogFormat("{0} / {1} = {2} ", Mathf.Abs(this.StepCount - this.MaxStep) , MaxStep , stepFactor );
+        //Debug.LogFormat("{0} / {1} = {2} ", Mathf.Abs(this.StepCount - this.MaxStep) , MaxStep , stepFactor );
 
 
         #region TerminalRewards
-        if (HasEpisodeEnded()) //when it ends : max step reached or completed task
+        if (HasEpisodeEnded()) //TC1 when it ends? : max step reached or completed task
         {
             if (hasFindGoal)
             {
@@ -246,8 +275,7 @@ public class PFAgent : Agent
                 else
                 {
                     calculateReward = -boostReward / 10;
-                    Debug.Log("Phase : Distance is more than dijstrta \t reward : " + calculateReward);
-
+                    Debug.Log("Phase : Distance is more than dijstrta * 2 \t reward : " + calculateReward);
                 }
             }
             else
@@ -255,16 +283,14 @@ public class PFAgent : Agent
                 calculateReward = -boostReward;
                 Debug.Log("Phase : Didnt find goal \t reward : " + calculateReward);
             }
-
             EndEpisode();
         }
         #endregion
         else //encourage agent to keep searing 
         {
-            distanceR = 1 - Mathf.Pow(currDistance / pLength, epsilon); //change pL to the init distance from spawning
-            calculateReward = distanceR * stepFactor;
-            //Debug.LogFormat("Phase : Encourage \t reward : {0}", calculateReward);
-
+            distanceR = 1 - Mathf.Pow(currDistance / goalDistances[goalIndex], epsilon); //change pL to the init distance from spawning
+            calculateReward = distanceR;
+            Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward , goalDistances[goalIndex]);
         }
         return calculateReward;
     }
@@ -274,18 +300,39 @@ public class PFAgent : Agent
         return hasFindGoal || StepCount == MaxStep;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>true if the distance that agent did is less than dijstras shortest path length</returns>
     bool IsDistanceLessThanDijstra()
     {
-        return m_DistanceRecorder.totalDistance <= pLength;
+        return m_DistanceRecorder.totalDistance <= p_totalLength * 2;
     }
 
-    float DistanceDiffrence(Vector3 pointA, Vector3 pointB)
+    /// <summary>
+    /// used to find the distance between agent and current goal
+    /// </summary>
+    /// <param name="pointA">Agent</param>
+    /// <param name="pointB">goal</param>
+    /// <returns>the distance in float, from pointA to pointB</returns>
+    float DistanceDiffrence(GameObject pointA, GameObject pointB)
     {
         if (pointA == null || pointB == null)
             return 0;
+        Vector3 _pointA = new Vector3(pointA.transform.localPosition.x, 0, pointA.transform.localPosition.z);
+        Vector3 _pointB = new Vector3(pointB.transform.localPosition.x, 0, pointB.transform.localPosition.z);
 
-        return Vector3.Distance(pointA, pointB);
+        return Vector3.Distance(_pointA, _pointB);
     }
+    #endregion
 
+    void SendData()
+    {
+        if (!isFirstTake)
+        {
+            isFirstTake = false;
+            GameManager.instance.WriteData(episodeCounter, GetComponent<DistanceRecorder>().totalDistance, p_totalLength, hasFindGoal, 0);
+        }
+    }
 }
 
