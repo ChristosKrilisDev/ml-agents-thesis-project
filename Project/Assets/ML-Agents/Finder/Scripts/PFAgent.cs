@@ -55,15 +55,42 @@ public class PFAgent : Agent
         m_DistanceRecorder = GetComponent<DistanceRecorder>();
     }
 
+    /// <summary>
+    /// what data the ai needs in order to solve the problem
+    /// A reasonable approach for determining what information
+    /// should be included is to consider what you would need to
+    /// calculate an analytical solution to the problem, or what
+    /// you would expect a human to be able to use to solve the problem.
+    /// </summary>
+    /// <param name="sensor"></param>
     public override void CollectObservations(VectorSensor sensor)
     {
         if (useVectorObs)
         {
-            sensor.AddObservation(m_SwitchLogic.GetState());
-            sensor.AddObservation(transform.InverseTransformDirection(m_AgentRb.velocity));
+            sensor.AddObservation(transform.InverseTransformDirection(m_AgentRb.velocity)); //3
 
-            //sensor.AddObservation(transform.position.x);
-            //sensor.AddObservation(transform.position.y);
+            //cp
+            sensor.AddObservation(m_SwitchLogic.GetState()); //1
+            Vector3 dir = (goalsToFind[0].transform.localPosition - transform.localPosition).normalized;
+            sensor.AddObservation(dir.x); //1
+            sensor.AddObservation(dir.z); //1
+
+
+            //if goal is active in scene : 
+            sensor.AddObservation(goalsToFind[1].activeInHierarchy ? 1 : 0);  //1
+            if (goalsToFind[1].activeInHierarchy)
+            {
+                Vector3 dirToGoal = (goalsToFind[1].transform.localPosition - transform.localPosition).normalized;
+                sensor.AddObservation(dirToGoal.x); //1
+                sensor.AddObservation(dirToGoal.z); //1
+            }
+            else
+            {
+                sensor.AddObservation(0);//x
+                sensor.AddObservation(0);//z
+            }
+
+            //note : maybe add the Nodes dijstra 
         }
     }
 
@@ -94,7 +121,7 @@ public class PFAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        RewardFunction(DistanceDiffrence(this.gameObject, f_goal));
+        RewardFunction(DistanceDiffrence(this.gameObject, f_goal)); //step is running 50 times/sec
         MoveAgent(actionBuffers.DiscreteActions);
     }
 
@@ -271,18 +298,18 @@ public class PFAgent : Agent
                 if (IsDistanceLessThanDijstra())
                 {
                     calculateReward = Math.Abs(boostReward * stepFactor);
-                    Debug.Log("Phase : ALl true \t reward : " + calculateReward);
+                    //Debug.Log("Phase : ALl true \t reward : " + calculateReward);
                 }
                 else
                 {
                     calculateReward = -boostReward / 10;
-                    Debug.Log("Phase : Distance is more than dijstrta * 2 \t reward : " + calculateReward);
+                    //Debug.Log("Phase : Distance is more than dijstrta * 2 \t reward : " + calculateReward);
                 }
             }
             else
             {
                 calculateReward = -boostReward;
-                Debug.Log("Phase : Didnt find goal \t reward : " + calculateReward);
+                //Debug.Log("Phase : Didnt find goal \t reward : " + calculateReward);
             }
             EndEpisode();
         }
@@ -291,7 +318,7 @@ public class PFAgent : Agent
         {
             distanceR = 1 - Mathf.Pow(currDistance / goalDistances[goalIndex], epsilon); //change pL to the init distance from spawning
             calculateReward = distanceR;
-            Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward , goalDistances[goalIndex]);
+            //Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward , goalDistances[goalIndex]);
         }
         return calculateReward;
     }

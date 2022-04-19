@@ -9,6 +9,7 @@ namespace Unity.MLAgentsExamples
         [Tooltip("The time it takes to move to the new position")]
         public float smoothingTime; //The time it takes to move to the new position
 
+        [SerializeField]
         private Vector3 m_Offset;
         private Vector3 m_CamVelocity; //Camera's velocity (used by SmoothDamp)
 
@@ -26,6 +27,8 @@ namespace Unity.MLAgentsExamples
             gameObject.transform.position =
                 Vector3.SmoothDamp(transform.position, newPosition, ref m_CamVelocity, smoothingTime, Mathf.Infinity,
                     Time.fixedDeltaTime);
+
+            //transform.rotation = Quaternion.LookRotation(Vector3.one + target.transform.position, Vector3.one);
         }
     }
 }
