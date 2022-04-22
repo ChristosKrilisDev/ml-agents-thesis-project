@@ -7,7 +7,7 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
 using Dijstra.path;
-
+using System.Collections;
 
 public class PFAgent : Agent
 {
@@ -36,13 +36,18 @@ public class PFAgent : Agent
     [Header("Reward Function Vars")]
     float distanceR = 0;
     readonly float epsilon = 0.4f;
-    float boostReward = 100;
+    float boostReward = 1;
+    float stepFactor;
 
-    GameObject[] goalsToFind = new GameObject [2];
+    GameObject[] goalsToFind = new GameObject[2];
     float[] goalDistances = new float[2];
     GameObject f_goal;
     int goalIndex = 0;
+    bool hasFindCP;
 
+    //timed //step is running 50 times/sec
+    int frameCount = 0;
+    readonly int frameAmmount = 50;
 
     #endregion
 
@@ -90,7 +95,8 @@ public class PFAgent : Agent
                 sensor.AddObservation(0);//z
             }
 
-            //note : maybe add the Nodes dijstra 
+            //note : maybe add the Nodes dijstra
+            sensor.AddObservation(stepFactor);//1
         }
     }
 
@@ -121,9 +127,16 @@ public class PFAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        RewardFunction(DistanceDiffrence(this.gameObject, f_goal)); //step is running 50 times/sec
+        if(--frameCount <=0)
+        {
+            frameCount = frameAmmount;
+            AddReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal)));//step is running 50 times/sec
+            Debug.Log("---Timed---");
+        }
+        //SetReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal)));//step is running 50 times/sec
         MoveAgent(actionBuffers.DiscreteActions);
     }
+
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
@@ -148,17 +161,26 @@ public class PFAgent : Agent
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("switchOff")) //collision.gameObject.CompareTag("swichOff")
+
+        if(collision.gameObject.CompareTag("wall"))
+        {
+            SetReward(-0.1f);
+            EndEpisode();
+        }
+
+        if (collision.gameObject.CompareTag("switchOff")) //collision.gameObject.CompareTag("swichOff")
         {
             goalIndex++;
+            hasFindCP = true;
+            SetReward(+1);
+            Debug.Log("R for CP  : 100");
             SwitchGoalToFind();
         }
 
         if (collision.gameObject.CompareTag("goal"))
         {
             hasFindGoal = true;
-            RewardFunction(DistanceDiffrence(this.gameObject, f_goal.gameObject));
-            EndEpisode();
+            SetReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal.gameObject)));
         }
     }
 
@@ -221,9 +243,12 @@ public class PFAgent : Agent
         episodeCounter++;
         hasFindGoal = false;
         goalIndex = 0;
+        frameCount = 0;
+        hasFindCP = false;
+        stepFactor = 0;
     }
 
-    void SetUpPath(int n_agent , int n_checkPoint , int n_finalGoal)
+    void SetUpPath(int n_agent, int n_checkPoint, int n_finalGoal)
     {
         //calculate the distance player - Checkpoint - goal
         //set start-end nodes
@@ -286,41 +311,53 @@ public class PFAgent : Agent
         float calculateReward = 0;
         //agent reward is reseted to 0 after every step
         // Additionally, the magnitude of the reward should not exceed 1.0
-        float stepFactor = Math.Abs(this.StepCount - this.MaxStep) / (float)this.MaxStep;
+        stepFactor = Math.Abs(this.StepCount - this.MaxStep) / (float)this.MaxStep;
         //Debug.LogFormat("{0} / {1} = {2} ", Mathf.Abs(this.StepCount - this.MaxStep) , MaxStep , stepFactor );
 
 
         #region TerminalRewards
         if (HasEpisodeEnded()) //TC1 when it ends? : max step reached or completed task
         {
-            if (hasFindGoal)
+            if(hasFindCP)
             {
-                if (IsDistanceLessThanDijstra())
+                if (hasFindGoal)
                 {
-                    calculateReward = Math.Abs(boostReward * stepFactor);
-                    //Debug.Log("Phase : ALl true \t reward : " + calculateReward);
+                    if (IsDistanceLessThanDijstra())
+                    {
+                        calculateReward = Math.Abs(boostReward + (1 * stepFactor));
+                        Debug.Log("Phase : ALl true \t reward : " + calculateReward);
+                    }
+                    else
+                    {
+                        calculateReward = -boostReward / 2;
+                        Debug.Log("Phase : Distance is more than dijstrta * 2 \t reward : " + calculateReward);
+                    }
                 }
                 else
                 {
-                    calculateReward = -boostReward / 10;
-                    //Debug.Log("Phase : Distance is more than dijstrta * 2 \t reward : " + calculateReward);
+                    calculateReward = -boostReward;
+                    Debug.Log("Phase : Didnt find goal \t reward : " + calculateReward);
                 }
+
             }
             else
             {
-                calculateReward = -boostReward;
-                //Debug.Log("Phase : Didnt find goal \t reward : " + calculateReward);
+                calculateReward = -boostReward * 2.5f;
+                Debug.Log("Phase : Didnt CP goal \t reward : " + calculateReward);
             }
+
             EndEpisode();
         }
         #endregion
         else //encourage agent to keep searing 
         {
             distanceR = 1 - Mathf.Pow(currDistance / goalDistances[goalIndex], epsilon); //change pL to the init distance from spawning
-            calculateReward = distanceR;
-            //Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward , goalDistances[goalIndex]);
+            calculateReward = distanceR/100;
+            //Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward, goalDistances[goalIndex]);
         }
         return calculateReward;
+        //Use AddReward() to accumulate rewards between decisions.
+        //Use SetReward() to overwrite any previous rewards accumulate between decisions.
     }
 
     bool HasEpisodeEnded()

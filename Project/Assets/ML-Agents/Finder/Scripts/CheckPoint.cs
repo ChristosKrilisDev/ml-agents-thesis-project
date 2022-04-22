@@ -25,8 +25,10 @@ public class CheckPoint : MonoBehaviour
         m_AreaComponent = m_Area.GetComponent<PFArea>();
     }
 
-    public void ResetSwitch(int cpSpawnAreaIndex, int goalSpawnIndex)//CHANGE
+    public void ResetSwitch(int cpSpawnAreaIndex, int goalSpawnIndex)
     {
+        this.gameObject.GetComponent<BoxCollider>().enabled = true;
+
         m_AreaComponent.PlaceObject(gameObject, cpSpawnAreaIndex);
         goalObj =  m_AreaComponent.CreateGoalObject(1, goalSpawnIndex);   //pre-create final goal to get all nodes 
         goalObj.gameObject.SetActive(false);
@@ -42,10 +44,11 @@ public class CheckPoint : MonoBehaviour
     {
         if (other.gameObject.CompareTag("agent") && m_State == false)
         {
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;
+            goalObj.gameObject.SetActive(true);
             myButton.GetComponent<Renderer>().material = onMaterial;
             m_State = true;
             //m_AreaComponent.CreateGoalObject(1, m_goalIndex);   //create final goal
-            goalObj.gameObject.SetActive(true);
 
             tag = "switchOn";
         }
