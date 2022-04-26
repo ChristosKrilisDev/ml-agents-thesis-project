@@ -32,6 +32,7 @@ public class PFAgent : Agent
     bool isFirstTake = true;
     static float episodeCounter = 0;
     bool hasFindGoal = false;
+    bool hasTouchedTheWall = false;
 
     [Header("Reward Function Vars")]
     float distanceR = 0;
@@ -46,8 +47,12 @@ public class PFAgent : Agent
     bool hasFindCP;
 
     //timed //step is running 50 times/sec
+    //3000 max steps/ 5 decision interv = 600steps per episode
+
     int frameCount = 0;
     readonly int frameAmmount = 50;
+
+
 
     #endregion
 
@@ -127,11 +132,11 @@ public class PFAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        if(--frameCount <=0)
+        if(--frameCount <=0)//O(1) O(n) //TODO HERE
         {
             frameCount = frameAmmount;
             AddReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal)));//step is running 50 times/sec
-            Debug.Log("---Timed---");
+            //Debug.Log("---Timed---");
         }
         //SetReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal)));//step is running 50 times/sec
         MoveAgent(actionBuffers.DiscreteActions);
@@ -164,21 +169,26 @@ public class PFAgent : Agent
 
         if(collision.gameObject.CompareTag("wall"))
         {
-            SetReward(-0.1f);
-            EndEpisode();
+            SetReward(-0.25f);
+            hasTouchedTheWall = true;
+            SetReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal.gameObject)));//this will give end reward and end episode
         }
 
         if (collision.gameObject.CompareTag("switchOff")) //collision.gameObject.CompareTag("swichOff")
         {
             goalIndex++;
             hasFindCP = true;
-            SetReward(+1);
-            Debug.Log("R for CP  : 100");
+            //SetReward(+1);
+            //AddReward(+1);
+            //Debug.Log("R for CP  : 100");
+            AddReward(2f);
             SwitchGoalToFind();
         }
 
         if (collision.gameObject.CompareTag("goal"))
         {
+            AddReward(+3);
+
             hasFindGoal = true;
             SetReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal.gameObject)));
         }
@@ -246,6 +256,7 @@ public class PFAgent : Agent
         frameCount = 0;
         hasFindCP = false;
         stepFactor = 0;
+        hasTouchedTheWall = false;
     }
 
     void SetUpPath(int n_agent, int n_checkPoint, int n_finalGoal)
@@ -324,26 +335,25 @@ public class PFAgent : Agent
                 {
                     if (IsDistanceLessThanDijstra())
                     {
-                        calculateReward = Math.Abs(boostReward + (1 * stepFactor));
-                        Debug.Log("Phase : ALl true \t reward : " + calculateReward);
+                        calculateReward = Math.Abs(boostReward + stepFactor); //1 + SF 
+                        //Debug.Log("Phase : ALl true \t reward : " + calculateReward);
                     }
                     else
                     {
-                        calculateReward = -boostReward / 2;
-                        Debug.Log("Phase : Distance is more than dijstrta * 2 \t reward : " + calculateReward);
+                        calculateReward = -boostReward / 4; //-0.25f
+                        //Debug.Log("Phase : Distance is more than dijstrta * 2 \t reward : " + calculateReward);
                     }
                 }
                 else
                 {
-                    calculateReward = -boostReward;
-                    Debug.Log("Phase : Didnt find goal \t reward : " + calculateReward);
+                    calculateReward = -boostReward*3; //-0.5f
+                    //Debug.Log("Phase : Didnt find goal \t reward : " + calculateReward);
                 }
-
             }
             else
             {
-                calculateReward = -boostReward * 2.5f;
-                Debug.Log("Phase : Didnt CP goal \t reward : " + calculateReward);
+                calculateReward = -boostReward*4;// -1 wrost senario
+                //Debug.Log("Phase : Didnt CP goal \t reward : " + calculateReward);
             }
 
             EndEpisode();
@@ -351,10 +361,15 @@ public class PFAgent : Agent
         #endregion
         else //encourage agent to keep searing 
         {
-            distanceR = 1 - Mathf.Pow(currDistance / goalDistances[goalIndex], epsilon); //change pL to the init distance from spawning
-            calculateReward = distanceR/100;
+            distanceR = 1 - Mathf.Pow(currDistance / goalDistances[goalIndex], epsilon);
+
+            //TODO : 0/100 ??!!
+            calculateReward = (distanceR+0.0001f/100) * 0.3f;//50% less //reward a very small ammount, to guide the agent but not big enough to create a looped reward(circle).
             //Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward, goalDistances[goalIndex]);
         }
+
+
+        Debug.LogFormat("Agent :{0} ended with reward = {1}", this.gameObject.name, calculateReward);
         return calculateReward;
         //Use AddReward() to accumulate rewards between decisions.
         //Use SetReward() to overwrite any previous rewards accumulate between decisions.
@@ -362,7 +377,7 @@ public class PFAgent : Agent
 
     bool HasEpisodeEnded()
     {
-        return hasFindGoal || StepCount == MaxStep;
+        return hasFindGoal || StepCount == MaxStep || hasTouchedTheWall;
     }
 
     /// <summary>
