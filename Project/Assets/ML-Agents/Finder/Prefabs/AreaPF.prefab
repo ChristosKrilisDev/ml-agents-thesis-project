@@ -1700,11 +1700,15 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 3500
+  MaxStep: 3000
   useVectorObs: 1
   area: {fileID: 1464170487903594}
   areaSwitch: {fileID: 1432086782037750}
   m_Graph: {fileID: 1761445699}
+  epsilon: 0.4
+  dP: 0.2
+  rewardBoostHelper: 2
+  boostHelper: 2
 --- !u!65 &65345930959735878
 BoxCollider:
   m_ObjectHideFlags: 0
