@@ -11,58 +11,65 @@ using System.Collections;
 
 public class PFAgent : Agent
 {
-
     #region Vars
     [Header("Agent behavior Vars")]
-    public bool useVectorObs;
+    [Space]
+    [SerializeField] private bool useVectorObs;
 
     [Header("Area Vars")]
-    public GameObject area;
-    public GameObject areaSwitch;
-    PFArea m_MyArea;
-    Rigidbody m_AgentRb;
-    CheckPoint m_SwitchLogic;
+    [SerializeField] private PFArea _area;
+    [SerializeField] private CheckPoint _checkPoint;
+    [SerializeField] private Graph _graph;
+    private Path _path = new Path();
+    private float _pathTotalLength = 0;
 
-    public Graph m_Graph;
-    Path path = new Path();
-    DistanceRecorder m_DistanceRecorder;
-    float p_totalLength = 0;
+    private Rigidbody _agentRb;
 
     // record data
-    bool isFirstTake = true;
-    static float episodeCounter = 0;
-    bool hasFindGoal = false;
-    bool hasTouchedTheWall = false;
+    //struct MyStruct
+    //{
+    //    public bool _done;
+    //    public int x;
+    //}
+    DistanceRecorder _distanceRecorder;
+    private bool _isFirstTake = false;
+    private static float episodeCounter = 0;
+    private bool _hasTouchedTheWall = false;
+    private bool _hasFindGoal = false;
+    private bool _hasFindCP;
+
 
     [Header("Reward Function Vars")]
-    float distanceR = 0;
-    readonly float epsilon = 0.4f;
-    float boostReward = 1;
-    float stepFactor;
+    [SerializeField] private float distanceReward = 0;
+    [SerializeField] private readonly float epsilon = 0.4f;
+    [SerializeField] private float boostReward = 1;
+    [SerializeField] private float _stepFactor;
 
-    GameObject[] goalsToFind = new GameObject[2];
-    float[] goalDistances = new float[2];
-    GameObject f_goal;
-    int goalIndex = 0;
-    bool hasFindCP;
+    private GameObject[] _goalsToFind = new GameObject[2];
+    private float[] _goalDistances = new float[2];
+    private GameObject _targetGoal;
+    private int _targetGoalIndex = 0;
 
     //timed //step is running 50 times/sec
     //3000 max steps/ 5 decision interv = 600steps per episode
+    //Timed Frames
+    private int _frameCount = 0;
+    private readonly int frameAmmount = 50;
 
-    int frameCount = 0;
-    readonly int frameAmmount = 50;
-
-
+    private enum Indexof
+    {
+        _Agent = 0,
+        _CheckPoint = 1,
+        _FinalNode = 2
+    }
 
     #endregion
 
     #region Agent
     public override void Initialize()
     {
-        m_AgentRb = GetComponent<Rigidbody>();
-        m_MyArea = area.GetComponent<PFArea>();
-        m_SwitchLogic = areaSwitch.GetComponent<CheckPoint>();
-        m_DistanceRecorder = GetComponent<DistanceRecorder>();
+        _agentRb = GetComponent<Rigidbody>();
+        _distanceRecorder = GetComponent<DistanceRecorder>();
     }
 
     /// <summary>
@@ -77,20 +84,19 @@ public class PFAgent : Agent
     {
         if (useVectorObs)
         {
-            sensor.AddObservation(transform.InverseTransformDirection(m_AgentRb.velocity)); //3
-
+            sensor.AddObservation(transform.InverseTransformDirection(_agentRb.velocity)); //3
             //cp
-            sensor.AddObservation(m_SwitchLogic.GetState()); //1
-            Vector3 dir = (goalsToFind[0].transform.localPosition - transform.localPosition).normalized;
+            sensor.AddObservation(_checkPoint.GetState); //1
+            Vector3 dir = (_goalsToFind[0].transform.localPosition - transform.localPosition).normalized;
             sensor.AddObservation(dir.x); //1
             sensor.AddObservation(dir.z); //1
 
 
             //if goal is active in scene : 
-            sensor.AddObservation(goalsToFind[1].activeInHierarchy ? 1 : 0);  //1
-            if (goalsToFind[1].activeInHierarchy)
+            sensor.AddObservation(_goalsToFind[1].activeInHierarchy ? 1 : 0);  //1
+            if (_goalsToFind[1].activeInHierarchy)
             {
-                Vector3 dirToGoal = (goalsToFind[1].transform.localPosition - transform.localPosition).normalized;
+                Vector3 dirToGoal = (_goalsToFind[1].transform.localPosition - transform.localPosition).normalized;
                 sensor.AddObservation(dirToGoal.x); //1
                 sensor.AddObservation(dirToGoal.z); //1
             }
@@ -101,7 +107,7 @@ public class PFAgent : Agent
             }
 
             //note : maybe add the Nodes dijstra
-            sensor.AddObservation(stepFactor);//1
+            sensor.AddObservation(_stepFactor);//1
         }
     }
 
@@ -127,179 +133,152 @@ public class PFAgent : Agent
                 break;
         }
         transform.Rotate(rotateDir, Time.deltaTime * 200f);
-        m_AgentRb.AddForce(dirToGo * 2f, ForceMode.VelocityChange);
+        _agentRb.AddForce(dirToGo * 2f, ForceMode.VelocityChange);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        if(--frameCount <=0)//O(1) O(n) //TODO HERE
+        if (--_frameCount <= 0)//O(1) O(n) //TODO HERE
         {
-            frameCount = frameAmmount;
-            AddReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal)));//step is running 50 times/sec
+
+            _frameCount = frameAmmount;
+            AddReward(RewardFunction(GetCurrentDistanceDiffrence(this.gameObject, _targetGoal)));//step is running 50 times/sec
             //Debug.Log("---Timed---");
         }
         //SetReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal)));//step is running 50 times/sec
         MoveAgent(actionBuffers.DiscreteActions);
     }
 
-
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var discreteActionsOut = actionsOut.DiscreteActions;
         if (Input.GetKey(KeyCode.D))
-        {
             discreteActionsOut[0] = 3;
-        }
         else if (Input.GetKey(KeyCode.W))
-        {
             discreteActionsOut[0] = 1;
-        }
         else if (Input.GetKey(KeyCode.A))
-        {
             discreteActionsOut[0] = 4;
-        }
         else if (Input.GetKey(KeyCode.S))
-        {
             discreteActionsOut[0] = 2;
-        }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-
-        if(collision.gameObject.CompareTag("wall"))
+        if (collision.gameObject.CompareTag("wall"))
         {
-            SetReward(-0.25f);
-            hasTouchedTheWall = true;
-            SetReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal.gameObject)));//this will give end reward and end episode
+            _hasTouchedTheWall = true;
+            OnTerminalCondition(-0.25f, true);
         }
-
-        if (collision.gameObject.CompareTag("switchOff")) //collision.gameObject.CompareTag("swichOff")
+        if (collision.gameObject.CompareTag("switchOff"))
         {
-            goalIndex++;
-            hasFindCP = true;
+            _targetGoalIndex++;
+            _hasFindCP = true;
             //SetReward(+1);
-            //AddReward(+1);
-            //Debug.Log("R for CP  : 100");
             AddReward(2f);
-            SwitchGoalToFind();
+            SwitchTargetToFinalNode();
         }
-
         if (collision.gameObject.CompareTag("goal"))
         {
-            AddReward(+3);
-
-            hasFindGoal = true;
-            SetReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal.gameObject)));
+            _hasFindGoal = true;
+            OnTerminalCondition(2, true);
         }
     }
 
+    private void OnTerminalCondition(float reward, bool useAddReward)
+    {
+        if (useAddReward) AddReward(reward);
+        else SetReward(reward);
+
+        //this will give end reward and end episode
+        SetReward(RewardFunction(GetCurrentDistanceDiffrence(this.gameObject, _targetGoal.gameObject)));
+    }
 
     public override void OnEpisodeBegin()
     {
-        //send any data from the previous round before reseting them
         SendData();
 
-        #region Spawning
-        //create a array with random unique values with range 0 to 9
+        _area.CleanArea();
+
         var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
         var items = enumerable.ToArray();
-        //holds the count of spawned objects
-        int next = 0;
 
-        //whenever the episodes begin, destroy precreated objs
-        m_MyArea.CleanArea();
+        Transform[] nodesTransforms = new Transform[_graph.nodes.Count];
+        Array.Copy(_graph.nodes.ToArray(), nodesTransforms, _graph.nodes.Count);
 
+        _area.SetNodesPosition(ref nodesTransforms);
+        Spawn(items);
 
-        Transform[] nodeTransforms = new Transform[m_Graph.nodes.Count];
-        //nodeTransforms = m_Graph.nodes.ConvertAll<Transform>(Converter<Node,Transform>(Transform t));
-        //copy nodes.transform to new array to use that array by reference below
-        for (int i = 0; i < m_Graph.nodes.Count; i++)
-            nodeTransforms[i] = m_Graph.nodes[i].transform;
-
-        //pass the array by reference to modify directly within PFArea.cs
-        m_MyArea.SetNodesPosition(ref nodeTransforms);
-
-        //replace agent tranform
-        m_AgentRb.velocity = Vector3.zero;
-        m_MyArea.PlaceObject(gameObject, items[next++]);
-        transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
-
-        //Create CheckPoint and Goal objs, and hide the goal.obj
-        m_SwitchLogic.ResetSwitch(items[next++], items[next++]);
-
-        //Create all the other objects
-        for (int i = 0; i < 6; i++)
-            m_MyArea.CreateBlockObject(1, items[next++]);
-
-        //nodes transform has updated through the PFArea.cs above(ref nodeTransforms)
         //create's the 2D graph 
-        m_Graph.ConnectNodes();
-        #endregion
-
-        SetUpPath(items[0], items[1], items[2]);
-        SetUpDistanceDifrences(items[1], items[2]);
-        ResetTmpVars();
-        f_goal = goalsToFind[0] = m_Graph.nodes[items[1]].gameObject;
-        goalsToFind[1] = m_Graph.nodes[items[2]].gameObject;
-        //SwitchGoalToFind();
+        _graph.ConnectNodes();
+        //item[0] => player | item[1] => checkPoint | item[2] => final node
+        SetUpPath(items[(int)Indexof._Agent], items[(int)Indexof._CheckPoint], items[(int)Indexof._FinalNode]);
+        SetUpDistanceDifrences(items[(int)Indexof._CheckPoint], items[(int)Indexof._FinalNode]);
+        ResetTmpVars(items);
     }
     #endregion
 
-    void ResetTmpVars()
+    #region OnEpisodeBeginMethods
+    private void Spawn(int[] items)
     {
-        //mLength = 0;
-        m_DistanceRecorder.GetTraveledDistance = 0;
+        int next = 0;
+        //replace agent tranform
+        _agentRb.velocity = Vector3.zero;
+        _area.PlaceNode(this.gameObject, items[next++]);
+        transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
+
+        //Create CheckPoint and Goal objs, and hide the goal.obj
+        _checkPoint.Init(items[next++], items[next++]);
+
+        //Create all the other objects
+        for (int i = 0; i < 6; i++)
+            _area.CreateBlockNode(items[next++])/*.Hide(next)*/;
+
+        //nodes transform has updated through the PFArea.cs above(ref nodeTransforms)
+    }
+
+    private void ResetTmpVars(int[] items)
+    {
         episodeCounter++;
-        hasFindGoal = false;
-        goalIndex = 0;
-        frameCount = 0;
-        hasFindCP = false;
-        stepFactor = 0;
-        hasTouchedTheWall = false;
+        _distanceRecorder.GetTraveledDistance = 0;
+        _stepFactor = 0;
+        _hasFindGoal = _hasFindCP = _hasTouchedTheWall = false;
+        _targetGoalIndex = _frameCount = 0;
+
+        _targetGoal = _goalsToFind[(int)Indexof._Agent] = _graph.nodes[items[(int)Indexof._CheckPoint]].gameObject; //on init target CP 
+        _goalsToFind[(int)Indexof._CheckPoint] = _graph.nodes[items[(int)Indexof._FinalNode]].gameObject;    //set final node as secondtarger
     }
 
-    void SetUpPath(int n_agent, int n_checkPoint, int n_finalGoal)
-    {
-        //calculate the distance player - Checkpoint - goal
-        //set start-end nodes
-        // _pd = path distance calculated after running dijkstra
-        // _ps = list of the nodes in the shortest path
-        float p_len1 = CalculateShortestPathLength(m_Graph.nodes[n_agent], m_Graph.nodes[n_checkPoint]);
-        float p_len2 = CalculateShortestPathLength(m_Graph.nodes[n_checkPoint], m_Graph.nodes[n_finalGoal]);
-        p_len1 = p_len1 + p_len2;
-        p_totalLength = p_len1;
-
-        //string _ps2 = path.ToString();
-        //string _ps1 = path.ToString();
-        //_ps1 = _ps1 + " -|- " + _ps2;
-        //Debug.Log("Path Length : " + _pd1 + "\t ==" + _ps1);
+    private void SetUpPath(int n_agent, int n_checkPoint, int n_finalGoal)
+    {    //calculate the distance player - Checkpoint - goal
+        {
+            float p_len1 = AddShortestPathLength(_graph.nodes[n_agent], _graph.nodes[n_checkPoint]);
+            float p_len2 = AddShortestPathLength(_graph.nodes[n_checkPoint], _graph.nodes[n_finalGoal]);
+            p_len1 += p_len2;
+            _pathTotalLength = p_len1;
+        }
     }
-    float CalculateShortestPathLength(Node from, Node to)
-    {
-        //m_Graph.m_Start = from;
-        //m_Graph.m_End = to;
-        path = m_Graph.GetShortestPath(from, to);
-        //Debug.Log(path.length + " --- " + path.ToString());
 
-        if (path.length <= 0)
+    private float AddShortestPathLength(Node from, Node to)
+    {
+        _path = _graph.GetShortestPath(from, to);
+
+        if (_path.length <= 0)
             Debug.LogError("Path length <= 0");
 
-        return path.length;
+        return _path.length;
     }
 
-    void SwitchGoalToFind()
-    {
-        f_goal = goalsToFind[goalIndex];
-    }
+    private void SwitchTargetToFinalNode() => _targetGoal = _goalsToFind[_targetGoalIndex];
 
-    void SetUpDistanceDifrences(int n_checkPoint, int n_finalGoal)
+    private void SetUpDistanceDifrences(int n_checkPoint, int n_finalGoal)
     {
+        //use for the sharped RF , distance/reward for each targert
         //get the distance from agent to cp
-        goalDistances[0] = DistanceDiffrence(this.gameObject, m_Graph.nodes[n_checkPoint].gameObject);
+        _goalDistances[0] = GetCurrentDistanceDiffrence(this.gameObject, _graph.nodes[n_checkPoint].gameObject);
         //get the distance from agent to final goal
-        goalDistances[1] = DistanceDiffrence(m_Graph.nodes[n_checkPoint].gameObject, m_Graph.nodes[n_finalGoal].gameObject);
+        _goalDistances[1] = GetCurrentDistanceDiffrence(_graph.nodes[n_checkPoint].gameObject, _graph.nodes[n_finalGoal].gameObject);
     }
+    #endregion
 
     #region RewardFunction
 
@@ -322,20 +301,20 @@ public class PFAgent : Agent
         float calculateReward = 0;
         //agent reward is reseted to 0 after every step
         // Additionally, the magnitude of the reward should not exceed 1.0
-        stepFactor = Math.Abs(this.StepCount - this.MaxStep) / (float)this.MaxStep;
+        _stepFactor = Math.Abs(this.StepCount - this.MaxStep) / (float)this.MaxStep;
         //Debug.LogFormat("{0} / {1} = {2} ", Mathf.Abs(this.StepCount - this.MaxStep) , MaxStep , stepFactor );
 
 
         #region TerminalRewards
         if (HasEpisodeEnded()) //TC1 when it ends? : max step reached or completed task
         {
-            if(hasFindCP)
+            if (_hasFindCP)
             {
-                if (hasFindGoal)
+                if (_hasFindGoal)
                 {
                     if (IsDistanceLessThanDijstra())
                     {
-                        calculateReward = Math.Abs(boostReward + stepFactor); //1 + SF 
+                        calculateReward = Math.Abs(boostReward + _stepFactor); //1 + SF 
                         //Debug.Log("Phase : ALl true \t reward : " + calculateReward);
                     }
                     else
@@ -346,13 +325,13 @@ public class PFAgent : Agent
                 }
                 else
                 {
-                    calculateReward = -boostReward*3; //-0.5f
+                    calculateReward = -boostReward * 3; //-0.5f
                     //Debug.Log("Phase : Didnt find goal \t reward : " + calculateReward);
                 }
             }
             else
             {
-                calculateReward = -boostReward*4;// -1 wrost senario
+                calculateReward = -boostReward * 4;// -1 wrost senario
                 //Debug.Log("Phase : Didnt CP goal \t reward : " + calculateReward);
             }
 
@@ -361,10 +340,10 @@ public class PFAgent : Agent
         #endregion
         else //encourage agent to keep searing 
         {
-            distanceR = 1 - Mathf.Pow(currDistance / goalDistances[goalIndex], epsilon);
+            distanceReward = 1 - Mathf.Pow(currDistance / _goalDistances[_targetGoalIndex], epsilon);
 
             //TODO : 0/100 ??!!
-            calculateReward = (distanceR+0.0001f/100) * 0.3f;//50% less //reward a very small ammount, to guide the agent but not big enough to create a looped reward(circle).
+            calculateReward = (distanceReward + 0.0001f / 100) * 0.3f;//50% less //reward a very small ammount, to guide the agent but not big enough to create a looped reward(circle).
             //Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward, goalDistances[goalIndex]);
         }
 
@@ -377,7 +356,7 @@ public class PFAgent : Agent
 
     bool HasEpisodeEnded()
     {
-        return hasFindGoal || StepCount == MaxStep || hasTouchedTheWall;
+        return _hasFindGoal || StepCount == MaxStep || _hasTouchedTheWall;
     }
 
     /// <summary>
@@ -386,7 +365,7 @@ public class PFAgent : Agent
     /// <returns>true if the distance that agent did is less than dijstras shortest path length</returns>
     bool IsDistanceLessThanDijstra()
     {
-        return m_DistanceRecorder.GetTraveledDistance <= p_totalLength * 2;
+        return _distanceRecorder.GetTraveledDistance <= _pathTotalLength * 2;
     }
 
     /// <summary>
@@ -395,7 +374,7 @@ public class PFAgent : Agent
     /// <param name="pointA">Agent</param>
     /// <param name="pointB">goal</param>
     /// <returns>the distance in float, from pointA to pointB</returns>
-    float DistanceDiffrence(GameObject pointA, GameObject pointB)
+    float GetCurrentDistanceDiffrence(GameObject pointA, GameObject pointB)
     {
         if (pointA == null || pointB == null)
             return 0;
@@ -406,12 +385,13 @@ public class PFAgent : Agent
     }
     #endregion
 
-    void SendData()
+
+    private void SendData()
     {
-        if (!isFirstTake)
+        if (!_isFirstTake) //dont send data if it's the first episode
         {
-            isFirstTake = false;
-            GameManager.instance.WriteData(episodeCounter, GetComponent<DistanceRecorder>().GetTraveledDistance, p_totalLength, hasFindGoal, 0);
+            _isFirstTake = false;
+            GameManager.instance.WriteData(episodeCounter, GetComponent<DistanceRecorder>().GetTraveledDistance, _pathTotalLength, _hasFindGoal, 0);
         }
     }
 }
