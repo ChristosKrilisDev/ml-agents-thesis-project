@@ -2,55 +2,50 @@ using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
 {
-    public Material onMaterial;
-    public Material offMaterial;
-    public GameObject myButton;
-    public GameObject goalObj = null;
+    [SerializeField] private Material _onMaterial;
+    [SerializeField] private Material _offMaterial;
+    [SerializeField] private GameObject _myButton;
 
-    private Transform nodeGoal;
+    private GameObject _goalNode = null;
+    private PFArea _areaComponent;
+    private bool _hasPushed;
 
-    bool m_State;
-    GameObject m_Area;
-    PFArea m_AreaComponent;
-    int m_goalIndex;
+    private Renderer _renderer => _myButton.GetComponent<Renderer>();
+    private GameObject _area => transform.parent.gameObject;
+    private BoxCollider _boxCollider => gameObject.GetComponent<BoxCollider>();
+    public bool GetState { get { return _hasPushed; } private set { } }
 
-    public bool GetState()
+
+    private void Awake()
     {
-        return m_State;
+        _areaComponent = _area.GetComponent<PFArea>();
     }
 
-    void Start()
+    public void Init(int cpSpawnIndex, int goalSpawnIndex)
     {
-        m_Area = gameObject.transform.parent.gameObject;
-        m_AreaComponent = m_Area.GetComponent<PFArea>();
-    }
+        _areaComponent.PlaceNode(this.gameObject, cpSpawnIndex);
+        _goalNode = _areaComponent.CreateGoalNode(goalSpawnIndex);   //pre-create final node to get all nodes 
 
-    public void ResetSwitch(int cpSpawnAreaIndex, int goalSpawnIndex)
-    {
-        this.gameObject.GetComponent<BoxCollider>().enabled = true;
-
-        m_AreaComponent.PlaceObject(gameObject, cpSpawnAreaIndex);
-        goalObj =  m_AreaComponent.CreateGoalObject(1, goalSpawnIndex);   //pre-create final goal to get all nodes 
-        goalObj.gameObject.SetActive(false);
-        //m_goalIndex = goalSpawnIndex;
-
-        m_State = false;
-        tag = "switchOff";
         transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        myButton.GetComponent<Renderer>().material = offMaterial;
+
+        ToggleState(true);
     }
 
-    void OnCollisionEnter(Collision other)
+    private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("agent") && m_State == false)
-        {
-            this.gameObject.GetComponent<BoxCollider>().enabled = false;
-            goalObj.gameObject.SetActive(true);
-            myButton.GetComponent<Renderer>().material = onMaterial;
-            m_State = true;
-            //m_AreaComponent.CreateGoalObject(1, m_goalIndex);   //create final goal
+        if (other.gameObject.CompareTag("agent") && !_hasPushed)
+            ToggleState(false);
+    }
 
-            tag = "switchOn";
-        }
+
+    private void ToggleState(bool isInitState)
+    {
+        _boxCollider.enabled = isInitState;
+        _hasPushed = !isInitState;
+        _goalNode.SetActive(!isInitState);
+
+        _renderer.material = isInitState ? _offMaterial : _onMaterial;
+        tag = isInitState ? "switchOff" : "switchOn";
+
     }
 }
