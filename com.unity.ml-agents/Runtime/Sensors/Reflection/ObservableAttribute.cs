@@ -46,27 +46,41 @@ namespace Unity.MLAgents.Sensors.Reflection
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class ObservableAttribute : Attribute
     {
-        string m_Name;
-        int m_NumStackedObservations;
+        private string m_Name;
+        private int m_NumStackedObservations;
 
         /// <summary>
         /// Default binding flags used for reflection of members and properties.
         /// </summary>
-        const BindingFlags k_BindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        private const BindingFlags k_BindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
         /// <summary>
         /// Supported types and their observation sizes and corresponding sensor type.
         /// </summary>
-        static Dictionary<Type, (int, Type)> s_TypeToSensorInfo = new Dictionary<Type, (int, Type)>()
+        private static Dictionary<Type, (int, Type)> s_TypeToSensorInfo = new Dictionary<Type, (int, Type)>()
         {
-            {typeof(int), (1, typeof(IntReflectionSensor))},
-            {typeof(bool), (1, typeof(BoolReflectionSensor))},
-            {typeof(float), (1, typeof(FloatReflectionSensor))},
+            {
+                typeof(int), (1, typeof(IntReflectionSensor))
+            },
+            {
+                typeof(bool), (1, typeof(BoolReflectionSensor))
+            },
+            {
+                typeof(float), (1, typeof(FloatReflectionSensor))
+            },
 
-            {typeof(Vector2), (2, typeof(Vector2ReflectionSensor))},
-            {typeof(Vector3), (3, typeof(Vector3ReflectionSensor))},
-            {typeof(Vector4), (4, typeof(Vector4ReflectionSensor))},
-            {typeof(Quaternion), (4, typeof(QuaternionReflectionSensor))},
+            {
+                typeof(Vector2), (2, typeof(Vector2ReflectionSensor))
+            },
+            {
+                typeof(Vector3), (3, typeof(Vector3ReflectionSensor))
+            },
+            {
+                typeof(Vector4), (4, typeof(Vector4ReflectionSensor))
+            },
+            {
+                typeof(Quaternion), (4, typeof(QuaternionReflectionSensor))
+            }
         };
 
         /// <summary>
@@ -87,7 +101,7 @@ namespace Unity.MLAgents.Sensors.Reflection
         /// <param name="o">Object being reflected</param>
         /// <param name="excludeInherited">Whether to exclude inherited properties or not.</param>
         /// <returns></returns>
-        static IEnumerable<(FieldInfo, ObservableAttribute)> GetObservableFields(object o, bool excludeInherited)
+        private static IEnumerable<(FieldInfo, ObservableAttribute)> GetObservableFields(object o, bool excludeInherited)
         {
             // TODO cache these (and properties) by type, so that we only have to reflect once.
             var bindingFlags = k_BindingFlags | (excludeInherited ? BindingFlags.DeclaredOnly : 0);
@@ -108,7 +122,7 @@ namespace Unity.MLAgents.Sensors.Reflection
         /// <param name="o">Object being reflected</param>
         /// <param name="excludeInherited">Whether to exclude inherited properties or not.</param>
         /// <returns></returns>
-        static IEnumerable<(PropertyInfo, ObservableAttribute)> GetObservableProperties(object o, bool excludeInherited)
+        private static IEnumerable<(PropertyInfo, ObservableAttribute)> GetObservableProperties(object o, bool excludeInherited)
         {
             var bindingFlags = k_BindingFlags | (excludeInherited ? BindingFlags.DeclaredOnly : 0);
             var properties = o.GetType().GetProperties(bindingFlags);
@@ -167,7 +181,7 @@ namespace Unity.MLAgents.Sensors.Reflection
         /// <param name="observableAttribute"></param>
         /// <returns></returns>
         /// <exception cref="UnityAgentsException"></exception>
-        static ISensor CreateReflectionSensor(object o, FieldInfo fieldInfo, PropertyInfo propertyInfo, ObservableAttribute observableAttribute)
+        private static ISensor CreateReflectionSensor(object o, FieldInfo fieldInfo, PropertyInfo propertyInfo, ObservableAttribute observableAttribute)
         {
             string memberName;
             string declaringTypeName;
@@ -240,7 +254,7 @@ namespace Unity.MLAgents.Sensors.Reflection
         /// <returns></returns>
         internal static int GetTotalObservationSize(object o, bool excludeInherited, List<string> errorsOut)
         {
-            int sizeOut = 0;
+            var sizeOut = 0;
             foreach (var (field, attr) in GetObservableFields(o, excludeInherited))
             {
                 if (s_TypeToSensorInfo.ContainsKey(field.FieldType))

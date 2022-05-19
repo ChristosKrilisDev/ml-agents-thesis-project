@@ -15,29 +15,29 @@ namespace Unity.MLAgents.Inference
 
     internal class ModelRunner
     {
-        List<AgentInfoSensorsPair> m_Infos = new List<AgentInfoSensorsPair>();
-        Dictionary<int, ActionBuffers> m_LastActionsReceived = new Dictionary<int, ActionBuffers>();
-        List<int> m_OrderedAgentsRequestingDecisions = new List<int>();
+        private List<AgentInfoSensorsPair> m_Infos = new List<AgentInfoSensorsPair>();
+        private Dictionary<int, ActionBuffers> m_LastActionsReceived = new Dictionary<int, ActionBuffers>();
+        private List<int> m_OrderedAgentsRequestingDecisions = new List<int>();
 
-        ITensorAllocator m_TensorAllocator;
-        TensorGenerator m_TensorGenerator;
-        TensorApplier m_TensorApplier;
+        private ITensorAllocator m_TensorAllocator;
+        private TensorGenerator m_TensorGenerator;
+        private TensorApplier m_TensorApplier;
 
-        NNModel m_Model;
-        string m_ModelName;
-        InferenceDevice m_InferenceDevice;
-        IWorker m_Engine;
-        bool m_Verbose = false;
-        bool m_DeterministicInference;
-        string[] m_OutputNames;
-        IReadOnlyList<TensorProxy> m_InferenceInputs;
-        List<TensorProxy> m_InferenceOutputs;
-        Dictionary<string, Tensor> m_InputsByName;
-        Dictionary<int, List<float>> m_Memories = new Dictionary<int, List<float>>();
+        private NNModel m_Model;
+        private string m_ModelName;
+        private InferenceDevice m_InferenceDevice;
+        private IWorker m_Engine;
+        private bool m_Verbose = false;
+        private bool m_DeterministicInference;
+        private string[] m_OutputNames;
+        private IReadOnlyList<TensorProxy> m_InferenceInputs;
+        private List<TensorProxy> m_InferenceOutputs;
+        private Dictionary<string, Tensor> m_InputsByName;
+        private Dictionary<int, List<float>> m_Memories = new Dictionary<int, List<float>>();
 
-        SensorShapeValidator m_SensorShapeValidator = new SensorShapeValidator();
+        private SensorShapeValidator m_SensorShapeValidator = new SensorShapeValidator();
 
-        bool m_ObservationsInitialized;
+        private bool m_ObservationsInitialized;
 
         /// <summary>
         /// Initializes the Brain with the Model that it will use when selecting actions for
@@ -77,8 +77,8 @@ namespace Unity.MLAgents.Inference
                 barracudaModel = ModelLoader.Load(model);
 
                 var failedCheck = BarracudaModelParamLoader.CheckModelVersion(
-                        barracudaModel
-                    );
+                    barracudaModel
+                );
                 if (failedCheck != null)
                 {
                     if (failedCheck.CheckType == BarracudaModelParamLoader.FailedCheck.CheckTypeEnum.Error)
@@ -133,7 +133,7 @@ namespace Unity.MLAgents.Inference
             get { return m_Model; }
         }
 
-        void PrepareBarracudaInputs(IReadOnlyList<TensorProxy> infInputs)
+        private void PrepareBarracudaInputs(IReadOnlyList<TensorProxy> infInputs)
         {
             m_InputsByName.Clear();
             for (var i = 0; i < infInputs.Count; i++)
@@ -150,7 +150,7 @@ namespace Unity.MLAgents.Inference
             m_TensorAllocator?.Reset(false);
         }
 
-        void FetchBarracudaOutputs(string[] names)
+        private void FetchBarracudaOutputs(string[] names)
         {
             m_InferenceOutputs.Clear();
             foreach (var n in names)

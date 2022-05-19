@@ -11,8 +11,8 @@ namespace Unity.MLAgents.Integrations.Match3
     [AddComponentMenu("ML Agents/Match 3 Sensor", (int)MenuGroup.Sensors)]
     public class Match3SensorComponent : SensorComponent, IDisposable
     {
-        [HideInInspector, SerializeField, FormerlySerializedAs("SensorName")]
-        string m_SensorName = "Match3 Sensor";
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("SensorName")]
+        private string m_SensorName = "Match3 Sensor";
 
         /// <summary>
         /// Name of the generated Match3Sensor object.
@@ -20,20 +20,32 @@ namespace Unity.MLAgents.Integrations.Match3
         /// </summary>
         public string SensorName
         {
-            get => m_SensorName;
-            set => m_SensorName = value;
+            get
+            {
+                return m_SensorName;
+            }
+            set
+            {
+                m_SensorName = value;
+            }
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("ObservationType")]
-        Match3ObservationType m_ObservationType = Match3ObservationType.Vector;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("ObservationType")]
+        private Match3ObservationType m_ObservationType = Match3ObservationType.Vector;
 
         /// <summary>
         /// Type of observation to generate.
         /// </summary>
         public Match3ObservationType ObservationType
         {
-            get => m_ObservationType;
-            set => m_ObservationType = value;
+            get
+            {
+                return m_ObservationType;
+            }
+            set
+            {
+                m_ObservationType = value;
+            }
         }
 
         private ISensor[] m_Sensors;
@@ -53,8 +65,14 @@ namespace Unity.MLAgents.Integrations.Match3
             // This can be null if BoardSize.NumSpecialTypes is 0
             var specialSensor = Match3Sensor.SpecialTypeSensor(board, m_ObservationType, m_SensorName + " (special)");
             m_Sensors = specialSensor != null
-                ? new ISensor[] { cellSensor, specialSensor }
-            : new ISensor[] { cellSensor };
+                ? new ISensor[]
+                {
+                    cellSensor, specialSensor
+                }
+                : new ISensor[]
+                {
+                    cellSensor
+                };
             return m_Sensors;
         }
 

@@ -10,7 +10,7 @@ using UnityEngine.InputSystem.LowLevel;
 
 namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
 {
-    class TestAdaptor : IRLActionInputAdaptor
+    internal class TestAdaptor : IRLActionInputAdaptor
     {
         public bool eventWritten;
         public bool writtenToHeuristic;
@@ -40,9 +40,9 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
     [TestFixture]
     public class InputActionActuatorTests
     {
-        BehaviorParameters m_BehaviorParameters;
-        InputActionActuator m_Actuator;
-        TestAdaptor m_Adaptor;
+        private BehaviorParameters m_BehaviorParameters;
+        private InputActionActuator m_Actuator;
+        private TestAdaptor m_Adaptor;
 
         [SetUp]
         public void Setup()

@@ -9,7 +9,7 @@ namespace Unity.MLAgents.SideChannels
     /// </summary>
     internal class TrainingAnalyticsSideChannel : SideChannel
     {
-        const string k_TrainingAnalyticsConfigId = "b664a4a9-d86f-5a5f-95cb-e8353a7e8356";
+        private const string k_TrainingAnalyticsConfigId = "b664a4a9-d86f-5a5f-95cb-e8353a7e8356";
 
         /// <summary>
         /// Initializes the side channel. The constructor is internal because only one instance is

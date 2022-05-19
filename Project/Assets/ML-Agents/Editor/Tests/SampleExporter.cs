@@ -9,15 +9,15 @@ namespace Unity.MLAgents
 {
     public class SampleExporter
     {
-        const string k_MLAgentsSampleFile = "mlagents-sample.json";
-        const string k_PackageSampleFile = ".sample.json";
-        const string k_MLAgentsDir = "ML-Agents";
-        const string k_MLAgentsExamplesDir = "Examples";
-        const string k_MLAgentsPackageName = "com.unity.ml-agents";
-        const string k_MLAgentsSamplesDirName = "Samples";
-        const string k_MLAgentsScriptsDirName = "Scripts";
+        private const string k_MLAgentsSampleFile = "mlagents-sample.json";
+        private const string k_PackageSampleFile = ".sample.json";
+        private const string k_MLAgentsDir = "ML-Agents";
+        private const string k_MLAgentsExamplesDir = "Examples";
+        private const string k_MLAgentsPackageName = "com.unity.ml-agents";
+        private const string k_MLAgentsSamplesDirName = "Samples";
+        private const string k_MLAgentsScriptsDirName = "Scripts";
 
-        struct MLAgentsSampleJson
+        private struct MLAgentsSampleJson
         {
 #pragma warning disable 649
             public string displayName;
@@ -27,7 +27,7 @@ namespace Unity.MLAgents
 #pragma warning restore 649
         }
 
-        struct PackageSampleJson
+        private struct PackageSampleJson
         {
             public string displayName;
             public string description;
@@ -75,14 +75,20 @@ namespace Unity.MLAgents
 
                                 var scriptsPath = Path.Combine(exampleDirectory, k_MLAgentsScriptsDirName);
                                 Debug.Log($"Scene Path: {scenePath}");
-                                var assets = new List<string> { scenePath.Substring(scenePath.IndexOf("Assets")) };
+                                var assets = new List<string>
+                                {
+                                    scenePath.Substring(scenePath.IndexOf("Assets"))
+                                };
                                 if (!Directory.Exists(Path.Combine(scriptsPath)))
                                 {
                                     scriptsPath = exampleDirectory;
                                 }
 
                                 scriptsPath = scriptsPath.Substring(scriptsPath.IndexOf("Assets"));
-                                foreach (var guid in AssetDatabase.FindAssets("t:Script", new[] { scriptsPath }))
+                                foreach (var guid in AssetDatabase.FindAssets("t:Script", new[]
+                                    {
+                                        scriptsPath
+                                    }))
                                 {
                                     var path = AssetDatabase.GUIDToAssetPath(guid);
                                     assets.Add(path);

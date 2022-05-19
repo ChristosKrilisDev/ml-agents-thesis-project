@@ -37,7 +37,7 @@ namespace Unity.MLAgents.Tests
         [TestCase("en-US")]
         public void TestSortCulture(string culture)
         {
-            List<ISensor> sensors = new List<ISensor>();
+            var sensors = new List<ISensor>();
             var sensor0 = new TestSensor("Apple");
             var sensor1 = new TestSensor("Æble");
             sensors.Add(sensor0);

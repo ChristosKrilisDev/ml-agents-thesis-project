@@ -8,23 +8,23 @@ namespace Unity.MLAgents.Sensors
     /// </summary>
     internal class BoxOverlapChecker : IGridPerception
     {
-        Vector3 m_CellScale;
-        Vector3Int m_GridSize;
-        bool m_RotateWithAgent;
-        LayerMask m_ColliderMask;
-        GameObject m_CenterObject;
-        GameObject m_AgentGameObject;
-        string[] m_DetectableTags;
-        int m_InitialColliderBufferSize;
-        int m_MaxColliderBufferSize;
+        private Vector3 m_CellScale;
+        private Vector3Int m_GridSize;
+        private bool m_RotateWithAgent;
+        private LayerMask m_ColliderMask;
+        private GameObject m_CenterObject;
+        private GameObject m_AgentGameObject;
+        private string[] m_DetectableTags;
+        private int m_InitialColliderBufferSize;
+        private int m_MaxColliderBufferSize;
 
-        int m_NumCells;
-        Vector3 m_HalfCellScale;
-        Vector3 m_CellCenterOffset;
-        Vector3[] m_CellLocalPositions;
+        private int m_NumCells;
+        private Vector3 m_HalfCellScale;
+        private Vector3 m_CellCenterOffset;
+        private Vector3[] m_CellLocalPositions;
 
 #if MLA_UNITY_PHYSICS_MODULE
-        Collider[] m_ColliderBuffer;
+        private Collider[] m_ColliderBuffer;
 
         public event Action<GameObject, int> GridOverlapDetectedAll;
         public event Action<GameObject, int> GridOverlapDetectedClosest;
@@ -77,11 +77,11 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// Initializes the local location of the cells
         /// </summary>
-        void InitCellLocalPositions()
+        private void InitCellLocalPositions()
         {
             m_CellLocalPositions = new Vector3[m_NumCells];
 
-            for (int i = 0; i < m_NumCells; i++)
+            for (var i = 0; i < m_NumCells; i++)
             {
                 m_CellLocalPositions[i] = GetCellLocalPosition(i);
             }
@@ -89,8 +89,8 @@ namespace Unity.MLAgents.Sensors
 
         public Vector3 GetCellLocalPosition(int cellIndex)
         {
-            float x = (cellIndex / m_GridSize.z - m_CellCenterOffset.x) * m_CellScale.x;
-            float z = (cellIndex % m_GridSize.z - m_CellCenterOffset.z) * m_CellScale.z;
+            var x = (cellIndex / m_GridSize.z - m_CellCenterOffset.x) * m_CellScale.x;
+            var z = (cellIndex % m_GridSize.z - m_CellCenterOffset.z) * m_CellScale.z;
             return new Vector3(x, 0, z);
         }
 
@@ -153,7 +153,7 @@ namespace Unity.MLAgents.Sensors
         /// <param name="halfCellScale"></param>
         /// <param name="rotation"></param>
         /// <returns></returns>
-        int BufferResizingOverlapBoxNonAlloc(Vector3 cellCenter, Vector3 halfCellScale, Quaternion rotation)
+        private int BufferResizingOverlapBoxNonAlloc(Vector3 cellCenter, Vector3 halfCellScale, Quaternion rotation)
         {
             int numFound;
             // Since we can only get a fixed number of results, requery
@@ -177,7 +177,7 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// Parses the array of colliders found within a cell. Finds the closest gameobject to the agent root reference within the cell
         /// </summary>
-        void ParseCollidersClosest(Collider[] foundColliders, int numFound, int cellIndex, Vector3 cellCenter, Action<GameObject, int> detectedAction)
+        private void ParseCollidersClosest(Collider[] foundColliders, int numFound, int cellIndex, Vector3 cellCenter, Action<GameObject, int> detectedAction)
         {
             GameObject closestColliderGo = null;
             var minDistanceSquared = float.MaxValue;
@@ -226,9 +226,9 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// Parses all colliders in the array of colliders found within a cell.
         /// </summary>
-        void ParseCollidersAll(Collider[] foundColliders, int numFound, int cellIndex, Vector3 cellCenter, Action<GameObject, int> detectedAction)
+        private void ParseCollidersAll(Collider[] foundColliders, int numFound, int cellIndex, Vector3 cellCenter, Action<GameObject, int> detectedAction)
         {
-            for (int i = 0; i < numFound; i++)
+            for (var i = 0; i < numFound; i++)
             {
                 var currentColliderGo = foundColliders[i].gameObject;
                 if (!ReferenceEquals(currentColliderGo, m_AgentGameObject))

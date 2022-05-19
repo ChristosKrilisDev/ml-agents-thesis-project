@@ -10,13 +10,13 @@ namespace Unity.MLAgents.Extensions.Sensors
     /// </summary>
     public class RigidBodyPoseExtractor : PoseExtractor
     {
-        Rigidbody[] m_Bodies;
+        private Rigidbody[] m_Bodies;
 
         /// <summary>
         /// Optional game object used to determine the root of the poses, separate from the actual Rigidbodies
         /// in the hierarchy. For locomotion
         /// </summary>
-        GameObject m_VirtualRoot;
+        private GameObject m_VirtualRoot;
 
         /// <summary>
         /// Initialize given a root RigidBody.
@@ -146,7 +146,11 @@ namespace Unity.MLAgents.Extensions.Sensors
             }
 
             var body = m_Bodies[index];
-            return new Pose { rotation = body.rotation, position = body.position };
+            return new Pose
+            {
+                rotation = body.rotation,
+                position = body.position
+            };
         }
 
         /// <inheritdoc/>
@@ -159,7 +163,13 @@ namespace Unity.MLAgents.Extensions.Sensors
             return m_Bodies[index];
         }
 
-        internal Rigidbody[] Bodies => m_Bodies;
+        internal Rigidbody[] Bodies
+        {
+            get
+            {
+                return m_Bodies;
+            }
+        }
 
         /// <summary>
         /// Get a dictionary indicating which Rigidbodies' poses are enabled or disabled.

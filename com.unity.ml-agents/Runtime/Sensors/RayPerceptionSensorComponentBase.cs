@@ -10,8 +10,8 @@ namespace Unity.MLAgents.Sensors
     /// </summary>
     public abstract class RayPerceptionSensorComponentBase : SensorComponent
     {
-        [HideInInspector, SerializeField, FormerlySerializedAs("sensorName")]
-        string m_SensorName = "RayPerceptionSensor";
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("sensorName")]
+        private string m_SensorName = "RayPerceptionSensor";
 
         /// <summary>
         /// The name of the Sensor that this component wraps.
@@ -23,9 +23,9 @@ namespace Unity.MLAgents.Sensors
             set { m_SensorName = value; }
         }
 
-        [SerializeField, FormerlySerializedAs("detectableTags")]
+        [SerializeField] [FormerlySerializedAs("detectableTags")]
         [Tooltip("List of tags in the scene to compare against.")]
-        List<string> m_DetectableTags;
+        private List<string> m_DetectableTags;
 
         /// <summary>
         /// List of tags in the scene to compare against.
@@ -37,10 +37,10 @@ namespace Unity.MLAgents.Sensors
             set { m_DetectableTags = value; }
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("raysPerDirection")]
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("raysPerDirection")]
         [Range(0, 50)]
         [Tooltip("Number of rays to the left and right of center.")]
-        int m_RaysPerDirection = 3;
+        private int m_RaysPerDirection = 3;
 
         /// <summary>
         /// Number of rays to the left and right of center.
@@ -53,11 +53,11 @@ namespace Unity.MLAgents.Sensors
             set { m_RaysPerDirection = value; }
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("maxRayDegrees")]
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("maxRayDegrees")]
         [Range(0, 180)]
         [Tooltip("Cone size for rays. Using 90 degrees will cast rays to the left and right. " +
             "Greater than 90 degrees will go backwards.")]
-        float m_MaxRayDegrees = 70;
+        private float m_MaxRayDegrees = 70;
 
         /// <summary>
         /// Cone size for rays. Using 90 degrees will cast rays to the left and right.
@@ -65,57 +65,85 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public float MaxRayDegrees
         {
-            get => m_MaxRayDegrees;
-            set { m_MaxRayDegrees = value; UpdateSensor(); }
+            get
+            {
+                return m_MaxRayDegrees;
+            }
+            set
+            {
+                m_MaxRayDegrees = value;
+                UpdateSensor();
+            }
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("sphereCastRadius")]
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("sphereCastRadius")]
         [Range(0f, 10f)]
         [Tooltip("Radius of sphere to cast. Set to zero for raycasts.")]
-        float m_SphereCastRadius = 0.5f;
+        private float m_SphereCastRadius = 0.5f;
 
         /// <summary>
         /// Radius of sphere to cast. Set to zero for raycasts.
         /// </summary>
         public float SphereCastRadius
         {
-            get => m_SphereCastRadius;
-            set { m_SphereCastRadius = value; UpdateSensor(); }
+            get
+            {
+                return m_SphereCastRadius;
+            }
+            set
+            {
+                m_SphereCastRadius = value;
+                UpdateSensor();
+            }
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("rayLength")]
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("rayLength")]
         [Range(1, 1000)]
         [Tooltip("Length of the rays to cast.")]
-        float m_RayLength = 20f;
+        private float m_RayLength = 20f;
 
         /// <summary>
         /// Length of the rays to cast.
         /// </summary>
         public float RayLength
         {
-            get => m_RayLength;
-            set { m_RayLength = value; UpdateSensor(); }
+            get
+            {
+                return m_RayLength;
+            }
+            set
+            {
+                m_RayLength = value;
+                UpdateSensor();
+            }
         }
 
         // The value of the default layers.
-        const int k_PhysicsDefaultLayers = -5;
-        [HideInInspector, SerializeField, FormerlySerializedAs("rayLayerMask")]
+        private const int k_PhysicsDefaultLayers = -5;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("rayLayerMask")]
         [Tooltip("Controls which layers the rays can hit.")]
-        LayerMask m_RayLayerMask = k_PhysicsDefaultLayers;
+        private LayerMask m_RayLayerMask = k_PhysicsDefaultLayers;
 
         /// <summary>
         /// Controls which layers the rays can hit.
         /// </summary>
         public LayerMask RayLayerMask
         {
-            get => m_RayLayerMask;
-            set { m_RayLayerMask = value; UpdateSensor(); }
+            get
+            {
+                return m_RayLayerMask;
+            }
+            set
+            {
+                m_RayLayerMask = value;
+                UpdateSensor();
+            }
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("observationStacks")]
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("observationStacks")]
         [Range(1, 50)]
         [Tooltip("Number of raycast results that will be stacked before being fed to the neural network.")]
-        int m_ObservationStacks = 1;
+        private int m_ObservationStacks = 1;
 
         /// <summary>
         /// Whether to stack previous observations. Using 1 means no previous observations.
@@ -143,14 +171,17 @@ namespace Unity.MLAgents.Sensors
         internal Color rayMissColor = Color.white;
 
         [NonSerialized]
-        RayPerceptionSensor m_RaySensor;
+        private RayPerceptionSensor m_RaySensor;
 
         /// <summary>
         /// Get the RayPerceptionSensor that was created.
         /// </summary>
         public RayPerceptionSensor RaySensor
         {
-            get => m_RaySensor;
+            get
+            {
+                return m_RaySensor;
+            }
         }
 
         /// <summary>
@@ -190,10 +221,16 @@ namespace Unity.MLAgents.Sensors
             if (ObservationStacks != 1)
             {
                 var stackingSensor = new StackingSensor(m_RaySensor, ObservationStacks);
-                return new ISensor[] { stackingSensor };
+                return new ISensor[]
+                {
+                    stackingSensor
+                };
             }
 
-            return new ISensor[] { m_RaySensor };
+            return new ISensor[]
+            {
+                m_RaySensor
+            };
         }
 
         /// <summary>
@@ -262,7 +299,7 @@ namespace Unity.MLAgents.Sensors
             return 0;
         }
 
-        void OnDrawGizmosSelected()
+        private void OnDrawGizmosSelected()
         {
             if (m_RaySensor?.RayPerceptionOutput?.RayOutputs != null)
             {
@@ -295,7 +332,7 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// Draw the debug information from the sensor (if available).
         /// </summary>
-        void DrawRaycastGizmos(RayPerceptionOutput.RayOutput rayOutput, float alpha = 1.0f)
+        private void DrawRaycastGizmos(RayPerceptionOutput.RayOutput rayOutput, float alpha = 1.0f)
         {
             var startPositionWorld = rayOutput.StartPositionWorld;
             var endPositionWorld = rayOutput.EndPositionWorld;

@@ -13,13 +13,13 @@ namespace Unity.MLAgents.Policies
     /// </summary>
     internal class HeuristicPolicy : IPolicy
     {
-        ActuatorManager m_ActuatorManager;
-        ActionBuffers m_ActionBuffers;
-        bool m_Done;
-        bool m_DecisionRequested;
+        private ActuatorManager m_ActuatorManager;
+        private ActionBuffers m_ActionBuffers;
+        private bool m_Done;
+        private bool m_DecisionRequested;
 
-        ObservationWriter m_ObservationWriter = new ObservationWriter();
-        NullList m_NullList = new NullList();
+        private ObservationWriter m_ObservationWriter = new ObservationWriter();
+        private NullList m_NullList = new NullList();
 
 
         public HeuristicPolicy(ActuatorManager actuatorManager, ActionSpec actionSpec)
@@ -123,7 +123,7 @@ namespace Unity.MLAgents.Policies
         /// between training and inference.
         /// </summary>
         /// <param name="sensors"></param>
-        void StepSensors(List<ISensor> sensors)
+        private void StepSensors(List<ISensor> sensors)
         {
             foreach (var sensor in sensors)
             {

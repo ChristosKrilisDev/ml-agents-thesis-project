@@ -10,8 +10,8 @@ namespace Unity.MLAgents.SideChannels
     /// </summary>
     public class OutgoingMessage : IDisposable
     {
-        BinaryWriter m_Writer;
-        MemoryStream m_Stream;
+        private BinaryWriter m_Writer;
+        private MemoryStream m_Stream;
 
         /// <summary>
         /// Create a new empty OutgoingMessage.
@@ -94,7 +94,7 @@ namespace Unity.MLAgents.SideChannels
             m_Stream.SetLength(0);
 
             // Then append the data. Increase the capacity if needed (but don't shrink it).
-            m_Stream.Capacity = (m_Stream.Capacity < data.Length) ? data.Length : m_Stream.Capacity;
+            m_Stream.Capacity = m_Stream.Capacity < data.Length ? data.Length : m_Stream.Capacity;
             m_Stream.Write(data, 0, data.Length);
         }
 

@@ -58,7 +58,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             return new PhysicsSensorSettings
             {
                 UseModelSpaceTranslations = true,
-                UseModelSpaceRotations = true,
+                UseModelSpaceRotations = true
             };
         }
 

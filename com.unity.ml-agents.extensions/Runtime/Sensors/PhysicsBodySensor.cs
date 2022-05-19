@@ -11,12 +11,12 @@ namespace Unity.MLAgents.Extensions.Sensors
     /// </summary>
     public class PhysicsBodySensor : ISensor, IBuiltInSensor
     {
-        ObservationSpec m_ObservationSpec;
-        string m_SensorName;
+        private ObservationSpec m_ObservationSpec;
+        private string m_SensorName;
 
-        PoseExtractor m_PoseExtractor;
-        List<IJointExtractor> m_JointExtractors;
-        PhysicsSensorSettings m_Settings;
+        private PoseExtractor m_PoseExtractor;
+        private List<IJointExtractor> m_JointExtractors;
+        private PhysicsSensorSettings m_Settings;
 
         /// <summary>
         /// Construct a new PhysicsBodySensor

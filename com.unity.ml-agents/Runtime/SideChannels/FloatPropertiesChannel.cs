@@ -8,9 +8,9 @@ namespace Unity.MLAgents.SideChannels
     /// </summary>
     public class FloatPropertiesChannel : SideChannel
     {
-        Dictionary<string, float> m_FloatProperties = new Dictionary<string, float>();
-        Dictionary<string, Action<float>> m_RegisteredActions = new Dictionary<string, Action<float>>();
-        const string k_FloatPropertiesDefaultId = "60ccf7d0-4f7e-11ea-b238-784f4387d1f7";
+        private Dictionary<string, float> m_FloatProperties = new Dictionary<string, float>();
+        private Dictionary<string, Action<float>> m_RegisteredActions = new Dictionary<string, Action<float>>();
+        private const string k_FloatPropertiesDefaultId = "60ccf7d0-4f7e-11ea-b238-784f4387d1f7";
 
         /// <summary>
         /// Initializes the side channel with the provided channel ID.
@@ -71,7 +71,7 @@ namespace Unity.MLAgents.SideChannels
         public float GetWithDefault(string key, float defaultValue)
         {
             float valueOut;
-            bool hasKey = m_FloatProperties.TryGetValue(key, out valueOut);
+            var hasKey = m_FloatProperties.TryGetValue(key, out valueOut);
             return hasKey ? valueOut : defaultValue;
         }
 

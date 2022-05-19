@@ -11,7 +11,10 @@ namespace Unity.MLAgents.Tests
         [Test]
         public void TestRenderTextureSensor()
         {
-            foreach (var grayscale in new[] { true, false })
+            foreach (var grayscale in new[]
+                {
+                    true, false
+                })
             {
                 foreach (SensorCompressionType compression in Enum.GetValues(typeof(SensorCompressionType)))
                 {
@@ -24,7 +27,10 @@ namespace Unity.MLAgents.Tests
                     var obs = sensor.GetObservationProto(obsWriter);
 
                     Assert.AreEqual((int)compression, (int)obs.CompressionType);
-                    var expectedShape = new[] { height, width, grayscale ? 1 : 3 };
+                    var expectedShape = new[]
+                    {
+                        height, width, grayscale ? 1 : 3
+                    };
                     Assert.AreEqual(expectedShape, obs.Shape);
                 }
             }

@@ -17,7 +17,7 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// Cast in 3 dimensions, using Physics.SphereCast or Physics.RayCast.
         /// </summary>
-        Cast3D,
+        Cast3D
     }
 
     /// <summary>
@@ -112,7 +112,7 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// Converts polar coordinate to cartesian coordinate.
         /// </summary>
-        static internal Vector3 PolarToCartesian3D(float radius, float angleDegrees)
+        internal static Vector3 PolarToCartesian3D(float radius, float angleDegrees)
         {
             var x = radius * Mathf.Cos(Mathf.Deg2Rad * angleDegrees);
             var z = radius * Mathf.Sin(Mathf.Deg2Rad * angleDegrees);
@@ -122,7 +122,7 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// Converts polar coordinate to cartesian coordinate.
         /// </summary>
-        static internal Vector2 PolarToCartesian2D(float radius, float angleDegrees)
+        internal static Vector2 PolarToCartesian2D(float radius, float angleDegrees)
         {
             var x = radius * Mathf.Cos(Mathf.Deg2Rad * angleDegrees);
             var y = radius * Mathf.Sin(Mathf.Deg2Rad * angleDegrees);
@@ -238,17 +238,17 @@ namespace Unity.MLAgents.Sensors
     /// </summary>
     public class RayPerceptionSensor : ISensor, IBuiltInSensor
     {
-        float[] m_Observations;
-        ObservationSpec m_ObservationSpec;
-        string m_Name;
+        private float[] m_Observations;
+        private ObservationSpec m_ObservationSpec;
+        private string m_Name;
 
-        RayPerceptionInput m_RayPerceptionInput;
-        RayPerceptionOutput m_RayPerceptionOutput;
+        private RayPerceptionInput m_RayPerceptionInput;
+        private RayPerceptionOutput m_RayPerceptionOutput;
 
         /// <summary>
         /// Time.frameCount at the last time Update() was called. This is only used for display in gizmos.
         /// </summary>
-        int m_DebugLastFrameCount;
+        private int m_DebugLastFrameCount;
 
         internal int DebugLastFrameCount
         {
@@ -279,7 +279,7 @@ namespace Unity.MLAgents.Sensors
             get { return m_RayPerceptionOutput; }
         }
 
-        void SetNumObservations(int numObservations)
+        private void SetNumObservations(int numObservations)
         {
             m_ObservationSpec = ObservationSpec.Vector(numObservations);
             m_Observations = new float[numObservations];
@@ -386,7 +386,7 @@ namespace Unity.MLAgents.Sensors
         /// <returns>Output struct containing the raycast results.</returns>
         public static RayPerceptionOutput Perceive(RayPerceptionInput input)
         {
-            RayPerceptionOutput output = new RayPerceptionOutput();
+            var output = new RayPerceptionOutput();
             output.RayOutputs = new RayPerceptionOutput.RayOutput[input.Angles.Count];
 
             for (var rayIndex = 0; rayIndex < input.Angles.Count; rayIndex++)
@@ -447,7 +447,7 @@ namespace Unity.MLAgents.Sensors
 
                 // If scaledRayLength is 0, we still could have a hit with sphere casts (maybe?).
                 // To avoid 0/0, set the fraction to 0.
-                hitFraction = castHit ? (scaledRayLength > 0 ? rayHit.distance / scaledRayLength : 0.0f) : 1.0f;
+                hitFraction = castHit ? scaledRayLength > 0 ? rayHit.distance / scaledRayLength : 0.0f : 1.0f;
                 hitObject = castHit ? rayHit.collider.gameObject : null;
 #endif
             }

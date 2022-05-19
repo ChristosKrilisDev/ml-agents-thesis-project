@@ -15,9 +15,9 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(Academy.k_PackageVersion, packageInfo.version);
         }
 
-        class RecursiveAgent : Agent
+        private class RecursiveAgent : Agent
         {
-            int m_collectObsCount;
+            private int m_collectObsCount;
             public override void CollectObservations(VectorSensor sensor)
             {
                 m_collectObsCount++;

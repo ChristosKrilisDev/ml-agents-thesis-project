@@ -164,7 +164,10 @@ namespace Unity.MLAgents
         /// </summary>
         public int Length
         {
-            get => m_Length;
+            get
+            {
+                return m_Length;
+            }
         }
 
         /// <summary>
@@ -206,14 +209,20 @@ namespace Unity.MLAgents
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns>Whether the arrays are not equivalent</returns>
-        public static bool operator !=(InplaceArray<T> lhs, InplaceArray<T> rhs) => !lhs.Equals(rhs);
+        public static bool operator !=(InplaceArray<T> lhs, InplaceArray<T> rhs)
+        {
+            return !lhs.Equals(rhs);
+        }
 
         /// <summary>
         /// Check that the arrays are equivalent.
         /// </summary>
         /// <param name="other"></param>
         /// <returns>Whether the arrays are not equivalent</returns>
-        public override bool Equals(object other) => other is InplaceArray<T> other1 && this.Equals(other1);
+        public override bool Equals(object other)
+        {
+            return other is InplaceArray<T> other1 && Equals(other1);
+        }
 
         /// <summary>
         /// Check that the arrays are equivalent.

@@ -7,7 +7,7 @@ namespace Unity.MLAgents.Tests
 {
     public class MultiAgentGroupTests
     {
-        class TestAgent : Agent
+        private class TestAgent : Agent
         {
             internal int _GroupId
             {
@@ -42,13 +42,13 @@ namespace Unity.MLAgents.Tests
             var agent = agentGo.GetComponent<TestAgent>();
 
             // test register
-            SimpleMultiAgentGroup agentGroup1 = new SimpleMultiAgentGroup();
+            var agentGroup1 = new SimpleMultiAgentGroup();
             agentGroup1.RegisterAgent(agent);
             Assert.AreEqual(agentGroup1.GetId(), agent._GroupId);
             Assert.IsNotNull(agent._OnAgentDisabledActions);
 
             // should not be able to registered to multiple groups
-            SimpleMultiAgentGroup agentGroup2 = new SimpleMultiAgentGroup();
+            var agentGroup2 = new SimpleMultiAgentGroup();
             Assert.Throws<UnityAgentsException>(
                 () => agentGroup2.RegisterAgent(agent));
             Assert.AreEqual(agentGroup1.GetId(), agent._GroupId);
@@ -74,7 +74,7 @@ namespace Unity.MLAgents.Tests
             agentGo2.AddComponent<TestAgent>();
             var agent2 = agentGo2.GetComponent<TestAgent>();
 
-            SimpleMultiAgentGroup agentGroup = new SimpleMultiAgentGroup();
+            var agentGroup = new SimpleMultiAgentGroup();
             agentGroup.RegisterAgent(agent1); // register
             Assert.AreEqual(agentGroup.GetRegisteredAgents().Count, 1);
             agentGroup.UnregisterAgent(agent2); // unregister non-member agent
@@ -109,8 +109,8 @@ namespace Unity.MLAgents.Tests
         [Test]
         public void TestGroupIdCounter()
         {
-            SimpleMultiAgentGroup group1 = new SimpleMultiAgentGroup();
-            SimpleMultiAgentGroup group2 = new SimpleMultiAgentGroup();
+            var group1 = new SimpleMultiAgentGroup();
+            var group2 = new SimpleMultiAgentGroup();
             // id should be unique
             Assert.AreNotEqual(group1.GetId(), group2.GetId());
         }

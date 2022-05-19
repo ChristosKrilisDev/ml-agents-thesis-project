@@ -47,7 +47,9 @@ namespace Unity.MLAgents.Actuators
         /// <param name="continuousActions">The continuous actions to send to an <see cref="IActionReceiver"/>.</param>
         /// <param name="discreteActions">The discrete actions to send to an <see cref="IActionReceiver"/>.</param>
         public ActionBuffers(float[] continuousActions, int[] discreteActions)
-            : this(new ActionSegment<float>(continuousActions), new ActionSegment<int>(discreteActions)) { }
+            : this(new ActionSegment<float>(continuousActions), new ActionSegment<int>(discreteActions))
+        {
+        }
 
         /// <summary>
         /// Construct an <see cref="ActionBuffers"/> instance with the continuous and discrete actions that will
@@ -67,8 +69,9 @@ namespace Unity.MLAgents.Actuators
         /// <param name="actionSpec">The <see cref="ActionSpec"/>  to send to an <see cref="IActionReceiver"/>.</param>
         public ActionBuffers(ActionSpec actionSpec)
             : this(new ActionSegment<float>(new float[actionSpec.NumContinuousActions]),
-            new ActionSegment<int>(new int[actionSpec.NumDiscreteActions]))
-        { }
+                new ActionSegment<int>(new int[actionSpec.NumDiscreteActions]))
+        {
+        }
 
         /// <summary>
         /// Create an <see cref="ActionBuffers"/> instance with ActionSpec and all actions stored as a float array.
@@ -80,7 +83,7 @@ namespace Unity.MLAgents.Actuators
         {
             if (actions == null)
             {
-                return ActionBuffers.Empty;
+                return Empty;
             }
 
             Debug.Assert(actions.Length == actionSpec.NumContinuousActions + actionSpec.NumDiscreteActions,
@@ -88,9 +91,9 @@ namespace Unity.MLAgents.Actuators
                 $"{nameof(actions)}.Length: {actions.Length}\n" +
                 $"{nameof(actionSpec)}: {actionSpec.NumContinuousActions + actionSpec.NumDiscreteActions}");
 
-            ActionSegment<float> continuousActionSegment = ActionSegment<float>.Empty;
-            ActionSegment<int> discreteActionSegment = ActionSegment<int>.Empty;
-            int offset = 0;
+            var continuousActionSegment = ActionSegment<float>.Empty;
+            var discreteActionSegment = ActionSegment<int>.Empty;
+            var offset = 0;
             if (actionSpec.NumContinuousActions > 0)
             {
                 continuousActionSegment = new ActionSegment<float>(actions, 0, actionSpec.NumContinuousActions);
@@ -98,7 +101,7 @@ namespace Unity.MLAgents.Actuators
             }
             if (actionSpec.NumDiscreteActions > 0)
             {
-                int[] discreteActions = new int[actionSpec.NumDiscreteActions];
+                var discreteActions = new int[actionSpec.NumDiscreteActions];
                 for (var i = 0; i < actionSpec.NumDiscreteActions; i++)
                 {
                     discreteActions[i] = (int)actions[i + offset];
@@ -152,7 +155,7 @@ namespace Unity.MLAgents.Actuators
         {
             unchecked
             {
-                return (ContinuousActions.GetHashCode() * 397) ^ DiscreteActions.GetHashCode();
+                return ContinuousActions.GetHashCode() * 397 ^ DiscreteActions.GetHashCode();
             }
         }
     }

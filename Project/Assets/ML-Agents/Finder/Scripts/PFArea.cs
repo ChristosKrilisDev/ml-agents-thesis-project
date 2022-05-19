@@ -5,9 +5,12 @@ namespace ML_Agents.Finder.Scripts
 {
     public class PfArea : MonoBehaviour
     {
-        [SerializeField] private GameObject _goalNodePref;
-        [SerializeField] private GameObject _blockPref;
-        [SerializeField] private GameObject[] _spawnAreas;
+        [SerializeField]
+        private GameObject _goalNodePref;
+        [SerializeField]
+        private GameObject _blockPref;
+        [SerializeField]
+        private GameObject[] _spawnAreas;
 
         private Transform[] _nodes;
 

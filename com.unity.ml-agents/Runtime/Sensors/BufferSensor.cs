@@ -10,9 +10,9 @@ namespace Unity.MLAgents.Sensors
         private string m_Name;
         private int m_MaxNumObs;
         private int m_ObsSize;
-        float[] m_ObservationBuffer;
-        int m_CurrentNumObservables;
-        ObservationSpec m_ObservationSpec;
+        private float[] m_ObservationBuffer;
+        private int m_CurrentNumObservables;
+        private ObservationSpec m_ObservationSpec;
 
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Unity.MLAgents.Sensors
             {
                 return;
             }
-            for (int i = 0; i < obs.Length; i++)
+            for (var i = 0; i < obs.Length; i++)
             {
                 m_ObservationBuffer[m_CurrentNumObservables * m_ObsSize + i] = obs[i];
             }
@@ -67,7 +67,7 @@ namespace Unity.MLAgents.Sensors
         /// <inheritdoc/>
         public int Write(ObservationWriter writer)
         {
-            for (int i = 0; i < m_ObsSize * m_MaxNumObs; i++)
+            for (var i = 0; i < m_ObsSize * m_MaxNumObs; i++)
             {
                 writer[i] = m_ObservationBuffer[i];
             }

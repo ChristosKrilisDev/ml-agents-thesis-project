@@ -16,7 +16,10 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public InplaceArray<int> Shape
         {
-            get => m_Shape;
+            get
+            {
+                return m_Shape;
+            }
         }
 
         internal readonly InplaceArray<DimensionProperty> m_DimensionProperties;
@@ -31,7 +34,10 @@ namespace Unity.MLAgents.Sensors
         /// </remarks>
         public InplaceArray<DimensionProperty> DimensionProperties
         {
-            get => m_DimensionProperties;
+            get
+            {
+                return m_DimensionProperties;
+            }
         }
 
         internal ObservationType m_ObservationType;
@@ -42,7 +48,10 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public ObservationType ObservationType
         {
-            get => m_ObservationType;
+            get
+            {
+                return m_ObservationType;
+            }
         }
 
         /// <summary>

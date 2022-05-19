@@ -34,8 +34,8 @@ namespace Unity.MLAgents.Inference
                 TensorProxy tensorProxy, int batchSize, IList<AgentInfoSensorsPair> infos);
         }
 
-        readonly Dictionary<string, IGenerator> m_Dict = new Dictionary<string, IGenerator>();
-        int m_ApiVersion;
+        private readonly Dictionary<string, IGenerator> m_Dict = new Dictionary<string, IGenerator>();
+        private int m_ApiVersion;
 
         /// <summary>
         /// Returns a new TensorGenerators object.

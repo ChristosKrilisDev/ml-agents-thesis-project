@@ -10,9 +10,9 @@ namespace Unity.MLAgents.Inference.Utils
     /// </summary>
     internal class RandomNormal
     {
-        readonly double m_Mean;
-        readonly double m_Stddev;
-        readonly Random m_Random;
+        private readonly double m_Mean;
+        private readonly double m_Stddev;
+        private readonly Random m_Random;
 
         public RandomNormal(int seed, float mean = 0.0f, float stddev = 1.0f)
         {
@@ -22,8 +22,8 @@ namespace Unity.MLAgents.Inference.Utils
         }
 
         // Each iteration produces two numbers. Hold one here for next call
-        bool m_HasSpare;
-        double m_SpareUnscaled;
+        private bool m_HasSpare;
+        private double m_SpareUnscaled;
 
         /// <summary>
         /// Return the next random double number.

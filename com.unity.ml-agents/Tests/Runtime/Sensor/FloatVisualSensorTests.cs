@@ -7,7 +7,7 @@ namespace Unity.MLAgents.Tests
     {
         public int Width { get; }
         public int Height { get; }
-        string m_Name;
+        private string m_Name;
         private ObservationSpec m_ObservationSpec;
         public float[,] floatData;
 

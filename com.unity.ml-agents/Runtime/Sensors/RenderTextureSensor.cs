@@ -8,12 +8,12 @@ namespace Unity.MLAgents.Sensors
     /// </summary>
     public class RenderTextureSensor : ISensor, IBuiltInSensor, IDisposable
     {
-        RenderTexture m_RenderTexture;
-        bool m_Grayscale;
-        string m_Name;
+        private RenderTexture m_RenderTexture;
+        private bool m_Grayscale;
+        private string m_Name;
         private ObservationSpec m_ObservationSpec;
-        SensorCompressionType m_CompressionType;
-        Texture2D m_Texture;
+        private SensorCompressionType m_CompressionType;
+        private Texture2D m_Texture;
 
         /// <summary>
         /// The compression type used by the sensor.

@@ -49,7 +49,7 @@ namespace Unity.MLAgentsExamples
         public CollisionEvent onCollisionExitEvent = new CollisionEvent();
 
         // Start is called before the first frame update
-        void OnEnable()
+        private void OnEnable()
         {
             m_startingPos = transform.position;
             if (respawnIfTouched)
@@ -58,7 +58,7 @@ namespace Unity.MLAgentsExamples
             }
         }
 
-        void Update()
+        private void Update()
         {
             if (respawnIfFallsOffPlatform)
             {
@@ -75,7 +75,7 @@ namespace Unity.MLAgentsExamples
         /// </summary>
         public void MoveTargetToRandomPosition()
         {
-            var newTargetPos = m_startingPos + (Random.insideUnitSphere * spawnRadius);
+            var newTargetPos = m_startingPos + Random.insideUnitSphere * spawnRadius;
             newTargetPos.y = m_startingPos.y;
             transform.position = newTargetPos;
         }

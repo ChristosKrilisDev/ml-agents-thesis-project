@@ -5,17 +5,41 @@ namespace ML_Agents.Finder.Scripts
 {
     public class CheckPoint : MonoBehaviour
     {
-        [SerializeField] private Material _onMaterial;
-        [SerializeField] private Material _offMaterial;
-        [SerializeField] private GameObject _myButton;
+        [SerializeField]
+        private Material _onMaterial;
+        [SerializeField]
+        private Material _offMaterial;
+        [SerializeField]
+        private GameObject _myButton;
 
         private GameObject _goalNode = null;
         private PfArea _areaComponent;
         private bool _hasPushed;
 
-        private Renderer Renderer => _myButton.GetComponent<Renderer>();
-        private GameObject Area => transform.parent.gameObject;
-        private BoxCollider BoxCollider => gameObject.GetComponent<BoxCollider>();
+        private Renderer Renderer
+        {
+            get
+            {
+                return _myButton.GetComponent<Renderer>();
+            }
+        }
+
+        private GameObject Area
+        {
+            get
+            {
+                return transform.parent.gameObject;
+            }
+        }
+
+        private BoxCollider BoxCollider
+        {
+            get
+            {
+                return gameObject.GetComponent<BoxCollider>();
+            }
+        }
+
         public bool GetState { get { return _hasPushed; } private set { } }
 
 
@@ -26,8 +50,8 @@ namespace ML_Agents.Finder.Scripts
 
         public void Init(int cpSpawnIndex, int goalSpawnIndex)
         {
-            _areaComponent.PlaceNode(this.gameObject, cpSpawnIndex);
-            _goalNode = _areaComponent.CreateGoalNode(goalSpawnIndex);   //pre-create final node to get all nodes
+            _areaComponent.PlaceNode(gameObject, cpSpawnIndex);
+            _goalNode = _areaComponent.CreateGoalNode(goalSpawnIndex); //pre-create final node to get all nodes
 
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 

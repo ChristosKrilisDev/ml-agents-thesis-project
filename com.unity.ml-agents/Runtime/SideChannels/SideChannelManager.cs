@@ -11,15 +11,15 @@ namespace Unity.MLAgents.SideChannels
     /// </summary>
     public static class SideChannelManager
     {
-        static Dictionary<Guid, SideChannel> s_RegisteredChannels = new Dictionary<Guid, SideChannel>();
+        private static Dictionary<Guid, SideChannel> s_RegisteredChannels = new Dictionary<Guid, SideChannel>();
 
-        struct CachedSideChannelMessage
+        private struct CachedSideChannelMessage
         {
             public Guid ChannelId;
             public byte[] Message;
         }
 
-        static readonly Queue<CachedSideChannelMessage> s_CachedMessages =
+        private static readonly Queue<CachedSideChannelMessage> s_CachedMessages =
             new Queue<CachedSideChannelMessage>();
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Unity.MLAgents.SideChannels
         /// </summary>
         /// <param name="sideChannels"></param>
         /// <returns></returns>
-        static bool HasOutgoingMessages(Dictionary<Guid, SideChannel> sideChannels)
+        private static bool HasOutgoingMessages(Dictionary<Guid, SideChannel> sideChannels)
         {
             foreach (var sideChannel in sideChannels.Values)
             {
@@ -207,7 +207,7 @@ namespace Unity.MLAgents.SideChannels
                 {
                     while (memStream.Position < memStream.Length)
                     {
-                        Guid channelId = Guid.Empty;
+                        var channelId = Guid.Empty;
                         byte[] message = null;
                         try
                         {

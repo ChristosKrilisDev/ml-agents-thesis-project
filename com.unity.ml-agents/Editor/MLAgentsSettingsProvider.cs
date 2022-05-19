@@ -11,7 +11,7 @@ namespace Unity.MLAgents.Editor
 {
     internal class MLAgentsSettingsProvider : SettingsProvider, IDisposable
     {
-        const string k_SettingsPath = "Project/ML-Agents";
+        private const string k_SettingsPath = "Project/ML-Agents";
         private static MLAgentsSettingsProvider s_Instance;
         private string[] m_AvailableSettingsAssets;
         private int m_CurrentSelectedSettingsAsset;

@@ -15,12 +15,12 @@ namespace Unity.MLAgents.Tests.Analytics
     [TestFixture]
     public class InferenceAnalyticsTests
     {
-        const string k_continuousONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/continuous2vis8vec2action_v1_0.onnx";
-        NNModel continuousONNXModel;
-        Test3DSensorComponent sensor_21_20_3;
-        Test3DSensorComponent sensor_20_22_3;
+        private const string k_continuousONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/continuous2vis8vec2action_v1_0.onnx";
+        private NNModel continuousONNXModel;
+        private Test3DSensorComponent sensor_21_20_3;
+        private Test3DSensorComponent sensor_20_22_3;
 
-        ActionSpec GetContinuous2vis8vec2actionActionSpec()
+        private ActionSpec GetContinuous2vis8vec2actionActionSpec()
         {
             return ActionSpec.MakeContinuous(2);
         }
@@ -44,12 +44,19 @@ namespace Unity.MLAgents.Tests.Analytics
         [Test]
         public void TestModelEvent()
         {
-            var sensors = new List<ISensor> { sensor_21_20_3.Sensor, sensor_20_22_3.Sensor };
+            var sensors = new List<ISensor>
+            {
+                sensor_21_20_3.Sensor,
+                sensor_20_22_3.Sensor
+            };
             var behaviorName = "continuousModel";
             var actionSpec = GetContinuous2vis8vec2actionActionSpec();
 
             var vectorActuator = new VectorActuator(null, actionSpec, "test'");
-            var actuators = new IActuator[] { vectorActuator };
+            var actuators = new IActuator[]
+            {
+                vectorActuator
+            };
 
             var continuousEvent = InferenceAnalytics.GetEventForModel(
                 continuousONNXModel, behaviorName,
@@ -89,7 +96,11 @@ namespace Unity.MLAgents.Tests.Analytics
             // Explicitly request decisions for a policy so we get code coverage on the event sending
             using (new AnalyticsUtils.DisableAnalyticsSending())
             {
-                var sensors = new List<ISensor> { sensor_21_20_3.Sensor, sensor_20_22_3.Sensor };
+                var sensors = new List<ISensor>
+                {
+                    sensor_21_20_3.Sensor,
+                    sensor_20_22_3.Sensor
+                };
                 var policy = new BarracudaPolicy(
                     GetContinuous2vis8vec2actionActionSpec(),
                     Array.Empty<IActuator>(),

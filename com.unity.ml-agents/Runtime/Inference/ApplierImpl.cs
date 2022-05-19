@@ -13,7 +13,7 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class ContinuousActionOutputApplier : TensorApplier.IApplier
     {
-        readonly ActionSpec m_ActionSpec;
+        private readonly ActionSpec m_ActionSpec;
 
         public ContinuousActionOutputApplier(ActionSpec actionSpec)
         {
@@ -51,7 +51,7 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class DiscreteActionOutputApplier : TensorApplier.IApplier
     {
-        readonly ActionSpec m_ActionSpec;
+        private readonly ActionSpec m_ActionSpec;
 
 
         public DiscreteActionOutputApplier(ActionSpec actionSpec, int seed, ITensorAllocator allocator)
@@ -92,11 +92,11 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class LegacyDiscreteActionOutputApplier : TensorApplier.IApplier
     {
-        readonly int[] m_ActionSize;
-        readonly Multinomial m_Multinomial;
-        readonly ActionSpec m_ActionSpec;
-        readonly int[] m_StartActionIndices;
-        readonly float[] m_CdfBuffer;
+        private readonly int[] m_ActionSize;
+        private readonly Multinomial m_Multinomial;
+        private readonly ActionSpec m_ActionSpec;
+        private readonly int[] m_StartActionIndices;
+        private readonly float[] m_CdfBuffer;
 
 
         public LegacyDiscreteActionOutputApplier(ActionSpec actionSpec, int seed, ITensorAllocator allocator)
@@ -171,7 +171,7 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class MemoryOutputApplier : TensorApplier.IApplier
     {
-        Dictionary<int, List<float>> m_Memories;
+        private Dictionary<int, List<float>> m_Memories;
 
         public MemoryOutputApplier(
             Dictionary<int, List<float>> memories)

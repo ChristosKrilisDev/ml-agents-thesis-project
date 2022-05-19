@@ -34,7 +34,7 @@ namespace Unity.MLAgents.Inference
             void Apply(TensorProxy tensorProxy, IList<int> actionIds, Dictionary<int, ActionBuffers> lastActions);
         }
 
-        readonly Dictionary<string, IApplier> m_Dict = new Dictionary<string, IApplier>();
+        private readonly Dictionary<string, IApplier> m_Dict = new Dictionary<string, IApplier>();
 
         /// <summary>
         /// Returns a new TensorAppliers object.

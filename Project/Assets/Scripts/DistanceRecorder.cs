@@ -10,17 +10,20 @@ public class DistanceRecorder : MonoBehaviour
     private float traveledDistance = 0;
     private Vector3 previousLoc;
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (record)
             RecordDistance();
     }
-    void RecordDistance()
+    private void RecordDistance()
     {
         traveledDistance += Vector3.Distance(transform.position, previousLoc);
         previousLoc = transform.position;
     }
-    public void ToggleRecord() => record = !record;
+    public void ToggleRecord()
+    {
+        record = !record;
+    }
 
     public float GetTraveledDistance { get { return traveledDistance; } set { traveledDistance = value; } }
 

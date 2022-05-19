@@ -26,24 +26,24 @@ namespace Unity.MLAgents.Sensors
     /// </summary>
     public class GridSensorBase : ISensor, IBuiltInSensor, IDisposable
     {
-        string m_Name;
-        Vector3 m_CellScale;
-        Vector3Int m_GridSize;
-        string[] m_DetectableTags;
-        SensorCompressionType m_CompressionType;
-        ObservationSpec m_ObservationSpec;
+        private string m_Name;
+        private Vector3 m_CellScale;
+        private Vector3Int m_GridSize;
+        private string[] m_DetectableTags;
+        private SensorCompressionType m_CompressionType;
+        private ObservationSpec m_ObservationSpec;
         internal IGridPerception m_GridPerception;
 
         // Buffers
-        float[] m_PerceptionBuffer;
-        Color[] m_PerceptionColors;
-        Texture2D m_PerceptionTexture;
-        float[] m_CellDataBuffer;
+        private float[] m_PerceptionBuffer;
+        private Color[] m_PerceptionColors;
+        private Texture2D m_PerceptionTexture;
+        private float[] m_CellDataBuffer;
 
         // Utility Constants Calculated on Init
-        int m_NumCells;
-        int m_CellObservationSize;
-        Vector3 m_CellCenterOffset;
+        private int m_NumCells;
+        private int m_CellObservationSize;
+        private Vector3 m_CellCenterOffset;
 
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace Unity.MLAgents.Sensors
             {
                 var allBytes = new List<byte>();
                 var numImages = (m_CellObservationSize + 2) / 3;
-                for (int i = 0; i < numImages; i++)
+                for (var i = 0; i < numImages; i++)
                 {
                     var channelIndex = 3 * i;
                     GridValuesToTexture(channelIndex, Math.Min(3, m_CellObservationSize - channelIndex));
@@ -172,11 +172,11 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// Convert observation values to texture for PNG compression.
         /// </summary>
-        void GridValuesToTexture(int channelIndex, int numChannelsToAdd)
+        private void GridValuesToTexture(int channelIndex, int numChannelsToAdd)
         {
-            for (int i = 0; i < m_NumCells; i++)
+            for (var i = 0; i < m_NumCells; i++)
             {
-                for (int j = 0; j < numChannelsToAdd; j++)
+                for (var j = 0; j < numChannelsToAdd; j++)
                 {
                     m_PerceptionColors[i][j] = m_PerceptionBuffer[i * m_CellObservationSize + channelIndex + j];
                 }
@@ -250,14 +250,14 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// If using PNG compression, check if the values are normalized.
         /// </summary>
-        void ValidateValues(float[] dataValues, GameObject detectedObject)
+        private void ValidateValues(float[] dataValues, GameObject detectedObject)
         {
             if (m_CompressionType != SensorCompressionType.PNG)
             {
                 return;
             }
 
-            for (int j = 0; j < dataValues.Length; j++)
+            for (var j = 0; j < dataValues.Length; j++)
             {
                 if (dataValues[j] < 0 || dataValues[j] > 1)
                     throw new UnityAgentsException($"When using compression type {m_CompressionType} the data value has to be normalized between 0-1. " +
@@ -317,7 +317,7 @@ namespace Unity.MLAgents.Sensors
         {
             using (TimerStack.Instance.Scoped("GridSensor.Write"))
             {
-                int index = 0;
+                var index = 0;
                 for (var h = m_GridSize.z - 1; h >= 0; h--)
                 {
                     for (var w = 0; w < m_GridSize.x; w++)

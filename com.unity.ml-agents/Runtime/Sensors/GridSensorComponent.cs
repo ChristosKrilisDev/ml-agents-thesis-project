@@ -11,11 +11,11 @@ namespace Unity.MLAgents.Sensors
     public class GridSensorComponent : SensorComponent
     {
         // dummy sensor only used for debug gizmo
-        GridSensorBase m_DebugSensor;
-        List<GridSensorBase> m_Sensors;
+        private GridSensorBase m_DebugSensor;
+        private List<GridSensorBase> m_Sensors;
         internal IGridPerception m_GridPerception;
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         protected internal string m_SensorName = "GridSensor";
         /// <summary>
         /// Name of the generated <see cref="GridSensorBase"/> object.
@@ -27,7 +27,7 @@ namespace Unity.MLAgents.Sensors
             set { m_SensorName = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal Vector3 m_CellScale = new Vector3(1f, 0.01f, 1f);
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Unity.MLAgents.Sensors
             set { m_CellScale = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal Vector3Int m_GridSize = new Vector3Int(16, 1, 16);
         /// <summary>
         /// The number of grid on each side.
@@ -62,7 +62,7 @@ namespace Unity.MLAgents.Sensors
             }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal bool m_RotateWithAgent = true;
         /// <summary>
         /// Rotate the grid based on the direction the agent is facing.
@@ -73,7 +73,7 @@ namespace Unity.MLAgents.Sensors
             set { m_RotateWithAgent = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal GameObject m_AgentGameObject;
         /// <summary>
         /// The reference of the root of the agent. This is used to disambiguate objects with
@@ -81,11 +81,11 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public GameObject AgentGameObject
         {
-            get { return (m_AgentGameObject == null ? gameObject : m_AgentGameObject); }
+            get { return m_AgentGameObject == null ? gameObject : m_AgentGameObject; }
             set { m_AgentGameObject = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal string[] m_DetectableTags;
         /// <summary>
         /// List of tags that are detected.
@@ -97,7 +97,7 @@ namespace Unity.MLAgents.Sensors
             set { m_DetectableTags = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal LayerMask m_ColliderMask;
         /// <summary>
         /// The layer mask.
@@ -108,7 +108,7 @@ namespace Unity.MLAgents.Sensors
             set { m_ColliderMask = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal int m_MaxColliderBufferSize = 500;
         /// <summary>
         /// The absolute max size of the Collider buffer used in the non-allocating Physics calls.  In other words
@@ -121,7 +121,7 @@ namespace Unity.MLAgents.Sensors
             set { m_MaxColliderBufferSize = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal int m_InitialColliderBufferSize = 4;
         /// <summary>
         /// The Estimated Max Number of Colliders to expect per cell.  This number is used to
@@ -136,7 +136,7 @@ namespace Unity.MLAgents.Sensors
             set { m_InitialColliderBufferSize = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal Color[] m_DebugColors;
         /// <summary>
         /// Array of Colors used for the grid gizmos.
@@ -147,7 +147,7 @@ namespace Unity.MLAgents.Sensors
             set { m_DebugColors = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal float m_GizmoYOffset = 0f;
         /// <summary>
         /// The height of the gizmos grid.
@@ -158,7 +158,7 @@ namespace Unity.MLAgents.Sensors
             set { m_GizmoYOffset = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal bool m_ShowGizmos = false;
         /// <summary>
         /// Whether to show gizmos or not.
@@ -169,7 +169,7 @@ namespace Unity.MLAgents.Sensors
             set { m_ShowGizmos = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         internal SensorCompressionType m_CompressionType = SensorCompressionType.PNG;
         /// <summary>
         /// The compression type to use for the sensor.
@@ -177,10 +177,14 @@ namespace Unity.MLAgents.Sensors
         public SensorCompressionType CompressionType
         {
             get { return m_CompressionType; }
-            set { m_CompressionType = value; UpdateSensor(); }
+            set
+            {
+                m_CompressionType = value;
+                UpdateSensor();
+            }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         [Range(1, 50)]
         [Tooltip("Number of frames of observations that will be stacked before being fed to the neural network.")]
         internal int m_ObservationStacks = 1;
@@ -249,7 +253,7 @@ namespace Unity.MLAgents.Sensors
         /// <returns>Array of grid sensors to be added to the component.</returns>
         protected virtual GridSensorBase[] GetGridSensors()
         {
-            List<GridSensorBase> sensorList = new List<GridSensorBase>();
+            var sensorList = new List<GridSensorBase>();
             var sensor = new OneHotGridSensor(m_SensorName + "-OneHot", m_CellScale, m_GridSize, m_DetectableTags, m_CompressionType);
             sensorList.Add(sensor);
             return sensorList.ToArray();
@@ -271,7 +275,7 @@ namespace Unity.MLAgents.Sensors
             }
         }
 
-        void OnDrawGizmos()
+        private void OnDrawGizmos()
         {
             if (m_ShowGizmos)
             {

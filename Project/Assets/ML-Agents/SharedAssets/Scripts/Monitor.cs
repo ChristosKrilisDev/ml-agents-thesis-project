@@ -31,19 +31,19 @@ namespace Unity.MLAgents
         /// </summary>
         public static float verticalOffset = 3f;
 
-        static bool s_IsInstantiated;
-        static GameObject s_Canvas;
-        static Dictionary<Transform, Dictionary<string, DisplayValue>> s_DisplayTransformValues;
+        private static bool s_IsInstantiated;
+        private static GameObject s_Canvas;
+        private static Dictionary<Transform, Dictionary<string, DisplayValue>> s_DisplayTransformValues;
 
         /// <summary>
         /// Camera used to calculate GUI screen position relative to the target
         /// transform.
         /// </summary>
-        static Dictionary<Transform, Camera> s_TransformCamera;
+        private static Dictionary<Transform, Camera> s_TransformCamera;
 
-        static Color[] s_BarColors;
+        private static Color[] s_BarColors;
 
-        struct DisplayValue
+        private struct DisplayValue
         {
             public float time;
             public string stringValue;
@@ -61,12 +61,12 @@ namespace Unity.MLAgents
             public ValueType valueType;
         }
 
-        static GUIStyle s_KeyStyle;
-        static GUIStyle s_ValueStyle;
-        static GUIStyle s_GreenStyle;
-        static GUIStyle s_RedStyle;
-        static GUIStyle[] s_ColorStyle;
-        static bool s_Initialized;
+        private static GUIStyle s_KeyStyle;
+        private static GUIStyle s_ValueStyle;
+        private static GUIStyle s_GreenStyle;
+        private static GUIStyle s_RedStyle;
+        private static GUIStyle[] s_ColorStyle;
+        private static bool s_Initialized;
 
         /// <summary>
         /// Use the Monitor.Log static function to attach information to a transform.
@@ -125,11 +125,9 @@ namespace Unity.MLAgents
                 displayValues[key] = dv;
                 while (displayValues.Count > 20)
                 {
-                    var max = (
-                        displayValues
-                            .Aggregate((l, r) => l.Value.time < r.Value.time ? l : r)
-                            .Key
-                    );
+                    var max = displayValues
+                        .Aggregate((l, r) => l.Value.time < r.Value.time ? l : r)
+                        .Key;
                     RemoveValue(target, max);
                 }
             }
@@ -187,8 +185,7 @@ namespace Unity.MLAgents
                 displayValues[key] = dv;
                 while (displayValues.Count > 20)
                 {
-                    var max = (
-                        displayValues.Aggregate((l, r) => l.Value.time < r.Value.time ? l : r).Key);
+                    var max = displayValues.Aggregate((l, r) => l.Value.time < r.Value.time ? l : r).Key;
                     RemoveValue(target, max);
                 }
             }
@@ -257,8 +254,7 @@ namespace Unity.MLAgents
                 displayValues[key] = dv;
                 while (displayValues.Count > 20)
                 {
-                    var max = (
-                        displayValues.Aggregate((l, r) => l.Value.time < r.Value.time ? l : r).Key);
+                    var max = displayValues.Aggregate((l, r) => l.Value.time < r.Value.time ? l : r).Key;
                     RemoveValue(target, max);
                 }
             }
@@ -344,7 +340,7 @@ namespace Unity.MLAgents
         }
 
         /// Initializes the canvas.
-        static void InstantiateCanvas()
+        private static void InstantiateCanvas()
         {
             s_Canvas = GameObject.Find("AgentMonitorCanvas");
             if (s_Canvas == null)
@@ -355,12 +351,12 @@ namespace Unity.MLAgents
             }
 
             s_DisplayTransformValues = new Dictionary<Transform,
-                                                      Dictionary<string, DisplayValue>>();
+                Dictionary<string, DisplayValue>>();
 
             s_TransformCamera = new Dictionary<Transform, Camera>();
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             if (!s_Initialized)
             {
@@ -384,7 +380,7 @@ namespace Unity.MLAgents
                     cam = Camera.main;
                 }
 
-                var widthScaler = (Screen.width / 1000f);
+                var widthScaler = Screen.width / 1000f;
                 var keyPixelWidth = 100 * widthScaler;
                 var keyPixelHeight = 20 * widthScaler;
                 var paddingWidth = 10 * widthScaler;
@@ -399,7 +395,7 @@ namespace Unity.MLAgents
                     var cam2Obj = position - camTransform.position;
                     scale = Mathf.Min(
                         1,
-                        20f / (Vector3.Dot(cam2Obj, camTransform.forward)));
+                        20f / Vector3.Dot(cam2Obj, camTransform.forward));
                     var worldPosition = cam.WorldToScreenPoint(
                         position + new Vector3(0, verticalOffset, 0));
                     origin = new Vector3(
@@ -530,7 +526,7 @@ namespace Unity.MLAgents
         }
 
         /// Helper method used to initialize the GUI. Called once.
-        void Initialize()
+        private void Initialize()
         {
             s_KeyStyle = GUI.skin.label;
             s_ValueStyle = GUI.skin.label;
@@ -538,12 +534,7 @@ namespace Unity.MLAgents
             s_ValueStyle.wordWrap = false;
             s_BarColors = new[]
             {
-                Color.magenta,
-                Color.blue,
-                Color.cyan,
-                Color.green,
-                Color.yellow,
-                Color.red
+                Color.magenta, Color.blue, Color.cyan, Color.green, Color.yellow, Color.red
             };
             s_ColorStyle = new GUIStyle[s_BarColors.Length];
             for (var i = 0; i < s_BarColors.Length; i++)

@@ -116,7 +116,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             sensorComponent.Settings = new PhysicsSensorSettings
             {
                 UseJointForces = true,
-                UseJointPositionsAndAngles = true,
+                UseJointPositionsAndAngles = true
             };
 
             sensor = sensorComponent.CreateSensors()[0];
@@ -130,7 +130,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
 
                 // prismatic
                 0.5f, // joint2.position (interpolate between limits)
-                0f, // joint2.force
+                0f // joint2.force
             };
             SensorTestHelper.CompareObservation(sensor, expected);
             Assert.AreEqual(expected.Length, sensor.GetObservationSpec().Shape[0]);

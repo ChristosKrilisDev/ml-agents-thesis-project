@@ -5,8 +5,8 @@ namespace Unity.MLAgents.Extensions.Sensors
 {
     public class RigidBodyJointExtractor : IJointExtractor
     {
-        Rigidbody m_Body;
-        Joint m_Joint;
+        private Rigidbody m_Body;
+        private Joint m_Joint;
 
         public RigidBodyJointExtractor(Rigidbody body)
         {

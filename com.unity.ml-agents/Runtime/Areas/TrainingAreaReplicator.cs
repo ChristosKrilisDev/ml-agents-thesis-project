@@ -24,19 +24,31 @@ namespace Unity.MLAgents.Areas
         /// </summary>
         public float separation = 10f;
 
-        int3 m_GridSize = new int3(1, 1, 1);
-        int m_areaCount = 0;
-        string m_TrainingAreaName;
+        private int3 m_GridSize = new int3(1, 1, 1);
+        private int m_areaCount = 0;
+        private string m_TrainingAreaName;
 
         /// <summary>
         /// The size of the computed grid to pack the training areas into.
         /// </summary>
-        public int3 GridSize => m_GridSize;
+        public int3 GridSize
+        {
+            get
+            {
+                return m_GridSize;
+            }
+        }
 
         /// <summary>
         /// The name of the training area.
         /// </summary>
-        public string TrainingAreaName => m_TrainingAreaName;
+        public string TrainingAreaName
+        {
+            get
+            {
+                return m_TrainingAreaName;
+            }
+        }
 
         /// <summary>
         /// Called before the simulation begins to computed the grid size for distributing
@@ -63,7 +75,7 @@ namespace Unity.MLAgents.Areas
         /// <summary>
         /// Computes the Grid Size for replicating the training area.
         /// </summary>
-        void ComputeGridSize()
+        private void ComputeGridSize()
         {
             // check if running inference, if so, use the num areas set through the component,
             // otherwise, pull it from the academy
@@ -81,18 +93,18 @@ namespace Unity.MLAgents.Areas
         /// Adds replicas of the training area to the scene.
         /// </summary>
         /// <exception cref="UnityAgentsException"></exception>
-        void AddEnvironments()
+        private void AddEnvironments()
         {
             if (numAreas > m_GridSize.x * m_GridSize.y * m_GridSize.z)
             {
                 throw new UnityAgentsException("The number of training areas that you have specified exceeds the size of the grid.");
             }
 
-            for (int z = 0; z < m_GridSize.z; z++)
+            for (var z = 0; z < m_GridSize.z; z++)
             {
-                for (int y = 0; y < m_GridSize.y; y++)
+                for (var y = 0; y < m_GridSize.y; y++)
                 {
-                    for (int x = 0; x < m_GridSize.x; x++)
+                    for (var x = 0; x < m_GridSize.x; x++)
                     {
                         if (m_areaCount == 0)
                         {

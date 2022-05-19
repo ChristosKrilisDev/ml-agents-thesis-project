@@ -14,9 +14,9 @@ namespace Unity.MLAgents.Tests
     [TestFixture]
     public class DemonstrationTests
     {
-        const string k_DemoDirectory = "Assets/Demonstrations/";
-        const string k_ExtensionType = ".demo";
-        const string k_DemoName = "Test";
+        private const string k_DemoDirectory = "Assets/Demonstrations/";
+        private const string k_ExtensionType = ".demo";
+        private const string k_DemoName = "Test";
 
         [SetUp]
         public void SetUp()
@@ -47,7 +47,10 @@ namespace Unity.MLAgents.Tests
             var bp = gameobj.AddComponent<BehaviorParameters>();
             bp.BrainParameters.VectorObservationSize = 3;
             bp.BrainParameters.NumStackedVectorObservations = 2;
-            bp.BrainParameters.VectorActionDescriptions = new[] { "TestActionA", "TestActionB" };
+            bp.BrainParameters.VectorActionDescriptions = new[]
+            {
+                "TestActionA", "TestActionB"
+            };
             bp.BrainParameters.ActionSpec = ActionSpec.MakeDiscrete(2, 2);
 
             gameobj.AddComponent<TestAgent>();
@@ -66,11 +69,17 @@ namespace Unity.MLAgents.Tests
             var agentInfo = new AgentInfo
             {
                 reward = 1f,
-                discreteActionMasks = new[] { false, true },
+                discreteActionMasks = new[]
+                {
+                    false, true
+                },
                 done = true,
                 episodeId = 5,
                 maxStepReached = true,
-                storedActions = new ActionBuffers(null, new[] { 0, 1 }),
+                storedActions = new ActionBuffers(null, new[]
+                {
+                    0, 1
+                })
             };
 
 
@@ -103,7 +112,10 @@ namespace Unity.MLAgents.Tests
             var bpA = agentGo1.AddComponent<BehaviorParameters>();
             bpA.BrainParameters.VectorObservationSize = 3;
             bpA.BrainParameters.NumStackedVectorObservations = 1;
-            bpA.BrainParameters.VectorActionDescriptions = new[] { "TestActionA", "TestActionB" };
+            bpA.BrainParameters.VectorActionDescriptions = new[]
+            {
+                "TestActionA", "TestActionB"
+            };
             bpA.BrainParameters.ActionSpec = ActionSpec.MakeDiscrete(2, 2);
 
             agentGo1.AddComponent<ObservationAgent>();
@@ -122,11 +134,15 @@ namespace Unity.MLAgents.Tests
             var agentSendInfo = typeof(Agent).GetMethod("SendInfo",
                 BindingFlags.Instance | BindingFlags.NonPublic);
 
-            agentEnableMethod?.Invoke(agent1, new object[] { });
+            agentEnableMethod?.Invoke(agent1, new object[]
+            {
+            });
 
             // Step the agent
             agent1.RequestDecision();
-            agentSendInfo?.Invoke(agent1, new object[] { });
+            agentSendInfo?.Invoke(agent1, new object[]
+            {
+            });
 
             demoRecorder.Close();
 

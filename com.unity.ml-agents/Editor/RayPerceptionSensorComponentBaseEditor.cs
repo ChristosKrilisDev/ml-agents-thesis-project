@@ -6,7 +6,7 @@ namespace Unity.MLAgents.Editor
 {
     internal class RayPerceptionSensorComponentBaseEditor : UnityEditor.Editor
     {
-        bool m_RequireSensorUpdate;
+        private bool m_RequireSensorUpdate;
 
         protected void OnRayPerceptionInspectorGUI(bool is3d)
         {
@@ -76,7 +76,7 @@ namespace Unity.MLAgents.Editor
             UpdateSensorIfDirty();
         }
 
-        void UpdateSensorIfDirty()
+        private void UpdateSensorIfDirty()
         {
             if (m_RequireSensorUpdate)
             {
@@ -87,7 +87,7 @@ namespace Unity.MLAgents.Editor
         }
     }
 
-    [CustomEditor(typeof(RayPerceptionSensorComponent2D), editorForChildClasses: true)]
+    [CustomEditor(typeof(RayPerceptionSensorComponent2D), true)]
     [CanEditMultipleObjects]
     internal class RayPerceptionSensorComponent2DEditor : RayPerceptionSensorComponentBaseEditor
     {
@@ -97,7 +97,7 @@ namespace Unity.MLAgents.Editor
         }
     }
 
-    [CustomEditor(typeof(RayPerceptionSensorComponent3D), editorForChildClasses: true)]
+    [CustomEditor(typeof(RayPerceptionSensorComponent3D), true)]
     [CanEditMultipleObjects]
     internal class RayPerceptionSensorComponent3DEditor : RayPerceptionSensorComponentBaseEditor
     {

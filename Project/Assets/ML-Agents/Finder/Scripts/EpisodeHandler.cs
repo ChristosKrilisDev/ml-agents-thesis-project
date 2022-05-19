@@ -16,7 +16,7 @@ namespace ML_Agents.Finder.Scripts
 
         public PfArea area;
 
-        void EpisodeLoop()
+        private void EpisodeLoop()
         {
             area.CleanArea();
 

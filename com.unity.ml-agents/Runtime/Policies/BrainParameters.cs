@@ -82,7 +82,10 @@ namespace Unity.MLAgents.Policies
         [Obsolete("VectorActionSize has been deprecated, please use ActionSpec instead.")]
         [SerializeField]
         [FormerlySerializedAs("vectorActionSize")]
-        internal int[] VectorActionSize = new[] { 1 };
+        internal int[] VectorActionSize = new[]
+        {
+            1
+        };
 
         /// <summary>
         /// The list of strings describing what the actions correspond to.
@@ -117,7 +120,7 @@ namespace Unity.MLAgents.Policies
                 VectorActionDescriptions = (string[])VectorActionDescriptions.Clone(),
                 ActionSpec = new ActionSpec(ActionSpec.NumContinuousActions, ActionSpec.BranchSizes),
                 VectorActionSize = (int[])VectorActionSize.Clone(),
-                VectorActionSpaceType = VectorActionSpaceType,
+                VectorActionSpaceType = VectorActionSpaceType
             };
 #pragma warning restore CS0618
         }
@@ -161,7 +164,10 @@ namespace Unity.MLAgents.Policies
             }
             else if (m_ActionSpec.NumDiscreteActions == 0)
             {
-                VectorActionSize = new[] { m_ActionSpec.NumContinuousActions };
+                VectorActionSize = new[]
+                {
+                    m_ActionSpec.NumContinuousActions
+                };
                 VectorActionSpaceType = SpaceType.Continuous;
             }
             else

@@ -34,29 +34,32 @@ namespace Dijstra.path
         //}
 
         #region ConnectNodes
+
         /// <summary>
         /// auto connect nodes of a 1D list
         /// in a 2D grid, connect the nodes based on the "connectionRange" var
         /// </summary>
         ///
         [Tooltip("Step : the incresment the pointer should take to connect above/below nodes")]
-        const int gridStep = 3;                   // for up/down connections
-        const int connectionRange = 1;            // for left/right connections
+        private const int gridStep = 3; // for up/down connections
+        private const int connectionRange = 1; // for left/right connections
         public void ConnectNodes()
         {
-            int cp = 0; //check point, 2 == right edge, 0 == right edge
+            var cp = 0; //check point, 2 == right edge, 0 == right edge
 
-            for (int i = 0; i < m_Nodes.Count; i++)
+            for (var i = 0; i < m_Nodes.Count; i++)
             {
-                if (cp >= gridStep)     //reset checkpoint when reache step value
+                if (cp >= gridStep) //reset checkpoint when reache step value
                     cp = 0;
 
                 //right
                 if (i + connectionRange < m_Nodes.Count)
-                    if (cp < gridStep - 1) m_Nodes[i].connections.Add(m_Nodes[i + connectionRange]);
+                    if (cp < gridStep - 1)
+                        m_Nodes[i].connections.Add(m_Nodes[i + connectionRange]);
                 //left
                 if (i - connectionRange >= 0)
-                    if (cp != 0) m_Nodes[i].connections.Add(m_Nodes[i - connectionRange]);
+                    if (cp != 0)
+                        m_Nodes[i].connections.Add(m_Nodes[i - connectionRange]);
                 //up
                 if (i + gridStep < m_Nodes.Count) m_Nodes[i].connections.Add(m_Nodes[i + gridStep]);
                 //down
@@ -89,7 +92,7 @@ namespace Dijstra.path
             }
 
             // The final path
-            Path path = new Path();
+            var path = new Path();
 
             // If the start and end are same node, we can return the start node
             if (start == end)
@@ -99,17 +102,17 @@ namespace Dijstra.path
             }
 
             // The list of unvisited nodes
-            List<Node> unvisited = new List<Node>();
+            var unvisited = new List<Node>();
 
             // Previous nodes in optimal path from source
-            Dictionary<Node, Node> previous = new Dictionary<Node, Node>();
+            var previous = new Dictionary<Node, Node>();
 
             // The calculated distances, set all to Infinity at start, except the start Node
-            Dictionary<Node, float> distances = new Dictionary<Node, float>();
+            var distances = new Dictionary<Node, float>();
 
-            for (int i = 0; i < m_Nodes.Count; i++)
+            for (var i = 0; i < m_Nodes.Count; i++)
             {
-                Node node = m_Nodes[i];
+                var node = m_Nodes[i];
                 unvisited.Add(node);
 
                 // Setting the node distance to Infinity
@@ -125,7 +128,7 @@ namespace Dijstra.path
                 unvisited = unvisited.OrderBy(node => distances[node]).ToList();
 
                 // Getting the Node with smallest distance
-                Node current = unvisited[0];
+                var current = unvisited[0];
 
                 // Remove the current node from unvisisted list
                 unvisited.Remove(current);
@@ -151,15 +154,15 @@ namespace Dijstra.path
                 }
 
                 // Looping through the Node connections (neighbors) and where the connection (neighbor) is available at unvisited list
-                for (int i = 0; i < current.connections.Count; i++)
+                for (var i = 0; i < current.connections.Count; i++)
                 {
-                    Node neighbor = current.connections[i];
+                    var neighbor = current.connections[i];
 
                     // Getting the distance between the current node and the connection (neighbor)
-                    float length = Vector3.Distance(current.transform.position, neighbor.transform.position);
+                    var length = Vector3.Distance(current.transform.position, neighbor.transform.position);
 
                     // The distance from start node to this connection (neighbor) of current node
-                    float alt = distances[current] + length;
+                    var alt = distances[current] + length;
 
                     // A shorter path to the connection (neighbor) has been found
                     if (alt < distances[neighbor])

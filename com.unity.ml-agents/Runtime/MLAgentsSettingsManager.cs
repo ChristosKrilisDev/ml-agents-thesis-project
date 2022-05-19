@@ -48,7 +48,7 @@ namespace Unity.MLAgents
             Initialize();
         }
 
-        static void Initialize()
+        private static void Initialize()
         {
 #if UNITY_EDITOR
             InitializeInEditor();

@@ -26,7 +26,7 @@ namespace Unity.MLAgents.Integrations.Match3
         /// <summary>
         /// Move right (increasing column direction).
         /// </summary>
-        Right, // +column direction
+        Right // +column direction
     }
 
     /// <summary>
@@ -201,7 +201,7 @@ namespace Unity.MLAgents.Integrations.Match3
                 Row = row,
                 Column = col,
                 Direction = dir,
-                MoveIndex = moveIndex,
+                MoveIndex = moveIndex
             };
         }
 
@@ -272,7 +272,7 @@ namespace Unity.MLAgents.Integrations.Match3
         /// <returns></returns>
         public static int NumPotentialMoves(BoardSize maxBoardSize)
         {
-            return maxBoardSize.Rows * (maxBoardSize.Columns - 1) + (maxBoardSize.Rows - 1) * (maxBoardSize.Columns);
+            return maxBoardSize.Rows * (maxBoardSize.Columns - 1) + (maxBoardSize.Rows - 1) * maxBoardSize.Columns;
         }
     }
 }

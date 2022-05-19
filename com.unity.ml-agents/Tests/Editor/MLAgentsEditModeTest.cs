@@ -245,14 +245,14 @@ namespace Unity.MLAgents.Tests
 
                 // We are testing request decision and request actions when called
                 // at different intervals
-                if ((i % 3 == 0) && (i > 2))
+                if (i % 3 == 0 && i > 2)
                 {
                     //Every 3 steps after agent 2 is initialized, request decision
                     requestDecision += 1;
                     requestAction += 1;
                     agent2.RequestDecision();
                 }
-                else if ((i % 5 == 0) && (i > 2))
+                else if (i % 5 == 0 && i > 2)
                 {
                     // Every 5 steps after agent 2 is initialized, request action
                     requestAction += 1;
@@ -479,7 +479,7 @@ namespace Unity.MLAgents.Tests
                 expectedAgentStepCount += 1;
 
                 // If the next step will put the agent at maxSteps, we expect it to reset
-                if (agent1.StepCount == maxStep - 1 || (i == 0))
+                if (agent1.StepCount == maxStep - 1 || i == 0)
                 {
                     expectedEpisodes += 1;
                 }
@@ -555,7 +555,10 @@ namespace Unity.MLAgents.Tests
 
             Assert.Throws<NotImplementedException>(() =>
             {
-                nullList.CopyTo(new[] { 0f }, 0);
+                nullList.CopyTo(new[]
+                {
+                    0f
+                }, 0);
             });
 
             nullList.Add(0);
@@ -592,7 +595,7 @@ namespace Unity.MLAgents.Tests
             }
         }
 
-        static void _InnerAgentTestOnEnableOverride(bool callBase = false)
+        private static void _InnerAgentTestOnEnableOverride(bool callBase = false)
         {
             var go = new GameObject();
             var agent = go.AddComponent<OnEnableAgent>();
@@ -671,7 +674,7 @@ namespace Unity.MLAgents.Tests
                 var bp = go.GetComponent<BehaviorParameters>();
                 bp.ObservableAttributeHandling = behavior;
                 agent.LazyInitialize();
-                int numAttributeSensors = 0;
+                var numAttributeSensors = 0;
                 foreach (var sensor in agent.sensors)
                 {
                     if (sensor.GetType() != typeof(VectorSensor))
@@ -696,7 +699,7 @@ namespace Unity.MLAgents.Tests
             }
         }
 
-        class CollectObsEndEpisodeAgent : Agent
+        private class CollectObsEndEpisodeAgent : Agent
         {
             public override void CollectObservations(VectorSensor sensor)
             {
@@ -705,7 +708,7 @@ namespace Unity.MLAgents.Tests
             }
         }
 
-        class OnEpisodeBeginEndEpisodeAgent : Agent
+        private class OnEpisodeBeginEndEpisodeAgent : Agent
         {
             public override void OnEpisodeBegin()
             {
@@ -714,7 +717,7 @@ namespace Unity.MLAgents.Tests
             }
         }
 
-        void TestRecursiveThrows<T>() where T : Agent
+        private void TestRecursiveThrows<T>() where T : Agent
         {
             var gameObj = new GameObject();
             var agent = gameObj.AddComponent<T>();

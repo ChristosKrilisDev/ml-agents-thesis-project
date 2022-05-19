@@ -16,9 +16,9 @@ namespace Unity.MLAgents.Utils.Tests
     internal class TestPolicy : IPolicy
     {
         public Action OnRequestDecision;
-        ObservationWriter m_ObsWriter = new ObservationWriter();
-        static ActionSpec s_ActionSpec = ActionSpec.MakeContinuous(1);
-        static ActionBuffers s_EmptyActionBuffers = new ActionBuffers(new float[1], Array.Empty<int>());
+        private ObservationWriter m_ObsWriter = new ObservationWriter();
+        private static ActionSpec s_ActionSpec = ActionSpec.MakeContinuous(1);
+        private static ActionBuffers s_EmptyActionBuffers = new ActionBuffers(new float[1], Array.Empty<int>());
 
         public void RequestDecision(AgentInfo info, List<ISensor> sensors)
         {
@@ -142,7 +142,10 @@ namespace Unity.MLAgents.Utils.Tests
         public byte[] GetCompressedObservation()
         {
             numCompressedCalls++;
-            return new byte[] { 0 };
+            return new byte[]
+            {
+                0
+            };
         }
 
         public CompressionSpec GetCompressionSpec()

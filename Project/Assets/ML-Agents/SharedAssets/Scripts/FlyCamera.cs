@@ -17,14 +17,14 @@ namespace Unity.MLAgentsExamples
         public bool rotateOnlyIfMousedown = true;
         public bool movementStaysFlat = true;
 
-        Vector3
+        private Vector3
             m_LastMouse =
-            new Vector3(255, 255,
-                255);     // kind of in the middle of the screen, rather than at the top (play)
+                new Vector3(255, 255,
+                    255); // kind of in the middle of the screen, rather than at the top (play)
 
-        float m_TotalRun = 1.0f;
+        private float m_TotalRun = 1.0f;
 
-        void Awake()
+        private void Awake()
         {
             Debug.Log("FlyCamera Awake() - RESETTING CAMERA POSITION"); // nop?
             // nop:
@@ -34,7 +34,7 @@ namespace Unity.MLAgentsExamples
             transform.rotation = Quaternion.Euler(25, 0, 0);
         }
 
-        void Update()
+        private void Update()
         {
             if (Input.GetMouseButtonDown(1))
             {
@@ -42,7 +42,7 @@ namespace Unity.MLAgentsExamples
             }
 
             if (!rotateOnlyIfMousedown ||
-                (rotateOnlyIfMousedown && Input.GetMouseButton(1)))
+                rotateOnlyIfMousedown && Input.GetMouseButton(1))
             {
                 m_LastMouse = Input.mousePosition - m_LastMouse;
                 m_LastMouse = new Vector3(-m_LastMouse.y * camSens, m_LastMouse.x * camSens, 0);
@@ -72,7 +72,7 @@ namespace Unity.MLAgentsExamples
             p = p * Time.deltaTime;
             var newPosition = transform.position;
             if (Input.GetKey(KeyCode.Space)
-                || (movementStaysFlat && !(rotateOnlyIfMousedown && Input.GetMouseButton(1))))
+                || movementStaysFlat && !(rotateOnlyIfMousedown && Input.GetMouseButton(1)))
             {
                 // If player wants to move on X and Z axis only
                 transform.Translate(p);
@@ -86,7 +86,7 @@ namespace Unity.MLAgentsExamples
             }
         }
 
-        Vector3 GetBaseInput()
+        private Vector3 GetBaseInput()
         {
             // returns the basic values, if it's 0 than it's not active.
             var pVelocity = new Vector3();

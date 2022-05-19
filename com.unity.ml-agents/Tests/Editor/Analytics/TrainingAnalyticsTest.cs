@@ -26,12 +26,19 @@ namespace Unity.MLAgents.Tests.Analytics
             var behaviorName = "testBehavior";
             var sensor1 = new Test3DSensor("SensorA", 21, 20, 3);
             var sensor2 = new Test3DSensor("SensorB", 20, 22, 3);
-            var sensors = new List<ISensor> { sensor1, sensor2 };
+            var sensors = new List<ISensor>
+            {
+                sensor1,
+                sensor2
+            };
 
             var actionSpec = ActionSpec.MakeContinuous(2);
 
             var vectorActuator = new VectorActuator(null, actionSpec, "test'");
-            var actuators = new IActuator[] { vectorActuator };
+            var actuators = new IActuator[]
+            {
+                vectorActuator
+            };
 
             var remotePolicyEvent = TrainingAnalytics.GetEventForRemotePolicy(behaviorName, sensors, actionSpec, actuators);
 

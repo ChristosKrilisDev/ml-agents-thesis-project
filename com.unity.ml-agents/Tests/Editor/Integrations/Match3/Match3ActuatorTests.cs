@@ -183,7 +183,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
             actuator.WriteDiscreteActionMask(masks);
 
             // Run through all moves and make sure those are the only valid ones
-            HashSet<int> validIndices = new HashSet<int>();
+            var validIndices = new HashSet<int>();
             foreach (var m in validMoves)
             {
                 validIndices.Add(m.MoveIndex);

@@ -18,7 +18,7 @@ namespace Unity.MLAgents.SideChannels
             CaptureFrameRate = 4
         }
 
-        const string k_EngineConfigId = "e951342c-4f7e-11ea-b238-784f4387d1f7";
+        private const string k_EngineConfigId = "e951342c-4f7e-11ea-b238-784f4387d1f7";
 
         /// <summary>
         /// Initializes the side channel. The constructor is internal because only one instance is

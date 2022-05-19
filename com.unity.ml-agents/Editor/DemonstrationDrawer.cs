@@ -12,23 +12,23 @@ namespace Unity.MLAgents.Editor
     [CanEditMultipleObjects]
     internal class DemonstrationEditor : UnityEditor.Editor
     {
-        SerializedProperty m_BrainParameters;
-        SerializedProperty m_DemoMetaData;
-        SerializedProperty m_ObservationShapes;
-        const string k_BrainParametersName = "brainParameters";
-        const string k_MetaDataName = "metaData";
-        const string k_ObservationSummariesName = "observationSummaries";
-        const string k_DemonstrationName = "demonstrationName";
-        const string k_NumberStepsName = "numberSteps";
-        const string k_NumberEpisodesName = "numberEpisodes";
-        const string k_MeanRewardName = "meanReward";
-        const string k_ActionSpecName = "m_ActionSpec";
-        const string k_NumContinuousActionsName = "m_NumContinuousActions";
-        const string k_NumDiscreteActionsName = "BranchSizes";
-        const string k_ShapeName = "shape";
+        private SerializedProperty m_BrainParameters;
+        private SerializedProperty m_DemoMetaData;
+        private SerializedProperty m_ObservationShapes;
+        private const string k_BrainParametersName = "brainParameters";
+        private const string k_MetaDataName = "metaData";
+        private const string k_ObservationSummariesName = "observationSummaries";
+        private const string k_DemonstrationName = "demonstrationName";
+        private const string k_NumberStepsName = "numberSteps";
+        private const string k_NumberEpisodesName = "numberEpisodes";
+        private const string k_MeanRewardName = "meanReward";
+        private const string k_ActionSpecName = "m_ActionSpec";
+        private const string k_NumContinuousActionsName = "m_NumContinuousActions";
+        private const string k_NumDiscreteActionsName = "BranchSizes";
+        private const string k_ShapeName = "shape";
 
 
-        void OnEnable()
+        private void OnEnable()
         {
             m_BrainParameters = serializedObject.FindProperty(k_BrainParametersName);
             m_DemoMetaData = serializedObject.FindProperty(k_MetaDataName);
@@ -38,7 +38,7 @@ namespace Unity.MLAgents.Editor
         /// <summary>
         /// Renders Inspector UI for Demonstration metadata.
         /// </summary>
-        void MakeMetaDataProperty(SerializedProperty property)
+        private void MakeMetaDataProperty(SerializedProperty property)
         {
             var nameProp = property.FindPropertyRelative(k_DemonstrationName);
             var experiencesProp = property.FindPropertyRelative(k_NumberStepsName);
@@ -59,7 +59,7 @@ namespace Unity.MLAgents.Editor
         /// <summary>
         /// Constructs label for a serialized integer array.
         /// </summary>
-        static string BuildIntArrayLabel(SerializedProperty actionSizeProperty)
+        private static string BuildIntArrayLabel(SerializedProperty actionSizeProperty)
         {
             var actionSize = actionSizeProperty.arraySize;
             var actionLabel = new StringBuilder("[ ");
@@ -80,7 +80,7 @@ namespace Unity.MLAgents.Editor
         /// Renders Inspector UI for BrainParameters of a DemonstrationSummary.
         /// Only the Action size and type are used from the BrainParameters.
         /// </summary>
-        void MakeActionsProperty(SerializedProperty property)
+        private void MakeActionsProperty(SerializedProperty property)
         {
             var actSpecProperty = property.FindPropertyRelative(k_ActionSpecName);
             var continuousSizeProperty = actSpecProperty.FindPropertyRelative(k_NumContinuousActionsName);
@@ -96,7 +96,7 @@ namespace Unity.MLAgents.Editor
         /// Render the observation shapes of a DemonstrationSummary.
         /// </summary>
         /// <param name="obsSummariesProperty"></param>
-        void MakeObservationsProperty(SerializedProperty obsSummariesProperty)
+        private void MakeObservationsProperty(SerializedProperty obsSummariesProperty)
         {
             var shapesLabels = new List<string>();
             var numObservations = obsSummariesProperty.arraySize;

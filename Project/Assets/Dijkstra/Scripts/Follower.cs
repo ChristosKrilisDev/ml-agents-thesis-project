@@ -23,7 +23,7 @@ namespace Dijstra.path
         protected Path m_Path = new Path();
         protected Node m_Current;
 
-        void Start()
+        private void Start()
         {
             m_Path = m_Graph.GetShortestPath(m_Start, m_End);
             Follow(m_Path);
@@ -45,7 +45,7 @@ namespace Dijstra.path
         /// Following the path.
         /// </summary>
         /// <returns>The path.</returns>
-        IEnumerator FollowPath()
+        private IEnumerator FollowPath()
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.update += Update;
@@ -57,9 +57,9 @@ namespace Dijstra.path
 
                 // Wait until we reach the current target node and then go to next node
                 yield return new WaitUntil(() =>
-              {
-                  return transform.position == m_Current.transform.position;
-              });
+                {
+                    return transform.position == m_Current.transform.position;
+                });
             }
             m_Current = null;
 #if UNITY_EDITOR
@@ -67,7 +67,7 @@ namespace Dijstra.path
 #endif
         }
 
-        void Update()
+        private void Update()
         {
             if (m_Current != null)
             {

@@ -8,7 +8,7 @@ namespace Unity.MLAgents.Extensions.Editor
     [CanEditMultipleObjects]
     internal class RigidBodySensorComponentEditor : UnityEditor.Editor
     {
-        bool ShowHierarchy = true;
+        private bool ShowHierarchy = true;
 
         public override void OnInspectorGUI()
         {

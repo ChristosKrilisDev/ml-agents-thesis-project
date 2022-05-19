@@ -17,33 +17,33 @@ namespace Dijstra.path
         //protected Follower m_Follower;
         protected Path m_Path = new Path();
 
-        void OnEnable()
+        private void OnEnable()
         {
             m_Graph = target as Graph;
         }
 
-        void OnSceneGUI()
+        private void OnSceneGUI()
         {
             if (m_Graph == null)
             {
                 return;
             }
-            for (int i = 0; i < m_Graph.nodes.Count; i++)
+            for (var i = 0; i < m_Graph.nodes.Count; i++)
             {
-                Node node = m_Graph.nodes[i];
-                for (int j = 0; j < node.connections.Count; j++)
+                var node = m_Graph.nodes[i];
+                for (var j = 0; j < node.connections.Count; j++)
                 {
-                    Node connection = node.connections[j];
+                    var connection = node.connections[j];
                     if (connection == null)
                     {
                         continue;
                     }
-                    float distance = Vector3.Distance(node.transform.position, connection.transform.position);
-                    Vector3 diff = connection.transform.position - node.transform.position;
-                    Handles.Label(node.transform.position + (diff / 2), distance.ToString("f2"), EditorStyles.whiteBoldLabel);
+                    var distance = Vector3.Distance(node.transform.position, connection.transform.position);
+                    var diff = connection.transform.position - node.transform.position;
+                    Handles.Label(node.transform.position + diff / 2, distance.ToString("f2"), EditorStyles.whiteBoldLabel);
                     if (m_Path.nodes.Contains(node) && m_Path.nodes.Contains(connection))
                     {
-                        Color color = Handles.color;
+                        var color = Handles.color;
                         Handles.color = Color.green;
                         Handles.DrawLine(node.transform.position, connection.transform.position);
                         Handles.color = color;
@@ -61,7 +61,7 @@ namespace Dijstra.path
             m_Graph.nodes.Clear();
             foreach (Transform child in m_Graph.transform)
             {
-                Node node = child.GetComponent<Node>();
+                var node = child.GetComponent<Node>();
                 if (node != null)
                 {
                     m_Graph.nodes.Add(node);

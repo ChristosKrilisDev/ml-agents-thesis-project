@@ -7,11 +7,11 @@ namespace Unity.MLAgents.Tests
         [Test]
         public void TestNested()
         {
-            TimerStack myTimer = TimerStack.Instance;
+            var myTimer = TimerStack.Instance;
             myTimer.Reset();
             using (myTimer.Scoped("foo"))
             {
-                for (int i = 0; i < 5; i++)
+                for (var i = 0; i < 5; i++)
                 {
                     using (myTimer.Scoped("bar"))
                     {
@@ -43,7 +43,7 @@ namespace Unity.MLAgents.Tests
         [Test]
         public void TestGauges()
         {
-            TimerStack myTimer = TimerStack.Instance;
+            var myTimer = TimerStack.Instance;
             myTimer.Reset();
 
             // Simple test - adding 1's should keep that for the weighted and running averages.
@@ -52,7 +52,7 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(oneNode.weightedAverage, 1.0f);
             Assert.AreEqual(oneNode.runningAverage, 1.0f);
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 myTimer.SetGauge("one", 1.0f);
             }

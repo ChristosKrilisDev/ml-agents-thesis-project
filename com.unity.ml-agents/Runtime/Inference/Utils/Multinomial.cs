@@ -10,7 +10,7 @@ namespace Unity.MLAgents.Inference.Utils
     /// </summary>
     internal class Multinomial
     {
-        readonly System.Random m_Random;
+        private readonly System.Random m_Random;
 
         /// <summary>
         /// Constructor.

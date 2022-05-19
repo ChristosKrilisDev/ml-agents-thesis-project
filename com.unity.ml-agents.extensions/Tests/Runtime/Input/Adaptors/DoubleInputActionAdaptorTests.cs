@@ -9,10 +9,10 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
 {
     public class DoubleInputActionAdaptorTests : InputTestFixture
     {
-        DoubleInputActionAdaptor m_Adaptor;
-        InputDevice m_Device;
-        InputControl<double> m_Control;
-        InputAction m_Action;
+        private DoubleInputActionAdaptor m_Adaptor;
+        private InputDevice m_Device;
+        private InputControl<double> m_Control;
+        private InputAction m_Action;
 
         public override void Setup()
         {
@@ -49,7 +49,10 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
         [Test]
         public void TestQueueEvent()
         {
-            var actionBuffers = new ActionBuffers(new ActionSegment<float>(new[] { 1f }), ActionSegment<int>.Empty);
+            var actionBuffers = new ActionBuffers(new ActionSegment<float>(new[]
+            {
+                1f
+            }), ActionSegment<int>.Empty);
             var context = new InputActuatorEventContext(1, m_Device);
             using (context.GetEventForFrame(out var eventPtr))
             {
@@ -62,14 +65,20 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
         [Test]
         public void TestWriteToHeuristic()
         {
-            var actionBuffers = new ActionBuffers(new ActionSegment<float>(new[] { 1f }), ActionSegment<int>.Empty);
+            var actionBuffers = new ActionBuffers(new ActionSegment<float>(new[]
+            {
+                1f
+            }), ActionSegment<int>.Empty);
             var context = new InputActuatorEventContext(1, m_Device);
             using (context.GetEventForFrame(out var eventPtr))
             {
                 m_Adaptor.WriteToInputEventForAction(eventPtr, m_Action, m_Control, new ActionSpec(), actionBuffers);
             }
             InputSystem.Update();
-            var buffer = new ActionBuffers(new ActionSegment<float>(new[] { 1f }), ActionSegment<int>.Empty);
+            var buffer = new ActionBuffers(new ActionSegment<float>(new[]
+            {
+                1f
+            }), ActionSegment<int>.Empty);
             m_Adaptor.WriteToHeuristic(m_Action, buffer);
             Assert.IsTrue(Mathf.Approximately(buffer.ContinuousActions[0], 1f));
         }

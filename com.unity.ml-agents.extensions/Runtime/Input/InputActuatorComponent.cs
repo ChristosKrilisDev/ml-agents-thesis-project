@@ -25,29 +25,39 @@ namespace Unity.MLAgents.Extensions.Input
     [AddComponentMenu("ML Agents/Input Actuator", (int)MenuGroup.Actuators)]
     public class InputActuatorComponent : ActuatorComponent
     {
-        InputActionAsset m_InputAsset;
-        IInputActionCollection2 m_AssetCollection;
-        PlayerInput m_PlayerInput;
-        BehaviorParameters m_BehaviorParameters;
-        IActuator[] m_Actuators;
-        InputDevice m_Device;
+        private InputActionAsset m_InputAsset;
+        private IInputActionCollection2 m_AssetCollection;
+        private PlayerInput m_PlayerInput;
+        private BehaviorParameters m_BehaviorParameters;
+        private IActuator[] m_Actuators;
+        private InputDevice m_Device;
 
         /// <summary>
         /// Mapping of <see cref="InputControl"/> types to types of <see cref="IRLActionInputAdaptor"/> concrete classes.
         /// </summary>
         public static Dictionary<Type, Type> controlTypeToAdaptorType = new Dictionary<Type, Type>
         {
-            { typeof(Vector2Control), typeof(Vector2InputActionAdaptor) },
-            { typeof(ButtonControl), typeof(ButtonInputActionAdaptor) },
-            { typeof(IntegerControl), typeof(IntegerInputActionAdaptor) },
-            { typeof(AxisControl), typeof(FloatInputActionAdaptor) },
-            { typeof(DoubleControl), typeof(DoubleInputActionAdaptor) }
+            {
+                typeof(Vector2Control), typeof(Vector2InputActionAdaptor)
+            },
+            {
+                typeof(ButtonControl), typeof(ButtonInputActionAdaptor)
+            },
+            {
+                typeof(IntegerControl), typeof(IntegerInputActionAdaptor)
+            },
+            {
+                typeof(AxisControl), typeof(FloatInputActionAdaptor)
+            },
+            {
+                typeof(DoubleControl), typeof(DoubleInputActionAdaptor)
+            }
         };
 
-        string m_LayoutName;
+        private string m_LayoutName;
         [SerializeField]
-        ActionSpec m_ActionSpec;
-        InputControlScheme m_ControlScheme;
+        private ActionSpec m_ActionSpec;
+        private InputControlScheme m_ControlScheme;
 
         public const string mlAgentsLayoutFormat = "MLAT";
         public const string mlAgentsLayoutName = "MLAgentsLayout";
@@ -76,7 +86,7 @@ namespace Unity.MLAgents.Extensions.Input
             }
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             CleanupActionAsset();
         }
@@ -141,7 +151,7 @@ namespace Unity.MLAgents.Extensions.Input
             return m_Actuators;
         }
 
-        static ActionSpec CombineActuatorActionSpecs(IActuator[] actuators)
+        private static ActionSpec CombineActuatorActionSpecs(IActuator[] actuators)
         {
             var specs = new ActionSpec[actuators.Length];
             for (var i = 0; i < actuators.Length; i++)
@@ -202,7 +212,10 @@ namespace Unity.MLAgents.Extensions.Input
                 var inputActionMap = m_InputAsset.FindActionMap(m_PlayerInput.defaultActionMap);
                 m_InputAsset.AddControlScheme(m_ControlScheme);
                 collection.bindingMask = InputBinding.MaskByGroup(m_ControlScheme.bindingGroup);
-                collection.devices = new ReadOnlyArray<InputDevice>(new[] { m_Device });
+                collection.devices = new ReadOnlyArray<InputDevice>(new[]
+                {
+                    m_Device
+                });
                 inputActionMap.bindingMask = collection.bindingMask;
                 inputActionMap.devices = collection.devices;
             }
@@ -336,9 +349,9 @@ namespace Unity.MLAgents.Extensions.Input
             m_Device = null;
         }
 
-        int m_ActuatorsWrittenToEvent;
-        NativeArray<byte> m_InputBufferForFrame;
-        InputEventPtr m_InputEventPtrForFrame;
+        private int m_ActuatorsWrittenToEvent;
+        private NativeArray<byte> m_InputBufferForFrame;
+        private InputEventPtr m_InputEventPtrForFrame;
         public InputEventPtr GetEventForFrame()
         {
 #if UNITY_EDITOR

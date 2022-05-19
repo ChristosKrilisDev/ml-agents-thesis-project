@@ -11,7 +11,7 @@ namespace Unity.MLAgents.Actuators
     public struct ActionSpec
     {
         [SerializeField]
-        int m_NumContinuousActions;
+        private int m_NumContinuousActions;
 
         /// <summary>
         /// An array of branch sizes for discrete actions.

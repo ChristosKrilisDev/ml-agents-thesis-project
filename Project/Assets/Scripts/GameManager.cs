@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,9 +14,9 @@ public class GameManager : MonoBehaviour
     private TextFileHandler fileHandler;
     private int index = 0;
 
-    DateTime localDate = DateTime.Now;
+    private DateTime localDate = DateTime.Now;
 
-    void Awake()
+    private void Awake()
     {
         if (instance == null)
             instance = this;
@@ -25,7 +24,7 @@ public class GameManager : MonoBehaviour
         if (!canWriteData)
             return;
 
-            if (!PlayerPrefs.HasKey("Index"))
+        if (!PlayerPrefs.HasKey("Index"))
             PlayerPrefs.SetInt("Index", index);
         else
             index = PlayerPrefs.GetInt("Index");

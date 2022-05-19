@@ -44,17 +44,17 @@ namespace Unity.MLAgents.Integrations.Match3
     /// </summary>
     public class Match3Sensor : ISensor, IBuiltInSensor, IDisposable
     {
-        Match3ObservationType m_ObservationType;
-        ObservationSpec m_ObservationSpec;
-        string m_Name;
+        private Match3ObservationType m_ObservationType;
+        private ObservationSpec m_ObservationSpec;
+        private string m_Name;
 
-        AbstractBoard m_Board;
-        BoardSize m_MaxBoardSize;
-        GridValueProvider m_GridValues;
-        int m_OneHotSize;
+        private AbstractBoard m_Board;
+        private BoardSize m_MaxBoardSize;
+        private GridValueProvider m_GridValues;
+        private int m_OneHotSize;
 
-        Texture2D m_ObservationTexture;
-        OneHotToTextureUtil m_TextureUtil;
+        private Texture2D m_ObservationTexture;
+        private OneHotToTextureUtil m_TextureUtil;
 
         /// <summary>
         /// Create a sensor for the GridValueProvider with the specified observation type.
@@ -127,7 +127,7 @@ namespace Unity.MLAgents.Integrations.Match3
             m_Board.CheckBoardSizes(m_MaxBoardSize);
             var currentBoardSize = m_Board.GetCurrentBoardSize();
 
-            int offset = 0;
+            var offset = 0;
             var isVisual = m_ObservationType != Match3ObservationType.Vector;
 
             // This is equivalent to
@@ -261,10 +261,13 @@ namespace Unity.MLAgents.Integrations.Match3
     /// </summary>
     internal class OneHotToTextureUtil
     {
-        Color[] m_Colors;
-        int m_MaxHeight;
-        int m_MaxWidth;
-        private static Color[] s_OneHotColors = { Color.red, Color.green, Color.blue };
+        private Color[] m_Colors;
+        private int m_MaxHeight;
+        private int m_MaxWidth;
+        private static Color[] s_OneHotColors =
+        {
+            Color.red, Color.green, Color.blue
+        };
 
         public OneHotToTextureUtil(int maxHeight, int maxWidth)
         {
@@ -291,7 +294,7 @@ namespace Unity.MLAgents.Integrations.Match3
                     var colorVal = Color.black;
                     if (h < currentHeight && w < currentWidth)
                     {
-                        int oneHotValue = gridValueProvider(h, w);
+                        var oneHotValue = gridValueProvider(h, w);
                         if (oneHotValue >= channelOffset && oneHotValue < channelOffset + 3)
                         {
                             colorVal = s_OneHotColors[oneHotValue - channelOffset];
@@ -315,14 +318,14 @@ namespace Unity.MLAgents.Integrations.Match3
             {
                 for (var i = 0; i < oneHotSize; i++)
                 {
-                    writer[row, col, i] = (i == value) ? 1.0f : 0.0f;
+                    writer[row, col, i] = i == value ? 1.0f : 0.0f;
                 }
             }
             else
             {
                 for (var i = 0; i < oneHotSize; i++)
                 {
-                    writer[offset] = (i == value) ? 1.0f : 0.0f;
+                    writer[offset] = i == value ? 1.0f : 0.0f;
                     offset++;
                 }
             }

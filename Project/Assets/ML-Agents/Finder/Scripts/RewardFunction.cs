@@ -13,9 +13,9 @@ namespace ML_Agents.Finder.Scripts
         private static readonly float _epsilon = 0.4f;
         private static readonly float _boostReward = 1;
 
-        
+
         public static UnityAction OnEpisodeEnd;
-        
+
 
 
         /// <SharpedRewardFunction> distanceReward = 1 - ( Dx/DijDχ )^(epsilon) </SharpedRewardFunction>
@@ -29,7 +29,7 @@ namespace ML_Agents.Finder.Scripts
         /// <hasEpisodeEnded> Whenever the episodes ends, calculate terminal reward </hasEpisodeEnded>
         ///
         /// <calculateReward> The reward agent will take for that state based based on the reward state</calculateReward>
-        public static float GetComplexReward(float currDistance, float currentGoalDistance, int stepCount, int maxStep , bool hasEpisodeEnded, bool hasFoundCheckPoint, bool hasFoundGoal, bool hasFollowedDijktra)
+        public static float GetComplexReward(float currDistance, float currentGoalDistance, int stepCount, int maxStep, bool hasEpisodeEnded, bool hasFoundCheckPoint, bool hasFoundGoal, bool hasFollowedDijktra)
         {
             float calculateReward;
             //agent reward is reset to 0 after every step
@@ -37,6 +37,7 @@ namespace ML_Agents.Finder.Scripts
             var stepFactor = Math.Abs(stepCount - maxStep) / (float)maxStep;
 
             #region TerminalRewards
+
             if (hasEpisodeEnded) //TC1 when it ends? : max step reached or completed task
             {
                 if (hasFoundCheckPoint)
@@ -68,6 +69,7 @@ namespace ML_Agents.Finder.Scripts
 
                 OnEpisodeEnd?.Invoke();
             }
+
             #endregion
             else //encourage agent to keep searching
             {

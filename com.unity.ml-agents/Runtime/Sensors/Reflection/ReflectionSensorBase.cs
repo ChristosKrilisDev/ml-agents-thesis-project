@@ -36,9 +36,9 @@ namespace Unity.MLAgents.Sensors.Reflection
         protected ObservableAttribute m_ObservableAttribute;
 
         // Cached sensor names and shapes.
-        string m_SensorName;
-        ObservationSpec m_ObservationSpec;
-        int m_NumFloats;
+        private string m_SensorName;
+        private ObservationSpec m_ObservationSpec;
+        private int m_NumFloats;
 
         public ReflectionSensorBase(ReflectionSensorInfo reflectionSensorInfo, int size)
         {

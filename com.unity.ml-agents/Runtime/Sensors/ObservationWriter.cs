@@ -11,13 +11,13 @@ namespace Unity.MLAgents.Sensors
     /// </summary>
     public class ObservationWriter
     {
-        IList<float> m_Data;
-        int m_Offset;
+        private IList<float> m_Data;
+        private int m_Offset;
 
-        TensorProxy m_Proxy;
-        int m_Batch;
+        private TensorProxy m_Proxy;
+        private int m_Batch;
 
-        TensorShape m_TensorShape;
+        private TensorShape m_TensorShape;
 
         internal ObservationWriter() { }
 
@@ -51,7 +51,10 @@ namespace Unity.MLAgents.Sensors
             }
             else if (shape.Length == 2)
             {
-                m_TensorShape = new TensorShape(new[] { m_Batch, 1, shape[0], shape[1] });
+                m_TensorShape = new TensorShape(new[]
+                {
+                    m_Batch, 1, shape[0], shape[1]
+                });
             }
             else
             {
@@ -202,7 +205,6 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         /// <param name="quat">The Quaternion to be written.</param>
         /// <param name="writeOffset">Optional write offset.</param>
-
         public void Add(Quaternion quat, int writeOffset = 0)
         {
             if (m_Data != null)

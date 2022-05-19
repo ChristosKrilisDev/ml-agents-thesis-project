@@ -8,7 +8,7 @@ namespace Unity.MLAgents.Tests
     [TestFixture]
     public class InplaceArrayTests
     {
-        class LengthCases : IEnumerable
+        private class LengthCases : IEnumerable
         {
             public IEnumerator GetEnumerator()
             {

@@ -2,7 +2,7 @@ using UnityEditor;
 using Unity.MLAgents.Integrations.Match3;
 namespace Unity.MLAgents.Editor
 {
-    [CustomEditor(typeof(Match3ActuatorComponent), editorForChildClasses: true)]
+    [CustomEditor(typeof(Match3ActuatorComponent), true)]
     [CanEditMultipleObjects]
     internal class Match3ActuatorComponentEditor : UnityEditor.Editor
     {
@@ -39,7 +39,7 @@ namespace Unity.MLAgents.Editor
             }
         }
 
-        void UpdateActuator()
+        private void UpdateActuator()
         {
         }
     }

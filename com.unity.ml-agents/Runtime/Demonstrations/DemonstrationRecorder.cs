@@ -37,7 +37,7 @@ namespace Unity.MLAgents.Demonstrations
         /// Set to zero to record indefinitely.
         /// </summary>
         [Tooltip("Number of steps to record. The editor will stop playing when it reaches this threshold. " +
-                 "Set to zero to record indefinitely.")]
+            "Set to zero to record indefinitely.")]
         public int NumStepsToRecord;
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Unity.MLAgents.Demonstrations
         /// </summary>
         [FormerlySerializedAs("demonstrationName")]
         [Tooltip("Base demonstration file name. If multiple files are saved, the additional " +
-                 "filenames will have a unique number appended.")]
+            "filenames will have a unique number appended.")]
         public string DemonstrationName;
 
         /// <summary>
@@ -55,24 +55,24 @@ namespace Unity.MLAgents.Demonstrations
         /// </summary>
         [FormerlySerializedAs("demonstrationDirectory")]
         [Tooltip("Directory to save the demo files. Will default to " +
-                 "{Application.dataPath}/Demonstrations if not specified.")]
+            "{Application.dataPath}/Demonstrations if not specified.")]
         public string DemonstrationDirectory;
 
-        DemonstrationWriter m_DemoWriter;
+        private DemonstrationWriter m_DemoWriter;
         internal const int MaxNameLength = 16;
 
-        const string k_ExtensionType = ".demo";
-        const string k_DefaultDirectoryName = "Demonstrations";
-        IFileSystem m_FileSystem;
+        private const string k_ExtensionType = ".demo";
+        private const string k_DefaultDirectoryName = "Demonstrations";
+        private IFileSystem m_FileSystem;
 
-        Agent m_Agent;
+        private Agent m_Agent;
 
-        void OnEnable()
+        private void OnEnable()
         {
             m_Agent = GetComponent<Agent>();
         }
 
-        void Update()
+        private void Update()
         {
             if (!Record)
             {
@@ -194,7 +194,7 @@ namespace Unity.MLAgents.Demonstrations
         /// <summary>
         /// Clean up the DemonstrationWriter when shutting down or destroying the Agent.
         /// </summary>
-        void OnDestroy()
+        private void OnDestroy()
         {
             Close();
         }

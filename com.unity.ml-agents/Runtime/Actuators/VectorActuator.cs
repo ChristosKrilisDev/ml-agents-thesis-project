@@ -7,14 +7,20 @@ namespace Unity.MLAgents.Actuators
     /// </summary>
     internal class VectorActuator : IActuator, IBuiltInActuator
     {
-        IActionReceiver m_ActionReceiver;
-        IHeuristicProvider m_HeuristicProvider;
+        private IActionReceiver m_ActionReceiver;
+        private IHeuristicProvider m_HeuristicProvider;
 
-        ActionBuffers m_ActionBuffers;
+        private ActionBuffers m_ActionBuffers;
         internal ActionBuffers ActionBuffers
         {
-            get => m_ActionBuffers;
-            private set => m_ActionBuffers = value;
+            get
+            {
+                return m_ActionBuffers;
+            }
+            private set
+            {
+                m_ActionBuffers = value;
+            }
         }
 
         /// <summary>
@@ -26,9 +32,11 @@ namespace Unity.MLAgents.Actuators
         /// <param name="actionSpec"></param>
         /// <param name="name"></param>
         public VectorActuator(IActionReceiver actionReceiver,
-                              ActionSpec actionSpec,
-                              string name = "VectorActuator")
-            : this(actionReceiver, actionReceiver as IHeuristicProvider, actionSpec, name) { }
+            ActionSpec actionSpec,
+            string name = "VectorActuator")
+            : this(actionReceiver, actionReceiver as IHeuristicProvider, actionSpec, name)
+        {
+        }
 
         /// <summary>
         /// Create a VectorActuator that forwards to the provided IActionReceiver.
@@ -39,9 +47,9 @@ namespace Unity.MLAgents.Actuators
         /// <param name="actionSpec"></param>
         /// <param name="name"></param>
         public VectorActuator(IActionReceiver actionReceiver,
-                              IHeuristicProvider heuristicProvider,
-                              ActionSpec actionSpec,
-                              string name = "VectorActuator")
+            IHeuristicProvider heuristicProvider,
+            ActionSpec actionSpec,
+            string name = "VectorActuator")
         {
             m_ActionReceiver = actionReceiver;
             m_HeuristicProvider = heuristicProvider;

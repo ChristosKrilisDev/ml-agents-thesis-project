@@ -21,7 +21,7 @@ namespace Unity.MLAgents.Tests
             }
         }
 
-        static List<TestAgent> GetFakeAgents(ObservableAttributeOptions observableAttributeOptions = ObservableAttributeOptions.Ignore)
+        private static List<TestAgent> GetFakeAgents(ObservableAttributeOptions observableAttributeOptions = ObservableAttributeOptions.Ignore)
         {
             var goA = new GameObject("goA");
             var bpA = goA.AddComponent<BehaviorParameters>();
@@ -37,7 +37,11 @@ namespace Unity.MLAgents.Tests
             bpB.ObservableAttributeHandling = observableAttributeOptions;
             var agentB = goB.AddComponent<TestAgent>();
 
-            var agents = new List<TestAgent> { agentA, agentB };
+            var agents = new List<TestAgent>
+            {
+                agentA,
+                agentB
+            };
             foreach (var agent in agents)
             {
                 agent.LazyInitialize();
@@ -47,14 +51,23 @@ namespace Unity.MLAgents.Tests
 
             var infoA = new AgentInfo
             {
-                storedActions = new ActionBuffers(null, new[] { 1, 2 }),
-                discreteActionMasks = null,
+                storedActions = new ActionBuffers(null, new[]
+                {
+                    1, 2
+                }),
+                discreteActionMasks = null
             };
 
             var infoB = new AgentInfo
             {
-                storedActions = new ActionBuffers(null, new[] { 3, 4 }),
-                discreteActionMasks = new[] { true, false, false, false, false },
+                storedActions = new ActionBuffers(null, new[]
+                {
+                    3, 4
+                }),
+                discreteActionMasks = new[]
+                {
+                    true, false, false, false, false
+                }
             };
 
 
@@ -104,7 +117,10 @@ namespace Unity.MLAgents.Tests
         {
             var inputTensor = new TensorProxy
             {
-                shape = new long[] { 2, 4 }
+                shape = new long[]
+                {
+                    2, 4
+                }
             };
             const int batchSize = 4;
             var agentInfos = GetFakeAgents(ObservableAttributeOptions.ExamineAll);
@@ -118,8 +134,16 @@ namespace Unity.MLAgents.Tests
             var agent1 = agentInfos[1];
             var inputs = new List<AgentInfoSensorsPair>
             {
-                new AgentInfoSensorsPair {agentInfo = agent0._Info, sensors = agent0.sensors},
-                new AgentInfoSensorsPair {agentInfo = agent1._Info, sensors = agent1.sensors},
+                new AgentInfoSensorsPair
+                {
+                    agentInfo = agent0._Info,
+                    sensors = agent0.sensors
+                },
+                new AgentInfoSensorsPair
+                {
+                    agentInfo = agent1._Info,
+                    sensors = agent1.sensors
+                }
             };
             generator.Generate(inputTensor, batchSize, inputs);
             Assert.IsNotNull(inputTensor.data);
@@ -135,7 +159,10 @@ namespace Unity.MLAgents.Tests
         {
             var inputTensor = new TensorProxy
             {
-                shape = new long[] { 2, 2 },
+                shape = new long[]
+                {
+                    2, 2
+                },
                 valueType = TensorProxy.TensorType.Integer
             };
             const int batchSize = 4;
@@ -146,8 +173,16 @@ namespace Unity.MLAgents.Tests
             var agent1 = agentInfos[1];
             var inputs = new List<AgentInfoSensorsPair>
             {
-                new AgentInfoSensorsPair {agentInfo = agent0._Info, sensors = agent0.sensors},
-                new AgentInfoSensorsPair {agentInfo = agent1._Info, sensors = agent1.sensors},
+                new AgentInfoSensorsPair
+                {
+                    agentInfo = agent0._Info,
+                    sensors = agent0.sensors
+                },
+                new AgentInfoSensorsPair
+                {
+                    agentInfo = agent1._Info,
+                    sensors = agent1.sensors
+                }
             };
             generator.Generate(inputTensor, batchSize, inputs);
             Assert.IsNotNull(inputTensor.data);
@@ -163,7 +198,10 @@ namespace Unity.MLAgents.Tests
         {
             var inputTensor = new TensorProxy
             {
-                shape = new long[] { 2, 5 },
+                shape = new long[]
+                {
+                    2, 5
+                },
                 valueType = TensorProxy.TensorType.FloatingPoint
             };
             const int batchSize = 4;
@@ -175,8 +213,16 @@ namespace Unity.MLAgents.Tests
             var agent1 = agentInfos[1];
             var inputs = new List<AgentInfoSensorsPair>
             {
-                new AgentInfoSensorsPair {agentInfo = agent0._Info, sensors = agent0.sensors},
-                new AgentInfoSensorsPair {agentInfo = agent1._Info, sensors = agent1.sensors},
+                new AgentInfoSensorsPair
+                {
+                    agentInfo = agent0._Info,
+                    sensors = agent0.sensors
+                },
+                new AgentInfoSensorsPair
+                {
+                    agentInfo = agent1._Info,
+                    sensors = agent1.sensors
+                }
             };
 
             generator.Generate(inputTensor, batchSize, inputs);

@@ -4,7 +4,7 @@ using Unity.MLAgents.Sensors;
 
 namespace Unity.MLAgents.Editor
 {
-    [CustomEditor(typeof(GridSensorComponent), editorForChildClasses: true)]
+    [CustomEditor(typeof(GridSensorComponent), true)]
     [CanEditMultipleObjects]
     internal class GridSensorComponentEditor : UnityEditor.Editor
     {
@@ -100,7 +100,7 @@ namespace Unity.MLAgents.Editor
             }
         }
 
-        void UpdateSensor()
+        private void UpdateSensor()
         {
             var sensorComponent = serializedObject.targetObject as GridSensorComponent;
             sensorComponent?.UpdateSensor();

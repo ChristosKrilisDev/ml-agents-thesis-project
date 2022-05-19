@@ -12,12 +12,12 @@ namespace Unity.MLAgentsExamples
     public class ProjectSettingsOverrides : MonoBehaviour
     {
         // Original values
-        Vector3 m_OriginalGravity;
-        float m_OriginalFixedDeltaTime;
-        float m_OriginalMaximumDeltaTime;
-        int m_OriginalSolverIterations;
-        int m_OriginalSolverVelocityIterations;
-        bool m_OriginalReuseCollisionCallbacks;
+        private Vector3 m_OriginalGravity;
+        private float m_OriginalFixedDeltaTime;
+        private float m_OriginalMaximumDeltaTime;
+        private int m_OriginalSolverIterations;
+        private int m_OriginalSolverVelocityIterations;
+        private bool m_OriginalReuseCollisionCallbacks;
 
         [Tooltip("Increase or decrease the scene gravity. Use ~3x to make things less floaty")]
         public float gravityMultiplier = 1.0f;

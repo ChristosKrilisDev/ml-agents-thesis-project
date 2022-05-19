@@ -8,10 +8,10 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
 {
     public class IntegerInputActionAdaptorTests : InputTestFixture
     {
-        IntegerInputActionAdaptor m_Adaptor;
-        InputDevice m_Device;
-        InputControl<int> m_Control;
-        InputAction m_Action;
+        private IntegerInputActionAdaptor m_Adaptor;
+        private InputDevice m_Device;
+        private InputControl<int> m_Control;
+        private InputAction m_Action;
 
         public override void Setup()
         {
@@ -49,7 +49,10 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
         [Test]
         public void TestQueueEvent()
         {
-            var actionBuffers = new ActionBuffers(ActionSegment<float>.Empty, new ActionSegment<int>(new[] { 1 }));
+            var actionBuffers = new ActionBuffers(ActionSegment<float>.Empty, new ActionSegment<int>(new[]
+            {
+                1
+            }));
             var context = new InputActuatorEventContext(1, m_Device);
             using (context.GetEventForFrame(out var eventPtr))
             {
@@ -63,7 +66,10 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
         [Test]
         public void TestWriteToHeuristic()
         {
-            var actionBuffers = new ActionBuffers(ActionSegment<float>.Empty, new ActionSegment<int>(new[] { 1 }));
+            var actionBuffers = new ActionBuffers(ActionSegment<float>.Empty, new ActionSegment<int>(new[]
+            {
+                1
+            }));
             var context = new InputActuatorEventContext(1, m_Device);
             using (context.GetEventForFrame(out var eventPtr))
             {

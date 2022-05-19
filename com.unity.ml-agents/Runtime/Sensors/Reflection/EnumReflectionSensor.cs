@@ -4,8 +4,8 @@ namespace Unity.MLAgents.Sensors.Reflection
 {
     internal class EnumReflectionSensor : ReflectionSensorBase
     {
-        Array m_Values;
-        bool m_IsFlags;
+        private Array m_Values;
+        private bool m_IsFlags;
 
         internal EnumReflectionSensor(ReflectionSensorInfo reflectionSensorInfo)
             : base(reflectionSensorInfo, GetEnumObservationSize(reflectionSensorInfo.GetMemberType()))
@@ -22,7 +22,7 @@ namespace Unity.MLAgents.Sensors.Reflection
             // Flags will get treated as a sequence of bools.
             var enumValue = (Enum)GetReflectedValue();
 
-            int i = 0;
+            var i = 0;
             foreach (var val in m_Values)
             {
                 if (m_IsFlags)

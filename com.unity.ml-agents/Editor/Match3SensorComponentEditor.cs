@@ -2,7 +2,7 @@ using UnityEditor;
 using Unity.MLAgents.Integrations.Match3;
 namespace Unity.MLAgents.Editor
 {
-    [CustomEditor(typeof(Match3SensorComponent), editorForChildClasses: true)]
+    [CustomEditor(typeof(Match3SensorComponent), true)]
     [CanEditMultipleObjects]
     internal class Match3SensorComponentEditor : UnityEditor.Editor
     {
@@ -38,7 +38,7 @@ namespace Unity.MLAgents.Editor
             }
         }
 
-        void UpdateSensor()
+        private void UpdateSensor()
         {
         }
     }

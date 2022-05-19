@@ -38,14 +38,24 @@ namespace Unity.MLAgents.Tests
         {
             var intSender = new TestSideChannel();
             var intReceiver = new TestSideChannel();
-            var dictSender = new Dictionary<Guid, SideChannel> { { intSender.ChannelId, intSender } };
-            var dictReceiver = new Dictionary<Guid, SideChannel> { { intReceiver.ChannelId, intReceiver } };
+            var dictSender = new Dictionary<Guid, SideChannel>
+            {
+                {
+                    intSender.ChannelId, intSender
+                }
+            };
+            var dictReceiver = new Dictionary<Guid, SideChannel>
+            {
+                {
+                    intReceiver.ChannelId, intReceiver
+                }
+            };
 
             intSender.SendInt(4);
             intSender.SendInt(5);
             intSender.SendInt(6);
 
-            byte[] fakeData = SideChannelManager.GetSideChannelMessage(dictSender);
+            var fakeData = SideChannelManager.GetSideChannelMessage(dictSender);
             SideChannelManager.ProcessSideChannelData(dictReceiver, fakeData);
 
             Assert.AreEqual(intReceiver.messagesReceived[0], 4);
@@ -61,13 +71,23 @@ namespace Unity.MLAgents.Tests
 
             var strSender = new RawBytesChannel(new Guid("9a5b8954-4f82-11ea-b238-784f4387d1f7"));
             var strReceiver = new RawBytesChannel(new Guid("9a5b8954-4f82-11ea-b238-784f4387d1f7"));
-            var dictSender = new Dictionary<Guid, SideChannel> { { strSender.ChannelId, strSender } };
-            var dictReceiver = new Dictionary<Guid, SideChannel> { { strReceiver.ChannelId, strReceiver } };
+            var dictSender = new Dictionary<Guid, SideChannel>
+            {
+                {
+                    strSender.ChannelId, strSender
+                }
+            };
+            var dictReceiver = new Dictionary<Guid, SideChannel>
+            {
+                {
+                    strReceiver.ChannelId, strReceiver
+                }
+            };
 
             strSender.SendRawBytes(Encoding.ASCII.GetBytes(str1));
             strSender.SendRawBytes(Encoding.ASCII.GetBytes(str2));
 
-            byte[] fakeData = SideChannelManager.GetSideChannelMessage(dictSender);
+            var fakeData = SideChannelManager.GetSideChannelMessage(dictSender);
             SideChannelManager.ProcessSideChannelData(dictReceiver, fakeData);
 
             var messages = strReceiver.GetAndClearReceivedMessages();
@@ -82,12 +102,22 @@ namespace Unity.MLAgents.Tests
         {
             var k1 = "gravity";
             var k2 = "length";
-            int wasCalled = 0;
+            var wasCalled = 0;
 
             var propA = new FloatPropertiesChannel();
             var propB = new FloatPropertiesChannel();
-            var dictReceiver = new Dictionary<Guid, SideChannel> { { propA.ChannelId, propA } };
-            var dictSender = new Dictionary<Guid, SideChannel> { { propB.ChannelId, propB } };
+            var dictReceiver = new Dictionary<Guid, SideChannel>
+            {
+                {
+                    propA.ChannelId, propA
+                }
+            };
+            var dictSender = new Dictionary<Guid, SideChannel>
+            {
+                {
+                    propB.ChannelId, propB
+                }
+            };
 
             propA.RegisterCallback(k1, f => { wasCalled++; });
             var tmp = propB.GetWithDefault(k2, 3.0f);
@@ -96,7 +126,7 @@ namespace Unity.MLAgents.Tests
             tmp = propB.GetWithDefault(k2, 3.0f);
             Assert.AreEqual(tmp, 1.0f);
 
-            byte[] fakeData = SideChannelManager.GetSideChannelMessage(dictSender);
+            var fakeData = SideChannelManager.GetSideChannelMessage(dictSender);
             SideChannelManager.ProcessSideChannelData(dictReceiver, fakeData);
 
             tmp = propA.GetWithDefault(k2, 3.0f);
@@ -129,7 +159,10 @@ namespace Unity.MLAgents.Tests
             msg.WriteInt32(42);
             msg.WriteFloat32(1.0f);
 
-            var data = new byte[] { 1, 2, 3, 4 };
+            var data = new byte[]
+            {
+                1, 2, 3, 4
+            };
             msg.SetRawBytes(data);
 
             var result = msg.ToByteArray();
@@ -142,7 +175,10 @@ namespace Unity.MLAgents.Tests
             var boolVal = true;
             var intVal = 1337;
             var floatVal = 4.2f;
-            var floatListVal = new float[] { 1001, 1002 };
+            var floatListVal = new float[]
+            {
+                1001, 1002
+            };
             var stringVal = "mlagents!";
 
             IncomingMessage incomingMsg;
@@ -187,7 +223,13 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual("foo", incomingMsg.ReadString(defaultValue: "foo"));
 
             Assert.AreEqual(default(float[]), incomingMsg.ReadFloatList());
-            Assert.AreEqual(new float[] { 1001, 1002 }, incomingMsg.ReadFloatList(new float[] { 1001, 1002 }));
+            Assert.AreEqual(new float[]
+            {
+                1001, 1002
+            }, incomingMsg.ReadFloatList(new float[]
+            {
+                1001, 1002
+            }));
         }
     }
 }

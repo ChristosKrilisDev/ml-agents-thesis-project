@@ -5,7 +5,7 @@ namespace Unity.MLAgents.Sensors
 {
     internal class SensorShapeValidator
     {
-        List<ObservationSpec> m_SensorShapes;
+        private List<ObservationSpec> m_SensorShapes;
 
         /// <summary>
         /// Check that the List Sensors are the same shape as the previous ones.

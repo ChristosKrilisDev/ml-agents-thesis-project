@@ -15,12 +15,12 @@ namespace Unity.MLAgents.Extensions.Input
     /// </summary>
     public class InputActionActuator : IActuator, IBuiltInActuator
     {
-        readonly BehaviorParameters m_BehaviorParameters;
-        readonly InputAction m_Action;
-        readonly IRLActionInputAdaptor m_InputAdaptor;
-        InputActuatorEventContext m_InputActuatorEventContext;
-        InputDevice m_Device;
-        InputControl m_Control;
+        private readonly BehaviorParameters m_BehaviorParameters;
+        private readonly InputAction m_Action;
+        private readonly IRLActionInputAdaptor m_InputAdaptor;
+        private InputActuatorEventContext m_InputActuatorEventContext;
+        private InputDevice m_Device;
+        private InputControl m_Control;
 
         /// <summary>
         /// Construct an <see cref="InputActionActuator"/> with the <see cref="BehaviorParameters"/> of the
@@ -36,9 +36,9 @@ namespace Unity.MLAgents.Extensions.Input
         ///     and the <see cref="InputSystem"/>.</param>
         /// <param name="inputActuatorEventContext">The object that will provide the event ptr to write to.</param>
         public InputActionActuator(InputDevice inputDevice, BehaviorParameters behaviorParameters,
-                                   InputAction action,
-                                   IRLActionInputAdaptor adaptor,
-                                   InputActuatorEventContext inputActuatorEventContext)
+            InputAction action,
+            IRLActionInputAdaptor adaptor,
+            InputActuatorEventContext inputActuatorEventContext)
         {
             m_BehaviorParameters = behaviorParameters;
             Name = $"InputActionActuator-{action.name}";

@@ -21,18 +21,29 @@ namespace Unity.MLAgents.Inference
             FloatingPoint
         };
 
-        static readonly Dictionary<TensorType, Type> k_TypeMap =
+        private static readonly Dictionary<TensorType, Type> k_TypeMap =
             new Dictionary<TensorType, Type>()
-        {
-            {TensorType.FloatingPoint, typeof(float)},
-            {TensorType.Integer, typeof(int)}
-        };
+            {
+                {
+                    TensorType.FloatingPoint, typeof(float)
+                },
+                {
+                    TensorType.Integer, typeof(int)
+                }
+            };
 
         public string name;
         public TensorType valueType;
 
         // Since Type is not serializable, we use the DisplayType for the Inspector
-        public Type DataType => k_TypeMap[valueType];
+        public Type DataType
+        {
+            get
+            {
+                return k_TypeMap[valueType];
+            }
+        }
+
         public long[] shape;
         public Tensor data;
 
@@ -87,10 +98,16 @@ namespace Unity.MLAgents.Inference
         {
             if (src.height == 1 && src.width == 1)
             {
-                return new long[] { src.batch, src.channels };
+                return new long[]
+                {
+                    src.batch, src.channels
+                };
             }
 
-            return new long[] { src.batch, src.height, src.width, src.channels };
+            return new long[]
+            {
+                src.batch, src.height, src.width, src.channels
+            };
         }
 
         public static TensorProxy TensorProxyFromBarracuda(Tensor src, string nameOverride = null)

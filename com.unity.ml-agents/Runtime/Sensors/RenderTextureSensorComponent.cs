@@ -10,14 +10,14 @@ namespace Unity.MLAgents.Sensors
     [AddComponentMenu("ML Agents/Render Texture Sensor", (int)MenuGroup.Sensors)]
     public class RenderTextureSensorComponent : SensorComponent, IDisposable
     {
-        RenderTextureSensor m_Sensor;
+        private RenderTextureSensor m_Sensor;
 
         /// <summary>
         /// The [RenderTexture](https://docs.unity3d.com/ScriptReference/RenderTexture.html) instance
         /// that the associated <see cref="RenderTextureSensor"/> wraps.
         /// </summary>
-        [HideInInspector, SerializeField, FormerlySerializedAs("renderTexture")]
-        RenderTexture m_RenderTexture;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("renderTexture")]
+        private RenderTexture m_RenderTexture;
 
         /// <summary>
         /// Stores the [RenderTexture](https://docs.unity3d.com/ScriptReference/RenderTexture.html)
@@ -29,8 +29,8 @@ namespace Unity.MLAgents.Sensors
             set { m_RenderTexture = value; }
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("sensorName")]
-        string m_SensorName = "RenderTextureSensor";
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("sensorName")]
+        private string m_SensorName = "RenderTextureSensor";
 
         /// <summary>
         /// Name of the generated <see cref="RenderTextureSensor"/>.
@@ -42,8 +42,8 @@ namespace Unity.MLAgents.Sensors
             set { m_SensorName = value; }
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("grayscale")]
-        bool m_Grayscale;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("grayscale")]
+        private bool m_Grayscale;
 
         /// <summary>
         /// Whether the RenderTexture observation should be converted to grayscale or not.
@@ -55,13 +55,13 @@ namespace Unity.MLAgents.Sensors
             set { m_Grayscale = value; }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         [Range(1, 50)]
         [Tooltip("Number of frames that will be stacked before being fed to the neural network.")]
-        int m_ObservationStacks = 1;
+        private int m_ObservationStacks = 1;
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("compression")]
-        SensorCompressionType m_Compression = SensorCompressionType.PNG;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("compression")]
+        private SensorCompressionType m_Compression = SensorCompressionType.PNG;
 
         /// <summary>
         /// Compression type for the render texture observation.
@@ -69,7 +69,11 @@ namespace Unity.MLAgents.Sensors
         public SensorCompressionType CompressionType
         {
             get { return m_Compression; }
-            set { m_Compression = value; UpdateSensor(); }
+            set
+            {
+                m_Compression = value;
+                UpdateSensor();
+            }
         }
 
         /// <summary>
@@ -89,9 +93,15 @@ namespace Unity.MLAgents.Sensors
             m_Sensor = new RenderTextureSensor(RenderTexture, Grayscale, SensorName, m_Compression);
             if (ObservationStacks != 1)
             {
-                return new ISensor[] { new StackingSensor(m_Sensor, ObservationStacks) };
+                return new ISensor[]
+                {
+                    new StackingSensor(m_Sensor, ObservationStacks)
+                };
             }
-            return new ISensor[] { m_Sensor };
+            return new ISensor[]
+            {
+                m_Sensor
+            };
         }
 
         /// <summary>

@@ -7,10 +7,11 @@ using Unity.MLAgents.Extensions.Input;
 using Unity.MLAgents.Policies;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Object = UnityEngine.Object;
 
 namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
 {
-    class TestProvider : MonoBehaviour, IInputActionAssetProvider
+    internal class TestProvider : MonoBehaviour, IInputActionAssetProvider
     {
         public InputActionAsset asset;
         public IInputActionCollection2 collection;
@@ -22,13 +23,13 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
     }
     public class InputActuatorComponentTests : InputTestFixture
     {
-        InputActionAsset m_Asset;
-        GameObject m_GameObject;
-        PlayerInput m_PlayerInput;
-        BehaviorParameters m_BehaviorParameters;
-        InputActuatorComponent m_ActuatorComponent;
-        TestPushBlockActions m_Actions;
-        TestProvider m_Provider;
+        private InputActionAsset m_Asset;
+        private GameObject m_GameObject;
+        private PlayerInput m_PlayerInput;
+        private BehaviorParameters m_BehaviorParameters;
+        private InputActuatorComponent m_ActuatorComponent;
+        private TestPushBlockActions m_Actions;
+        private TestProvider m_Provider;
 
         public override void Setup()
         {
@@ -49,10 +50,10 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
         public override void TearDown()
         {
             m_ActuatorComponent.CleanupActionAsset();
-            var objects = GameObject.FindObjectsOfType<GameObject>();
+            var objects = Object.FindObjectsOfType<GameObject>();
             foreach (var o in objects)
             {
-                UnityEngine.Object.DestroyImmediate(o);
+                Object.DestroyImmediate(o);
             }
             base.TearDown();
         }
@@ -69,7 +70,10 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
             Assert.IsTrue(actuators[1].ActionSpec.NumDiscreteActions == 1);
 
             var actuatorComponentActionSpec = m_ActuatorComponent.ActionSpec;
-            Assert.IsTrue(actuatorComponentActionSpec.BranchSizes.SequenceEqual(new[] {2}));
+            Assert.IsTrue(actuatorComponentActionSpec.BranchSizes.SequenceEqual(new[]
+            {
+                2
+            }));
             Assert.IsTrue(actuatorComponentActionSpec.NumContinuousActions == 2);
         }
 

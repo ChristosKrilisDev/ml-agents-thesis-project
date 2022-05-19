@@ -31,7 +31,7 @@ namespace Unity.MLAgents.Actuators
         /// <summary>
         /// Corresponds to the InputActionActuator in com.unity.ml-agents.extensions.
         /// </summary>
-        InputActionActuator = 4,
+        InputActionActuator = 4
     }
 
     /// <summary>

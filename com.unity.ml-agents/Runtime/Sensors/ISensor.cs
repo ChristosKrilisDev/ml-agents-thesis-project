@@ -29,7 +29,7 @@ namespace Unity.MLAgents.Sensors
         /// Means that there can be a variable number of observations in this dimension.
         /// The observations are unordered.
         /// </summary>
-        VariableSize = 4,
+        VariableSize = 4
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// Collected observations contain goal information.
         /// </summary>
-        GoalSignal = 1,
+        GoalSignal = 1
     }
 
     /// <summary>

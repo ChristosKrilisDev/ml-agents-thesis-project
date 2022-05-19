@@ -16,14 +16,14 @@ namespace Unity.MLAgents.Extensions.Sensors
     /// </summary>
     public abstract class PoseExtractor
     {
-        int[] m_ParentIndices;
-        Pose[] m_ModelSpacePoses;
-        Pose[] m_LocalSpacePoses;
+        private int[] m_ParentIndices;
+        private Pose[] m_ModelSpacePoses;
+        private Pose[] m_LocalSpacePoses;
 
-        Vector3[] m_ModelSpaceLinearVelocities;
-        Vector3[] m_LocalSpaceLinearVelocities;
+        private Vector3[] m_ModelSpaceLinearVelocities;
+        private Vector3[] m_LocalSpaceLinearVelocities;
 
-        bool[] m_PoseEnabled;
+        private bool[] m_PoseEnabled;
 
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace Unity.MLAgents.Extensions.Sensors
         /// <returns></returns>
         public int GetNumPoseObservations(PhysicsSensorSettings settings)
         {
-            int obsPerPose = 0;
+            var obsPerPose = 0;
             obsPerPose += settings.UseModelSpaceTranslations ? 3 : 0;
             obsPerPose += settings.UseModelSpaceRotations ? 4 : 0;
             obsPerPose += settings.UseLocalSpaceTranslations ? 3 : 0;
@@ -441,7 +441,11 @@ namespace Unity.MLAgents.Extensions.Sensors
         {
             var rotationInverse = Quaternion.Inverse(pose.rotation);
             var translationInverse = -(rotationInverse * pose.position);
-            return new Pose { rotation = rotationInverse, position = translationInverse };
+            return new Pose
+            {
+                rotation = rotationInverse,
+                position = translationInverse
+            };
         }
 
         /// <summary>

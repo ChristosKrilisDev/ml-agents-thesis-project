@@ -16,12 +16,16 @@ namespace ML_Agents.Finder.Scripts
     #region Vars
 
         [Header("Agent behavior Vars")] [Space]
-        [SerializeField] private bool _useVectorObs;
+        [SerializeField]
+        private bool _useVectorObs;
 
         [Header("Area Vars")]
-        [SerializeField] private PfArea _area;
-        [SerializeField] private CheckPoint _checkPoint;
-        [SerializeField] private Graph _graph;
+        [SerializeField]
+        private PfArea _area;
+        [SerializeField]
+        private CheckPoint _checkPoint;
+        [SerializeField]
+        private Graph _graph;
         private Path _path = new Path();
         private float _pathTotalLength;
 
@@ -30,8 +34,8 @@ namespace ML_Agents.Finder.Scripts
         private DistanceRecorder _distanceRecorder;
         private bool _isFirstTake;
         private static float _episodeCounter;
-        
-        
+
+
         private bool _hasTouchedTheWall;
         private bool _hasFindGoal;
         private bool _hasFindCp;
@@ -87,7 +91,6 @@ namespace ML_Agents.Finder.Scripts
             sensor.AddObservation(dir.x); //1
             sensor.AddObservation(dir.z); //1
 
-
             //if goal is active in scene :
             sensor.AddObservation(_goalsToFind[1].activeInHierarchy ? 1 : 0); //1
             if (_goalsToFind[1].activeInHierarchy)
@@ -139,10 +142,7 @@ namespace ML_Agents.Finder.Scripts
                 _frameCount = FRAME_AMOUNT;
                 _stepFactor = Math.Abs(StepCount - MaxStep) / (float)MaxStep;
                 AddReward(CalculateReward()); //step is running 50 times/sec
-                //Debug.Log("---Timed---");
             }
-
-            //SetReward(RewardFunction(DistanceDiffrence(this.gameObject, f_goal)));//step is running 50 times/sec
             MoveAgent(actionBuffers.DiscreteActions);
         }
 
@@ -159,14 +159,15 @@ namespace ML_Agents.Finder.Scripts
                 discreteActionsOut[0] = 2;
         }
 
+
         private void OnCollisionEnter(Collision collision)
         {
+
             if (collision.gameObject.CompareTag("wall"))
             {
                 _hasTouchedTheWall = true;
-                OnTerminalCondition(true , -0.25f, true);
+                OnTerminalCondition(true, -0.25f, true);
             }
-
             if (collision.gameObject.CompareTag("switchOff"))
             {
                 _findTargetGoalIndex++;
@@ -182,8 +183,7 @@ namespace ML_Agents.Finder.Scripts
                 OnTerminalCondition();
             }
         }
-
-        private void OnTerminalCondition(bool useExtraReward = false, float extraRewardValue = 0 , bool useAddReward = false)
+        private void OnTerminalCondition(bool useExtraReward = false, float extraRewardValue = 0, bool useAddReward = false)
         {
             //this will give end reward and end episode
             if (useExtraReward)
@@ -191,17 +191,17 @@ namespace ML_Agents.Finder.Scripts
                 if (useAddReward) AddReward(extraRewardValue);
                 else SetReward(extraRewardValue);
             }
-            
+
             if (useAddReward) AddReward(CalculateReward());
             else SetReward(CalculateReward());
-            
+
             EndEpisode();
         }
         private float CalculateReward()
         {
             return RewardFunction.GetComplexReward
             (
-                GetCurrentDistanceDifference(this.gameObject, _targetObjectToFind),
+                GetCurrentDistanceDifference(gameObject, _targetObjectToFind),
                 _goalDistances[_findTargetGoalIndex],
                 StepCount,
                 MaxStep,
@@ -255,7 +255,7 @@ namespace ML_Agents.Finder.Scripts
             var next = 0;
             //replace agent transform
             _agentRb.velocity = Vector3.zero;
-            _area.PlaceNode(this.gameObject, items[next++]);
+            _area.PlaceNode(gameObject, items[next++]);
             transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
 
             //Create CheckPoint and Goal objs, and hide the goal.obj
@@ -301,19 +301,22 @@ namespace ML_Agents.Finder.Scripts
             return _path.length;
         }
 
-        private void SwitchTargetToFinalNode() => _targetObjectToFind = _goalsToFind[_findTargetGoalIndex];
+        private void SwitchTargetToFinalNode()
+        {
+            _targetObjectToFind = _goalsToFind[_findTargetGoalIndex];
+        }
 
         private void SetUpDistanceDifferences(int nCheckPoint, int nFinalGoal)
         {
             //use for the sharped RF , distance/reward for each targert
             //get the distance from agent to cp
-            _goalDistances[0] = GetCurrentDistanceDifference(this.gameObject, _graph.nodes[nCheckPoint].gameObject);
+            _goalDistances[0] = GetCurrentDistanceDifference(gameObject, _graph.nodes[nCheckPoint].gameObject);
             //get the distance from agent to final goal
             _goalDistances[1] = GetCurrentDistanceDifference(_graph.nodes[nCheckPoint].gameObject, _graph.nodes[nFinalGoal].gameObject);
         }
 
     #endregion
-        
+
 
         //TODO : Move them elsewhere
         private bool HasEpisodeEnded()

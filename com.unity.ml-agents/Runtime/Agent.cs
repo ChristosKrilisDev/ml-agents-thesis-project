@@ -88,11 +88,12 @@ namespace Unity.MLAgents
     internal class AgentVectorActuator : VectorActuator
     {
         public AgentVectorActuator(IActionReceiver actionReceiver,
-                                   IHeuristicProvider heuristicProvider,
-                                   ActionSpec actionSpec,
-                                   string name = "VectorActuator"
+            IHeuristicProvider heuristicProvider,
+            ActionSpec actionSpec,
+            string name = "VectorActuator"
         ) : base(actionReceiver, heuristicProvider, actionSpec, name)
-        { }
+        {
+        }
 
         public override BuiltInActuatorType GetBuiltInActuatorType()
         {
@@ -198,8 +199,8 @@ namespace Unity.MLAgents
     [RequireComponent(typeof(BehaviorParameters))]
     public partial class Agent : MonoBehaviour, ISerializationCallbackReceiver, IActionReceiver, IHeuristicProvider
     {
-        IPolicy m_Brain;
-        BehaviorParameters m_PolicyFactory;
+        private IPolicy m_Brain;
+        private BehaviorParameters m_PolicyFactory;
 
         /// This code is here to make the upgrade path for users using MaxStep
         /// easier. We will hook into the Serialization code and make sure that
@@ -263,7 +264,7 @@ namespace Unity.MLAgents
         [HideInInspector] public int MaxStep;
 
         /// Current Agent information (message sent to Brain).
-        AgentInfo m_Info;
+        private AgentInfo m_Info;
 
         /// Represents the reward the agent accumulated during the current step.
         /// It is reset to 0 at the beginning of every step.
@@ -271,36 +272,36 @@ namespace Unity.MLAgents
         /// action that we wish to reinforce/reward, and set to a negative value
         /// when the agent performs a "bad" action that we wish to punish/deter.
         /// Additionally, the magnitude of the reward should not exceed 1.0
-        float m_Reward;
+        private float m_Reward;
 
         /// Represents the group reward the agent accumulated during the current step.
-        float m_GroupReward;
+        private float m_GroupReward;
 
         /// Keeps track of the cumulative reward in this episode.
-        float m_CumulativeReward;
+        private float m_CumulativeReward;
 
         /// Whether or not the agent requests an action.
-        bool m_RequestAction;
+        private bool m_RequestAction;
 
         /// Whether or not the agent requests a decision.
-        bool m_RequestDecision;
+        private bool m_RequestDecision;
 
         /// Keeps track of the number of steps taken by the agent in this episode.
         /// Note that this value is different for each agent, and may not overlap
         /// with the step counter in the Academy, since agents reset based on
         /// their own experience.
-        int m_StepCount;
+        private int m_StepCount;
 
         /// Number of times the Agent has completed an episode.
-        int m_CompletedEpisodes;
+        private int m_CompletedEpisodes;
 
         /// Episode identifier each agent receives. It is used
         /// to separate between different agents in the environment.
         /// This Id will be changed every time the Agent resets.
-        int m_EpisodeId;
+        private int m_EpisodeId;
 
         /// Whether or not the Agent has been initialized already
-        bool m_Initialized;
+        private bool m_Initialized;
 
         /// <summary>
         /// Set of DemonstrationWriters that the Agent will write its step information to.
@@ -332,17 +333,17 @@ namespace Unity.MLAgents
         /// <summary>
         /// List of IActuators that this Agent will delegate actions to if any exist.
         /// </summary>
-        ActuatorManager m_ActuatorManager;
+        private ActuatorManager m_ActuatorManager;
 
         /// <summary>
         /// VectorActuator which is used by default if no other sensors exist on this Agent. This VectorSensor will
         /// delegate its actions to <see cref="OnActionReceived(ActionBuffers)"/> by default in order to keep backward compatibility
         /// with the current behavior of Agent.
         /// </summary>
-        IActuator m_VectorActuator;
+        private IActuator m_VectorActuator;
 
         /// Currect MultiAgentGroup ID. Default to 0 (meaning no group)
-        int m_GroupId;
+        private int m_GroupId;
 
         /// Delegate for the agent to unregister itself from the MultiAgentGroup without cyclic reference
         /// between agent and the group
@@ -497,7 +498,7 @@ namespace Unity.MLAgents
         /// <summary>
         /// The reason that the Agent has been set to "done".
         /// </summary>
-        enum DoneReason
+        private enum DoneReason
         {
             /// <summary>
             /// The episode was ended manually by calling <see cref="EndEpisode"/>.
@@ -512,7 +513,7 @@ namespace Unity.MLAgents
             /// <summary>
             /// The Agent was disabled.
             /// </summary>
-            Disabled,
+            Disabled
         }
 
         /// <summary>
@@ -555,7 +556,7 @@ namespace Unity.MLAgents
             m_Initialized = false;
         }
 
-        void NotifyAgentDone(DoneReason doneReason)
+        private void NotifyAgentDone(DoneReason doneReason)
         {
             if (m_Info.done)
             {
@@ -702,7 +703,7 @@ namespace Unity.MLAgents
         public void SetReward(float reward)
         {
             Utilities.DebugCheckNanAndInfinity(reward, nameof(reward), nameof(SetReward));
-            m_CumulativeReward += (reward - m_Reward);
+            m_CumulativeReward += reward - m_Reward;
             m_Reward = reward;
         }
 
@@ -755,7 +756,7 @@ namespace Unity.MLAgents
             return m_CumulativeReward;
         }
 
-        void UpdateRewardStats()
+        private void UpdateRewardStats()
         {
             var gaugeName = $"{m_PolicyFactory.BehaviorName}.CumulativeReward";
             TimerStack.Instance.SetGauge(gaugeName, GetCumulativeReward());
@@ -795,7 +796,7 @@ namespace Unity.MLAgents
         /// Internal method to end the episode and reset the Agent.
         /// </summary>
         /// <param name="reason"></param>
-        void EndEpisodeAndReset(DoneReason reason)
+        private void EndEpisodeAndReset(DoneReason reason)
         {
             NotifyAgentDone(reason);
             _AgentReset();
@@ -856,7 +857,7 @@ namespace Unity.MLAgents
         /// Helper function that resets all the data structures associated with
         /// the agent. Typically used when the agent is being initialized or reset
         /// at the end of an episode.
-        void ResetData()
+        private void ResetData()
         {
             m_ActuatorManager?.ResetData();
         }
@@ -1012,7 +1013,7 @@ namespace Unity.MLAgents
 #endif
         }
 
-        void CleanupSensors()
+        private void CleanupSensors()
         {
             // Dispose all attached sensor
             for (var i = 0; i < sensors.Count; i++)
@@ -1025,7 +1026,7 @@ namespace Unity.MLAgents
             }
         }
 
-        void InitializeActuators()
+        private void InitializeActuators()
         {
             ActuatorComponent[] attachedActuators;
             if (m_PolicyFactory.UseChildActuators)
@@ -1054,7 +1055,7 @@ namespace Unity.MLAgents
         /// <summary>
         /// Sends the Agent info to the linked Brain.
         /// </summary>
-        void SendInfoToBrain()
+        private void SendInfoToBrain()
         {
             if (!m_Initialized)
             {
@@ -1112,7 +1113,7 @@ namespace Unity.MLAgents
             }
         }
 
-        void UpdateSensors()
+        private void UpdateSensors()
         {
             foreach (var sensor in sensors)
             {
@@ -1120,7 +1121,7 @@ namespace Unity.MLAgents
             }
         }
 
-        void ResetSensors()
+        private void ResetSensors()
         {
             foreach (var sensor in sensors)
             {
@@ -1304,7 +1305,7 @@ namespace Unity.MLAgents
         /// An internal reset method that updates internal data structures in
         /// addition to calling <see cref="OnEpisodeBegin"/>.
         /// </summary>
-        void _AgentReset()
+        private void _AgentReset()
         {
             ResetData();
             m_StepCount = 0;
@@ -1332,7 +1333,7 @@ namespace Unity.MLAgents
         /// <summary>
         /// Signals the agent that it must send its decision to the brain.
         /// </summary>
-        void SendInfo()
+        private void SendInfo()
         {
             // If the Agent is done, it has just reset and thus requires a new decision
             if (m_RequestDecision)
@@ -1344,28 +1345,28 @@ namespace Unity.MLAgents
             }
         }
 
-        void AgentIncrementStep()
+        private void AgentIncrementStep()
         {
             m_StepCount += 1;
         }
 
         /// Used by the brain to make the agent perform a step.
-        void AgentStep()
+        private void AgentStep()
         {
-            if ((m_RequestAction) && (m_Brain != null))
+            if (m_RequestAction && m_Brain != null)
             {
                 m_RequestAction = false;
                 m_ActuatorManager.ExecuteActions();
             }
 
-            if ((m_StepCount >= MaxStep) && (MaxStep > 0))
+            if (m_StepCount >= MaxStep && MaxStep > 0)
             {
                 NotifyAgentDone(DoneReason.MaxStepReached);
                 _AgentReset();
             }
         }
 
-        void DecideAction()
+        private void DecideAction()
         {
             if (m_ActuatorManager.StoredActions.ContinuousActions.Array == null)
             {

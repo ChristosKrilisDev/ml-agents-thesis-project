@@ -36,7 +36,10 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public SensorCompressionType SensorCompressionType
         {
-            get => m_SensorCompressionType;
+            get
+            {
+                return m_SensorCompressionType;
+            }
         }
 
         internal int[] m_CompressedChannelMapping;
@@ -54,7 +57,10 @@ namespace Unity.MLAgents.Sensors
         /// </remarks>
         public int[] CompressedChannelMapping
         {
-            get => m_CompressedChannelMapping;
+            get
+            {
+                return m_CompressedChannelMapping;
+            }
         }
 
         /// <summary>

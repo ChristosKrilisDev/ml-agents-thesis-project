@@ -19,7 +19,7 @@ namespace Unity.MLAgents.Sensors
             get { return m_SensorName; }
             set { m_SensorName = value; }
         }
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         private string m_SensorName = "BufferSensor";
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Unity.MLAgents.Sensors
             get { return m_ObservableSize; }
             set { m_ObservableSize = value; }
         }
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         private int m_ObservableSize;
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Unity.MLAgents.Sensors
             get { return m_MaxNumObservables; }
             set { m_MaxNumObservables = value; }
         }
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         private int m_MaxNumObservables;
 
         private BufferSensor m_Sensor;
@@ -52,7 +52,10 @@ namespace Unity.MLAgents.Sensors
         public override ISensor[] CreateSensors()
         {
             m_Sensor = new BufferSensor(MaxNumObservables, ObservableSize, m_SensorName);
-            return new ISensor[] { m_Sensor };
+            return new ISensor[]
+            {
+                m_Sensor
+            };
         }
 
         /// <summary>

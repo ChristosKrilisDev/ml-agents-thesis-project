@@ -11,18 +11,18 @@ namespace Unity.MLAgentsExamples
         public float heightOffset;
         private float m_StartingYPos;
 
-        void OnEnable()
+        private void OnEnable()
         {
             m_StartingYPos = transform.position.y;
         }
 
-        void Update()
+        private void Update()
         {
             if (updatedByAgent)
                 return;
             transform.position = new Vector3(transformToFollow.position.x, m_StartingYPos + heightOffset,
                 transformToFollow.position.z);
-            Vector3 walkDir = targetToLookAt.position - transform.position;
+            var walkDir = targetToLookAt.position - transform.position;
             walkDir.y = 0; //flatten dir on the y
             transform.rotation = Quaternion.LookRotation(walkDir);
         }

@@ -9,8 +9,8 @@ namespace Unity.MLAgents.Tests
 {
     public class DummySensor : ISensor
     {
-        string m_Name = "DummySensor";
-        ObservationSpec m_ObservationSpec;
+        private string m_Name = "DummySensor";
+        private ObservationSpec m_ObservationSpec;
 
         public DummySensor(int dim1)
         {
@@ -62,10 +62,20 @@ namespace Unity.MLAgents.Tests
         public void TestShapesAgree()
         {
             var validator = new SensorShapeValidator();
-            var sensorList1 = new List<ISensor>() { new DummySensor(1), new DummySensor(2, 3), new DummySensor(4, 5, 6) };
+            var sensorList1 = new List<ISensor>()
+            {
+                new DummySensor(1),
+                new DummySensor(2, 3),
+                new DummySensor(4, 5, 6)
+            };
             validator.ValidateSensors(sensorList1);
 
-            var sensorList2 = new List<ISensor>() { new DummySensor(1), new DummySensor(2, 3), new DummySensor(4, 5, 6) };
+            var sensorList2 = new List<ISensor>()
+            {
+                new DummySensor(1),
+                new DummySensor(2, 3),
+                new DummySensor(4, 5, 6)
+            };
             validator.ValidateSensors(sensorList2);
         }
 
@@ -73,10 +83,19 @@ namespace Unity.MLAgents.Tests
         public void TestNumSensorMismatch()
         {
             var validator = new SensorShapeValidator();
-            var sensorList1 = new List<ISensor>() { new DummySensor(1), new DummySensor(2, 3), new DummySensor(4, 5, 6) };
+            var sensorList1 = new List<ISensor>()
+            {
+                new DummySensor(1),
+                new DummySensor(2, 3),
+                new DummySensor(4, 5, 6)
+            };
             validator.ValidateSensors(sensorList1);
 
-            var sensorList2 = new List<ISensor>() { new DummySensor(1), new DummySensor(2, 3), };
+            var sensorList2 = new List<ISensor>()
+            {
+                new DummySensor(1),
+                new DummySensor(2, 3)
+            };
             LogAssert.Expect(LogType.Assert, "Number of Sensors must match. 3 != 2");
             validator.ValidateSensors(sensorList2);
 
@@ -91,10 +110,20 @@ namespace Unity.MLAgents.Tests
         public void TestDimensionMismatch()
         {
             var validator = new SensorShapeValidator();
-            var sensorList1 = new List<ISensor>() { new DummySensor(1), new DummySensor(2, 3), new DummySensor(4, 5, 6) };
+            var sensorList1 = new List<ISensor>()
+            {
+                new DummySensor(1),
+                new DummySensor(2, 3),
+                new DummySensor(4, 5, 6)
+            };
             validator.ValidateSensors(sensorList1);
 
-            var sensorList2 = new List<ISensor>() { new DummySensor(1), new DummySensor(2, 3), new DummySensor(4, 5) };
+            var sensorList2 = new List<ISensor>()
+            {
+                new DummySensor(1),
+                new DummySensor(2, 3),
+                new DummySensor(4, 5)
+            };
             LogAssert.Expect(LogType.Assert, new Regex("Sensor shapes must match.*"));
             validator.ValidateSensors(sensorList2);
 
@@ -109,10 +138,20 @@ namespace Unity.MLAgents.Tests
         public void TestSizeMismatch()
         {
             var validator = new SensorShapeValidator();
-            var sensorList1 = new List<ISensor>() { new DummySensor(1), new DummySensor(2, 3), new DummySensor(4, 5, 6) };
+            var sensorList1 = new List<ISensor>()
+            {
+                new DummySensor(1),
+                new DummySensor(2, 3),
+                new DummySensor(4, 5, 6)
+            };
             validator.ValidateSensors(sensorList1);
 
-            var sensorList2 = new List<ISensor>() { new DummySensor(1), new DummySensor(2, 3), new DummySensor(4, 5, 7) };
+            var sensorList2 = new List<ISensor>()
+            {
+                new DummySensor(1),
+                new DummySensor(2, 3),
+                new DummySensor(4, 5, 7)
+            };
             LogAssert.Expect(LogType.Assert, new Regex("Sensor shapes must match.*"));
             validator.ValidateSensors(sensorList2);
 
@@ -127,10 +166,19 @@ namespace Unity.MLAgents.Tests
         public void TestEverythingMismatch()
         {
             var validator = new SensorShapeValidator();
-            var sensorList1 = new List<ISensor>() { new DummySensor(1), new DummySensor(2, 3), new DummySensor(4, 5, 6) };
+            var sensorList1 = new List<ISensor>()
+            {
+                new DummySensor(1),
+                new DummySensor(2, 3),
+                new DummySensor(4, 5, 6)
+            };
             validator.ValidateSensors(sensorList1);
 
-            var sensorList2 = new List<ISensor>() { new DummySensor(1), new DummySensor(9) };
+            var sensorList2 = new List<ISensor>()
+            {
+                new DummySensor(1),
+                new DummySensor(9)
+            };
             LogAssert.Expect(LogType.Assert, "Number of Sensors must match. 3 != 2");
             LogAssert.Expect(LogType.Assert, new Regex("Sensor shapes must match.*"));
             validator.ValidateSensors(sensorList2);

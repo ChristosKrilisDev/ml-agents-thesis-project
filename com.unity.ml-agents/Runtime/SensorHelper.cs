@@ -36,7 +36,7 @@ namespace Unity.MLAgents.Sensors
                 }
             }
 
-            ObservationWriter writer = new ObservationWriter();
+            var writer = new ObservationWriter();
             writer.SetTarget(output, sensor.GetObservationSpec(), 0);
 
             // Make sure ObservationWriter didn't touch anything
@@ -93,7 +93,7 @@ namespace Unity.MLAgents.Sensors
                 }
             }
 
-            ObservationWriter writer = new ObservationWriter();
+            var writer = new ObservationWriter();
             writer.SetTarget(output, sensor.GetObservationSpec(), 0);
 
             // Make sure ObservationWriter didn't touch anything

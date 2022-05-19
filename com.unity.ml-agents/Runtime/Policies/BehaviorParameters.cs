@@ -71,8 +71,8 @@ namespace Unity.MLAgents.Policies
     [AddComponentMenu("ML Agents/Behavior Parameters", (int)MenuGroup.Default)]
     public class BehaviorParameters : MonoBehaviour
     {
-        [HideInInspector, SerializeField]
-        BrainParameters m_BrainParameters = new BrainParameters();
+        [HideInInspector] [SerializeField]
+        private BrainParameters m_BrainParameters = new BrainParameters();
 
         /// <summary>
         /// Delegate for receiving events about Policy Updates.
@@ -94,8 +94,8 @@ namespace Unity.MLAgents.Policies
             internal set { m_BrainParameters = value; }
         }
 
-        [HideInInspector, SerializeField]
-        NNModel m_Model;
+        [HideInInspector] [SerializeField]
+        private NNModel m_Model;
 
         /// <summary>
         /// The neural network model used when in inference mode.
@@ -105,11 +105,15 @@ namespace Unity.MLAgents.Policies
         public NNModel Model
         {
             get { return m_Model; }
-            set { m_Model = value; UpdateAgentPolicy(); }
+            set
+            {
+                m_Model = value;
+                UpdateAgentPolicy();
+            }
         }
 
-        [HideInInspector, SerializeField]
-        InferenceDevice m_InferenceDevice = InferenceDevice.Default;
+        [HideInInspector] [SerializeField]
+        private InferenceDevice m_InferenceDevice = InferenceDevice.Default;
 
         /// <summary>
         /// How inference is performed for this Agent's model.
@@ -119,11 +123,15 @@ namespace Unity.MLAgents.Policies
         public InferenceDevice InferenceDevice
         {
             get { return m_InferenceDevice; }
-            set { m_InferenceDevice = value; UpdateAgentPolicy(); }
+            set
+            {
+                m_InferenceDevice = value;
+                UpdateAgentPolicy();
+            }
         }
 
-        [HideInInspector, SerializeField]
-        BehaviorType m_BehaviorType;
+        [HideInInspector] [SerializeField]
+        private BehaviorType m_BehaviorType;
 
         /// <summary>
         /// The BehaviorType for the Agent.
@@ -131,11 +139,15 @@ namespace Unity.MLAgents.Policies
         public BehaviorType BehaviorType
         {
             get { return m_BehaviorType; }
-            set { m_BehaviorType = value; UpdateAgentPolicy(); }
+            set
+            {
+                m_BehaviorType = value;
+                UpdateAgentPolicy();
+            }
         }
 
-        [HideInInspector, SerializeField]
-        string m_BehaviorName = "My Behavior";
+        [HideInInspector] [SerializeField]
+        private string m_BehaviorName = "My Behavior";
 
         /// <summary>
         /// The name of this behavior, which is used as a base name. See
@@ -146,13 +158,17 @@ namespace Unity.MLAgents.Policies
         public string BehaviorName
         {
             get { return m_BehaviorName; }
-            set { m_BehaviorName = value; UpdateAgentPolicy(); }
+            set
+            {
+                m_BehaviorName = value;
+                UpdateAgentPolicy();
+            }
         }
 
         /// <summary>
         /// The team ID for this behavior.
         /// </summary>
-        [HideInInspector, SerializeField, FormerlySerializedAs("m_TeamID")]
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("m_TeamID")]
         public int TeamId;
         // TODO properties here instead of Agent
 
@@ -160,12 +176,12 @@ namespace Unity.MLAgents.Policies
         [HideInInspector]
         [SerializeField]
         [Tooltip("Use all Sensor components attached to child GameObjects of this Agent.")]
-        bool m_UseChildSensors = true;
+        private bool m_UseChildSensors = true;
 
         [HideInInspector]
         [SerializeField]
         [Tooltip("Use all Actuator components attached to child GameObjects of this Agent.")]
-        bool m_UseChildActuators = true;
+        private bool m_UseChildActuators = true;
 
         /// <summary>
         /// Whether or not to use all the sensor components attached to child GameObjects of the agent.
@@ -201,8 +217,8 @@ namespace Unity.MLAgents.Policies
             set { m_UseChildActuators = value; }
         }
 
-        [HideInInspector, SerializeField]
-        ObservableAttributeOptions m_ObservableAttributeHandling = ObservableAttributeOptions.Ignore;
+        [HideInInspector] [SerializeField]
+        private ObservableAttributeOptions m_ObservableAttributeHandling = ObservableAttributeOptions.Ignore;
 
         /// <summary>
         /// Determines how the Agent class is searched for <see cref="ObservableAttribute"/>s.
@@ -221,7 +237,7 @@ namespace Unity.MLAgents.Policies
             get { return m_BehaviorName + "?team=" + TeamId; }
         }
 
-        void Awake()
+        private void Awake()
         {
             OnPolicyUpdated += mode => { };
         }

@@ -11,8 +11,8 @@ namespace Unity.MLAgents.Integrations.Match3
     [AddComponentMenu("ML Agents/Match 3 Actuator", (int)MenuGroup.Actuators)]
     public class Match3ActuatorComponent : ActuatorComponent
     {
-        [HideInInspector, SerializeField, FormerlySerializedAs("ActuatorName")]
-        string m_ActuatorName = "Match3 Actuator";
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("ActuatorName")]
+        private string m_ActuatorName = "Match3 Actuator";
 
         /// <summary>
         /// Name of the generated Match3Actuator object.
@@ -20,33 +20,51 @@ namespace Unity.MLAgents.Integrations.Match3
         /// </summary>
         public string ActuatorName
         {
-            get => m_ActuatorName;
-            set => m_ActuatorName = value;
+            get
+            {
+                return m_ActuatorName;
+            }
+            set
+            {
+                m_ActuatorName = value;
+            }
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("RandomSeed")]
-        int m_RandomSeed = -1;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("RandomSeed")]
+        private int m_RandomSeed = -1;
 
         /// <summary>
         /// A random seed used in the actuator's heuristic, if needed.
         /// </summary>
         public int RandomSeed
         {
-            get => m_RandomSeed;
-            set => m_RandomSeed = value;
+            get
+            {
+                return m_RandomSeed;
+            }
+            set
+            {
+                m_RandomSeed = value;
+            }
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("ForceHeuristic")]
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("ForceHeuristic")]
         [Tooltip("Force using the Agent's Heuristic() method to decide the action. This should only be used in testing.")]
-        bool m_ForceHeuristic;
+        private bool m_ForceHeuristic;
 
         /// <summary>
         /// Force using the Agent's Heuristic() method to decide the action. This should only be used in testing.
         /// </summary>
         public bool ForceHeuristic
         {
-            get => m_ForceHeuristic;
-            set => m_ForceHeuristic = value;
+            get
+            {
+                return m_ForceHeuristic;
+            }
+            set
+            {
+                m_ForceHeuristic = value;
+            }
         }
 
         /// <inheritdoc/>
@@ -59,7 +77,10 @@ namespace Unity.MLAgents.Integrations.Match3
             }
 
             var seed = m_RandomSeed == -1 ? gameObject.GetInstanceID() : m_RandomSeed + 1;
-            return new IActuator[] { new Match3Actuator(board, m_ForceHeuristic, seed, m_ActuatorName) };
+            return new IActuator[]
+            {
+                new Match3Actuator(board, m_ForceHeuristic, seed, m_ActuatorName)
+            };
         }
 
         /// <inheritdoc/>

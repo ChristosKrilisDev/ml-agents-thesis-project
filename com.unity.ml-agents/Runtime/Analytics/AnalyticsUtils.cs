@@ -15,8 +15,8 @@ namespace Unity.MLAgents.Analytics
         /// <returns>A byte array to be hex encoded.</returns>
         private static string ToHexString(byte[] array)
         {
-            StringBuilder hex = new StringBuilder(array.Length * 2);
-            foreach (byte b in array)
+            var hex = new StringBuilder(array.Length * 2);
+            foreach (var b in array)
             {
                 hex.AppendFormat("{0:x2}", b);
             }
@@ -33,10 +33,10 @@ namespace Unity.MLAgents.Analytics
         public static string Hash(string key, string value)
         {
             string hash;
-            UTF8Encoding encoder = new UTF8Encoding();
-            using (HMACSHA256 hmac = new HMACSHA256(encoder.GetBytes(key)))
+            var encoder = new UTF8Encoding();
+            using (var hmac = new HMACSHA256(encoder.GetBytes(key)))
             {
-                Byte[] hmBytes = hmac.ComputeHash(encoder.GetBytes(value));
+                var hmBytes = hmac.ComputeHash(encoder.GetBytes(value));
                 hash = ToHexString(hmBytes);
             }
             return hash;

@@ -23,13 +23,34 @@ namespace Unity.MLAgents.Tests.Areas
 
         private static object[] NumAreasCases =
         {
-            new object[] {1},
-            new object[] {2},
-            new object[] {5},
-            new object[] {7},
-            new object[] {8},
-            new object[] {64},
-            new object[] {63},
+            new object[]
+            {
+                1
+            },
+            new object[]
+            {
+                2
+            },
+            new object[]
+            {
+                5
+            },
+            new object[]
+            {
+                7
+            },
+            new object[]
+            {
+                8
+            },
+            new object[]
+            {
+                64
+            },
+            new object[]
+            {
+                63
+            }
         };
 
         [TestCaseSource(nameof(NumAreasCases))]

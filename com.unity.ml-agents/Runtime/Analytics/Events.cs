@@ -44,7 +44,7 @@ namespace Unity.MLAgents.Analytics
             {
                 NumContinuousActions = actionSpec.NumContinuousActions,
                 NumDiscreteActions = actionSpec.NumDiscreteActions,
-                BranchSizes = branchSizes,
+                BranchSizes = branchSizes
             };
         }
     }
@@ -61,7 +61,7 @@ namespace Unity.MLAgents.Analytics
 
         public static EventActuatorInfo FromActuator(IActuator actuator)
         {
-            BuiltInActuatorType builtInActuatorType = Actuators.BuiltInActuatorType.Unknown;
+            var builtInActuatorType = Actuators.BuiltInActuatorType.Unknown;
             if (actuator is IBuiltInActuator builtInActuator)
             {
                 builtInActuatorType = builtInActuator.GetBuiltInActuatorType();
@@ -121,7 +121,7 @@ namespace Unity.MLAgents.Analytics
                 CompressionType = sensor.GetCompressionSpec().SensorCompressionType.ToString(),
                 BuiltInSensorType = (int)builtInSensorType,
                 ObservationType = (int)obsSpec.ObservationType,
-                DimensionInfos = dimInfos,
+                DimensionInfos = dimInfos
             };
         }
     }
@@ -165,7 +165,7 @@ namespace Unity.MLAgents.Analytics
         Extrinsic = 1 << 0,
         Gail = 1 << 1,
         Curiosity = 1 << 2,
-        Rnd = 1 << 3,
+        Rnd = 1 << 3
     }
 
     [Flags]
@@ -175,7 +175,7 @@ namespace Unity.MLAgents.Analytics
         Recurrent = 1 << 1,
         Threaded = 1 << 2,
         SelfPlay = 1 << 3,
-        Curriculum = 1 << 4,
+        Curriculum = 1 << 4
     }
 
     internal struct TrainingBehaviorInitializedEvent

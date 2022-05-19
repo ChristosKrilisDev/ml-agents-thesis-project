@@ -65,8 +65,14 @@ namespace Tests
             var behaviorParams = gameObject.AddComponent<BehaviorParameters>();
             behaviorParams.BrainParameters.VectorObservationSize = 3;
             behaviorParams.BrainParameters.NumStackedVectorObservations = 2;
-            behaviorParams.BrainParameters.VectorActionDescriptions = new[] { "Continuous1", "TestActionA", "TestActionB" };
-            behaviorParams.BrainParameters.ActionSpec = new ActionSpec(1, new[] { 2, 2 });
+            behaviorParams.BrainParameters.VectorActionDescriptions = new[]
+            {
+                "Continuous1", "TestActionA", "TestActionB"
+            };
+            behaviorParams.BrainParameters.ActionSpec = new ActionSpec(1, new[]
+            {
+                2, 2
+            });
             behaviorParams.BehaviorName = "TestBehavior";
             behaviorParams.TeamId = 42;
             behaviorParams.UseChildSensors = true;
@@ -79,7 +85,11 @@ namespace Tests
 #if MLA_UNITY_PHYSICS_MODULE
             var sensorComponent = gameObject.AddComponent<RayPerceptionSensorComponent3D>();
             sensorComponent.SensorName = "ray3d";
-            sensorComponent.DetectableTags = new List<string> { "Player", "Respawn" };
+            sensorComponent.DetectableTags = new List<string>
+            {
+                "Player",
+                "Respawn"
+            };
             sensorComponent.RaysPerDirection = 3;
 
             // Make a StackingSensor that wraps the RayPerceptionSensorComponent3D
@@ -122,7 +132,10 @@ namespace Tests
 
             var actions = agent.GetStoredActionBuffers().DiscreteActions;
             // default Heuristic implementation should return zero actions.
-            Assert.AreEqual(new ActionSegment<int>(new[] { 0, 0 }), actions);
+            Assert.AreEqual(new ActionSegment<int>(new[]
+            {
+                0, 0
+            }), actions);
             Assert.AreEqual(1, agent.numHeuristicCalls);
 
             Academy.Instance.EnvironmentStep();

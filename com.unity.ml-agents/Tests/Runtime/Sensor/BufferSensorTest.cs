@@ -22,8 +22,14 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(dimProp[1], DimensionProperty.None);
             Assert.AreEqual(dimProp.Length, 2);
 
-            bufferSensor.AppendObservation(new float[] { 1, 2, 3, 4 });
-            bufferSensor.AppendObservation(new float[] { 5, 6, 7, 8 });
+            bufferSensor.AppendObservation(new float[]
+            {
+                1, 2, 3, 4
+            });
+            bufferSensor.AppendObservation(new float[]
+            {
+                5, 6, 7, 8
+            });
 
             var obsWriter = new ObservationWriter();
             var obs = bufferSensor.GetObservationProto(obsWriter);
@@ -33,12 +39,12 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual((int)dimProp[0], obs.DimensionProperties[0]);
             Assert.AreEqual((int)dimProp[1], obs.DimensionProperties[1]);
 
-            for (int i = 0; i < 8; i++)
+            for (var i = 0; i < 8; i++)
             {
                 Assert.AreEqual(obs.FloatData.Data[i], i + 1);
 
             }
-            for (int i = 8; i < 80; i++)
+            for (var i = 8; i < 80; i++)
             {
                 Assert.AreEqual(obs.FloatData.Data[i], 0);
 
@@ -61,8 +67,14 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(shape[1], 4);
             Assert.AreEqual(shape.Length, 2);
 
-            bufferComponent.AppendObservation(new float[] { 1, 2, 3, 4 });
-            bufferComponent.AppendObservation(new float[] { 5, 6, 7, 8 });
+            bufferComponent.AppendObservation(new float[]
+            {
+                1, 2, 3, 4
+            });
+            bufferComponent.AppendObservation(new float[]
+            {
+                5, 6, 7, 8
+            });
 
             var obsWriter = new ObservationWriter();
             var obs = sensor.GetObservationProto(obsWriter);
@@ -72,12 +84,12 @@ namespace Unity.MLAgents.Tests
 
             Assert.AreEqual(sensor.GetName(), "TestName");
 
-            for (int i = 0; i < 8; i++)
+            for (var i = 0; i < 8; i++)
             {
                 Assert.AreEqual(obs.FloatData.Data[i], i + 1);
 
             }
-            for (int i = 8; i < 80; i++)
+            for (var i = 8; i < 80; i++)
             {
                 Assert.AreEqual(obs.FloatData.Data[i], 0);
 

@@ -6,7 +6,7 @@ namespace Unity.MLAgents.Tests
 {
     public class EngineConfigurationChannelTests
     {
-        float m_OldTimeScale = 1.0f;
+        private float m_OldTimeScale = 1.0f;
 
         [SetUp]
         public void Setup()
@@ -23,7 +23,7 @@ namespace Unity.MLAgents.Tests
         [Test]
         public void TestTimeScaleClamping()
         {
-            OutgoingMessage pythonMsg = new OutgoingMessage();
+            var pythonMsg = new OutgoingMessage();
             pythonMsg.WriteInt32((int)EngineConfigurationChannel.ConfigurationType.TimeScale);
             pythonMsg.WriteFloat32(1000f);
 

@@ -10,7 +10,7 @@ namespace Unity.MLAgents.Tests.Actuators
     [TestFixture]
     public class VectorActuatorTests
     {
-        class TestActionReceiver : IActionReceiver, IHeuristicProvider
+        private class TestActionReceiver : IActionReceiver, IHeuristicProvider
         {
             public ActionBuffers LastActionBuffers;
             public int Branch;
@@ -60,7 +60,10 @@ namespace Unity.MLAgents.Tests.Actuators
             var ar = new TestActionReceiver();
             var va = new VectorActuator(ar, ActionSpec.MakeDiscrete(1, 2, 3), "name");
 
-            var discreteActions = new[] { 0, 1, 1 };
+            var discreteActions = new[]
+            {
+                0, 1, 1
+            };
             var ab = new ActionBuffers(ActionSegment<float>.Empty,
                 new ActionSegment<int>(discreteActions, 0, 3));
 
@@ -78,7 +81,10 @@ namespace Unity.MLAgents.Tests.Actuators
             var ar = new TestActionReceiver();
             var va = new VectorActuator(ar, ActionSpec.MakeDiscrete(1, 2, 3), "name");
 
-            var discreteActions = new[] { 0, 1, 1 };
+            var discreteActions = new[]
+            {
+                0, 1, 1
+            };
             var ab = new ActionBuffers(ActionSegment<float>.Empty,
                 new ActionSegment<int>(discreteActions, 0, 3));
 
@@ -90,15 +96,27 @@ namespace Unity.MLAgents.Tests.Actuators
         {
             var ar = new TestActionReceiver();
             var va = new VectorActuator(ar, ActionSpec.MakeDiscrete(1, 2, 3), "name");
-            var bdam = new ActuatorDiscreteActionMask(new[] { va }, 6, 3);
+            var bdam = new ActuatorDiscreteActionMask(new[]
+            {
+                va
+            }, 6, 3);
 
-            var groundTruthMask = new[] { false, true, false, false, true, true };
+            var groundTruthMask = new[]
+            {
+                false, true, false, false, true, true
+            };
 
             ar.Branch = 1;
-            ar.Mask = new[] { 0 };
+            ar.Mask = new[]
+            {
+                0
+            };
             va.WriteDiscreteActionMask(bdam);
             ar.Branch = 2;
-            ar.Mask = new[] { 1, 2 };
+            ar.Mask = new[]
+            {
+                1, 2
+            };
             va.WriteDiscreteActionMask(bdam);
 
             Assert.IsTrue(groundTruthMask.SequenceEqual(bdam.GetMask()));

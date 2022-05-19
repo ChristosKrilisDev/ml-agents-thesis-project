@@ -7,13 +7,13 @@ namespace Unity.MLAgents.Extensions.Editor.Input
     [CustomEditor(typeof(InputActuatorComponent))]
     internal class InputActuatorComponentEditor : UnityEditor.Editor
     {
-        const string k_ActionSpecName = "m_ActionSpec";
+        private const string k_ActionSpecName = "m_ActionSpec";
 
         public override void OnInspectorGUI()
         {
             var so = serializedObject;
             so.Update();
-            InputActuatorComponent o = so.targetObject as InputActuatorComponent;
+            var o = so.targetObject as InputActuatorComponent;
             _ = o.ActionSpec;
             EditorGUI.indentLevel++;
             EditorGUI.BeginDisabledGroup(true);

@@ -201,9 +201,9 @@ public partial class TestPushBlockActions : IInputActionCollection2, IDisposable
     ]
 }");
         // Movement
-        m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
-        m_Movement_movement = m_Movement.FindAction("movement", throwIfNotFound: true);
-        m_Movement_jump = m_Movement.FindAction("jump", throwIfNotFound: true);
+        m_Movement = asset.FindActionMap("Movement", true);
+        m_Movement_movement = m_Movement.FindAction("movement", true);
+        m_Movement_jump = m_Movement.FindAction("jump", true);
     }
 
     public void Dispose()
@@ -213,17 +213,35 @@ public partial class TestPushBlockActions : IInputActionCollection2, IDisposable
 
     public InputBinding? bindingMask
     {
-        get => asset.bindingMask;
-        set => asset.bindingMask = value;
+        get
+        {
+            return asset.bindingMask;
+        }
+        set
+        {
+            asset.bindingMask = value;
+        }
     }
 
     public ReadOnlyArray<InputDevice>? devices
     {
-        get => asset.devices;
-        set => asset.devices = value;
+        get
+        {
+            return asset.devices;
+        }
+        set
+        {
+            asset.devices = value;
+        }
     }
 
-    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+    public ReadOnlyArray<InputControlScheme> controlSchemes
+    {
+        get
+        {
+            return asset.controlSchemes;
+        }
+    }
 
     public bool Contains(InputAction action)
     {
@@ -249,7 +267,13 @@ public partial class TestPushBlockActions : IInputActionCollection2, IDisposable
     {
         asset.Disable();
     }
-    public IEnumerable<InputBinding> bindings => asset.bindings;
+    public IEnumerable<InputBinding> bindings
+    {
+        get
+        {
+            return asset.bindings;
+        }
+    }
 
     public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
     {
@@ -269,12 +293,33 @@ public partial class TestPushBlockActions : IInputActionCollection2, IDisposable
     {
         private TestPushBlockActions m_Wrapper;
         public MovementActions(TestPushBlockActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @movement => m_Wrapper.m_Movement_movement;
-        public InputAction @jump => m_Wrapper.m_Movement_jump;
+        public InputAction @movement
+        {
+            get
+            {
+                return m_Wrapper.m_Movement_movement;
+            }
+        }
+
+        public InputAction @jump
+        {
+            get
+            {
+                return m_Wrapper.m_Movement_jump;
+            }
+        }
+
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
+        public bool enabled
+        {
+            get
+            {
+                return Get().enabled;
+            }
+        }
+
         public static implicit operator InputActionMap(MovementActions set) { return set.Get(); }
         public void SetCallbacks(IMovementActions instance)
         {
@@ -299,7 +344,14 @@ public partial class TestPushBlockActions : IInputActionCollection2, IDisposable
             }
         }
     }
-    public MovementActions @Movement => new MovementActions(this);
+    public MovementActions @Movement
+    {
+        get
+        {
+            return new MovementActions(this);
+        }
+    }
+
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {

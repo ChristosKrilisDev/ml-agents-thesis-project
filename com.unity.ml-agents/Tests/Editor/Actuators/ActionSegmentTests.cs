@@ -10,7 +10,10 @@ namespace Unity.MLAgents.Tests.Actuators
         [Test]
         public void TestConstruction()
         {
-            var floatArray = new[] { 1f, 2f, 3f, 4f, 5f, 6f, 7f };
+            var floatArray = new[]
+            {
+                1f, 2f, 3f, 4f, 5f, 6f, 7f
+            };
             Assert.Throws<ArgumentOutOfRangeException>(
                 () => new ActionSegment<float>(floatArray, 100, 1));
 
@@ -20,7 +23,10 @@ namespace Unity.MLAgents.Tests.Actuators
         [Test]
         public void TestIndexing()
         {
-            var floatArray = new[] { 1f, 2f, 3f, 4f, 5f, 6f, 7f };
+            var floatArray = new[]
+            {
+                1f, 2f, 3f, 4f, 5f, 6f, 7f
+            };
             for (var i = 0; i < floatArray.Length; i++)
             {
                 var start = 0 + i;
@@ -36,7 +42,10 @@ namespace Unity.MLAgents.Tests.Actuators
         [Test]
         public void TestEnumerator()
         {
-            var floatArray = new[] { 1f, 2f, 3f, 4f, 5f, 6f, 7f };
+            var floatArray = new[]
+            {
+                1f, 2f, 3f, 4f, 5f, 6f, 7f
+            };
             for (var i = 0; i < floatArray.Length; i++)
             {
                 var start = 0 + i;

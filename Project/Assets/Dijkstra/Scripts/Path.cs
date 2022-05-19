@@ -53,14 +53,14 @@ namespace Dijstra.path
         /// </summary>
         public virtual void Bake()
         {
-            List<Node> calculated = new List<Node>();
+            var calculated = new List<Node>();
             m_Length = 0f;
-            for (int i = 0; i < m_Nodes.Count; i++)
+            for (var i = 0; i < m_Nodes.Count; i++)
             {
-                Node node = m_Nodes[i];
-                for (int j = 0; j < node.connections.Count; j++)
+                var node = m_Nodes[i];
+                for (var j = 0; j < node.connections.Count; j++)
                 {
-                    Node connection = node.connections[j];
+                    var connection = node.connections[j];
 
                     // Don't calcualte calculated nodes
                     if (m_Nodes.Contains(connection) && !calculated.Contains(connection))
@@ -86,7 +86,7 @@ namespace Dijstra.path
                 "Nodes: {0}",
                 string.Join(
                     ", ",
-                    nodes.Select(node => node.name).ToArray())/*,length*/);
+                    nodes.Select(node => node.name).ToArray()) /*,length*/);
         }
 
     }

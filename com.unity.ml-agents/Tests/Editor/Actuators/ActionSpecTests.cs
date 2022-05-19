@@ -11,8 +11,14 @@ namespace Unity.MLAgents.Tests.Actuators
         [Test]
         public void ActionSpecCombineTest()
         {
-            var as0 = new ActionSpec(3, new[] { 3, 2, 1 });
-            var as1 = new ActionSpec(1, new[] { 35, 122, 1, 3, 8, 3 });
+            var as0 = new ActionSpec(3, new[]
+            {
+                3, 2, 1
+            });
+            var as1 = new ActionSpec(1, new[]
+            {
+                35, 122, 1, 3, 8, 3
+            });
 
             var as0NumCon = 3;
             var as0NumDis = as0.NumDiscreteActions;
