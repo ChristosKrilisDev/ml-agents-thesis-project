@@ -10,7 +10,7 @@ namespace ML_Agents.Finder.Scripts
         [SerializeField] private GameObject _myButton;
 
         private GameObject _goalNode = null;
-        private PfArea _areaComponent;
+        private PFArea _areaComponent;
 
         private const string SWITCH_OFF_TAG = "switchOff";
         private const string SWITCH_ON_TAG = "switchOn";
@@ -25,7 +25,7 @@ namespace ML_Agents.Finder.Scripts
 
         private void Awake()
         {
-            _areaComponent = Area.GetComponent<PfArea>();
+            _areaComponent = Area.GetComponent<PFArea>();
         }
 
         public void Init(int cpSpawnIndex, int goalSpawnIndex)

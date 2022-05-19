@@ -1678,7 +1678,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 1
-  m_BehaviorType: 0
+  m_BehaviorType: 1
   m_BehaviorName: PF
   TeamId: 0
   m_UseChildSensors: 1
@@ -1701,10 +1701,10 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 3500
-  useVectorObs: 1
-  area: {fileID: 1464170487903594}
-  areaSwitch: {fileID: 1432086782037750}
-  m_Graph: {fileID: 1761445699}
+  _useVectorObs: 0
+  _area: {fileID: 6972023362410834850}
+  _checkPoint: {fileID: 114882773008046678}
+  _graph: {fileID: 1761445699}
 --- !u!65 &65345930959735878
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2856,10 +2856,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abd01d977612744528db278c446e9a11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onMaterial: {fileID: 2100000, guid: c67450f290f3e4897bc40276a619e78d, type: 2}
-  offMaterial: {fileID: 2100000, guid: 5c59bd36def9a4684be49a21cf201a2d, type: 2}
-  myButton: {fileID: 1311237735163698}
-  goalObj: {fileID: 0}
+  _onMaterial: {fileID: 2100000, guid: 88b9ae7af2c1748a0a1f63407587a601, type: 2}
+  _offMaterial: {fileID: 2100000, guid: c67450f290f3e4897bc40276a619e78d, type: 2}
+  _myButton: {fileID: 1311237735163698}
 --- !u!1 &1464170487903594
 GameObject:
   m_ObjectHideFlags: 0
@@ -2869,7 +2868,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4603070702628152}
-  - component: {fileID: 114038595653051694}
+  - component: {fileID: 6972023362410834850}
   m_Layer: 0
   m_Name: AreaPF
   m_TagString: Untagged
@@ -2903,7 +2902,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114038595653051694
+--- !u!114 &6972023362410834850
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2915,9 +2914,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e048de15d0b8a4643a75c2b09981792e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goalPref: {fileID: 1891363201150404, guid: 8be2b3870e2cd4ad8bbf080059b2a132, type: 3}
-  blockPref: {fileID: 1703380733698014, guid: 41512dd84b60643ceb3855fcf9d7d318, type: 3}
-  spawnAreas:
+  _goalNodePref: {fileID: 1891363201150404, guid: 8be2b3870e2cd4ad8bbf080059b2a132,
+    type: 3}
+  _blockPref: {fileID: 1703380733698014, guid: 41512dd84b60643ceb3855fcf9d7d318, type: 3}
+  _spawnAreas:
   - {fileID: 1772811252886996}
   - {fileID: 1499222802311382}
   - {fileID: 1211192434636830}
@@ -2927,8 +2927,6 @@ MonoBehaviour:
   - {fileID: 1589824565497876}
   - {fileID: 1009802342325412}
   - {fileID: 1589816231338102}
-  numPyra: 1
-  range: 45
 --- !u!1 &1487796829611838
 GameObject:
   m_ObjectHideFlags: 0

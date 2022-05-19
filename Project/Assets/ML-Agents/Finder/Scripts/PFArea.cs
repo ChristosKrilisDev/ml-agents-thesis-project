@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ML_Agents.Finder.Scripts
 {
-    public class PfArea : MonoBehaviour
+    public class PFArea : MonoBehaviour
     {
         [SerializeField] private GameObject _goalNodePref;
         [SerializeField] private GameObject _blockPref;
@@ -23,7 +23,7 @@ namespace ML_Agents.Finder.Scripts
             return GoalNode;
         }
 
-        public PfArea CreateBlockNode(int spawnAreaIndex)
+        public PFArea CreateBlockNode(int spawnAreaIndex)
         {
             CreateNode(_blockPref, spawnAreaIndex);
             return this;
@@ -60,10 +60,11 @@ namespace ML_Agents.Finder.Scripts
                     DestroyImmediate(child.gameObject);
         }
 
-        public PfArea HideCallBack(int nodeIndex)
+        public PFArea HideCallBack(int nodeIndex)
         {
             //_nodes[nodeIndex].gameObject.SetActive(false);
             return this;
         }
     }
+    
 }

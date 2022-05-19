@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Dijstra.path;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 
 namespace ML_Agents.Finder.Scripts
 {
-    public class PfAgent : Agent
+    public class PFAgent : Agent
     {
     #region Vars
 
@@ -20,7 +22,7 @@ namespace ML_Agents.Finder.Scripts
         private bool _useVectorObs;
 
         [Header("Area Vars")]
-        [SerializeField] private PfArea _area;
+        [SerializeField] private PFArea _area;
         [SerializeField] private CheckPoint _checkPoint;
         [SerializeField] private Graph _graph;
         private Path _path = new Path();
@@ -33,20 +35,21 @@ namespace ML_Agents.Finder.Scripts
 
 
         private bool _hasTouchedTheWall;
-        private bool _hasFindGoal;
-        private bool _hasFindCp;
+        private bool _hasFoundGoal;
+        private bool _hasFoundCheckpoint;
         private float _stepFactor;
-        
-        private readonly GameObject[] _goalsToFind = new GameObject[2];
-        private readonly float[] _goalDistances = new float[2];
+
+        private readonly GameObject[] _nodesToFind = new GameObject[2];
+        private readonly float[] _nodesDistances = new float[2];
         private GameObject _targetObjectToFind;
-        private int _findTargetGoalIndex;
+        private int _findTargetNodeIndex;
 
         //timed //step is running 50 times/sec
-        //3000 max steps/ 5 decision interv = 600steps per episode
+        //3000 max steps/ 5 decision request = 600 steps per episode
         //Timed Frames
         private int _frameCount;
         private const int FRAME_AMOUNT = 50;
+        private static PFAgent MasterInit;
 
         private enum Indexof
         {
@@ -64,7 +67,20 @@ namespace ML_Agents.Finder.Scripts
         {
             _agentRb = GetComponent<Rigidbody>();
             _distanceRecorder = GetComponent<DistanceRecorder>();
+
+            if (MasterInit) return;
+            MasterInit = this;
+            Debug.Log("--------");
+            //RewardFunction.MaxStep = MaxStep;
+            //RewardFunction.OnEpisodeEnd.AddListener(EndEpisode);
+
         }
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            //RewardFunction.OnEpisodeEnd.RemoveListener(EndEpisode);
+        }
+
 
         /// <summary>
         /// what data the ai needs in order to solve the problem
@@ -76,21 +92,20 @@ namespace ML_Agents.Finder.Scripts
         /// <param name="sensor"></param>
         public override void CollectObservations(VectorSensor sensor)
         {
-
             if (!_useVectorObs) return;
 
             sensor.AddObservation(transform.InverseTransformDirection(_agentRb.velocity)); //3
             //cp
             sensor.AddObservation(_checkPoint.GetState); //1
-            var dir = (_goalsToFind[0].transform.localPosition - transform.localPosition).normalized;
+            var dir = (_nodesToFind[0].transform.localPosition - transform.localPosition).normalized;
             sensor.AddObservation(dir.x); //1
             sensor.AddObservation(dir.z); //1
 
             //if goal is active in scene :
-            sensor.AddObservation(_goalsToFind[1].activeInHierarchy ? 1 : 0); //1
-            if (_goalsToFind[1].activeInHierarchy)
+            sensor.AddObservation(_nodesToFind[1].activeInHierarchy ? 1 : 0); //1
+            if (_nodesToFind[1].activeInHierarchy)
             {
-                var dirToGoal = (_goalsToFind[1].transform.localPosition - transform.localPosition).normalized;
+                var dirToGoal = (_nodesToFind[1].transform.localPosition - transform.localPosition).normalized;
                 sensor.AddObservation(dirToGoal.x); //1
                 sensor.AddObservation(dirToGoal.z); //1
             }
@@ -132,7 +147,7 @@ namespace ML_Agents.Finder.Scripts
 
         public override void OnActionReceived(ActionBuffers actionBuffers)
         {
-            if (--_frameCount <= 0) //O(1) O(n) //TODO HERE
+            if (--_frameCount <= 0) //O(1) O(n) //TODO HERE Frame timer
             {
                 _frameCount = FRAME_AMOUNT;
                 _stepFactor = Math.Abs(StepCount - MaxStep) / (float)MaxStep;
@@ -165,8 +180,8 @@ namespace ML_Agents.Finder.Scripts
             }
             if (collision.gameObject.CompareTag("switchOff"))
             {
-                _findTargetGoalIndex++;
-                _hasFindCp = true;
+                _findTargetNodeIndex++;
+                _hasFoundCheckpoint = true;
                 //SetReward(+1);
                 AddReward(2f);
                 SwitchTargetToFinalNode();
@@ -174,7 +189,7 @@ namespace ML_Agents.Finder.Scripts
 
             if (collision.gameObject.CompareTag("goal"))
             {
-                _hasFindGoal = true;
+                _hasFoundGoal = true;
                 OnTerminalCondition();
             }
         }
@@ -186,8 +201,13 @@ namespace ML_Agents.Finder.Scripts
             var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
             var items = enumerable.ToArray();
 
-            var nodesTransforms = new Transform[_graph.nodes.Count];
-            Array.Copy(_graph.nodes.ToArray(), nodesTransforms, _graph.nodes.Count);
+            
+            //TODO : REFACTOR THIS ?
+            var toNodeTransformList = _graph.nodes.Select(item => item.transform);
+            var toNodeTransformArray = toNodeTransformList as Transform[] ?? toNodeTransformList.ToArray();
+            var nodesTransforms = toNodeTransformArray;
+            //Array.Copy(nodeTransformArray, nodesTransforms, nodeTransformArray.Length);
+
 
             _area.SetNodesPosition(ref nodesTransforms);
             Spawn(items);
@@ -237,11 +257,11 @@ namespace ML_Agents.Finder.Scripts
         {
             _stepFactor = 0;
             _distanceRecorder.GetTraveledDistance = 0;
-            _hasFindGoal = _hasFindCp = _hasTouchedTheWall = false;
-            _findTargetGoalIndex = _frameCount = 0;
+            _hasFoundGoal = _hasFoundCheckpoint = _hasTouchedTheWall = false;
+            _findTargetNodeIndex = _frameCount = 0;
 
-            _targetObjectToFind = _goalsToFind[(int)Indexof.AGENT] = _graph.nodes[items[(int)Indexof.CHECK_POINT]].gameObject; //on init target CP
-            _goalsToFind[(int)Indexof.CHECK_POINT] = _graph.nodes[items[(int)Indexof.FINAL_NODE]].gameObject; //set final node as second target
+            _targetObjectToFind = _nodesToFind[(int)Indexof.AGENT] = _graph.nodes[items[(int)Indexof.CHECK_POINT]].gameObject; //on init target CP
+            _nodesToFind[(int)Indexof.CHECK_POINT] = _graph.nodes[items[(int)Indexof.FINAL_NODE]].gameObject; //set final node as second target
 
             // _episodeCounter++;
         }
@@ -268,16 +288,16 @@ namespace ML_Agents.Finder.Scripts
 
         private void SwitchTargetToFinalNode()
         {
-            _targetObjectToFind = _goalsToFind[_findTargetGoalIndex];
+            _targetObjectToFind = _nodesToFind[_findTargetNodeIndex];
         }
 
         private void SetUpDistanceDifferences(int nCheckPoint, int nFinalGoal)
         {
             //use for the sharped RF , distance/reward for each targert
             //get the distance from agent to cp
-            _goalDistances[0] = EpisodeHandler.GetDistanceDifference(gameObject, _graph.nodes[nCheckPoint].gameObject);
+            _nodesDistances[0] = EpisodeHandler.GetDistanceDifference(gameObject, _graph.nodes[nCheckPoint].gameObject);
             //get the distance from agent to final goal
-            _goalDistances[1] = EpisodeHandler.GetDistanceDifference(_graph.nodes[nCheckPoint].gameObject, _graph.nodes[nFinalGoal].gameObject);
+            _nodesDistances[1] = EpisodeHandler.GetDistanceDifference(_graph.nodes[nCheckPoint].gameObject, _graph.nodes[nFinalGoal].gameObject);
         }
 
     #endregion
@@ -302,30 +322,28 @@ namespace ML_Agents.Finder.Scripts
         {
             return RewardFunction.GetComplexReward
             (
-                EpisodeHandler.GetDistanceDifference(gameObject,_targetObjectToFind),
-                _goalDistances[_findTargetGoalIndex],
+                EpisodeHandler.GetDistanceDifference(gameObject, _targetObjectToFind),
+                _nodesDistances[_findTargetNodeIndex],
                 StepCount,
-                MaxStep,
                 HasEpisodeEnded(),
-                _hasFindCp,
-                _hasFindGoal,
-                EpisodeHandler.CompareCurrentDistance(_distanceRecorder.GetTraveledDistance, _pathTotalLength , 2)
+                _hasFoundCheckpoint,
+                _hasFoundGoal,
+                EpisodeHandler.CompareCurrentDistance(_distanceRecorder.GetTraveledDistance, _pathTotalLength, 2)
             );
         }
 
   #endregion
 
-        
+
         private bool HasEpisodeEnded()
         {
             IEnumerable<bool> conditions = new List<bool>
             {
-                _hasFindGoal,
-                StepCount==MaxStep?true:false,
+                _hasFoundGoal,
+                StepCount == MaxStep ? true : false,
                 _hasTouchedTheWall
             };
             return EpisodeHandler.HasEpisodeEnded(conditions);
         }
-
     }
 }
