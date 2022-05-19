@@ -5,23 +5,18 @@ namespace ML_Agents.Finder.Scripts
 {
     public class PfArea : MonoBehaviour
     {
-        [SerializeField]
-        private GameObject _goalNodePref;
-        [SerializeField]
-        private GameObject _blockPref;
-        [SerializeField]
-        private GameObject[] _spawnAreas;
-
+        [SerializeField] private GameObject _goalNodePref;
+        [SerializeField] private GameObject _blockPref;
+        [SerializeField] private GameObject[] _spawnAreas;
         private Transform[] _nodes;
+        private const string OBJECT_TAG_TAG = "pfobj";
+        
 
-        public GameObject GoalNode { get; private set; }
-
-        public void SetNodesPosition(ref Transform[] nodes)
-        {
-            _nodes = nodes;
-        }
-
-
+        private GameObject GoalNode { get; set; }
+        public void SetNodesPosition(ref Transform[] nodes) => _nodes = nodes;
+        
+        
+        
         public GameObject CreateGoalNode(int spawnAreaIndex)
         {
             GoalNode = CreateNode(_goalNodePref, spawnAreaIndex);
@@ -56,15 +51,12 @@ namespace ML_Agents.Finder.Scripts
         }
 
 
-        private void SetNodePositionInternal(int spawnIndex, GameObject node)
-        {
-            _nodes[spawnIndex].position = node.transform.position;
-        }
-
+        private void SetNodePositionInternal(int spawnIndex, GameObject node) => _nodes[spawnIndex].position = node.transform.position;
+        
         public void CleanArea()
         {
             foreach (Transform child in transform)
-                if (child.CompareTag("pfobj"))
+                if (child.CompareTag(OBJECT_TAG_TAG))
                     DestroyImmediate(child.gameObject);
         }
 

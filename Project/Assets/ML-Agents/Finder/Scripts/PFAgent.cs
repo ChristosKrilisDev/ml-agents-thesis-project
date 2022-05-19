@@ -20,28 +20,23 @@ namespace ML_Agents.Finder.Scripts
         private bool _useVectorObs;
 
         [Header("Area Vars")]
-        [SerializeField]
-        private PfArea _area;
-        [SerializeField]
-        private CheckPoint _checkPoint;
-        [SerializeField]
-        private Graph _graph;
+        [SerializeField] private PfArea _area;
+        [SerializeField] private CheckPoint _checkPoint;
+        [SerializeField] private Graph _graph;
         private Path _path = new Path();
         private float _pathTotalLength;
 
         private Rigidbody _agentRb;
 
         private DistanceRecorder _distanceRecorder;
-        private bool _isFirstTake;
-        private static float _episodeCounter;
+        // private static float _episodeCounter;
 
 
         private bool _hasTouchedTheWall;
         private bool _hasFindGoal;
         private bool _hasFindCp;
         private float _stepFactor;
-
-
+        
         private readonly GameObject[] _goalsToFind = new GameObject[2];
         private readonly float[] _goalDistances = new float[2];
         private GameObject _targetObjectToFind;
@@ -51,7 +46,6 @@ namespace ML_Agents.Finder.Scripts
         //3000 max steps/ 5 decision interv = 600steps per episode
         //Timed Frames
         private int _frameCount;
-
         private const int FRAME_AMOUNT = 50;
 
         private enum Indexof
@@ -63,7 +57,8 @@ namespace ML_Agents.Finder.Scripts
 
     #endregion
 
-    #region Agent
+
+#region Agent
 
         public override void Initialize()
         {
@@ -105,7 +100,7 @@ namespace ML_Agents.Finder.Scripts
                 sensor.AddObservation(0); //z
             }
 
-            //note : maybe add the Nodes dijstra
+            //note : maybe add the Nodes dijkstra
             sensor.AddObservation(_stepFactor); //1
         }
 
@@ -183,39 +178,9 @@ namespace ML_Agents.Finder.Scripts
                 OnTerminalCondition();
             }
         }
-        private void OnTerminalCondition(bool useExtraReward = false, float extraRewardValue = 0, bool useAddReward = false)
-        {
-            //this will give end reward and end episode
-            if (useExtraReward)
-            {
-                if (useAddReward) AddReward(extraRewardValue);
-                else SetReward(extraRewardValue);
-            }
-
-            if (useAddReward) AddReward(CalculateReward());
-            else SetReward(CalculateReward());
-
-            EndEpisode();
-        }
-        private float CalculateReward()
-        {
-            return RewardFunction.GetComplexReward
-            (
-                GetCurrentDistanceDifference(gameObject, _targetObjectToFind),
-                _goalDistances[_findTargetGoalIndex],
-                StepCount,
-                MaxStep,
-                HasEpisodeEnded(),
-                _hasFindCp,
-                _hasFindGoal,
-                IsDistanceLessThanDijkstra()
-            );
-        }
 
         public override void OnEpisodeBegin()
         {
-            SendData();
-
             _area.CleanArea();
 
             var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
@@ -248,7 +213,7 @@ namespace ML_Agents.Finder.Scripts
 
     #endregion
 
-    #region OnEpisodeBeginMethods
+#region OnEpisodeBeginMethods
 
         private void Spawn(IReadOnlyList<int> items)
         {
@@ -278,7 +243,7 @@ namespace ML_Agents.Finder.Scripts
             _targetObjectToFind = _goalsToFind[(int)Indexof.AGENT] = _graph.nodes[items[(int)Indexof.CHECK_POINT]].gameObject; //on init target CP
             _goalsToFind[(int)Indexof.CHECK_POINT] = _graph.nodes[items[(int)Indexof.FINAL_NODE]].gameObject; //set final node as second target
 
-            _episodeCounter++;
+            // _episodeCounter++;
         }
 
         private void SetUpPath(int nAgent, int nCheckPoint, int nFinalGoal)
@@ -310,57 +275,57 @@ namespace ML_Agents.Finder.Scripts
         {
             //use for the sharped RF , distance/reward for each targert
             //get the distance from agent to cp
-            _goalDistances[0] = GetCurrentDistanceDifference(gameObject, _graph.nodes[nCheckPoint].gameObject);
+            _goalDistances[0] = EpisodeHandler.GetDistanceDifference(gameObject, _graph.nodes[nCheckPoint].gameObject);
             //get the distance from agent to final goal
-            _goalDistances[1] = GetCurrentDistanceDifference(_graph.nodes[nCheckPoint].gameObject, _graph.nodes[nFinalGoal].gameObject);
+            _goalDistances[1] = EpisodeHandler.GetDistanceDifference(_graph.nodes[nCheckPoint].gameObject, _graph.nodes[nFinalGoal].gameObject);
         }
 
     #endregion
 
+#region RewardMethods
 
-        //TODO : Move them elsewhere
+        private void OnTerminalCondition(bool useExtraReward = false, float extraRewardValue = 0, bool useAddReward = false)
+        {
+            //this will give end reward and end episode
+            if (useExtraReward)
+            {
+                if (useAddReward) AddReward(extraRewardValue);
+                else SetReward(extraRewardValue);
+            }
+
+            if (useAddReward) AddReward(CalculateReward());
+            else SetReward(CalculateReward());
+
+            EndEpisode();
+        }
+        private float CalculateReward()
+        {
+            return RewardFunction.GetComplexReward
+            (
+                EpisodeHandler.GetDistanceDifference(gameObject,_targetObjectToFind),
+                _goalDistances[_findTargetGoalIndex],
+                StepCount,
+                MaxStep,
+                HasEpisodeEnded(),
+                _hasFindCp,
+                _hasFindGoal,
+                EpisodeHandler.CompareCurrentDistance(_distanceRecorder.GetTraveledDistance, _pathTotalLength , 2)
+            );
+        }
+
+  #endregion
+
+        
         private bool HasEpisodeEnded()
         {
-            return _hasFindGoal || StepCount == MaxStep || _hasTouchedTheWall;
+            IEnumerable<bool> conditions = new List<bool>
+            {
+                _hasFindGoal,
+                StepCount==MaxStep?true:false,
+                _hasTouchedTheWall
+            };
+            return EpisodeHandler.HasEpisodeEnded(conditions);
         }
 
-        /// <summary>
-        /// Check the distance ~ Dijktra
-        /// </summary>
-        /// <returns>true if the distance that agent did is less than dijstras shortest path length</returns>
-        private bool IsDistanceLessThanDijkstra()
-        {
-            return _distanceRecorder.GetTraveledDistance <= _pathTotalLength * 2;
-        }
-
-        /// <summary>
-        /// used to find the distance between agent and current goal
-        /// </summary>
-        /// <param name="pointA">Agent</param>
-        /// <param name="pointB">goal</param>
-        /// <returns>the distance in float, from pointA to pointB</returns>
-        private static float GetCurrentDistanceDifference(GameObject pointA, GameObject pointB)
-        {
-            if (!pointA || !pointB) return 0;
-
-            var localPositionA = pointA.transform.localPosition;
-            var localPositionB = pointB.transform.localPosition;
-
-            var pA = new Vector3(localPositionA.x, 0, localPositionA.z);
-            var pB = new Vector3(localPositionB.x, 0, localPositionB.z);
-
-            return Vector3.Distance(pA, pB);
-        }
-        //TODO: 
-
-
-        private void SendData() //dont use
-        {
-            if (_isFirstTake) return;
-
-            _isFirstTake = false;
-            GameManager.instance.WriteData(_episodeCounter, _distanceRecorder.GetTraveledDistance, _pathTotalLength,
-                _hasFindGoal, 0);
-        }
     }
 }
