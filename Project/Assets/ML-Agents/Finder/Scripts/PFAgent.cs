@@ -1,5 +1,4 @@
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using Dijstra.path;
@@ -7,7 +6,6 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 
@@ -196,19 +194,14 @@ namespace ML_Agents.Finder.Scripts
 
             var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
             var items = enumerable.ToArray();
-
-
-            //TODO : REFACTOR THIS ?
+            
             var toNodeTransformList = _graph.nodes.Select(item => item.transform);
-            var toNodeTransformArray = toNodeTransformList as Transform[] ?? toNodeTransformList.ToArray();
-            var nodesTransforms = toNodeTransformArray;
-            //Array.Copy(nodeTransformArray, nodesTransforms, nodeTransformArray.Length);
-
+            var nodesTransforms = toNodeTransformList as Transform[] ?? toNodeTransformList.ToArray();
 
             _area.SetNodesPosition(ref nodesTransforms);
             Spawn(items);
 
-            //create's the 2D graph
+            //create the 2D graph
             _graph.ConnectNodes();
             //item[0] => player | item[1] => checkPoint | item[2] => final node
             SetUpPath
@@ -276,9 +269,7 @@ namespace ML_Agents.Finder.Scripts
         private float AddShortestPathLength(Node from, Node to)
         {
             _path = _graph.GetShortestPath(from, to);
-
-            if (_path.length <= 0) Debug.LogError("Path length <= 0");
-
+            if (_path.length <= 0) return -1;
             return _path.length;
         }
 
@@ -289,7 +280,7 @@ namespace ML_Agents.Finder.Scripts
 
         private void SetUpDistanceDifferences(int nCheckPoint, int nFinalGoal)
         {
-            //use for the sharped RF , distance/reward for each targert
+            //use for the sharped RF , distance/reward for each target
             //get the distance from agent to cp
             _nodesDistances[0] = EpisodeHandler.GetDistanceDifference(gameObject, _graph.nodes[nCheckPoint].gameObject);
             //get the distance from agent to final goal
@@ -336,7 +327,7 @@ namespace ML_Agents.Finder.Scripts
             IEnumerable<bool> conditions = new List<bool>
             {
                 _hasFoundGoal,
-                StepCount == MaxStep ? true : false,
+                StepCount == MaxStep,
                 _hasTouchedTheWall
             };
             return EpisodeHandler.HasEpisodeEnded(conditions);
