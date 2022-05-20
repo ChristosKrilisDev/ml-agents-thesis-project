@@ -14,7 +14,6 @@ namespace ML_Agents.Finder.Scripts
         private static readonly float _boostReward = 1;
 
         public static int MaxStep;
-        public static UnityEvent OnEpisodeEnd;
 
         /// <SharpedRewardFunction> distanceReward = 1 - ( Dx/DijDχ )^(epsilon) </SharpedRewardFunction>
         /// <distanceReward> The value of the reward based on how close to the target the agent is </distanceReward>
@@ -29,7 +28,7 @@ namespace ML_Agents.Finder.Scripts
         /// <calculateReward> The reward agent will take for that state based based on the reward state</calculateReward>
         public static float GetComplexReward(float currDistance, float currentGoalDistance, int stepCount, bool hasEpisodeEnded, bool hasFoundCheckPoint, bool hasFoundGoal, bool hasFollowedDijktra)
         {
-            float calculateReward;
+            float calculateReward ;
             //agent reward is reset to 0 after every step
             // Additionally, the magnitude of the reward should not exceed 1.0
             var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep;
@@ -45,27 +44,25 @@ namespace ML_Agents.Finder.Scripts
                         if (hasFollowedDijktra)
                         {
                             calculateReward = Math.Abs(_boostReward + stepFactor); //1 + SF
-                            //Debug.Log("Phase : ALl true \t reward : " + calculateReward);
+                            Debug.Log($"Phase : ALl true \t reward : {calculateReward}");
                         }
                         else
                         {
                             calculateReward = -_boostReward / 4; //-0.25f
-                            //Debug.Log("Phase : Distance is more than Dijkstra * 2 \t reward : " + calculateReward);
+                            Debug.Log($"Phase : Distance is more than Dijkstra * 2 \t reward : " + calculateReward);
                         }
                     }
                     else
                     {
                         calculateReward = -_boostReward * 3; //-0.5f
-                        //Debug.Log("Phase : Didnt find goal \t reward : " + calculateReward);
+                        Debug.Log($"Phase : Didnt find goal \t reward :  {calculateReward}");
                     }
                 }
                 else
                 {
                     calculateReward = -_boostReward * 4; // -1 worst scenario
-                    //Debug.Log("Phase : Didnt CP goal \t reward : " + calculateReward);
+                    Debug.Log($"Phase : Didnt CP goal \t reward :  {calculateReward}");
                 }
-
-                OnEpisodeEnd?.Invoke();
             }
 
             #endregion
@@ -74,13 +71,13 @@ namespace ML_Agents.Finder.Scripts
                 _distanceReward = 1 - Mathf.Pow(currDistance / currentGoalDistance, _epsilon);
 
                 //TODO : 0/100 ??!!
-                calculateReward = (_distanceReward + 0.0001f / 100) * 0.3f;
+                calculateReward = _distanceReward;
                 //50% less //reward a very small amount, to guide the agent but not big enough to create a looped reward(circle).
                 //Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward, goalDistances[goalIndex]);
             }
 
-
-            Debug.LogFormat("Agent ended with reward = {0}", calculateReward);
+            //TODO : DEBUgg
+            Debug.Log($"Calculated reward = {calculateReward}");
             return calculateReward;
             //Use AddReward() to accumulate rewards between decisions.
             //Use SetReward() to overwrite any previous rewards accumulate between decisions.

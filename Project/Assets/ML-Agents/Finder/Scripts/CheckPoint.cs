@@ -9,7 +9,7 @@ namespace ML_Agents.Finder.Scripts
         [SerializeField] private Material _offMaterial;
         [SerializeField] private GameObject _myButton;
 
-        private GameObject _goalNode = null;
+        private GameObject _goalNode;
         private PFArea _areaComponent;
 
         private const string SWITCH_OFF_TAG = "switchOff";

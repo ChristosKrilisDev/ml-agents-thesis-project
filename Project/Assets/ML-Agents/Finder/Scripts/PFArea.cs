@@ -57,7 +57,7 @@ namespace ML_Agents.Finder.Scripts
         {
             foreach (Transform child in transform)
                 if (child.CompareTag(OBJECT_TAG_TAG))
-                    DestroyImmediate(child.gameObject);
+                    Destroy(child.gameObject);
         }
 
         public PFArea HideCallBack(int nodeIndex)

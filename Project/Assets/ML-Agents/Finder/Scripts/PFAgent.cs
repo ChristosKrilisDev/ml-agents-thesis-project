@@ -1,6 +1,6 @@
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Dijstra.path;
 using Unity.MLAgents;
@@ -47,9 +47,10 @@ namespace ML_Agents.Finder.Scripts
         //timed //step is running 50 times/sec
         //3000 max steps/ 5 decision request = 600 steps per episode
         //Timed Frames
+        //Issue : timed step must match action 
         private int _frameCount;
         private const int FRAME_AMOUNT = 50;
-        private static PFAgent MasterInit;
+        private static PFAgent _masterInit;
 
         private enum Indexof
         {
@@ -68,17 +69,9 @@ namespace ML_Agents.Finder.Scripts
             _agentRb = GetComponent<Rigidbody>();
             _distanceRecorder = GetComponent<DistanceRecorder>();
 
-            if (MasterInit) return;
-            MasterInit = this;
-            Debug.Log("--------");
-            //RewardFunction.MaxStep = MaxStep;
-            //RewardFunction.OnEpisodeEnd.AddListener(EndEpisode);
-
-        }
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            //RewardFunction.OnEpisodeEnd.RemoveListener(EndEpisode);
+            if (_masterInit) return;
+            _masterInit = this;
+            RewardFunction.MaxStep = MaxStep;
         }
 
 
@@ -167,6 +160,9 @@ namespace ML_Agents.Finder.Scripts
                 discreteActionsOut[0] = 4;
             else if (Input.GetKey(KeyCode.S))
                 discreteActionsOut[0] = 2;
+            else
+                discreteActionsOut[0] = 0;
+
         }
 
 
@@ -201,7 +197,7 @@ namespace ML_Agents.Finder.Scripts
             var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
             var items = enumerable.ToArray();
 
-            
+
             //TODO : REFACTOR THIS ?
             var toNodeTransformList = _graph.nodes.Select(item => item.transform);
             var toNodeTransformArray = toNodeTransformList as Transform[] ?? toNodeTransformList.ToArray();
