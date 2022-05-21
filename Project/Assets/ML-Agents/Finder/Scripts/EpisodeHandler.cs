@@ -1,11 +1,48 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
+
 namespace ML_Agents.Finder.Scripts
 {
     public static class EpisodeHandler
     {
         
+        public static void Init()
+        {
+            GetButtonMaterials();
+            GetPrefabsNodesMaterials();
+        }
+        
+#region GetButtonMats
+
+        private const string MATERIALS_ROOT_PATH = "Assets/ML-Agents/SharedAssets/Materials";
+        public static Material OnButtonMaterial ;
+        public static Material OffButtonMaterial;
+
+        private static void GetButtonMaterials()
+        {
+            OnButtonMaterial = AssetDatabase.LoadAssetAtPath<Material>($"{MATERIALS_ROOT_PATH}/Green.mat");
+            OffButtonMaterial = AssetDatabase.LoadAssetAtPath<Material>($"{MATERIALS_ROOT_PATH}/Orange.mat");
+        }
+
+#endregion
+
+#region GetPrefabs
+
+        private const string PREFABS_ROOT_PATH = "Assets/ML-Agents/Finder/Prefabs";
+        public static GameObject FinalNode ;
+        public static GameObject SimpleNode;
+
+        private static void GetPrefabsNodesMaterials()
+        {
+            FinalNode = AssetDatabase.LoadAssetAtPath<GameObject>($"{PREFABS_ROOT_PATH}/FinalGoal.prefab");
+            SimpleNode = AssetDatabase.LoadAssetAtPath<GameObject>($"{PREFABS_ROOT_PATH}/BlockObj.prefab");
+        }
+
+#endregion
+        
+
 
         /// <summary>
         /// if any condition is true then the episode is done and return true

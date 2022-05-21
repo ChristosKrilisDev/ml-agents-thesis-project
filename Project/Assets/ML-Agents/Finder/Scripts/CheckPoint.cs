@@ -5,27 +5,30 @@ namespace ML_Agents.Finder.Scripts
 {
     public class CheckPoint : MonoBehaviour
     {
-        [SerializeField] private Material _onMaterial;
-        [SerializeField] private Material _offMaterial;
-        [SerializeField] private GameObject _myButton;
-
-        private GameObject _goalNode;
-        private PFArea _areaComponent;
-
-        private const string SWITCH_OFF_TAG = "switchOff";
         private const string SWITCH_ON_TAG = "switchOn";
+        private const string SWITCH_OFF_TAG = "switchOff";
 
+        private PathFindArea _areaComponent;
+        private GameObject _goalNode;
+        private Renderer _renderer;
+        private BoxCollider _boxCollider;
+        private GameObject _myButton;
+        private Material _onMaterial;
+        private Material _offMaterial;
         
-        private Renderer Renderer => _myButton.GetComponent<Renderer>();
         private GameObject Area => transform.parent.gameObject;
-        private BoxCollider BoxCollider => gameObject.GetComponent<BoxCollider>();
-        
         public bool GetState { get; private set; }
-
-
+        
         private void Awake()
         {
-            _areaComponent = Area.GetComponent<PFArea>();
+            _areaComponent = Area.GetComponent<PathFindArea>();
+            _boxCollider = gameObject.GetComponent<BoxCollider>();
+
+            _myButton = transform.GetChild(0).gameObject;
+            _renderer = _myButton.GetComponent<Renderer>();
+            
+            _onMaterial = EpisodeHandler.OnButtonMaterial;
+            _offMaterial = EpisodeHandler.OffButtonMaterial;
         }
 
         public void Init(int cpSpawnIndex, int goalSpawnIndex)
@@ -43,15 +46,14 @@ namespace ML_Agents.Finder.Scripts
             if (other.gameObject.CompareTag("agent") && !GetState)
                 ToggleState(false);
         }
-
-
+        
         private void ToggleState(bool isInitState)
         {
-            BoxCollider.enabled = isInitState;
+            _boxCollider.enabled = isInitState;
             GetState = !isInitState;
             _goalNode.SetActive(!isInitState);
 
-            Renderer.material = isInitState ? _offMaterial : _onMaterial;
+            _renderer.material = isInitState ? _offMaterial : _onMaterial;
             tag = isInitState ? SWITCH_OFF_TAG : SWITCH_ON_TAG;
 
         }

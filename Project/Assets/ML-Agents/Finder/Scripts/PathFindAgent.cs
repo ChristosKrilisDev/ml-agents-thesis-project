@@ -11,16 +11,17 @@ using Random = UnityEngine.Random;
 
 namespace ML_Agents.Finder.Scripts
 {
-    public class PFAgent : Agent
+    public class PathFindAgent : Agent
     {
-    #region Vars
+
+#region Vars
 
         [Header("Agent behavior Vars")] [Space]
         [SerializeField]
         private bool _useVectorObs;
 
         [Header("Area Vars")]
-        [SerializeField] private PFArea _area;
+        [SerializeField] private PathFindArea _area;
         [SerializeField] private CheckPoint _checkPoint;
         [SerializeField] private Graph _graph;
         private Path _path = new Path();
@@ -48,7 +49,7 @@ namespace ML_Agents.Finder.Scripts
         //Issue : timed step must match action 
         private int _frameCount;
         private const int FRAME_AMOUNT = 50;
-        private static PFAgent _masterInit;
+        private static PathFindAgent _masterInit;
 
         private enum Indexof
         {
@@ -56,9 +57,14 @@ namespace ML_Agents.Finder.Scripts
             CHECK_POINT = 1,
             FINAL_NODE = 2
         }
+        private enum Use
+        {
+            NONE,
+            ADD_REWARD,
+            SET_REWARD
+        }
 
-    #endregion
-
+#endregion
 
 #region Agent
 
@@ -142,7 +148,7 @@ namespace ML_Agents.Finder.Scripts
             {
                 _frameCount = FRAME_AMOUNT;
                 _stepFactor = Math.Abs(StepCount - MaxStep) / (float)MaxStep;
-                AddReward(CalculateReward()); //step is running 50 times/sec
+                GiveRewardInternal(Use.ADD_REWARD, CalculateReward()); //step is running 50 times/sec
             }
             MoveAgent(actionBuffers.DiscreteActions);
         }
@@ -166,21 +172,19 @@ namespace ML_Agents.Finder.Scripts
 
         private void OnCollisionEnter(Collision collision)
         {
-
             if (collision.gameObject.CompareTag("wall"))
             {
                 _hasTouchedTheWall = true;
-                OnTerminalCondition(true, -0.25f, true);
+                OnTerminalCondition(true, -0.25f, Use.SET_REWARD);
             }
             if (collision.gameObject.CompareTag("switchOff"))
             {
                 _findTargetNodeIndex++;
                 _hasFoundCheckpoint = true;
                 //SetReward(+1);
-                AddReward(2f);
+                GiveRewardInternal(Use.ADD_REWARD, 2);
                 SwitchTargetToFinalNode();
             }
-
             if (collision.gameObject.CompareTag("goal"))
             {
                 _hasFoundGoal = true;
@@ -194,7 +198,7 @@ namespace ML_Agents.Finder.Scripts
 
             var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
             var items = enumerable.ToArray();
-            
+
             var toNodeTransformList = _graph.nodes.Select(item => item.transform);
             var nodesTransforms = toNodeTransformList as Transform[] ?? toNodeTransformList.ToArray();
 
@@ -291,17 +295,28 @@ namespace ML_Agents.Finder.Scripts
 
 #region RewardMethods
 
-        private void OnTerminalCondition(bool useExtraReward = false, float extraRewardValue = 0, bool useAddReward = false)
+        private void GiveRewardInternal(Use useRewardType = Use.NONE, float extraRewardValue = 0)
         {
-            //this will give end reward and end episode
-            if (useExtraReward)
+            switch (useRewardType)
             {
-                if (useAddReward) AddReward(extraRewardValue);
-                else SetReward(extraRewardValue);
+                case Use.NONE: //Dont Give reward
+                default:
+                    break;
+                case Use.ADD_REWARD:
+                    AddReward(extraRewardValue);
+                    break;
+                case Use.SET_REWARD:
+                    SetReward(extraRewardValue);
+                    break;
             }
+        }
+        private void OnTerminalCondition(bool useExtraReward = false, float extraRewardValue = 0, Use useTypeReward = Use.NONE)
+        {
+            //give a reward for the last action the agent did
+            if (useExtraReward) GiveRewardInternal(useTypeReward, extraRewardValue);
 
-            if (useAddReward) AddReward(CalculateReward());
-            else SetReward(CalculateReward());
+            //get the calculate reward on terminal condition
+            GiveRewardInternal(useTypeReward, CalculateReward());
 
             EndEpisode();
         }

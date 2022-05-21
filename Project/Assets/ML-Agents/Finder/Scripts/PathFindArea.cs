@@ -3,29 +3,30 @@ using UnityEngine;
 
 namespace ML_Agents.Finder.Scripts
 {
-    public class PFArea : MonoBehaviour
+    public class PathFindArea : MonoBehaviour
     {
-        [SerializeField] private GameObject _goalNodePref;
-        [SerializeField] private GameObject _blockPref;
         [SerializeField] private GameObject[] _spawnAreas;
+     
         private Transform[] _nodes;
         private const string OBJECT_TAG_TAG = "pfobj";
         
-
+        private static GameObject GoalNodePref => EpisodeHandler.FinalNode;
+        private static GameObject BlockPref => EpisodeHandler.SimpleNode;
+        
+        
         private GameObject GoalNode { get; set; }
         public void SetNodesPosition(ref Transform[] nodes) => _nodes = nodes;
         
         
-        
         public GameObject CreateGoalNode(int spawnAreaIndex)
         {
-            GoalNode = CreateNode(_goalNodePref, spawnAreaIndex);
+            GoalNode = CreateNode(GoalNodePref, spawnAreaIndex);
             return GoalNode;
         }
 
-        public PFArea CreateBlockNode(int spawnAreaIndex)
+        public PathFindArea CreateBlockNode(int spawnAreaIndex)
         {
-            CreateNode(_blockPref, spawnAreaIndex);
+            CreateNode(BlockPref, spawnAreaIndex);
             return this;
         }
 
@@ -60,7 +61,7 @@ namespace ML_Agents.Finder.Scripts
                     Destroy(child.gameObject);
         }
 
-        public PFArea HideCallBack(int nodeIndex)
+        public PathFindArea HideCallBack(int nodeIndex)
         {
             //_nodes[nodeIndex].gameObject.SetActive(false);
             return this;
