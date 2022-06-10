@@ -22,8 +22,7 @@ public class GameManager : MonoBehaviour
         
         EpisodeHandler.Init();
         
-
-
+        
         if (!_canWriteData) return;
 
         if (!PlayerPrefs.HasKey("Index")) PlayerPrefs.SetInt("Index", _index);

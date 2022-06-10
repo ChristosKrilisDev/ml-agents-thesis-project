@@ -42,13 +42,7 @@ namespace ML_Agents.Finder.Scripts
         private readonly float[] _nodesDistances = new float[2];
         private GameObject _targetObjectToFind;
         private int _findTargetNodeIndex;
-
-        //timed //step is running 50 times/sec
-        //3000 max steps/ 5 decision request = 600 steps per episode
-        //Timed Frames
-        //Issue : timed step must match action 
-        private int _frameCount;
-        private const int FRAME_AMOUNT = 50;
+        
         private static PathFindAgent _masterInit;
 
         private enum Indexof
@@ -144,12 +138,9 @@ namespace ML_Agents.Finder.Scripts
 
         public override void OnActionReceived(ActionBuffers actionBuffers)
         {
-            if (--_frameCount <= 0) //O(1) O(n) //TODO HERE Frame timer
-            {
-                _frameCount = FRAME_AMOUNT;
-                _stepFactor = Math.Abs(StepCount - MaxStep) / (float)MaxStep;
-                GiveRewardInternal(Use.ADD_REWARD, CalculateReward()); //step is running 50 times/sec
-            }
+            _stepFactor = Math.Abs(StepCount - MaxStep) / (float)MaxStep;
+            GiveRewardInternal(Use.SET_REWARD, CalculateReward());
+
             MoveAgent(actionBuffers.DiscreteActions);
         }
 
@@ -175,20 +166,20 @@ namespace ML_Agents.Finder.Scripts
             if (collision.gameObject.CompareTag("wall"))
             {
                 _hasTouchedTheWall = true;
-                OnTerminalCondition(true, -0.25f, Use.SET_REWARD);
+                OnTerminalCondition(Use.SET_REWARD, true, -0.25f);
             }
             if (collision.gameObject.CompareTag("switchOff"))
             {
                 _findTargetNodeIndex++;
                 _hasFoundCheckpoint = true;
-                //SetReward(+1);
                 GiveRewardInternal(Use.ADD_REWARD, 2);
                 SwitchTargetToFinalNode();
             }
             if (collision.gameObject.CompareTag("goal"))
             {
                 _hasFoundGoal = true;
-                OnTerminalCondition();
+                GiveRewardInternal(Use.ADD_REWARD, 2);
+                OnTerminalCondition(Use.SET_REWARD);
             }
         }
 
@@ -251,12 +242,10 @@ namespace ML_Agents.Finder.Scripts
             _stepFactor = 0;
             _distanceRecorder.GetTraveledDistance = 0;
             _hasFoundGoal = _hasFoundCheckpoint = _hasTouchedTheWall = false;
-            _findTargetNodeIndex = _frameCount = 0;
+            //_findTargetNodeIndex = _frameCount = 0;
 
             _targetObjectToFind = _nodesToFind[(int)Indexof.AGENT] = _graph.nodes[items[(int)Indexof.CHECK_POINT]].gameObject; //on init target CP
             _nodesToFind[(int)Indexof.CHECK_POINT] = _graph.nodes[items[(int)Indexof.FINAL_NODE]].gameObject; //set final node as second target
-
-            // _episodeCounter++;
         }
 
         private void SetUpPath(int nAgent, int nCheckPoint, int nFinalGoal)
@@ -295,11 +284,13 @@ namespace ML_Agents.Finder.Scripts
 
 #region RewardMethods
 
+        //Use AddReward() to accumulate rewards between decisions.
+        //Use SetReward() to overwrite any previous rewards accumulate between decisions.
         private void GiveRewardInternal(Use useRewardType = Use.NONE, float extraRewardValue = 0)
         {
             switch (useRewardType)
             {
-                case Use.NONE: //Dont Give reward
+                case Use.NONE: //Don't Give reward
                 default:
                     break;
                 case Use.ADD_REWARD:
@@ -310,7 +301,7 @@ namespace ML_Agents.Finder.Scripts
                     break;
             }
         }
-        private void OnTerminalCondition(bool useExtraReward = false, float extraRewardValue = 0, Use useTypeReward = Use.NONE)
+        private void OnTerminalCondition(Use useTypeReward = Use.NONE, bool useExtraReward = false, float extraRewardValue = 0)
         {
             //give a reward for the last action the agent did
             if (useExtraReward) GiveRewardInternal(useTypeReward, extraRewardValue);
@@ -335,7 +326,6 @@ namespace ML_Agents.Finder.Scripts
         }
 
   #endregion
-
 
         private bool HasEpisodeEnded()
         {
