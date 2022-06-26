@@ -5,6 +5,7 @@ using Dijstra.path;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

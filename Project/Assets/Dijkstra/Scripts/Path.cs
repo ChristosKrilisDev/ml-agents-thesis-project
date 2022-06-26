@@ -1,57 +1,26 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-/// <summary>
-/// The Path.
-/// </summary>
-
 namespace Dijstra.path
 {
 
-    public class Path
+    public sealed class Path
     {
 
-        /// <summary>
-        /// The nodes.
-        /// </summary>
-        protected List<Node> m_Nodes = new List<Node>();
+        private List<Node> m_Nodes = new List<Node>();
+        private float m_Length = 0f;
 
-        /// <summary>
-        /// The length of the path.
-        /// </summary>
-        protected float m_Length = 0f;
 
-        /// <summary>
-        /// Gets the nodes.
-        /// </summary>
-        /// <value>The nodes.</value>
-        public virtual List<Node> nodes
-        {
-            get
-            {
-                return m_Nodes;
-            }
-        }
-
-        /// <summary>
-        /// Gets the length of the path.
-        /// </summary>
-        /// <value>The length.</value>
-        public virtual float length
-        {
-            get
-            {
-                return m_Length;
-            }
-        }
+        public List<Node> nodes => m_Nodes;
+        public float length =>  m_Length; 
+        
 
         /// <summary>
         /// Bake the path.
-        /// Making the path ready for usage, Such as caculating the length.
+        /// Making the path ready for usage, Such as calculating the length.
         /// </summary>
-        public virtual void Bake()
+        public void Bake()
         {
             var calculated = new List<Node>();
             m_Length = 0f;
@@ -62,12 +31,13 @@ namespace Dijstra.path
                 {
                     var connection = node.connections[j];
 
-                    // Don't calcualte calculated nodes
+                    // Don't calculate calculated nodes
                     if (m_Nodes.Contains(connection) && !calculated.Contains(connection))
                     {
 
                         // Calculating the distance between a node and connection when they are both available in path nodes list
                         m_Length += Vector3.Distance(node.transform.position, connection.transform.position);
+                        //m_Length += 1;
                     }
                 }
                 calculated.Add(node);
@@ -86,7 +56,7 @@ namespace Dijstra.path
                 "Nodes: {0}",
                 string.Join(
                     ", ",
-                    nodes.Select(node => node.name).ToArray()) /*,length*/);
+                    nodes.Select(node => node.name).ToArray()) ,length);
         }
 
     }

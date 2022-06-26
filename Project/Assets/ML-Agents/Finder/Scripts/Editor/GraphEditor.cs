@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
@@ -11,11 +8,11 @@ namespace Dijstra.path
     public class GraphEditor : Editor
     {
 
-        protected Graph m_Graph;
-        protected Node m_From;
-        protected Node m_To;
+        private Graph m_Graph;
+        private Node m_From;
+        private Node m_To;
         //protected Follower m_Follower;
-        protected Path m_Path = new Path();
+        private Path m_Path = new Path();
 
         private void OnEnable()
         {
@@ -24,10 +21,8 @@ namespace Dijstra.path
 
         private void OnSceneGUI()
         {
-            if (m_Graph == null)
-            {
-                return;
-            }
+            if (m_Graph == null) return;
+            
             for (var i = 0; i < m_Graph.nodes.Count; i++)
             {
                 var node = m_Graph.nodes[i];
@@ -40,7 +35,9 @@ namespace Dijstra.path
                     }
                     var distance = Vector3.Distance(node.transform.position, connection.transform.position);
                     var diff = connection.transform.position - node.transform.position;
+                    
                     Handles.Label(node.transform.position + diff / 2, distance.ToString("f2"), EditorStyles.whiteBoldLabel);
+                    
                     if (m_Path.nodes.Contains(node) && m_Path.nodes.Contains(connection))
                     {
                         var color = Handles.color;

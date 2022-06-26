@@ -1,13 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-/// <summary>
-/// The Graph.
-/// </summary>
-///
 namespace Dijstra.path
 {
     public class Graph : MonoBehaviour
@@ -22,16 +17,12 @@ namespace Dijstra.path
 
         protected Path m_Path = new Path();
 
+        public List<float> d_distances = new List<float>();
+
         public virtual List<Node> nodes
         {
             get { return m_Nodes; }
         }
-
-        //test
-        //private void Start()
-        //{
-        //    ConnectNodes();
-        //}
 
         #region ConnectNodes
 
@@ -71,8 +62,7 @@ namespace Dijstra.path
         }
 
         #endregion
-
-
+        
         #region Dijktra
 
         /// <summary>
@@ -84,7 +74,7 @@ namespace Dijstra.path
         /// <param name="end">End Node.</param>
         public virtual Path GetShortestPath(Node start, Node end)
         {
-
+            d_distances.Clear();
             // We don't accept null arguments
             if (start == null || end == null)
             {
@@ -160,6 +150,7 @@ namespace Dijstra.path
 
                     // Getting the distance between the current node and the connection (neighbor)
                     var length = Vector3.Distance(current.transform.position, neighbor.transform.position);
+                    //var length = 1f;
 
                     // The distance from start node to this connection (neighbor) of current node
                     var alt = distances[current] + length;
@@ -167,6 +158,8 @@ namespace Dijstra.path
                     // A shorter path to the connection (neighbor) has been found
                     if (alt < distances[neighbor])
                     {
+                        //TODO : Add +1 to the distance
+                        d_distances.Add(alt);
                         distances[neighbor] = alt;
                         previous[neighbor] = current;
                     }
