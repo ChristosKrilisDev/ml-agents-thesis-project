@@ -241,10 +241,10 @@ namespace ML_Agents.Finder.Scripts
         private void ResetTmpVars(IReadOnlyList<int> items)
         {
             _stepFactor = 0;
+            _findTargetNodeIndex = 0;
             _distanceRecorder.GetTraveledDistance = 0;
             _hasFoundGoal = _hasFoundCheckpoint = _hasTouchedTheWall = false;
             //_findTargetNodeIndex = _frameCount = 0;
-
             _targetObjectToFind = _nodesToFind[(int)Indexof.AGENT] = _graph.nodes[items[(int)Indexof.CHECK_POINT]].gameObject; //on init target CP
             _nodesToFind[(int)Indexof.CHECK_POINT] = _graph.nodes[items[(int)Indexof.FINAL_NODE]].gameObject; //set final node as second target
         }
@@ -253,6 +253,11 @@ namespace ML_Agents.Finder.Scripts
         {
             //calculate the distance player - Checkpoint - goal
             {
+                //visual tool
+                _graph.m_Start = _graph.nodes[nAgent];
+                _graph.m_CheckPoint = _graph.nodes[nCheckPoint];
+                _graph.m_End = _graph.nodes[nFinalGoal];
+                
                 var pLen1 = AddShortestPathLength(_graph.nodes[nAgent], _graph.nodes[nCheckPoint]);
                 var pLen2 = AddShortestPathLength(_graph.nodes[nCheckPoint], _graph.nodes[nFinalGoal]);
                 pLen1 += pLen2;

@@ -11,7 +11,8 @@ namespace Dijstra.path
         protected List<Node> m_Nodes = new List<Node>();
 
         [HideInInspector]
-        public Node m_Start;
+        public Node m_Start;        [HideInInspector]
+        public Node m_CheckPoint;
         [HideInInspector]
         public Node m_End;
 

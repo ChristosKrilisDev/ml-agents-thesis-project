@@ -8,7 +8,7 @@ namespace ML_Agents.Finder.Scripts
         [SerializeField] private GameObject[] _spawnAreas;
      
         private Transform[] _nodes;
-        private const string OBJECT_TAG_TAG = "pfobj";
+        private const string OBJECT_TAG = "pfobj";
         
         private static GameObject GoalNodePref => EpisodeHandler.FinalNode;
         private static GameObject BlockPref => EpisodeHandler.SimpleNode;
@@ -57,7 +57,7 @@ namespace ML_Agents.Finder.Scripts
         public void CleanArea()
         {
             foreach (Transform child in transform)
-                if (child.CompareTag(OBJECT_TAG_TAG))
+                if (child.CompareTag(OBJECT_TAG))
                     Destroy(child.gameObject);
         }
 
