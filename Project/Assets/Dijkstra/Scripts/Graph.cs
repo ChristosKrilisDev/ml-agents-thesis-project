@@ -16,9 +16,10 @@ namespace Dijstra.path
         [HideInInspector]
         public Node m_End;
 
-        protected Path m_Path = new Path();
+        public Path m_Path = new Path();
 
         public List<float> d_distances = new List<float>();
+        public List<float> p_distnaces = new List<float>();
 
         public virtual List<Node> nodes
         {
@@ -76,6 +77,7 @@ namespace Dijstra.path
         public virtual Path GetShortestPath(Node start, Node end)
         {
             d_distances.Clear();
+            p_distnaces.Clear();
             // We don't accept null arguments
             if (start == null || end == null)
             {
@@ -167,6 +169,7 @@ namespace Dijstra.path
                 }
             }
             path.Bake();
+            p_distnaces = path.pDistances;
             return path;
         }
 

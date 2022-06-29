@@ -1,29 +1,30 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Dijstra.path;
+using ML_Agents.Finder.Scripts;
 using UnityEngine;
 
 public class DistanceRecorder : MonoBehaviour
 {
-    [SerializeField]
-    private bool record = true;
-
+    
+    /// <summary>
+    /// TODO : REMOVE THIS .CS
+    /// </summary>
     private float traveledDistance = 0;
-    private Vector3 previousLoc;
 
-    private void FixedUpdate()
-    {
-        if (record)
-            RecordDistance();
-    }
-    private void RecordDistance()
-    {
-        traveledDistance += Vector3.Distance(transform.position, previousLoc);
-        previousLoc = transform.position;
-    }
     public void ToggleRecord()
     {
-        record = !record;
+        // record = !record;
     }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("spawnArea"))
+            traveledDistance++;
+    }
+
 
     public float GetTraveledDistance { get { return traveledDistance; } set { traveledDistance = value; } }
 
