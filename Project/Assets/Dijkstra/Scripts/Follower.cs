@@ -37,7 +37,7 @@ namespace Dijstra.path
         {
             StopCoroutine("FollowPath");
             m_Path = path;
-            transform.position = m_Path.nodes[0].transform.position;
+            transform.position = m_Path.PathNodes[0].transform.position;
             StartCoroutine("FollowPath");
         }
 
@@ -50,7 +50,7 @@ namespace Dijstra.path
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.update += Update;
 #endif
-            var e = m_Path.nodes.GetEnumerator();
+            var e = m_Path.PathNodes.GetEnumerator();
             while (e.MoveNext())
             {
                 m_Current = e.Current;

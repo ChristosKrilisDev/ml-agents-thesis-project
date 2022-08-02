@@ -4,61 +4,46 @@ using UnityEngine;
 
 namespace Dijstra.path
 {
-
     public sealed class Path
     {
+        private List<Node> _pathNodes = new List<Node>();
+        private float _length = 0f;
 
-        private List<Node> m_Nodes = new List<Node>();
-        private float m_Length = 0f;
 
-
-        public List<Node> nodes => m_Nodes;
+        public List<Node> PathNodes => _pathNodes;
         public List<float> pDistances = new List<float>();
-        public float length =>  m_Length; 
+        public float length =>  _length; 
         
-
-        /// <summary>
-        /// Bake the path.
-        /// Making the path ready for usage, Such as calculating the length.
-        /// </summary>
+        
         public void Bake()
         {
             pDistances.Clear();
+            _length = 0f;
+
             var calculated = new List<Node>();
-            m_Length = 0f;
-            for (var i = 0; i < m_Nodes.Count; i++)
+
+            foreach (var node in _pathNodes)
             {
-                var node = m_Nodes[i];
-                for (var j = 0; j < node.connections.Count; j++)
+                foreach (var connection in node.connections)
                 {
-                    var connection = node.connections[j];
-
-                    // Don't calculate calculated nodes
-                    if (m_Nodes.Contains(connection) && !calculated.Contains(connection))
+                    if (_pathNodes.Contains(connection) && !calculated.Contains(connection))
                     {
-
                         // Calculating the distance between a node and connection when they are both available in path nodes list
-                        //m_Length += Vector3.Distance(node.transform.position, connection.transform.position);
-                        m_Length += 1;
-                       // Debug.Log("Path Length => " + m_Length);
+                        _length += 1;
                     }
                 }
+
                 calculated.Add(node);
-                pDistances.Add(m_Length);
+                pDistances.Add(_length);
             }
-            //Debug.Log( ToString());
+            Debug.Log(ToString());
         }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>A string that represents the current object.</returns>
-        /// <filterpriority>2</filterpriority>
+
         public override string ToString()
         {
-            //\nLength: {1}
             return string.Format("Nodes: {0} Path Length: {1}", 
-                string.Join(", ", nodes.Select(node => node.name).ToArray()),
+                string.Join(", ", PathNodes.Select(node => node.name).ToArray()),
                 length);
         }
 

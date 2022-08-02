@@ -66,15 +66,15 @@ namespace ML_Agents.Finder.Scripts
         /// <summary>
         /// used to find the distance between agent and current goal
         /// </summary>
-        /// <param name="pointA">Agent</param>
-        /// <param name="pointB">goal</param>
+        /// <param name="startPoint">Agent</param>
+        /// <param name="endPoint">goal</param>
         /// <returns>the distance in float, from pointA to pointB</returns>
-        public static float GetDistanceDifference(GameObject pointA, GameObject pointB)
+        public static float GetDistanceDifference(GameObject startPoint, GameObject endPoint)
         {
-            if (!pointA || !pointB) return -1;
+            if (!startPoint || !endPoint) return -1;
             //get local transforms
-            var localPositionA = pointA.transform.localPosition;
-            var localPositionB = pointB.transform.localPosition;
+            var localPositionA = startPoint.transform.localPosition;
+            var localPositionB = endPoint.transform.localPosition;
 
             var pA = new Vector3(localPositionA.x, 0, localPositionA.z);
             var pB = new Vector3(localPositionB.x, 0, localPositionB.z);

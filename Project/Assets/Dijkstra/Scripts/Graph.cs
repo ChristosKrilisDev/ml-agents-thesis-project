@@ -90,7 +90,7 @@ namespace Dijstra.path
             // If the start and end are same node, we can return the start node
             if (start == end)
             {
-                path.nodes.Add(start);
+                path.PathNodes.Add(start);
                 return path;
             }
 
@@ -135,14 +135,14 @@ namespace Dijstra.path
                     {
 
                         // Insert the node onto the final result
-                        path.nodes.Insert(0, current);
+                        path.PathNodes.Insert(0, current);
 
                         // Traverse from start to end
                         current = previous[current];
                     }
 
                     // Insert the source onto the final result
-                    path.nodes.Insert(0, current);
+                    path.PathNodes.Insert(0, current);
                     break;
                 }
 

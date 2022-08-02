@@ -244,9 +244,12 @@ namespace ML_Agents.Finder.Scripts
             _findTargetNodeIndex = 0;
             _distanceRecorder.GetTraveledDistance = 0;
             _hasFoundGoal = _hasFoundCheckpoint = _hasTouchedTheWall = false;
-            //_findTargetNodeIndex = _frameCount = 0;
-            _targetObjectToFind = _nodesToFind[(int)Indexof.AGENT] = _graph.nodes[items[(int)Indexof.CHECK_POINT]].gameObject; //on init target CP
-            _nodesToFind[(int)Indexof.CHECK_POINT] = _graph.nodes[items[(int)Indexof.FINAL_NODE]].gameObject; //set final node as second target
+
+            _targetObjectToFind = null;
+            _nodesToFind[(int)Indexof.AGENT] = null;
+            _nodesToFind[(int)Indexof.CHECK_POINT] = null;
+            //_targetObjectToFind = _nodesToFind[(int)Indexof.AGENT] = _graph.nodes[items[(int)Indexof.CHECK_POINT]].gameObject; //on init target CP
+            //_nodesToFind[(int)Indexof.CHECK_POINT] = _graph.nodes[items[(int)Indexof.FINAL_NODE]].gameObject; //set final node as second target
         }
 
         private void SetUpPath(int nAgent, int nCheckPoint, int nFinalGoal)
@@ -262,6 +265,10 @@ namespace ML_Agents.Finder.Scripts
                 var pLen2 = AddShortestPathLength(_graph.nodes[nCheckPoint], _graph.nodes[nFinalGoal]);
                 pLen1 += pLen2;
                 _pathTotalLength = pLen1;
+                //TODO Reset Total Length
+                //TODO Error with Total lenghth
+                
+                Debug.Log(" Total Length : " +_pathTotalLength);
             }
         }
 

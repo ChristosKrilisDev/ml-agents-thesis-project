@@ -39,8 +39,8 @@ namespace Dijstra.path
                     {
                         continue;
                     }
-                    // var distance = Vector3.Distance(node.transform.position, connection.transform.position);
-                    var distance = 1;
+                    var distance = Vector3.Distance(node.transform.position, connection.transform.position);
+                    //var distance = 1;
                     var centeredTextDiff = connection.transform.position - node.transform.position;
 
                     // Handles.Label(node.transform.position + diff / 2, distance.ToString("f2"), EditorStyles.whiteBoldLabel);
@@ -48,9 +48,9 @@ namespace Dijstra.path
                     Handles.Label(node.transform.position + centeredTextDiff / 2, distance.ToString("f2"), EditorStyles.whiteBoldLabel);
 
 
-                    if (m_startPath.nodes.Contains(node) && m_startPath.nodes.Contains(connection))
+                    if (m_startPath.PathNodes.Contains(node) && m_startPath.PathNodes.Contains(connection))
                         DrawPath(node, connection, 3f,2.5f , Color.yellow, Color.green);
-                    else if (m_endPath.nodes.Contains(node) && m_endPath.nodes.Contains(connection))
+                    else if (m_endPath.PathNodes.Contains(node) && m_endPath.PathNodes.Contains(connection))
                         DrawPath(node, connection, 3.5f ,3f , Color.cyan, Color.red);
                     else
                         Handles.DrawLine(node.transform.position, connection.transform.position);

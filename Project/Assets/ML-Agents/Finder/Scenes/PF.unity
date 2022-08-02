@@ -1352,6 +1352,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 929064096}
     m_Modifications:
+    - target: {fileID: 1016437902, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1464170487903594, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
       propertyPath: m_Name
       value: AreaPF
