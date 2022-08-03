@@ -7,27 +7,27 @@ namespace Dijstra.path
     public class GraphEditor : Editor
     {
 
-        private Graph _Graph;
+        private Graph _graph;
         private Path _startPath = new Path();
         private Path _endPath = new Path();
-        private int length = 0;
+        private int _length = 0;
 
         private int _inputFieldWidth = 260;
         private bool _hasValue = false;
 
         private void OnEnable()
         {
-            _Graph = target as Graph;
+            _graph = target as Graph;
         }
 
         private void OnSceneGUI()
         {
             //if(!_liveUpdate) return;
-            if (_Graph == null) return;
+            if (_graph == null) return;
 
-            for (var i = 0; i < _Graph.nodes.Count; i++)
+            for (var i = 0; i < _graph.nodes.Count; i++)
             {
-                var node = _Graph.nodes[i];
+                var node = _graph.nodes[i];
 
                 for (var j = 0; j < node.connections.Count; j++)
                 {
@@ -107,33 +107,33 @@ namespace Dijstra.path
 
         public override void OnInspectorGUI()
         {
-            _Graph.nodes.Clear();
+            _graph.nodes.Clear();
 
-            foreach (Transform child in _Graph.transform)
+            foreach (Transform child in _graph.transform)
             {
                 var node = child.GetComponent<Node>();
-                if (node != null) _Graph.nodes.Add(node);
+                if (node != null) _graph.nodes.Add(node);
             }
             base.OnInspectorGUI();
 
             EditorGUILayout.Separator();
 
-            EditorGUILayout.ObjectField("Start Node", _Graph.m_Start, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
-            EditorGUILayout.ObjectField("Check point Node", _Graph.m_CheckPoint, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
-            EditorGUILayout.ObjectField("End Node ", _Graph.m_End, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
+            EditorGUILayout.ObjectField("Start Node", _graph.m_Start, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
+            EditorGUILayout.ObjectField("Check point Node", _graph.m_CheckPoint, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
+            EditorGUILayout.ObjectField("End Node ", _graph.m_End, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
 
             if (_hasValue)
             {
                 EditorGUILayout.Space(10);
                 EditorGUILayout.IntField("Start-Check Length", (int)_startPath.length, GUILayout.Width(_inputFieldWidth));
                 EditorGUILayout.IntField("Check-End Length", (int)_endPath.length, GUILayout.Width(_inputFieldWidth));
-                EditorGUILayout.IntField("Total Length", (int)length, GUILayout.Width(_inputFieldWidth));
+                EditorGUILayout.IntField("Total Length", (int)_length, GUILayout.Width(_inputFieldWidth));
                 EditorGUILayout.Space(10);
             }
 
             if (GUILayout.Button("Show Shortest Path"))
             {
-                if (_Graph.m_Start == null || _Graph.m_End == null)
+                if (_graph.m_Start == null || _graph.m_End == null)
                 {
                     Debug.LogError("From/To nodes are null");
                     _hasValue = false;
@@ -141,13 +141,13 @@ namespace Dijstra.path
                     return;
                 }
 
-                _startPath = _Graph.GetShortestPath(_Graph.m_Start, _Graph.m_CheckPoint);
-                _endPath = _Graph.GetShortestPath(_Graph.m_CheckPoint, _Graph.m_End);
-                length = (int)_startPath.length + (int)_endPath.length;
+                _startPath = _graph.GetShortestPath(_graph.m_Start, _graph.m_CheckPoint);
+                _endPath = _graph.GetShortestPath(_graph.m_CheckPoint, _graph.m_End);
+                _length = (int)_startPath.length + (int)_endPath.length;
 
                 _hasValue = true;
 
-                Debug.Log($" Lengths => Start - Check point : {_startPath.length} | Check point - End : {_endPath.length} | total : {length}");
+                Debug.Log($" Lengths => Start - Check point : {_startPath.length} | Check point - End : {_endPath.length} | total : {_length}");
                 SceneView.RepaintAll();
             }
 
@@ -155,7 +155,7 @@ namespace Dijstra.path
             {
                 _startPath = new Path();
                 _endPath = new Path();
-                length = 0;
+                _length = 0;
                 _hasValue = false;
             }
         }
