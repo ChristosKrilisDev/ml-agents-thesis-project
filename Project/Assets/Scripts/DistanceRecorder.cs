@@ -13,8 +13,7 @@ public class DistanceRecorder : MonoBehaviour
     {
         // record = !record;
     }
-    
-    
+
     //TODO Mode this to agent script
     private void OnTriggerEnter(Collider other)
     {
@@ -26,7 +25,10 @@ public class DistanceRecorder : MonoBehaviour
         }
     }
 
-
-    public float GetTraveledDistance { get { return traveledDistance; } set { traveledDistance = value; } }
+    public float GetTraveledDistance
+    {
+        get => traveledDistance;
+        set => traveledDistance = value;
+    }
 
 }

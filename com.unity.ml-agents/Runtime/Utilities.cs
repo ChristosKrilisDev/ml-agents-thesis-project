@@ -19,11 +19,13 @@ namespace Unity.MLAgents
         {
             var runningSum = 0;
             var result = new int[input.Length + 1];
+
             for (var actionIndex = 0; actionIndex < input.Length; actionIndex++)
             {
                 runningSum += input[actionIndex];
                 result[actionIndex + 1] = runningSum;
             }
+
             return result;
         }
 
@@ -51,6 +53,7 @@ namespace Unity.MLAgents
             {
                 throw new ArgumentException($"NaN {valueCategory} passed to {caller}.");
             }
+
             if (float.IsInfinity(value))
             {
                 throw new ArgumentException($"Inifinity {valueCategory} passed to {caller}.");

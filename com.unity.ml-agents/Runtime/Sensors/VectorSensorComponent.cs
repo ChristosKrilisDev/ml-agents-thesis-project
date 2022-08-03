@@ -14,8 +14,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public string SensorName
         {
-            get { return m_SensorName; }
-            set { m_SensorName = value; }
+            get => m_SensorName;
+            set => m_SensorName = value;
         }
         [HideInInspector] [SerializeField]
         private string m_SensorName = "VectorSensor";
@@ -25,8 +25,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int ObservationSize
         {
-            get { return m_ObservationSize; }
-            set { m_ObservationSize = value; }
+            get => m_ObservationSize;
+            set => m_ObservationSize = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -42,8 +42,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public ObservationType ObservationType
         {
-            get { return m_ObservationType; }
-            set { m_ObservationType = value; }
+            get => m_ObservationType;
+            set => m_ObservationType = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -57,8 +57,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int ObservationStacks
         {
-            get { return m_ObservationStacks; }
-            set { m_ObservationStacks = value; }
+            get => m_ObservationStacks;
+            set => m_ObservationStacks = value;
         }
 
         /// <summary>
@@ -68,6 +68,7 @@ namespace Unity.MLAgents.Sensors
         public override ISensor[] CreateSensors()
         {
             m_Sensor = new VectorSensor(m_ObservationSize, m_SensorName, m_ObservationType);
+
             if (ObservationStacks != 1)
             {
                 return new ISensor[]
@@ -75,6 +76,7 @@ namespace Unity.MLAgents.Sensors
                     new StackingSensor(m_Sensor, ObservationStacks)
                 };
             }
+
             return new ISensor[]
             {
                 m_Sensor

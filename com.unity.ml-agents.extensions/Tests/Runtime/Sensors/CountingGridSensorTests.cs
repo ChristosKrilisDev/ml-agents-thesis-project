@@ -72,10 +72,12 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
         public static float[][] DuplicateArray(float[] array, int numCopies)
         {
             var duplicated = new float[numCopies][];
+
             for (var i = 0; i < numCopies; i++)
             {
                 duplicated[i] = array;
             }
+
             return duplicated;
         }
 
@@ -87,6 +89,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             var subarrayIndex = 0;
             var lenOfData = expectedDefaultArray.Length;
             var numArrays = total.Length / lenOfData;
+
             for (var i = 0; i < numArrays; i++)
             {
                 totalIndex = i * lenOfData;
@@ -94,6 +97,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
                 if (indicies.Contains(i))
                 {
                     subarrayIndex = Array.IndexOf(indicies, i);
+
                     for (subIndex = 0; subIndex < lenOfData; subIndex++)
                     {
                         Assert.AreEqual(expectedArrays[subarrayIndex][subIndex], total[totalIndex],

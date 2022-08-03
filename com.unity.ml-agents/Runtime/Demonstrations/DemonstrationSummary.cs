@@ -16,14 +16,13 @@ namespace Unity.MLAgents.Demonstrations
         public List<ObservationSummary> observationSummaries;
 
         public void Initialize(BrainParameters brainParams,
-            DemonstrationMetaData demonstrationMetaData, List<ObservationSummary> obsSummaries)
+                               DemonstrationMetaData demonstrationMetaData, List<ObservationSummary> obsSummaries)
         {
             brainParameters = brainParams;
             metaData = demonstrationMetaData;
             observationSummaries = obsSummaries;
         }
     }
-
 
     /// <summary>
     /// Summary of a loaded Observation. Currently only contains the shape of the Observation.

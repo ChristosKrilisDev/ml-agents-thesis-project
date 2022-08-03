@@ -61,6 +61,7 @@ namespace Unity.MLAgents.Sensors.Reflection
         public int Write(ObservationWriter writer)
         {
             WriteReflectedField(writer);
+
             return m_NumFloats;
         }
 

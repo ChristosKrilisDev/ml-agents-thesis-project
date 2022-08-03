@@ -11,6 +11,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
         public void RemoveGameObjects()
         {
             var objects = Object.FindObjectsOfType<GameObject>();
+
             foreach (var o in objects)
             {
                 Object.DestroyImmediate(o);

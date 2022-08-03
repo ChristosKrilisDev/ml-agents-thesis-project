@@ -182,6 +182,7 @@ namespace Unity.MLAgents.Tests
             var stringVal = "mlagents!";
 
             IncomingMessage incomingMsg;
+
             using (var outgoingMsg = new OutgoingMessage())
             {
                 outgoingMsg.WriteBoolean(boolVal);
@@ -205,6 +206,7 @@ namespace Unity.MLAgents.Tests
         {
             // Make sure reading past the end of a message will apply defaults.
             IncomingMessage incomingMsg;
+
             using (var outgoingMsg = new OutgoingMessage())
             {
                 incomingMsg = new IncomingMessage(outgoingMsg.ToByteArray());

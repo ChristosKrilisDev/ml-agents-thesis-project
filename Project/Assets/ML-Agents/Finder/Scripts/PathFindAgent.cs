@@ -9,13 +9,12 @@ using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-
 namespace ML_Agents.Finder.Scripts
 {
     public class PathFindAgent : Agent
     {
 
-#region Vars
+    #region Vars
 
         [Header("Agent behavior Vars")] [Space]
         [SerializeField]
@@ -33,7 +32,6 @@ namespace ML_Agents.Finder.Scripts
         private DistanceRecorder _distanceRecorder;
         // private static float _episodeCounter;
 
-
         private bool _hasTouchedTheWall;
         private bool _hasFoundGoal;
         private bool _hasFoundCheckpoint;
@@ -43,7 +41,7 @@ namespace ML_Agents.Finder.Scripts
         private readonly float[] _nodesDistances = new float[2];
         private GameObject _targetObjectToFind;
         private int _findTargetNodeIndex;
-        
+
         private static PathFindAgent _masterInit;
 
         private enum Indexof
@@ -59,9 +57,9 @@ namespace ML_Agents.Finder.Scripts
             SET_REWARD
         }
 
-#endregion
+    #endregion
 
-#region Agent
+    #region Agent
 
         public override void Initialize()
         {
@@ -72,7 +70,6 @@ namespace ML_Agents.Finder.Scripts
             _masterInit = this;
             RewardFunction.MaxStep = MaxStep;
         }
-
 
         /// <summary>
         /// what data the ai needs in order to solve the problem
@@ -95,6 +92,7 @@ namespace ML_Agents.Finder.Scripts
 
             //if goal is active in scene :
             sensor.AddObservation(_nodesToFind[1].activeInHierarchy ? 1 : 0); //1
+
             if (_nodesToFind[1].activeInHierarchy)
             {
                 var dirToGoal = (_nodesToFind[1].transform.localPosition - transform.localPosition).normalized;
@@ -117,19 +115,24 @@ namespace ML_Agents.Finder.Scripts
             var rotateDir = Vector3.zero;
 
             var action = act[0];
+
             switch (action)
             {
                 case 1:
                     dirToGo = transform.forward * 1f;
+
                     break;
                 case 2:
                     dirToGo = transform.forward * -1f;
+
                     break;
                 case 3:
                     rotateDir = transform.up * 1f;
+
                     break;
                 case 4:
                     rotateDir = transform.up * -1f;
+
                     break;
             }
 
@@ -161,7 +164,6 @@ namespace ML_Agents.Finder.Scripts
 
         }
 
-
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.CompareTag("wall"))
@@ -169,6 +171,7 @@ namespace ML_Agents.Finder.Scripts
                 _hasTouchedTheWall = true;
                 OnTerminalCondition(Use.SET_REWARD, true, -0.25f);
             }
+
             if (collision.gameObject.CompareTag("switchOff"))
             {
                 _findTargetNodeIndex++;
@@ -176,6 +179,7 @@ namespace ML_Agents.Finder.Scripts
                 GiveRewardInternal(Use.ADD_REWARD, 2);
                 SwitchTargetToFinalNode();
             }
+
             if (collision.gameObject.CompareTag("goal"))
             {
                 _hasFoundGoal = true;
@@ -218,7 +222,7 @@ namespace ML_Agents.Finder.Scripts
 
     #endregion
 
-#region OnEpisodeBeginMethods
+    #region OnEpisodeBeginMethods
 
         private void Spawn(IReadOnlyList<int> items)
         {
@@ -260,22 +264,24 @@ namespace ML_Agents.Finder.Scripts
                 _graph.m_Start = _graph.nodes[nAgent];
                 _graph.m_CheckPoint = _graph.nodes[nCheckPoint];
                 _graph.m_End = _graph.nodes[nFinalGoal];
-                
+
                 var pLen1 = AddShortestPathLength(_graph.nodes[nAgent], _graph.nodes[nCheckPoint]);
                 var pLen2 = AddShortestPathLength(_graph.nodes[nCheckPoint], _graph.nodes[nFinalGoal]);
                 pLen1 += pLen2;
                 _pathTotalLength = pLen1;
                 //TODO Reset Total Length
                 //TODO Error with Total lenghth
-                
-                Debug.Log(" Total Length : " +_pathTotalLength);
+
+                Debug.Log(" Total Length : " + _pathTotalLength);
             }
         }
 
         private float AddShortestPathLength(Node from, Node to)
         {
             _path = _graph.GetShortestPath(from, to);
+
             if (_path.length <= 0) return -1;
+
             return _path.length;
         }
 
@@ -295,7 +301,7 @@ namespace ML_Agents.Finder.Scripts
 
     #endregion
 
-#region RewardMethods
+    #region RewardMethods
 
         //Use AddReward() to accumulate rewards between decisions.
         //Use SetReward() to overwrite any previous rewards accumulate between decisions.
@@ -308,9 +314,11 @@ namespace ML_Agents.Finder.Scripts
                     break;
                 case Use.ADD_REWARD:
                     AddReward(extraRewardValue);
+
                     break;
                 case Use.SET_REWARD:
                     SetReward(extraRewardValue);
+
                     break;
             }
         }
@@ -338,7 +346,7 @@ namespace ML_Agents.Finder.Scripts
             );
         }
 
-  #endregion
+    #endregion
 
         private bool HasEpisodeEnded()
         {
@@ -348,6 +356,7 @@ namespace ML_Agents.Finder.Scripts
                 StepCount == MaxStep,
                 _hasTouchedTheWall
             };
+
             return EpisodeHandler.HasEpisodeEnded(conditions);
         }
     }

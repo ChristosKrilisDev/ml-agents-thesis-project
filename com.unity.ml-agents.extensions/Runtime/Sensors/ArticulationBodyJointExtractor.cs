@@ -28,6 +28,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             }
 
             var totalCount = 0;
+
             if (settings.UseJointPositionsAndAngles)
             {
                 switch (body.jointType)
@@ -37,6 +38,7 @@ namespace Unity.MLAgents.Extensions.Sensors
                         // Both RevoluteJoint and SphericalJoint have all angular components.
                         // We use sine and cosine of the angles for the observations.
                         totalCount += 2 * body.dofCount;
+
                         break;
                     case ArticulationJointType.FixedJoint:
                         // Since FixedJoint can't moved, there aren't any interesting observations for it.
@@ -44,6 +46,7 @@ namespace Unity.MLAgents.Extensions.Sensors
                     case ArticulationJointType.PrismaticJoint:
                         // One linear component
                         totalCount += body.dofCount;
+
                         break;
                 }
             }
@@ -79,12 +82,14 @@ namespace Unity.MLAgents.Extensions.Sensors
                             writer[currentOffset++] = Mathf.Sin(jointRotationRads);
                             writer[currentOffset++] = Mathf.Cos(jointRotationRads);
                         }
+
                         break;
                     case ArticulationJointType.FixedJoint:
                         // No observations
                         break;
                     case ArticulationJointType.PrismaticJoint:
                         writer[currentOffset++] = GetPrismaticValue();
+
                         break;
                 }
             }
@@ -106,6 +111,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             // Prismatic joints should have at most one free axis.
             var limited = false;
             var drive = m_Body.xDrive;
+
             if (m_Body.linearLockX == ArticulationDofLock.LimitedMotion)
             {
                 drive = m_Body.xDrive;
@@ -123,11 +129,13 @@ namespace Unity.MLAgents.Extensions.Sensors
             }
 
             var jointPos = m_Body.jointPosition[0];
+
             if (limited)
             {
                 // If locked, interpolate between the limits.
                 var upperLimit = drive.upperLimit;
                 var lowerLimit = drive.lowerLimit;
+
                 if (upperLimit <= lowerLimit)
                 {
                     // Invalid limits (probably equal), so don't try to lerp
@@ -137,8 +145,10 @@ namespace Unity.MLAgents.Extensions.Sensors
 
                 // Convert [0, 1] -> [-1, 1]
                 var normalized = 2.0f * invLerped - 1.0f;
+
                 return normalized;
             }
+
             // take tanh() to keep in [-1, 1]
             return (float)System.Math.Tanh(jointPos);
         }

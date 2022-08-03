@@ -92,6 +92,7 @@ namespace Unity.MLAgents.Inference
         public static int GetNumVisualInputs(this Model model)
         {
             var count = 0;
+
             if (model == null)
                 return count;
 
@@ -128,6 +129,7 @@ namespace Unity.MLAgents.Inference
             {
                 names.Add(model.ContinuousOutputName(deterministicInference));
             }
+
             if (model.HasDiscreteOutputs(deterministicInference))
             {
                 names.Add(model.DiscreteOutputName(deterministicInference));
@@ -135,6 +137,7 @@ namespace Unity.MLAgents.Inference
 
             var modelVersion = model.GetVersion();
             var memory = (int)model.GetTensorByName(TensorNames.MemorySize)[0];
+
             if (memory > 0)
             {
                 names.Add(TensorNames.RecurrentOutput);
@@ -158,6 +161,7 @@ namespace Unity.MLAgents.Inference
         {
             if (model == null)
                 return false;
+
             if (!model.SupportsContinuousAndDiscrete())
             {
                 return (int)model.GetTensorByName(TensorNames.IsContinuousControlDeprecated)[0] > 0;
@@ -185,6 +189,7 @@ namespace Unity.MLAgents.Inference
         {
             if (model == null)
                 return 0;
+
             if (!model.SupportsContinuousAndDiscrete())
             {
                 return (int)model.GetTensorByName(TensorNames.IsContinuousControlDeprecated)[0] > 0 ?
@@ -193,6 +198,7 @@ namespace Unity.MLAgents.Inference
             else
             {
                 var continuousOutputShape = model.GetTensorByName(TensorNames.ContinuousActionOutputShape);
+
                 return continuousOutputShape == null ? 0 : (int)continuousOutputShape[0];
             }
         }
@@ -210,6 +216,7 @@ namespace Unity.MLAgents.Inference
         {
             if (model == null)
                 return null;
+
             if (!model.SupportsContinuousAndDiscrete())
             {
                 return TensorNames.ActionOutputDeprecated;
@@ -233,6 +240,7 @@ namespace Unity.MLAgents.Inference
         {
             if (model == null)
                 return false;
+
             if (!model.SupportsContinuousAndDiscrete())
             {
                 return (int)model.GetTensorByName(TensorNames.IsContinuousControlDeprecated)[0] == 0;
@@ -243,6 +251,7 @@ namespace Unity.MLAgents.Inference
                     model.outputs.Contains(TensorNames.DiscreteActionOutput);
                 var hasDeterministicOutput = deterministicInference &&
                     model.outputs.Contains(TensorNames.DeterministicDiscreteActionOutput);
+
                 return (hasStochasticOutput || hasDeterministicOutput) &&
                     model.DiscreteOutputSize() > 0;
             }
@@ -267,6 +276,7 @@ namespace Unity.MLAgents.Inference
         {
             if (model == null)
                 return 0;
+
             if (!model.SupportsContinuousAndDiscrete())
             {
                 return (int)model.GetTensorByName(TensorNames.IsContinuousControlDeprecated)[0] > 0 ?
@@ -275,6 +285,7 @@ namespace Unity.MLAgents.Inference
             else
             {
                 var discreteOutputShape = model.GetTensorByName(TensorNames.DiscreteActionOutputShape);
+
                 if (discreteOutputShape == null)
                 {
                     return 0;
@@ -282,10 +293,12 @@ namespace Unity.MLAgents.Inference
                 else
                 {
                     var result = 0;
+
                     for (var i = 0; i < discreteOutputShape.length; i++)
                     {
                         result += (int)discreteOutputShape[i];
                     }
+
                     return result;
                 }
             }
@@ -304,6 +317,7 @@ namespace Unity.MLAgents.Inference
         {
             if (model == null)
                 return null;
+
             if (!model.SupportsContinuousAndDiscrete())
             {
                 return TensorNames.ActionOutputDeprecated;
@@ -344,21 +358,25 @@ namespace Unity.MLAgents.Inference
         {
             // Check the presence of model version
             var modelApiVersionTensor = model.GetTensorByName(TensorNames.VersionNumber);
+
             if (modelApiVersionTensor == null)
             {
                 failedModelChecks.Add(
                     FailedCheck.Warning($"Required constant \"{TensorNames.VersionNumber}\" was not found in the model file.")
                 );
+
                 return false;
             }
 
             // Check the presence of memory size
             var memorySizeTensor = model.GetTensorByName(TensorNames.MemorySize);
+
             if (memorySizeTensor == null)
             {
                 failedModelChecks.Add(
                     FailedCheck.Warning($"Required constant \"{TensorNames.MemorySize}\" was not found in the model file.")
                 );
+
                 return false;
             }
 
@@ -372,6 +390,7 @@ namespace Unity.MLAgents.Inference
                 failedModelChecks.Add(
                     FailedCheck.Warning("The model does not contain any Action Output Node.")
                 );
+
                 return false;
             }
 
@@ -383,8 +402,10 @@ namespace Unity.MLAgents.Inference
                     failedModelChecks.Add(
                         FailedCheck.Warning("The model does not contain any Action Output Shape Node.")
                     );
+
                     return false;
                 }
+
                 if (model.GetTensorByName(TensorNames.IsContinuousControlDeprecated) == null)
                 {
                     failedModelChecks.Add(
@@ -392,6 +413,7 @@ namespace Unity.MLAgents.Inference
                             "not found in the model file. " +
                             "This is only required for model that uses a deprecated model format.")
                     );
+
                     return false;
                 }
             }
@@ -404,6 +426,7 @@ namespace Unity.MLAgents.Inference
                         failedModelChecks.Add(
                             FailedCheck.Warning("The model uses continuous action but does not contain Continuous Action Output Shape Node.")
                         );
+
                         return false;
                     }
 
@@ -414,6 +437,7 @@ namespace Unity.MLAgents.Inference
                         failedModelChecks.Add(
                             FailedCheck.Warning($"The model uses {actionType} inference but does not contain {actionName} Continuous Action Output Tensor. Uncheck `Deterministic inference` flag..")
                         );
+
                         return false;
                     }
                 }
@@ -425,6 +449,7 @@ namespace Unity.MLAgents.Inference
                         failedModelChecks.Add(
                             FailedCheck.Warning("The model uses discrete action but does not contain Discrete Action Output Shape Node.")
                         );
+
                         return false;
                     }
                     else if (!model.HasDiscreteOutputs(deterministicInference))
@@ -434,15 +459,14 @@ namespace Unity.MLAgents.Inference
                         failedModelChecks.Add(
                             FailedCheck.Warning($"The model uses {actionType} inference but does not contain {actionName} Discrete Action Output Tensor. Uncheck `Deterministic inference` flag.")
                         );
+
                         return false;
                     }
 
                 }
 
-
-
-
             }
+
             return true;
         }
     }

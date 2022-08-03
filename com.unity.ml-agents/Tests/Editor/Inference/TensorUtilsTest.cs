@@ -20,6 +20,7 @@ namespace Unity.MLAgents.Tests
             // Set shape to {1, ..., height, width, channels}
             // For 8D, the ... are all 1's
             var shape = new long[dimension];
+
             for (var i = 0; i < dimension; i++)
             {
                 shape[i] = 1;
@@ -30,6 +31,7 @@ namespace Unity.MLAgents.Tests
             shape[dimension - 1] = channels;
 
             var intShape = new int[dimension];
+
             for (var i = 0; i < dimension; i++)
             {
                 intShape[i] = (int)shape[i];

@@ -20,9 +20,9 @@ namespace Unity.MLAgents.Extensions.Input
 
         /// <inheritdoc cref="IRLActionInputAdaptor.WriteToInputEventForAction"/>
         public void WriteToInputEventForAction(InputEventPtr eventPtr, InputAction action,
-            InputControl control,
-            ActionSpec actionSpec,
-            in ActionBuffers actionBuffers)
+                                               InputControl control,
+                                               ActionSpec actionSpec,
+                                               in ActionBuffers actionBuffers)
         {
             var x = actionBuffers.ContinuousActions[0];
             var y = actionBuffers.ContinuousActions[1];

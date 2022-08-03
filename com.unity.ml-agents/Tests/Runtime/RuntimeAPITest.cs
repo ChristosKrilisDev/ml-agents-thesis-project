@@ -35,6 +35,7 @@ namespace Tests
         {
             var wrappedSensors = wrappedComponent.CreateSensors();
             var sensorsOut = new ISensor[wrappedSensors.Length];
+
             for (var i = 0; i < wrappedSensors.Length; i++)
             {
                 sensorsOut[i] = new StackingSensor(wrappedSensors[i], numStacks);
@@ -79,7 +80,6 @@ namespace Tests
             behaviorParams.DeterministicInference = false;
             behaviorParams.ObservableAttributeHandling = ObservableAttributeOptions.ExamineAll;
 
-
             // Can't actually create an Agent with InferenceOnly and no model, so change back
             behaviorParams.BehaviorType = BehaviorType.Default;
 #if MLA_UNITY_PHYSICS_MODULE
@@ -101,7 +101,6 @@ namespace Tests
             // ISensor isn't set up yet.
             Assert.IsNull(sensorComponent.RaySensor);
 #endif
-
 
             // Make sure we can set the behavior type correctly after the agent is initialized
             // (this creates a new policy).

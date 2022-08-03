@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using NUnit.Framework;
 
-
 namespace Unity.MLAgents.Tests
 {
     [TestFixture]
@@ -88,6 +87,7 @@ namespace Unity.MLAgents.Tests
             {
                 var modified = original;
                 modified[i] = 0;
+
                 for (var j = 0; j < original.Length; j++)
                 {
                     if (i == j)
@@ -128,9 +128,11 @@ namespace Unity.MLAgents.Tests
             for (var l1 = 1; l1 <= 4; l1++)
             {
                 var a1 = GetZeroArray(l1);
+
                 for (var l2 = 1; l2 <= 4; l2++)
                 {
                     var a2 = GetZeroArray(l2);
+
                     if (l1 == l2)
                     {
                         Assert.AreEqual(a1, a2);
@@ -178,6 +180,7 @@ namespace Unity.MLAgents.Tests
         public void TestFromList(int length)
         {
             var intArray = new int[length];
+
             for (var i = 0; i < length; i++)
             {
                 intArray[i] = (i + 1) * 11; // 11, 22, etc.

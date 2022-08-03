@@ -90,6 +90,7 @@ namespace Unity.MLAgents.Sensors
         {
             var angle = Angles[rayIndex];
             Vector3 startPositionLocal, endPositionLocal;
+
             if (CastType == RayPerceptionCastType.Cast3D)
             {
                 startPositionLocal = new Vector3(0, StartOffset, 0);
@@ -116,6 +117,7 @@ namespace Unity.MLAgents.Sensors
         {
             var x = radius * Mathf.Cos(Mathf.Deg2Rad * angleDegrees);
             var z = radius * Mathf.Sin(Mathf.Deg2Rad * angleDegrees);
+
             return new Vector3(x, 0f, z);
         }
 
@@ -126,6 +128,7 @@ namespace Unity.MLAgents.Sensors
         {
             var x = radius * Mathf.Cos(Mathf.Deg2Rad * angleDegrees);
             var y = radius * Mathf.Sin(Mathf.Deg2Rad * angleDegrees);
+
             return new Vector2(x, y);
         }
     }
@@ -188,6 +191,7 @@ namespace Unity.MLAgents.Sensors
                 get
                 {
                     var rayDirection = EndPositionWorld - StartPositionWorld;
+
                     return rayDirection.magnitude;
                 }
             }
@@ -218,6 +222,7 @@ namespace Unity.MLAgents.Sensors
             public void ToFloatArray(int numDetectableTags, int rayIndex, float[] buffer)
             {
                 var bufferOffset = (numDetectableTags + 2) * rayIndex;
+
                 if (HitTaggedObject)
                 {
                     buffer[bufferOffset + HitTagIndex] = 1f;
@@ -250,10 +255,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         private int m_DebugLastFrameCount;
 
-        internal int DebugLastFrameCount
-        {
-            get { return m_DebugLastFrameCount; }
-        }
+        internal int DebugLastFrameCount => m_DebugLastFrameCount;
 
         /// <summary>
         /// Creates the RayPerceptionSensor.
@@ -274,10 +276,7 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// The most recent raycast results.
         /// </summary>
-        public RayPerceptionOutput RayPerceptionOutput
-        {
-            get { return m_RayPerceptionOutput; }
-        }
+        public RayPerceptionOutput RayPerceptionOutput => m_RayPerceptionOutput;
 
         private void SetNumObservations(int numObservations)
         {
@@ -325,6 +324,7 @@ namespace Unity.MLAgents.Sensors
                 // Finally, add the observations to the ObservationWriter
                 writer.AddList(m_Observations);
             }
+
             return m_Observations.Length;
         }
 
@@ -434,6 +434,7 @@ namespace Unity.MLAgents.Sensors
             {
 #if MLA_UNITY_PHYSICS_MODULE
                 RaycastHit rayHit;
+
                 if (scaledCastRadius > 0f)
                 {
                     castHit = Physics.SphereCast(startPositionWorld, scaledCastRadius, rayDirection, out rayHit,
@@ -455,6 +456,7 @@ namespace Unity.MLAgents.Sensors
             {
 #if MLA_UNITY_PHYSICS2D_MODULE
                 RaycastHit2D rayHit;
+
                 if (scaledCastRadius > 0f)
                 {
                     rayHit = Physics2D.CircleCast(startPositionWorld, scaledCastRadius, rayDirection,
@@ -487,12 +489,15 @@ namespace Unity.MLAgents.Sensors
             {
                 // Find the index of the tag of the object that was hit.
                 var numTags = input.DetectableTags?.Count ?? 0;
+
                 for (var i = 0; i < numTags; i++)
                 {
                     var tagsEqual = false;
+
                     try
                     {
                         var tag = input.DetectableTags[i];
+
                         if (!string.IsNullOrEmpty(tag))
                         {
                             tagsEqual = hitObject.CompareTag(tag);
@@ -507,11 +512,11 @@ namespace Unity.MLAgents.Sensors
                     {
                         rayOutput.HitTaggedObject = true;
                         rayOutput.HitTagIndex = i;
+
                         break;
                     }
                 }
             }
-
 
             return rayOutput;
         }

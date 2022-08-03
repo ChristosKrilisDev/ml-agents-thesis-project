@@ -20,14 +20,8 @@ namespace Unity.MLAgents.Integrations.Match3
         /// </summary>
         public string ActuatorName
         {
-            get
-            {
-                return m_ActuatorName;
-            }
-            set
-            {
-                m_ActuatorName = value;
-            }
+            get => m_ActuatorName;
+            set => m_ActuatorName = value;
         }
 
         [HideInInspector] [SerializeField] [FormerlySerializedAs("RandomSeed")]
@@ -38,14 +32,8 @@ namespace Unity.MLAgents.Integrations.Match3
         /// </summary>
         public int RandomSeed
         {
-            get
-            {
-                return m_RandomSeed;
-            }
-            set
-            {
-                m_RandomSeed = value;
-            }
+            get => m_RandomSeed;
+            set => m_RandomSeed = value;
         }
 
         [HideInInspector] [SerializeField] [FormerlySerializedAs("ForceHeuristic")]
@@ -57,26 +45,22 @@ namespace Unity.MLAgents.Integrations.Match3
         /// </summary>
         public bool ForceHeuristic
         {
-            get
-            {
-                return m_ForceHeuristic;
-            }
-            set
-            {
-                m_ForceHeuristic = value;
-            }
+            get => m_ForceHeuristic;
+            set => m_ForceHeuristic = value;
         }
 
         /// <inheritdoc/>
         public override IActuator[] CreateActuators()
         {
             var board = GetComponent<AbstractBoard>();
+
             if (!board)
             {
                 return Array.Empty<IActuator>();
             }
 
             var seed = m_RandomSeed == -1 ? gameObject.GetInstanceID() : m_RandomSeed + 1;
+
             return new IActuator[]
             {
                 new Match3Actuator(board, m_ForceHeuristic, seed, m_ActuatorName)
@@ -89,12 +73,14 @@ namespace Unity.MLAgents.Integrations.Match3
             get
             {
                 var board = GetComponent<AbstractBoard>();
+
                 if (board == null)
                 {
                     return ActionSpec.MakeContinuous(0);
                 }
 
                 var numMoves = Move.NumPotentialMoves(board.GetMaxBoardSize());
+
                 return ActionSpec.MakeDiscrete(numMoves);
             }
         }

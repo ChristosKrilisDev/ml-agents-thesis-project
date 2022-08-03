@@ -27,6 +27,7 @@ namespace Unity.MLAgentsExamples
             if (col.transform.CompareTag(k_Ground))
             {
                 touchingGround = true;
+
                 if (penalizeGroundContact)
                 {
                     agent.SetReward(groundContactPenalty);

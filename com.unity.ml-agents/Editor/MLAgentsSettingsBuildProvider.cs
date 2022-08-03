@@ -4,20 +4,13 @@ using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 
-
 namespace Unity.MLAgents.Editor
 {
     internal class MLAgentsSettingsBuildProvider : IPreprocessBuildWithReport, IPostprocessBuildWithReport
     {
         private MLAgentsSettings m_SettingsAddedToPreloadedAssets;
 
-        public int callbackOrder
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        public int callbackOrder => 0;
 
         public void OnPreprocessBuild(BuildReport report)
         {
@@ -25,6 +18,7 @@ namespace Unity.MLAgents.Editor
             m_SettingsAddedToPreloadedAssets = null;
 
             var preloadedAssets = PlayerSettings.GetPreloadedAssets().ToList();
+
             if (!preloadedAssets.Contains(MLAgentsSettingsManager.Settings))
             {
                 m_SettingsAddedToPreloadedAssets = MLAgentsSettingsManager.Settings;
@@ -44,6 +38,7 @@ namespace Unity.MLAgents.Editor
             var wasDirty = IsPlayerSettingsDirty();
 
             var preloadedAssets = PlayerSettings.GetPreloadedAssets().ToList();
+
             if (preloadedAssets.Contains(m_SettingsAddedToPreloadedAssets))
             {
                 preloadedAssets.Remove(m_SettingsAddedToPreloadedAssets);
@@ -56,12 +51,13 @@ namespace Unity.MLAgents.Editor
                 ClearPlayerSettingsDirtyFlag();
         }
 
-
         private static bool IsPlayerSettingsDirty()
         {
             var settings = Resources.FindObjectsOfTypeAll<PlayerSettings>();
+
             if (settings != null && settings.Length > 0)
                 return EditorUtility.IsDirty(settings[0]);
+
             return false;
         }
 

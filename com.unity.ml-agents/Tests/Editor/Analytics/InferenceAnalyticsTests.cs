@@ -9,7 +9,6 @@ using Unity.MLAgents.Policies;
 using Unity.MLAgents.Analytics;
 using UnityEditor;
 
-
 namespace Unity.MLAgents.Tests.Analytics
 {
     [TestFixture]

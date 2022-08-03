@@ -64,14 +64,14 @@ namespace Unity.MLAgents.Sensors
 
         public bool RotateWithAgent
         {
-            get { return m_RotateWithAgent; }
-            set { m_RotateWithAgent = value; }
+            get => m_RotateWithAgent;
+            set => m_RotateWithAgent = value;
         }
 
         public LayerMask ColliderMask
         {
-            get { return m_ColliderMask; }
-            set { m_ColliderMask = value; }
+            get => m_ColliderMask;
+            set => m_ColliderMask = value;
         }
 
         /// <summary>
@@ -91,6 +91,7 @@ namespace Unity.MLAgents.Sensors
         {
             var x = (cellIndex / m_GridSize.z - m_CellCenterOffset.x) * m_CellScale.x;
             var z = (cellIndex % m_GridSize.z - m_CellCenterOffset.z) * m_CellScale.z;
+
             return new Vector3(x, 0, z);
         }
 
@@ -123,6 +124,7 @@ namespace Unity.MLAgents.Sensors
                 {
                     ParseCollidersAll(m_ColliderBuffer, numFound, cellIndex, cellCenter, GridOverlapDetectedAll);
                 }
+
                 if (GridOverlapDetectedClosest != null)
                 {
                     ParseCollidersClosest(m_ColliderBuffer, numFound, cellIndex, cellCenter, GridOverlapDetectedClosest);
@@ -156,11 +158,13 @@ namespace Unity.MLAgents.Sensors
         private int BufferResizingOverlapBoxNonAlloc(Vector3 cellCenter, Vector3 halfCellScale, Quaternion rotation)
         {
             int numFound;
+
             // Since we can only get a fixed number of results, requery
             // until we're sure we can hold them all (or until we hit the max size).
             while (true)
             {
                 numFound = Physics.OverlapBoxNonAlloc(cellCenter, halfCellScale, m_ColliderBuffer, rotation, m_ColliderMask);
+
                 if (numFound == m_ColliderBuffer.Length && m_ColliderBuffer.Length < m_MaxColliderBufferSize)
                 {
                     m_ColliderBuffer = new Collider[Math.Min(m_MaxColliderBufferSize, m_ColliderBuffer.Length * 2)];
@@ -171,6 +175,7 @@ namespace Unity.MLAgents.Sensors
                     break;
                 }
             }
+
             return numFound;
         }
 
@@ -202,14 +207,17 @@ namespace Unity.MLAgents.Sensors
 
                 // Checks if our colliders contain a detectable object
                 var index = -1;
+
                 for (var ii = 0; ii < m_DetectableTags.Length; ii++)
                 {
                     if (currentColliderGo.CompareTag(m_DetectableTags[ii]))
                     {
                         index = ii;
+
                         break;
                     }
                 }
+
                 if (index > -1 && currentDistanceSquared < minDistanceSquared)
                 {
                     minDistanceSquared = currentDistanceSquared;
@@ -231,6 +239,7 @@ namespace Unity.MLAgents.Sensors
             for (var i = 0; i < numFound; i++)
             {
                 var currentColliderGo = foundColliders[i].gameObject;
+
                 if (!ReferenceEquals(currentColliderGo, m_AgentGameObject))
                 {
                     detectedAction.Invoke(currentColliderGo, cellIndex);

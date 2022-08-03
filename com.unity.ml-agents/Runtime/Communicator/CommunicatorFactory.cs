@@ -16,14 +16,8 @@ namespace Unity.MLAgents
         /// </summary>
         public static bool Enabled
         {
-            get
-            {
-                return s_Enabled;
-            }
-            set
-            {
-                s_Enabled = value;
-            }
+            get => s_Enabled;
+            set => s_Enabled = value;
         }
 
         internal static ICommunicator Create()

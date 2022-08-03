@@ -83,6 +83,7 @@ namespace Unity.MLAgents.Inference
         public static FailedCheck CheckModelVersion(Model model)
         {
             var modelApiVersion = model.GetVersion();
+
             if (modelApiVersion < (int)ModelApiVersion.MinSupportedVersion)
             {
                 return FailedCheck.Error(
@@ -114,11 +115,10 @@ namespace Unity.MLAgents.Inference
                     "Either retrain with an newer trainer, or use an older version of com.unity.ml-agents.\n"
                 );
             }
+
             return null;
 
         }
-
-
 
         /// <summary>
         /// Factory for the ModelParamLoader : Creates a ModelParamLoader and runs the checks
@@ -148,9 +148,11 @@ namespace Unity.MLAgents.Inference
         )
         {
             var failedModelChecks = new List<FailedCheck>();
+
             if (model == null)
             {
                 var errorMsg = "There is no model for this Brain; cannot run inference. ";
+
                 if (behaviorType == BehaviorType.InferenceOnly)
                 {
                     errorMsg += "Either assign a model, or change to a different Behavior Type.";
@@ -160,10 +162,12 @@ namespace Unity.MLAgents.Inference
                     errorMsg += "(But can still train)";
                 }
                 failedModelChecks.Add(FailedCheck.Info(errorMsg));
+
                 return failedModelChecks;
             }
 
             var hasExpectedTensors = model.CheckExpectedTensors(failedModelChecks, deterministicInference);
+
             if (!hasExpectedTensors)
             {
                 return failedModelChecks;
@@ -171,16 +175,19 @@ namespace Unity.MLAgents.Inference
 
             var modelApiVersion = model.GetVersion();
             var versionCheck = CheckModelVersion(model);
+
             if (versionCheck != null)
             {
                 failedModelChecks.Add(versionCheck);
             }
 
             var memorySize = (int)model.GetTensorByName(TensorNames.MemorySize)[0];
+
             if (memorySize == -1)
             {
                 failedModelChecks.Add(FailedCheck.Warning($"Missing node in the model provided : {TensorNames.MemorySize}"
                 ));
+
                 return failedModelChecks;
             }
 
@@ -203,8 +210,6 @@ namespace Unity.MLAgents.Inference
                 );
             }
 
-
-
             failedModelChecks.AddRange(
                 CheckOutputTensorShape(model, brainParameters, actuatorComponents)
             );
@@ -212,6 +217,7 @@ namespace Unity.MLAgents.Inference
             failedModelChecks.AddRange(
                 CheckOutputTensorPresence(model, memorySize, deterministicInference)
             );
+
             return failedModelChecks;
         }
 
@@ -255,9 +261,11 @@ namespace Unity.MLAgents.Inference
             // If there are not enough Visual Observation Input compared to what the
             // sensors expect.
             var visObsIndex = 0;
+
             for (var sensorIndex = 0; sensorIndex < sensors.Length; sensorIndex++)
             {
                 var sensor = sensors[sensorIndex];
+
                 if (sensor.GetObservationSpec().Shape.Length == 3)
                 {
                     if (!tensorsNames.Contains(
@@ -270,6 +278,7 @@ namespace Unity.MLAgents.Inference
                     }
                     visObsIndex++;
                 }
+
                 if (sensor.GetObservationSpec().Shape.Length == 2)
                 {
                     if (!tensorsNames.Contains(
@@ -285,6 +294,7 @@ namespace Unity.MLAgents.Inference
             }
 
             var expectedVisualObs = model.GetNumVisualInputs();
+
             // Check if there's not enough visual sensors (too many would be handled above)
             if (expectedVisualObs > visObsIndex)
             {
@@ -316,6 +326,7 @@ namespace Unity.MLAgents.Inference
                     );
                 }
             }
+
             return failedModelChecks;
         }
 
@@ -348,6 +359,7 @@ namespace Unity.MLAgents.Inference
         {
             var failedModelChecks = new List<FailedCheck>();
             var tensorsNames = model.GetInputNames();
+
             for (var sensorIndex = 0; sensorIndex < sensors.Length; sensorIndex++)
             {
                 if (!tensorsNames.Contains(
@@ -365,6 +377,7 @@ namespace Unity.MLAgents.Inference
             if (memory > 0)
             {
                 var modelVersion = model.GetVersion();
+
                 if (!tensorsNames.Any(x => x == TensorNames.RecurrentInPlaceholder))
                 {
                     failedModelChecks.Add(
@@ -383,6 +396,7 @@ namespace Unity.MLAgents.Inference
                     );
                 }
             }
+
             return failedModelChecks;
         }
 
@@ -407,6 +421,7 @@ namespace Unity.MLAgents.Inference
             if (memory > 0)
             {
                 var allOutputs = model.GetOutputNames(deterministicInference).ToList();
+
                 if (!allOutputs.Any(x => x == TensorNames.RecurrentOutput))
                 {
                     failedModelChecks.Add(
@@ -415,6 +430,7 @@ namespace Unity.MLAgents.Inference
                 }
 
             }
+
             return failedModelChecks;
         }
 
@@ -437,6 +453,7 @@ namespace Unity.MLAgents.Inference
             var heightT = tensorProxy.Height;
             var widthT = tensorProxy.Width;
             var pixelT = tensorProxy.Channels;
+
             if (widthBp != widthT || heightBp != heightT || pixelBp != pixelT)
             {
                 return FailedCheck.Warning($"The visual Observation of the model does not match. " +
@@ -444,6 +461,7 @@ namespace Unity.MLAgents.Inference
                     $"was expecting [?x{widthT}x{heightT}x{pixelT}] for the {sensor.GetName()} Sensor."
                 );
             }
+
             return null;
         }
 
@@ -465,18 +483,22 @@ namespace Unity.MLAgents.Inference
             var dim1T = tensorProxy.Channels;
             var dim2T = tensorProxy.Width;
             var dim3T = tensorProxy.Height;
+
             if (dim1Bp != dim1T || dim2Bp != dim2T)
             {
                 var proxyDimStr = $"[?x{dim1T}x{dim2T}]";
+
                 if (dim3T > 1)
                 {
                     proxyDimStr = $"[?x{dim3T}x{dim2T}x{dim1T}]";
                 }
+
                 return FailedCheck.Warning($"An Observation of the model does not match. " +
                     $"Received TensorProxy of shape [?x{dim1Bp}x{dim2Bp}] but " +
                     $"was expecting {proxyDimStr} for the {sensor.GetName()} Sensor."
                 );
             }
+
             return null;
         }
 
@@ -497,22 +519,27 @@ namespace Unity.MLAgents.Inference
             var dim1T = tensorProxy.Channels;
             var dim2T = tensorProxy.Width;
             var dim3T = tensorProxy.Height;
+
             if (dim1Bp != dim1T)
             {
                 var proxyDimStr = $"[?x{dim1T}]";
+
                 if (dim2T > 1)
                 {
                     proxyDimStr = $"[?x{dim1T}x{dim2T}]";
                 }
+
                 if (dim3T > 1)
                 {
                     proxyDimStr = $"[?x{dim3T}x{dim2T}x{dim1T}]";
                 }
+
                 return FailedCheck.Warning($"An Observation of the model does not match. " +
                     $"Received TensorProxy of shape [?x{dim1Bp}] but " +
                     $"was expecting {proxyDimStr} for the {sensor.GetName()} Sensor."
                 );
             }
+
             return null;
         }
 
@@ -563,9 +590,11 @@ namespace Unity.MLAgents.Inference
             }
 
             var visObsIndex = 0;
+
             for (var sensorIndex = 0; sensorIndex < sensors.Length; sensorIndex++)
             {
                 var sens = sensors[sensorIndex];
+
                 if (sens.GetObservationSpec().Shape.Length == 3)
                 {
 
@@ -573,6 +602,7 @@ namespace Unity.MLAgents.Inference
                         (bp, tensor, scs, i) => CheckVisualObsShape(tensor, sens);
                     visObsIndex++;
                 }
+
                 if (sens.GetObservationSpec().Shape.Length == 2)
                 {
                     tensorTester[TensorNames.GetObservationName(sensorIndex)] =
@@ -596,12 +626,14 @@ namespace Unity.MLAgents.Inference
                 {
                     var tester = tensorTester[tensor.name];
                     var error = tester.Invoke(brainParameters, tensor, sensors, observableAttributeTotalSize);
+
                     if (error != null)
                     {
                         failedModelChecks.Add(error);
                     }
                 }
             }
+
             return failedModelChecks;
         }
 
@@ -628,6 +660,7 @@ namespace Unity.MLAgents.Inference
             var totalVecObsSizeT = tensorProxy.shape[tensorProxy.shape.Length - 1];
 
             var totalVectorSensorSize = 0;
+
             foreach (var sens in sensors)
             {
                 if (sens.GetObservationSpec().Shape.Length == 1)
@@ -639,11 +672,13 @@ namespace Unity.MLAgents.Inference
             if (totalVectorSensorSize != totalVecObsSizeT)
             {
                 var sensorSizes = "";
+
                 foreach (var sensorComp in sensors)
                 {
                     if (sensorComp.GetObservationSpec().Shape.Length == 1)
                     {
                         var vecSize = sensorComp.GetObservationSpec().Shape[0];
+
                         if (sensorSizes.Length == 0)
                         {
                             sensorSizes = $"[{vecSize}";
@@ -656,6 +691,7 @@ namespace Unity.MLAgents.Inference
                 }
 
                 sensorSizes += "]";
+
                 return FailedCheck.Warning(
                     $"Vector Observation Size of the model does not match. Was expecting {totalVecObsSizeT} " +
                     $"but received: \n" +
@@ -664,9 +700,9 @@ namespace Unity.MLAgents.Inference
                     $"Sensor sizes: {sensorSizes}."
                 );
             }
+
             return null;
         }
-
 
         /// <summary>
         /// Generates failed checks that correspond to inputs shapes incompatibilities between
@@ -714,16 +750,19 @@ namespace Unity.MLAgents.Inference
             for (var sensorIndex = 0; sensorIndex < sensors.Length; sensorIndex++)
             {
                 var sens = sensors[sensorIndex];
+
                 if (sens.GetObservationSpec().Rank == 3)
                 {
                     tensorTester[TensorNames.GetObservationName(sensorIndex)] =
                         (bp, tensor, scs, i) => CheckVisualObsShape(tensor, sens);
                 }
+
                 if (sens.GetObservationSpec().Rank == 2)
                 {
                     tensorTester[TensorNames.GetObservationName(sensorIndex)] =
                         (bp, tensor, scs, i) => CheckRankTwoObsShape(tensor, sens);
                 }
+
                 if (sens.GetObservationSpec().Rank == 1)
                 {
                     tensorTester[TensorNames.GetObservationName(sensorIndex)] =
@@ -744,12 +783,14 @@ namespace Unity.MLAgents.Inference
                 {
                     var tester = tensorTester[tensor.name];
                     var error = tester.Invoke(brainParameters, tensor, sensors, observableAttributeTotalSize);
+
                     if (error != null)
                     {
                         failedModelChecks.Add(error);
                     }
                 }
             }
+
             return failedModelChecks;
         }
 
@@ -771,12 +812,14 @@ namespace Unity.MLAgents.Inference
         {
             var numberActionsBp = brainParameters.ActionSpec.NumDiscreteActions;
             var numberActionsT = tensorProxy.shape[tensorProxy.shape.Length - 1];
+
             if (numberActionsBp != numberActionsT)
             {
                 return FailedCheck.Warning("Previous Action Size of the model does not match. " +
                     $"Received {numberActionsBp} but was expecting {numberActionsT}."
                 );
             }
+
             return null;
         }
 
@@ -805,17 +848,20 @@ namespace Unity.MLAgents.Inference
             // If the model expects an output but it is not in this list
             var modelContinuousActionSize = model.ContinuousOutputSize();
             var continuousError = CheckContinuousActionOutputShape(brainParameters, actuatorComponents, modelContinuousActionSize);
+
             if (continuousError != null)
             {
                 failedModelChecks.Add(continuousError);
             }
             FailedCheck discreteError = null;
             var modelApiVersion = model.GetVersion();
+
             if (modelApiVersion == (int)ModelApiVersion.MLAgents1_0)
             {
                 var modelSumDiscreteBranchSizes = model.DiscreteOutputSize();
                 discreteError = CheckDiscreteActionOutputShapeLegacy(brainParameters, actuatorComponents, modelSumDiscreteBranchSizes);
             }
+
             if (modelApiVersion == (int)ModelApiVersion.MLAgents2_0)
             {
                 var modelDiscreteBranches = model.GetTensorByName(TensorNames.DiscreteActionOutputShape);
@@ -826,6 +872,7 @@ namespace Unity.MLAgents.Inference
             {
                 failedModelChecks.Add(discreteError);
             }
+
             return failedModelChecks;
         }
 
@@ -848,6 +895,7 @@ namespace Unity.MLAgents.Inference
         {
 
             var discreteActionBranches = brainParameters.ActionSpec.BranchSizes.ToList();
+
             foreach (var actuatorComponent in actuatorComponents)
             {
                 var actionSpec = actuatorComponent.ActionSpec;
@@ -855,6 +903,7 @@ namespace Unity.MLAgents.Inference
             }
 
             var modelDiscreteBranchesLength = modelDiscreteBranches?.length ?? 0;
+
             if (modelDiscreteBranchesLength != discreteActionBranches.Count)
             {
                 return FailedCheck.Warning("Discrete Action Size of the model does not match. The BrainParameters expect " +
@@ -871,6 +920,7 @@ namespace Unity.MLAgents.Inference
                     );
                 }
             }
+
             return null;
         }
 
@@ -907,6 +957,7 @@ namespace Unity.MLAgents.Inference
                     $"{sumOfDiscreteBranchSizes} but the model contains {modelSumDiscreteBranchSizes}."
                 );
             }
+
             return null;
         }
 
@@ -941,6 +992,7 @@ namespace Unity.MLAgents.Inference
                     $"{numContinuousActions} but the model contains {modelContinuousActionSize}."
                 );
             }
+
             return null;
         }
     }

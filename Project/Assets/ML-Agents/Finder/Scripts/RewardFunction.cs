@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace ML_Agents.Finder.Scripts
 {
     public static class RewardFunction
@@ -14,11 +13,8 @@ namespace ML_Agents.Finder.Scripts
         private const float EPSILON = 0.4f;
         private const float BOOST_REWARD = 1;
 
-
         //TODO : Avoiding Reward Hacking | Avoiding Side Effects | Scalable Oversight | Safe Exploration | Robustness to Distributional Shift
         //TODO : Sharped RF
-
-
 
         /// <SharpedRewardFunction> distanceReward = 1 - ( Dx/DijDχ )^(epsilon) </SharpedRewardFunction>
         /// <distanceReward> The value of the reward based on how close to the target the agent is </distanceReward>
@@ -39,7 +35,7 @@ namespace ML_Agents.Finder.Scripts
             // Additionally, the magnitude of the reward should not exceed 1.0
             var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep; //TODO : remove this, get it from agent
 
-            #region TerminalRewards
+        #region TerminalRewards
 
             // bool[] x = new bool[3];
             // float r = 0;
@@ -54,7 +50,6 @@ namespace ML_Agents.Finder.Scripts
             //     }
             // }
             // r *= -BOOST_REWARD; //min -1.999
-
 
             if (hasEpisodeEnded) //TC1 when it ends? : max step reached or completed task
             {
@@ -77,7 +72,7 @@ namespace ML_Agents.Finder.Scripts
 
             }
 
-            #endregion
+        #endregion
             else //encourage agent to keep searching
             {
                 var distanceReward = 1 - Mathf.Pow(currDistance / currentGoalDistance, EPSILON);
@@ -86,6 +81,7 @@ namespace ML_Agents.Finder.Scripts
                 //50% less //reward a very small amount, to guide the agent but not big enough to create a looped reward(circle).
                 //Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward, goalDistances[goalIndex]);
             }
+
             return calculateReward;
         }
     }

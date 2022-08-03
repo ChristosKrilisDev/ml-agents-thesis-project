@@ -7,17 +7,17 @@ namespace ML_Agents.Finder.Scripts
 {
     public static class EpisodeHandler
     {
-        
+
         public static void Init()
         {
             GetButtonMaterials();
             GetPrefabsNodesMaterials();
         }
-        
-#region GetButtonMats
+
+    #region GetButtonMats
 
         private const string MATERIALS_ROOT_PATH = "Assets/ML-Agents/SharedAssets/Materials";
-        public static Material OnButtonMaterial ;
+        public static Material OnButtonMaterial;
         public static Material OffButtonMaterial;
 
         private static void GetButtonMaterials()
@@ -26,12 +26,12 @@ namespace ML_Agents.Finder.Scripts
             OffButtonMaterial = AssetDatabase.LoadAssetAtPath<Material>($"{MATERIALS_ROOT_PATH}/Orange.mat");
         }
 
-#endregion
+    #endregion
 
-#region GetPrefabs
+    #region GetPrefabs
 
         private const string PREFABS_ROOT_PATH = "Assets/ML-Agents/Finder/Prefabs";
-        public static GameObject FinalNode ;
+        public static GameObject FinalNode;
         public static GameObject SimpleNode;
 
         private static void GetPrefabsNodesMaterials()
@@ -40,9 +40,7 @@ namespace ML_Agents.Finder.Scripts
             SimpleNode = AssetDatabase.LoadAssetAtPath<GameObject>($"{PREFABS_ROOT_PATH}/BlockObj.prefab");
         }
 
-#endregion
-        
-
+    #endregion
 
         /// <summary>
         /// if any condition is true then the episode is done and return true

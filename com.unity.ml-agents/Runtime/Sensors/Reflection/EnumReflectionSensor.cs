@@ -23,6 +23,7 @@ namespace Unity.MLAgents.Sensors.Reflection
             var enumValue = (Enum)GetReflectedValue();
 
             var i = 0;
+
             foreach (var val in m_Values)
             {
                 if (m_IsFlags)
@@ -54,6 +55,7 @@ namespace Unity.MLAgents.Sensors.Reflection
         internal static int GetEnumObservationSize(Type t)
         {
             var values = Enum.GetValues(t);
+
             // Account for all enum values
             return values.Length;
         }

@@ -90,8 +90,8 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public BrainParameters BrainParameters
         {
-            get { return m_BrainParameters; }
-            internal set { m_BrainParameters = value; }
+            get => m_BrainParameters;
+            internal set => m_BrainParameters = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -104,7 +104,7 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public NNModel Model
         {
-            get { return m_Model; }
+            get => m_Model;
             set
             {
                 m_Model = value;
@@ -122,7 +122,7 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public InferenceDevice InferenceDevice
         {
-            get { return m_InferenceDevice; }
+            get => m_InferenceDevice;
             set
             {
                 m_InferenceDevice = value;
@@ -138,7 +138,7 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public BehaviorType BehaviorType
         {
-            get { return m_BehaviorType; }
+            get => m_BehaviorType;
             set
             {
                 m_BehaviorType = value;
@@ -157,7 +157,7 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public string BehaviorName
         {
-            get { return m_BehaviorName; }
+            get => m_BehaviorName;
             set
             {
                 m_BehaviorName = value;
@@ -189,8 +189,8 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public bool UseChildSensors
         {
-            get { return m_UseChildSensors; }
-            set { m_UseChildSensors = value; }
+            get => m_UseChildSensors;
+            set => m_UseChildSensors = value;
         }
 
         [HideInInspector]
@@ -203,8 +203,8 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public bool DeterministicInference
         {
-            get { return m_DeterministicInference; }
-            set { m_DeterministicInference = value; }
+            get => m_DeterministicInference;
+            set => m_DeterministicInference = value;
         }
 
         /// <summary>
@@ -213,8 +213,8 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public bool UseChildActuators
         {
-            get { return m_UseChildActuators; }
-            set { m_UseChildActuators = value; }
+            get => m_UseChildActuators;
+            set => m_UseChildActuators = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -225,17 +225,14 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public ObservableAttributeOptions ObservableAttributeHandling
         {
-            get { return m_ObservableAttributeHandling; }
-            set { m_ObservableAttributeHandling = value; }
+            get => m_ObservableAttributeHandling;
+            set => m_ObservableAttributeHandling = value;
         }
 
         /// <summary>
         /// Returns the behavior name, concatenated with any other metadata (i.e. team id).
         /// </summary>
-        public string FullyQualifiedBehaviorName
-        {
-            get { return m_BehaviorName + "?team=" + TeamId; }
-        }
+        public string FullyQualifiedBehaviorName => m_BehaviorName + "?team=" + TeamId;
 
         private void Awake()
         {
@@ -253,11 +250,13 @@ namespace Unity.MLAgents.Policies
                         if (m_Model == null)
                         {
                             var behaviorType = BehaviorType.InferenceOnly.ToString();
+
                             throw new UnityAgentsException(
                                 $"Can't use Behavior Type {behaviorType} without a model. " +
                                 "Either assign a model, or change to a different Behavior Type."
                             );
                         }
+
                         return new BarracudaPolicy(actionSpec, actuatorManager, m_Model, m_InferenceDevice, m_BehaviorName, m_DeterministicInference);
                     }
                 case BehaviorType.Default:
@@ -265,6 +264,7 @@ namespace Unity.MLAgents.Policies
                     {
                         return new RemotePolicy(actionSpec, actuatorManager, FullyQualifiedBehaviorName);
                     }
+
                     if (m_Model != null)
                     {
                         return new BarracudaPolicy(actionSpec, actuatorManager, m_Model, m_InferenceDevice, m_BehaviorName, m_DeterministicInference);
@@ -299,6 +299,7 @@ namespace Unity.MLAgents.Policies
         internal void UpdateAgentPolicy()
         {
             var agent = GetComponent<Agent>();
+
             if (agent == null)
             {
                 return;

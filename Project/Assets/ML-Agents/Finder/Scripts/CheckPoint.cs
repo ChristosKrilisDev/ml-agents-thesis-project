@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 namespace ML_Agents.Finder.Scripts
 {
     public class CheckPoint : MonoBehaviour
@@ -15,10 +14,10 @@ namespace ML_Agents.Finder.Scripts
         private GameObject _myButton;
         private Material _onMaterial;
         private Material _offMaterial;
-        
+
         private GameObject Area => transform.parent.gameObject;
         public bool GetState { get; private set; }
-        
+
         private void Awake()
         {
             _areaComponent = Area.GetComponent<PathFindArea>();
@@ -26,7 +25,7 @@ namespace ML_Agents.Finder.Scripts
 
             _myButton = transform.GetChild(0).gameObject;
             _renderer = _myButton.GetComponent<Renderer>();
-            
+
             _onMaterial = EpisodeHandler.OnButtonMaterial;
             _offMaterial = EpisodeHandler.OffButtonMaterial;
         }
@@ -46,7 +45,7 @@ namespace ML_Agents.Finder.Scripts
             if (other.gameObject.CompareTag("agent") && !GetState)
                 ToggleState(false);
         }
-        
+
         private void ToggleState(bool isInitState)
         {
             _boxCollider.enabled = isInitState;

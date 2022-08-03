@@ -19,7 +19,7 @@ namespace Unity.MLAgents
 {
     internal static class GrpcExtensions
     {
-        #region AgentInfo
+    #region AgentInfo
 
         /// <summary>
         /// Static flag to make sure that we only fire the warning once.
@@ -42,6 +42,7 @@ namespace Unity.MLAgents
                 {
                     agentActionProto.ContinuousActions.AddRange(ai.storedActions.ContinuousActions.Array);
                 }
+
                 if (!ai.storedActions.DiscreteActions.IsEmpty())
                 {
                     agentActionProto.DiscreteActions.AddRange(ai.storedActions.DiscreteActions.Array);
@@ -64,6 +65,7 @@ namespace Unity.MLAgents
             if (ai.groupId > 0)
             {
                 var trainerCanHandle = Academy.Instance.TrainerCapabilities == null || Academy.Instance.TrainerCapabilities.MultiAgentGroups;
+
                 if (!trainerCanHandle)
                 {
                     if (!s_HaveWarnedTrainerCapabilitiesAgentGroup)
@@ -104,6 +106,7 @@ namespace Unity.MLAgents
         {
             var summariesOut = new List<ObservationSummary>();
             var agentInfo = infoActionPair.AgentInfo;
+
             foreach (var obs in agentInfo.Observations)
             {
                 var summary = new ObservationSummary();
@@ -114,9 +117,9 @@ namespace Unity.MLAgents
             return summariesOut;
         }
 
-        #endregion
+    #endregion
 
-        #region BrainParameters
+    #region BrainParameters
 
         /// <summary>
         /// Converts a BrainParameters into to a BrainParametersProto so it can be sent.
@@ -136,10 +139,12 @@ namespace Unity.MLAgents
                 IsTraining = isTraining,
                 ActionSpec = ToActionSpecProto(bp.ActionSpec)
             };
+
             if (bp.VectorActionSize != null)
             {
                 brainParametersProto.VectorActionSizeDeprecated.AddRange(bp.VectorActionSize);
             }
+
             if (bp.VectorActionDescriptions != null)
             {
                 brainParametersProto.VectorActionDescriptionsDeprecated.AddRange(bp.VectorActionDescriptions);
@@ -165,9 +170,11 @@ namespace Unity.MLAgents
             };
 
             var supportHybrid = Academy.Instance.TrainerCapabilities == null || Academy.Instance.TrainerCapabilities.HybridActions;
+
             if (!supportHybrid)
             {
                 actionSpec.CheckAllContinuousOrDiscrete();
+
                 if (actionSpec.NumContinuousActions > 0)
                 {
                     brainParametersProto.VectorActionSizeDeprecated.Add(actionSpec.NumContinuousActions);
@@ -192,11 +199,13 @@ namespace Unity.MLAgents
         public static BrainParameters ToBrainParameters(this BrainParametersProto bpp)
         {
             ActionSpec actionSpec;
+
             if (bpp.ActionSpec == null)
             {
                 // Disable deprecation warnings so we can set legacy fields
 #pragma warning disable CS0618
                 var spaceType = (SpaceType)bpp.VectorActionSpaceTypeDeprecated;
+
                 if (spaceType == SpaceType.Continuous)
                 {
                     actionSpec = ActionSpec.MakeContinuous(bpp.VectorActionSizeDeprecated.ToArray()[0]);
@@ -216,6 +225,7 @@ namespace Unity.MLAgents
                 VectorActionDescriptions = bpp.VectorActionDescriptionsDeprecated.ToArray(),
                 ActionSpec = actionSpec
             };
+
             return bp;
         }
 
@@ -227,10 +237,12 @@ namespace Unity.MLAgents
         public static ActionSpec ToActionSpec(this ActionSpecProto actionSpecProto)
         {
             var actionSpec = new ActionSpec(actionSpecProto.NumContinuousActions);
+
             if (actionSpecProto.DiscreteBranchSizes != null)
             {
                 actionSpec.BranchSizes = actionSpecProto.DiscreteBranchSizes.ToArray();
             }
+
             return actionSpec;
         }
 
@@ -246,16 +258,18 @@ namespace Unity.MLAgents
                 NumContinuousActions = actionSpec.NumContinuousActions,
                 NumDiscreteActions = actionSpec.NumDiscreteActions
             };
+
             if (actionSpec.BranchSizes != null)
             {
                 actionSpecProto.DiscreteBranchSizes.AddRange(actionSpec.BranchSizes);
             }
+
             return actionSpecProto;
         }
 
-        #endregion
+    #endregion
 
-        #region DemonstrationMetaData
+    #region DemonstrationMetaData
 
         /// <summary>
         /// Convert metadata object to proto object.
@@ -271,6 +285,7 @@ namespace Unity.MLAgents
                 NumberEpisodes = dm.numberEpisodes,
                 DemonstrationName = demonstrationName
             };
+
             return demoProto;
         }
 
@@ -286,14 +301,16 @@ namespace Unity.MLAgents
                 meanReward = demoProto.MeanReward,
                 demonstrationName = demoProto.DemonstrationName
             };
+
             if (demoProto.ApiVersion != DemonstrationMetaData.ApiVersion)
             {
                 throw new Exception("API versions of demonstration are incompatible.");
             }
+
             return dm;
         }
 
-        #endregion
+    #endregion
 
         public static UnityRLInitParameters ToUnityRLInitParameters(this UnityRLInitializationInputProto inputProto)
         {
@@ -307,15 +324,17 @@ namespace Unity.MLAgents
             };
         }
 
-        #region AgentAction
+    #region AgentAction
 
         public static List<ActionBuffers> ToAgentActionList(this UnityRLInputProto.Types.ListAgentActionProto proto)
         {
             var agentActions = new List<ActionBuffers>(proto.Value.Count);
+
             foreach (var ap in proto.Value)
             {
                 agentActions.Add(ap.ToActionBuffers());
             }
+
             return agentActions;
         }
 
@@ -324,9 +343,9 @@ namespace Unity.MLAgents
             return new ActionBuffers(proto.ContinuousActions.ToArray(), proto.DiscreteActions.ToArray());
         }
 
-        #endregion
+    #endregion
 
-        #region Observations
+    #region Observations
 
         /// <summary>
         /// Static flag to make sure that we only fire the warning once.
@@ -349,10 +368,12 @@ namespace Unity.MLAgents
             ObservationProto observationProto = null;
             var compressionSpec = sensor.GetCompressionSpec();
             var compressionType = compressionSpec.SensorCompressionType;
+
             // Check capabilities if we need to concatenate PNGs
             if (compressionType == SensorCompressionType.PNG && shape.Length == 3 && shape[2] > 3)
             {
                 var trainerCanHandle = Academy.Instance.TrainerCapabilities == null || Academy.Instance.TrainerCapabilities.ConcatenatedPngObservations;
+
                 if (!trainerCanHandle)
                 {
                     if (!s_HaveWarnedTrainerCapabilitiesMultiPng)
@@ -367,11 +388,13 @@ namespace Unity.MLAgents
                     compressionType = SensorCompressionType.None;
                 }
             }
+
             // Check capabilities if we need mapping for compressed observations
             if (compressionType != SensorCompressionType.None && shape.Length == 3 && shape[2] > 3)
             {
                 var trainerCanHandleMapping = Academy.Instance.TrainerCapabilities == null || Academy.Instance.TrainerCapabilities.CompressedChannelMapping;
                 var isTrivialMapping = compressionSpec.IsTrivialMapping();
+
                 if (!trainerCanHandleMapping && !isTrivialMapping)
                 {
                     if (!s_HaveWarnedTrainerCapabilitiesMapping)
@@ -393,6 +416,7 @@ namespace Unity.MLAgents
             {
                 var numFloats = sensor.ObservationSize();
                 var floatDataProto = new ObservationProto.Types.FloatData();
+
                 // Resize the float array
                 // TODO upgrade protobuf versions so that we can set the Capacity directly - see https://github.com/protocolbuffers/protobuf/pull/6530
                 for (var i = 0; i < numFloats; i++)
@@ -412,6 +436,7 @@ namespace Unity.MLAgents
             else
             {
                 var compressedObs = sensor.GetCompressedObservation();
+
                 if (compressedObs == null)
                 {
                     throw new UnityAgentsException(
@@ -425,6 +450,7 @@ namespace Unity.MLAgents
                     CompressedData = ByteString.CopyFrom(compressedObs),
                     CompressionType = (CompressionTypeProto)sensor.GetCompressionSpec().SensorCompressionType
                 };
+
                 if (compressionSpec.CompressedChannelMapping != null)
                 {
                     observationProto.CompressedChannelMapping.AddRange(compressionSpec.CompressedChannelMapping);
@@ -433,6 +459,7 @@ namespace Unity.MLAgents
 
             // Add the dimension properties to the observationProto
             var dimensionProperties = obsSpec.DimensionProperties;
+
             for (var i = 0; i < dimensionProperties.Length; i++)
             {
                 observationProto.DimensionProperties.Add((int)dimensionProperties[i]);
@@ -442,6 +469,7 @@ namespace Unity.MLAgents
             if (dimensionProperties == new InplaceArray<DimensionProperty>(DimensionProperty.VariableSize, DimensionProperty.None))
             {
                 var trainerCanHandleVarLenObs = Academy.Instance.TrainerCapabilities == null || Academy.Instance.TrainerCapabilities.VariableLengthObservation;
+
                 if (!trainerCanHandleVarLenObs)
                 {
                     throw new UnityAgentsException("Variable Length Observations are not supported by the trainer");
@@ -454,16 +482,18 @@ namespace Unity.MLAgents
             }
 
             var sensorName = sensor.GetName();
+
             if (!string.IsNullOrEmpty(sensorName))
             {
                 observationProto.Name = sensorName;
             }
 
             observationProto.ObservationType = (ObservationTypeProto)obsSpec.ObservationType;
+
             return observationProto;
         }
 
-        #endregion
+    #endregion
 
         public static UnityRLCapabilities ToRLCapabilities(this UnityRLCapabilitiesProto proto)
         {
@@ -493,7 +523,7 @@ namespace Unity.MLAgents
             };
         }
 
-        #region Analytics
+    #region Analytics
 
         internal static TrainingEnvironmentInitializedEvent ToTrainingEnvironmentInitializedEvent(
             this TrainingEnvironmentInitialized inputProto)
@@ -527,7 +557,6 @@ namespace Unity.MLAgents
             trainingFeatures |= inputProto.SelfPlayEnabled ? TrainingFeatures.SelfPlay : 0;
             trainingFeatures |= inputProto.CurriculumEnabled ? TrainingFeatures.Curriculum : 0;
 
-
             return new TrainingBehaviorInitializedEvent
             {
                 BehaviorName = inputProto.BehaviorName,
@@ -541,6 +570,6 @@ namespace Unity.MLAgents
             };
         }
 
-        #endregion
+    #endregion
     }
 }

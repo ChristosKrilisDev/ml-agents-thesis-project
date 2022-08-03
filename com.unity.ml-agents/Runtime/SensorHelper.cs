@@ -22,6 +22,7 @@ namespace Unity.MLAgents.Sensors
             var numExpected = expected.Length;
             const float fill = -1337f;
             var output = new float[numExpected];
+
             for (var i = 0; i < numExpected; i++)
             {
                 output[i] = fill;
@@ -32,6 +33,7 @@ namespace Unity.MLAgents.Sensors
                 if (fill != output[0])
                 {
                     errorMessage = "Error setting output buffer.";
+
                     return false;
                 }
             }
@@ -45,21 +47,25 @@ namespace Unity.MLAgents.Sensors
                 if (fill != output[0])
                 {
                     errorMessage = "ObservationWriter.SetTarget modified a buffer it shouldn't have.";
+
                     return false;
                 }
             }
 
             sensor.Write(writer);
+
             for (var i = 0; i < output.Length; i++)
             {
                 if (expected[i] != output[i])
                 {
                     errorMessage = $"Expected and actual differed in position {i}. Expected: {expected[i]}  Actual: {output[i]} ";
+
                     return false;
                 }
             }
 
             errorMessage = null;
+
             return true;
         }
 
@@ -79,6 +85,7 @@ namespace Unity.MLAgents.Sensors
             var numExpected = tensorShape.height * tensorShape.width * tensorShape.channels;
             const float fill = -1337f;
             var output = new float[numExpected];
+
             for (var i = 0; i < numExpected; i++)
             {
                 output[i] = fill;
@@ -89,6 +96,7 @@ namespace Unity.MLAgents.Sensors
                 if (fill != output[0])
                 {
                     errorMessage = "Error setting output buffer.";
+
                     return false;
                 }
             }
@@ -102,11 +110,13 @@ namespace Unity.MLAgents.Sensors
                 if (fill != output[0])
                 {
                     errorMessage = "ObservationWriter.SetTarget modified a buffer it shouldn't have.";
+
                     return false;
                 }
             }
 
             sensor.Write(writer);
+
             for (var h = 0; h < tensorShape.height; h++)
             {
                 for (var w = 0; w < tensorShape.width; w++)
@@ -117,12 +127,14 @@ namespace Unity.MLAgents.Sensors
                         {
                             errorMessage = $"Expected and actual differed in position [{h}, {w}, {c}]. " +
                                 $"Expected: {expected[h, w, c]}  Actual: {output[tensorShape.Index(0, h, w, c)]} ";
+
                             return false;
                         }
                     }
                 }
             }
             errorMessage = null;
+
             return true;
         }
     }

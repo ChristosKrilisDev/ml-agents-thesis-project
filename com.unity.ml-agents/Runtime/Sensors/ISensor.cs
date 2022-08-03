@@ -103,7 +103,6 @@ namespace Unity.MLAgents.Sensors
         string GetName();
     }
 
-
     /// <summary>
     /// Helper methods to be shared by all classes that implement <see cref="ISensor"/>.
     /// </summary>
@@ -119,6 +118,7 @@ namespace Unity.MLAgents.Sensors
         {
             var obsSpec = sensor.GetObservationSpec();
             var count = 1;
+
             for (var i = 0; i < obsSpec.Rank; i++)
             {
                 count *= obsSpec.Shape[i];

@@ -28,7 +28,7 @@ namespace Unity.MLAgents.Extensions.Sensors
         /// a stabilized reference frame, which can improve learning.</param>
         /// <param name="enableBodyPoses">Optional mapping of whether a body's psoe should be enabled or not.</param>
         public RigidBodyPoseExtractor(Rigidbody rootBody, GameObject rootGameObject = null,
-            GameObject virtualRoot = null, Dictionary<Rigidbody, bool> enableBodyPoses = null)
+                                      GameObject virtualRoot = null, Dictionary<Rigidbody, bool> enableBodyPoses = null)
         {
             if (rootBody == null)
             {
@@ -37,6 +37,7 @@ namespace Unity.MLAgents.Extensions.Sensors
 
             Rigidbody[] rbs;
             Joint[] joints;
+
             if (rootGameObject == null)
             {
                 rbs = rootBody.GetComponentsInChildren<Rigidbody>();
@@ -51,12 +52,14 @@ namespace Unity.MLAgents.Extensions.Sensors
             if (rbs == null || rbs.Length == 0)
             {
                 Debug.Log("No rigid bodies found!");
+
                 return;
             }
 
             if (rbs[0] != rootBody)
             {
                 Debug.Log("Expected root body at index 0");
+
                 return;
             }
 
@@ -65,6 +68,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             if (virtualRoot != null)
             {
                 var extendedRbs = new Rigidbody[rbs.Length + 1];
+
                 for (var i = 0; i < rbs.Length; i++)
                 {
                     extendedRbs[i + 1] = rbs[i];
@@ -113,6 +117,7 @@ namespace Unity.MLAgents.Extensions.Sensors
                 foreach (var pair in enableBodyPoses)
                 {
                     var rb = pair.Key;
+
                     if (bodyToIndex.TryGetValue(rb, out var index))
                     {
                         SetPoseEnabled(index, pair.Value);
@@ -129,6 +134,7 @@ namespace Unity.MLAgents.Extensions.Sensors
                 // No velocity on the virtual root
                 return Vector3.zero;
             }
+
             return m_Bodies[index].velocity;
         }
 
@@ -146,6 +152,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             }
 
             var body = m_Bodies[index];
+
             return new Pose
             {
                 rotation = body.rotation,
@@ -160,16 +167,11 @@ namespace Unity.MLAgents.Extensions.Sensors
             {
                 return m_VirtualRoot;
             }
+
             return m_Bodies[index];
         }
 
-        internal Rigidbody[] Bodies
-        {
-            get
-            {
-                return m_Bodies;
-            }
-        }
+        internal Rigidbody[] Bodies => m_Bodies;
 
         /// <summary>
         /// Get a dictionary indicating which Rigidbodies' poses are enabled or disabled.
@@ -178,9 +180,11 @@ namespace Unity.MLAgents.Extensions.Sensors
         internal Dictionary<Rigidbody, bool> GetBodyPosesEnabled()
         {
             var bodyPosesEnabled = new Dictionary<Rigidbody, bool>(m_Bodies.Length);
+
             for (var i = 0; i < m_Bodies.Length; i++)
             {
                 var rb = m_Bodies[i];
+
                 if (rb == null)
                 {
                     continue; // skip virtual root
@@ -202,6 +206,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             for (var i = 0; i < m_Bodies.Length; i++)
             {
                 var rb = m_Bodies[i];
+
                 if (rb == null)
                 {
                     // Ignore a virtual root.

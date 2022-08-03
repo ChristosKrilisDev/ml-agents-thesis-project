@@ -76,6 +76,7 @@ namespace Unity.MLAgents.SideChannels
         public void WriteFloatList(IList<float> floatList)
         {
             WriteInt32(floatList.Count);
+
             foreach (var f in floatList)
             {
                 WriteFloat32(f);

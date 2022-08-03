@@ -27,6 +27,7 @@ namespace Unity.MLAgents.Editor
         public override void OnImportAsset(AssetImportContext ctx)
         {
             var inputType = Path.GetExtension(ctx.assetPath);
+
             if (inputType == null)
             {
                 throw new Exception("Demonstration import error.");
@@ -46,6 +47,7 @@ namespace Unity.MLAgents.Editor
 
                 // Read the first AgentInfoActionPair so that we can get the observation sizes.
                 List<ObservationSummary> observationSummaries;
+
                 try
                 {
                     var agentInfoActionPairProto = AgentInfoActionPairProto.Parser.ParseDelimitedFrom(reader);

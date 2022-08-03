@@ -47,6 +47,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
         public override bool MakeMove(Move m)
         {
             LastMoveIndex = m.MoveIndex;
+
             return MovesAreValid;
         }
 
@@ -135,6 +136,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
             public HashSetActionMask(ActionSpec spec)
             {
                 HashSets = new HashSet<int>[spec.NumDiscreteActions];
+
                 for (var i = 0; i < spec.NumDiscreteActions; i++)
                 {
                     HashSets[i] = new HashSet<int>();
@@ -144,6 +146,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
             public void SetActionEnabled(int branch, int actionIndex, bool isEnabled)
             {
                 var hashSet = HashSets[branch];
+
                 if (isEnabled)
                 {
                     hashSet.Remove(actionIndex);
@@ -169,6 +172,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
                   2022";
             board.SetBoard(boardString);
             var boardSize = board.GetMaxBoardSize();
+
             if (!fullBoard)
             {
                 board.CurrentRows -= 1;
@@ -184,6 +188,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
 
             // Run through all moves and make sure those are the only valid ones
             var validIndices = new HashSet<int>();
+
             foreach (var m in validMoves)
             {
                 validIndices.Add(m.MoveIndex);

@@ -16,10 +16,12 @@ namespace Unity.MLAgents.Analytics
         private static string ToHexString(byte[] array)
         {
             var hex = new StringBuilder(array.Length * 2);
+
             foreach (var b in array)
             {
                 hex.AppendFormat("{0:x2}", b);
             }
+
             return hex.ToString();
         }
 
@@ -34,11 +36,13 @@ namespace Unity.MLAgents.Analytics
         {
             string hash;
             var encoder = new UTF8Encoding();
+
             using (var hmac = new HMACSHA256(encoder.GetBytes(key)))
             {
                 var hmBytes = hmac.ComputeHash(encoder.GetBytes(value));
                 hash = ToHexString(hmBytes);
             }
+
             return hash;
         }
 

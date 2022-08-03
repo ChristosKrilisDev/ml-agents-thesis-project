@@ -74,6 +74,7 @@ namespace Unity.MLAgents.Sensors
             // Initialize uncompressed buffer anyway in case python trainer does not
             // support the compression mapping and has to fall back to uncompressed obs.
             m_StackedObservations = new float[numStackedObservations][];
+
             for (var i = 0; i < numStackedObservations; i++)
             {
                 m_StackedObservations[i] = new float[m_UnstackedObservationSize];
@@ -83,6 +84,7 @@ namespace Unity.MLAgents.Sensors
             {
                 m_StackedCompressedObservations = new byte[numStackedObservations][];
                 m_EmptyCompressedObservation = CreateEmptyPNG();
+
                 for (var i = 0; i < numStackedObservations; i++)
                 {
                     m_StackedCompressedObservations[i] = m_EmptyCompressedObservation;
@@ -106,6 +108,7 @@ namespace Unity.MLAgents.Sensors
 
             // Now write the saved observations (oldest first)
             var numWritten = 0;
+
             if (m_WrappedSpec.Rank == 1)
             {
                 for (var i = 0; i < m_NumStackedObservations; i++)
@@ -120,6 +123,7 @@ namespace Unity.MLAgents.Sensors
                 for (var i = 0; i < m_NumStackedObservations; i++)
                 {
                     var obsIndex = (m_CurrentIndex + 1 + i) % m_NumStackedObservations;
+
                     for (var h = 0; h < m_WrappedSpec.Shape[0]; h++)
                     {
                         for (var w = 0; w < m_WrappedSpec.Shape[1]; w++)
@@ -150,11 +154,13 @@ namespace Unity.MLAgents.Sensors
         public void Reset()
         {
             m_WrappedSensor.Reset();
+
             // Zero out the buffer.
             for (var i = 0; i < m_NumStackedObservations; i++)
             {
                 Array.Clear(m_StackedObservations[i], 0, m_StackedObservations[i].Length);
             }
+
             if (m_WrappedSensor.GetCompressionSpec().SensorCompressionType != SensorCompressionType.None)
             {
                 for (var i = 0; i < m_NumStackedObservations; i++)
@@ -183,6 +189,7 @@ namespace Unity.MLAgents.Sensors
             m_StackedCompressedObservations[m_CurrentIndex] = compressed;
 
             var bytesLength = 0;
+
             foreach (var compressedObs in m_StackedCompressedObservations)
             {
                 bytesLength += compressedObs.Length;
@@ -190,6 +197,7 @@ namespace Unity.MLAgents.Sensors
 
             var outputBytes = new byte[bytesLength];
             var offset = 0;
+
             for (var i = 0; i < m_NumStackedObservations; i++)
             {
                 var obsIndex = (m_CurrentIndex + 1 + i) % m_NumStackedObservations;
@@ -205,6 +213,7 @@ namespace Unity.MLAgents.Sensors
         public CompressionSpec GetCompressionSpec()
         {
             var wrappedSpec = m_WrappedSensor.GetCompressionSpec();
+
             return new CompressionSpec(wrappedSpec.SensorCompressionType, m_CompressionMapping);
         }
 
@@ -219,12 +228,14 @@ namespace Unity.MLAgents.Sensors
             var texture2D = new Texture2D(width, height, TextureFormat.RGB24, false);
             var resetColorArray = texture2D.GetPixels32();
             var black = new Color32(0, 0, 0, 0);
+
             for (var i = 0; i < resetColorArray.Length; i++)
             {
                 resetColorArray[i] = black;
             }
             texture2D.SetPixels32(resetColorArray);
             texture2D.Apply();
+
             return texture2D.EncodeToPNG();
         }
 
@@ -240,6 +251,7 @@ namespace Unity.MLAgents.Sensors
             var wrappedNumChannel = m_WrappedSpec.Shape[2];
 
             wrappedMapping = wrappedSenesor.GetCompressionSpec().CompressedChannelMapping;
+
             if (wrappedMapping == null)
             {
                 if (wrappedNumChannel == 1)
@@ -260,9 +272,11 @@ namespace Unity.MLAgents.Sensors
             // and add offset to each copy to form the stacked mapping.
             var paddedMapLength = (wrappedMapping.Length + 2) / 3 * 3;
             var compressionMapping = new int[paddedMapLength * m_NumStackedObservations];
+
             for (var i = 0; i < m_NumStackedObservations; i++)
             {
                 var offset = wrappedNumChannel * i;
+
                 for (var j = 0; j < paddedMapLength; j++)
                 {
                     if (j < wrappedMapping.Length)
@@ -275,6 +289,7 @@ namespace Unity.MLAgents.Sensors
                     }
                 }
             }
+
             return compressionMapping;
         }
 
@@ -282,6 +297,7 @@ namespace Unity.MLAgents.Sensors
         public BuiltInSensorType GetBuiltInSensorType()
         {
             var wrappedBuiltInSensor = m_WrappedSensor as IBuiltInSensor;
+
             return wrappedBuiltInSensor?.GetBuiltInSensorType() ?? BuiltInSensorType.Unknown;
         }
 
@@ -292,11 +308,13 @@ namespace Unity.MLAgents.Sensors
         internal ReadOnlyCollection<float> GetStackedObservations()
         {
             var observations = new List<float>();
+
             for (var i = 0; i < m_NumStackedObservations; i++)
             {
                 var obsIndex = (m_CurrentIndex + 1 + i) % m_NumStackedObservations;
                 observations.AddRange(m_StackedObservations[obsIndex].ToList());
             }
+
             return observations.AsReadOnly();
         }
     }

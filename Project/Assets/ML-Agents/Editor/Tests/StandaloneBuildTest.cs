@@ -19,6 +19,7 @@ namespace Unity.MLAgents
             var buildTarget = BuildTarget.StandaloneOSX;
 
             var args = Environment.GetCommandLineArgs();
+
             for (var i = 0; i < args.Length - 1; i++)
             {
                 if (args[i] == k_OutputCommandLineFlag)
@@ -48,6 +49,7 @@ namespace Unity.MLAgents
             );
             var isOk = buildResult.summary.result == BuildResult.Succeeded;
             var error = "";
+
             foreach (var stepInfo in buildResult.steps)
             {
                 foreach (var msg in stepInfo.messages)
@@ -58,6 +60,7 @@ namespace Unity.MLAgents
                     }
                 }
             }
+
             if (isOk)
             {
                 EditorApplication.Exit(0);

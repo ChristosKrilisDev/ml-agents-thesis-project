@@ -27,6 +27,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             }
 
             var numObservations = 0;
+
             if (settings.UseJointForces)
             {
                 // 3 force and 3 torque values
@@ -44,6 +45,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             }
 
             var currentOffset = offset;
+
             if (settings.UseJointForces)
             {
                 // Take tanh of the forces and torques to ensure they're in [-1, 1]
@@ -55,6 +57,7 @@ namespace Unity.MLAgents.Extensions.Sensors
                 writer[currentOffset++] = (float)System.Math.Tanh(m_Joint.currentTorque.y);
                 writer[currentOffset++] = (float)System.Math.Tanh(m_Joint.currentTorque.z);
             }
+
             return currentOffset - offset;
         }
     }

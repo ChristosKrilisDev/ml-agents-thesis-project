@@ -23,6 +23,7 @@ namespace Unity.MLAgents
                 );
             }
             m_IsRunning = true;
+
             return this;
         }
 

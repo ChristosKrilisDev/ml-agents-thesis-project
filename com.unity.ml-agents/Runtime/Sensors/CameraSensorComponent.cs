@@ -20,7 +20,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public Camera Camera
         {
-            get { return m_Camera; }
+            get => m_Camera;
             set
             {
                 m_Camera = value;
@@ -37,8 +37,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public string SensorName
         {
-            get { return m_SensorName; }
-            set { m_SensorName = value; }
+            get => m_SensorName;
+            set => m_SensorName = value;
         }
 
         [HideInInspector] [SerializeField] [FormerlySerializedAs("width")]
@@ -50,8 +50,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int Width
         {
-            get { return m_Width; }
-            set { m_Width = value; }
+            get => m_Width;
+            set => m_Width = value;
         }
 
         [HideInInspector] [SerializeField] [FormerlySerializedAs("height")]
@@ -63,8 +63,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int Height
         {
-            get { return m_Height; }
-            set { m_Height = value; }
+            get => m_Height;
+            set => m_Height = value;
         }
 
         [HideInInspector] [SerializeField] [FormerlySerializedAs("grayscale")]
@@ -76,8 +76,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public bool Grayscale
         {
-            get { return m_Grayscale; }
-            set { m_Grayscale = value; }
+            get => m_Grayscale;
+            set => m_Grayscale = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -88,7 +88,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public ObservationType ObservationType
         {
-            get { return m_ObservationType; }
+            get => m_ObservationType;
             set
             {
                 m_ObservationType = value;
@@ -109,7 +109,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public SensorCompressionType CompressionType
         {
-            get { return m_Compression; }
+            get => m_Compression;
             set
             {
                 m_Compression = value;
@@ -123,8 +123,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int ObservationStacks
         {
-            get { return m_ObservationStacks; }
-            set { m_ObservationStacks = value; }
+            get => m_ObservationStacks;
+            set => m_ObservationStacks = value;
         }
 
         /// <summary>
@@ -143,6 +143,7 @@ namespace Unity.MLAgents.Sensors
                     new StackingSensor(m_Sensor, ObservationStacks)
                 };
             }
+
             return new ISensor[]
             {
                 m_Sensor

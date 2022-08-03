@@ -134,6 +134,7 @@ namespace Unity.MLAgents.Policies
                 m_ModelRunner?.DecideBatch();
                 m_LastActionBuffer = m_ModelRunner.GetAction(m_AgentId);
             }
+
             return ref m_LastActionBuffer;
         }
 

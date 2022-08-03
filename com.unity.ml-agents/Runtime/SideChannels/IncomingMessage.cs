@@ -70,6 +70,7 @@ namespace Unity.MLAgents.SideChannels
 
             var strLength = ReadInt32();
             var str = Encoding.ASCII.GetString(m_Reader.ReadBytes(strLength));
+
             return str;
         }
 
@@ -87,6 +88,7 @@ namespace Unity.MLAgents.SideChannels
 
             var len = ReadInt32();
             var output = new float[len];
+
             for (var i = 0; i < len; i++)
             {
                 output[i] = ReadFloat32();

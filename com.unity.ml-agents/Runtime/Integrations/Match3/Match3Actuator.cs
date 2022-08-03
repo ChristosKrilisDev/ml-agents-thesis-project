@@ -1,7 +1,6 @@
 using Unity.MLAgents.Actuators;
 using Debug = UnityEngine.Debug;
 
-
 namespace Unity.MLAgents.Integrations.Match3
 {
     /// <summary>
@@ -25,9 +24,9 @@ namespace Unity.MLAgents.Integrations.Match3
         /// <param name="seed">The seed used to initialize <see cref="System.Random"/>.</param>
         /// <param name="name"></param>
         public Match3Actuator(AbstractBoard board,
-            bool forceHeuristic,
-            int seed,
-            string name)
+                              bool forceHeuristic,
+                              int seed,
+                              string name)
         {
             m_Board = board;
             m_MaxBoardSize = m_Board.GetMaxBoardSize();
@@ -41,18 +40,13 @@ namespace Unity.MLAgents.Integrations.Match3
         }
 
         /// <inheritdoc/>
-        public ActionSpec ActionSpec
-        {
-            get
-            {
-                return m_ActionSpec;
-            }
-        }
+        public ActionSpec ActionSpec => m_ActionSpec;
 
         /// <inheritdoc/>
         public void OnActionReceived(ActionBuffers actions)
         {
             m_Board.CheckBoardSizes(m_MaxBoardSize);
+
             if (m_ForceHeuristic)
             {
                 Heuristic(actions);
@@ -70,11 +64,13 @@ namespace Unity.MLAgents.Integrations.Match3
             m_Board.CheckBoardSizes(m_MaxBoardSize);
             const int branch = 0;
             var foundValidMove = false;
+
             using (TimerStack.Instance.Scoped("WriteDiscreteActionMask"))
             {
                 var numMoves = m_Board.NumMoves();
 
                 var currentMove = Move.FromMoveIndex(0, m_MaxBoardSize);
+
                 for (var i = 0; i < numMoves; i++)
                 {
                     // Check that the move is allowed for the current boardSize (e.g. it won't move a piece out of
@@ -151,6 +147,7 @@ namespace Unity.MLAgents.Integrations.Match3
             foreach (var move in m_Board.ValidMoves())
             {
                 var movePoints = EvalMovePoints(move);
+
                 if (movePoints < bestMovePoints)
                 {
                     // Worse, skip
@@ -170,6 +167,7 @@ namespace Unity.MLAgents.Integrations.Match3
                     // See https://en.wikipedia.org/wiki/Reservoir_sampling#Simple_algorithm
                     numMovesAtCurrentScore++;
                     var randVal = m_Random.Next(0, numMovesAtCurrentScore);
+
                     if (randVal == 0)
                     {
                         // Keep the new one

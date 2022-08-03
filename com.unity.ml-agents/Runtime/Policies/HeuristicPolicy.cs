@@ -21,7 +21,6 @@ namespace Unity.MLAgents.Policies
         private ObservationWriter m_ObservationWriter = new ObservationWriter();
         private NullList m_NullList = new NullList();
 
-
         public HeuristicPolicy(ActuatorManager actuatorManager, ActionSpec actionSpec)
         {
             m_ActuatorManager = actuatorManager;
@@ -49,6 +48,7 @@ namespace Unity.MLAgents.Policies
                 m_ActuatorManager.ApplyHeuristic(m_ActionBuffers);
             }
             m_DecisionRequested = false;
+
             return ref m_ActionBuffers;
         }
 
@@ -112,7 +112,7 @@ namespace Unity.MLAgents.Policies
 
             public float this[int index]
             {
-                get { return 0.0f; }
+                get => 0.0f;
                 set { }
             }
         }

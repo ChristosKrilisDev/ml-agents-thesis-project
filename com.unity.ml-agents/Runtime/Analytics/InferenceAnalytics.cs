@@ -11,14 +11,12 @@ using UnityEngine;
 using UnityEngine.Analytics;
 #endif
 
-
 #if UNITY_EDITOR
 using UnityEditor;
 #if MLA_UNITY_ANALYTICS_MODULE
 using UnityEditor.Analytics;
 #endif // MLA_UNITY_ANALYTICS_MODULE
 #endif // UNITY_EDITOR
-
 
 namespace Unity.MLAgents.Analytics
 {
@@ -43,7 +41,6 @@ namespace Unity.MLAgents.Analytics
         /// </summary>
         private const int k_MaxNumberOfElements = 1000;
 
-
 #if UNITY_EDITOR && MLA_UNITY_ANALYTICS_MODULE && ENABLE_CLOUD_SERVICES_ANALYTICS
         /// <summary>
         /// Models that we've already sent events for.
@@ -60,10 +57,12 @@ namespace Unity.MLAgents.Analytics
             }
 
             var result = EditorAnalytics.RegisterEventWithLimit(k_EventName, k_MaxEventsPerHour, k_MaxNumberOfElements, k_VendorKey, k_EventVersion);
+
             if (result == AnalyticsResult.Ok)
             {
                 s_EventRegistered = true;
             }
+
             if (s_EventRegistered && s_SentModels == null)
             {
                 s_SentModels = new HashSet<NNModel>();
@@ -124,6 +123,7 @@ namespace Unity.MLAgents.Analytics
             }
 
             var data = GetEventForModel(nnModel, behaviorName, inferenceDevice, sensors, actionSpec, actuators);
+
             // Note - to debug, use JsonUtility.ToJson on the event.
             // Debug.Log(JsonUtility.ToJson(data, true));
             if (AnalyticsUtils.s_SendEditorAnalytics)
@@ -180,12 +180,14 @@ namespace Unity.MLAgents.Analytics
 
             inferenceEvent.ActionSpec = EventActionSpec.FromActionSpec(actionSpec);
             inferenceEvent.ObservationSpecs = new List<EventObservationSpec>(sensors.Count);
+
             foreach (var sensor in sensors)
             {
                 inferenceEvent.ObservationSpecs.Add(EventObservationSpec.FromSensor(sensor));
             }
 
             inferenceEvent.ActuatorInfos = new List<EventActuatorInfo>(actuators.Count);
+
             foreach (var actuator in actuators)
             {
                 inferenceEvent.ActuatorInfos.Add(EventActuatorInfo.FromActuator(actuator));
@@ -193,6 +195,7 @@ namespace Unity.MLAgents.Analytics
 
             inferenceEvent.TotalWeightSizeBytes = GetModelWeightSize(barracudaModel);
             inferenceEvent.ModelHash = GetModelHash(barracudaModel);
+
             return inferenceEvent;
         }
 
@@ -206,6 +209,7 @@ namespace Unity.MLAgents.Analytics
         private static long GetModelWeightSize(Model barracudaModel)
         {
             long totalWeightsSizeInBytes = 0;
+
             for (var l = 0; l < barracudaModel.layers.Count; ++l)
             {
                 for (var d = 0; d < barracudaModel.layers[l].datasets.Length; ++d)
@@ -213,6 +217,7 @@ namespace Unity.MLAgents.Analytics
                     totalWeightsSizeInBytes += barracudaModel.layers[l].datasets[d].length;
                 }
             }
+
             return totalWeightsSizeInBytes;
         }
 

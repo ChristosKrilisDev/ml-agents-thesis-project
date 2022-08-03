@@ -19,10 +19,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public float StartVerticalOffset
         {
-            get
-            {
-                return m_StartVerticalOffset;
-            }
+            get => m_StartVerticalOffset;
             set
             {
                 m_StartVerticalOffset = value;
@@ -40,10 +37,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public float EndVerticalOffset
         {
-            get
-            {
-                return m_EndVerticalOffset;
-            }
+            get => m_EndVerticalOffset;
             set
             {
                 m_EndVerticalOffset = value;

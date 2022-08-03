@@ -7,7 +7,6 @@ using Unity.MLAgents.Analytics;
 using Unity.MLAgents.SideChannels;
 using Unity.MLAgents.CommunicatorObjects;
 
-
 namespace Unity.MLAgents.Tests
 {
     /// <summary>
@@ -23,6 +22,7 @@ namespace Unity.MLAgents.Tests
             var anyMsg = Google.Protobuf.WellKnownTypes.Any.Pack(new TrainingEnvironmentInitialized());
             var anyMsgBytes = anyMsg.ToByteArray();
             var sideChannel = new TrainingAnalyticsSideChannel();
+
             using (new AnalyticsUtils.DisableAnalyticsSending())
             {
                 sideChannel.ProcessMessage(anyMsgBytes);
@@ -35,6 +35,7 @@ namespace Unity.MLAgents.Tests
             var anyMsg = Google.Protobuf.WellKnownTypes.Any.Pack(new TrainingBehaviorInitialized());
             var anyMsgBytes = anyMsg.ToByteArray();
             var sideChannel = new TrainingAnalyticsSideChannel();
+
             using (new AnalyticsUtils.DisableAnalyticsSending())
             {
                 sideChannel.ProcessMessage(anyMsgBytes);
@@ -47,6 +48,7 @@ namespace Unity.MLAgents.Tests
             // Test an invalid (non-protobuf) message. This should silently ignore the data.
             var badBytes = Encoding.ASCII.GetBytes("Lorem ipsum");
             var sideChannel = new TrainingAnalyticsSideChannel();
+
             using (new AnalyticsUtils.DisableAnalyticsSending())
             {
                 sideChannel.ProcessMessage(badBytes);
@@ -56,6 +58,7 @@ namespace Unity.MLAgents.Tests
             var anyMsg = Google.Protobuf.WellKnownTypes.Any.Pack(new TrainingBehaviorInitialized());
             var anyMsgBytes = anyMsg.ToByteArray();
             var truncatedMessage = new ArraySegment<byte>(anyMsgBytes, 0, anyMsgBytes.Length - 1).ToArray();
+
             using (new AnalyticsUtils.DisableAnalyticsSending())
             {
                 sideChannel.ProcessMessage(truncatedMessage);

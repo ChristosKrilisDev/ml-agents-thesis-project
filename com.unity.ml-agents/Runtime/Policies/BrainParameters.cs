@@ -60,7 +60,7 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public ActionSpec ActionSpec
         {
-            get { return m_ActionSpec; }
+            get => m_ActionSpec;
             set
             {
                 m_ActionSpec.NumContinuousActions = value.NumContinuousActions;
@@ -140,6 +140,7 @@ namespace Unity.MLAgents.Policies
                 {
                     m_ActionSpec.NumContinuousActions = VectorActionSize[0];
                 }
+
                 if (VectorActionSpaceType == SpaceType.Discrete)
                 {
                     m_ActionSpec.BranchSizes = (int[])VectorActionSize.Clone();

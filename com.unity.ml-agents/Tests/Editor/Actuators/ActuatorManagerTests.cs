@@ -170,6 +170,7 @@ namespace Unity.MLAgents.Tests.Actuators
             where T : struct
         {
             Assert.IsFalse(actionSegment.Length == 0);
+
             for (var i = 0; i < actionSegment.Length; i++)
             {
                 var action = actionSegment[i];
@@ -419,7 +420,6 @@ namespace Unity.MLAgents.Tests.Actuators
             Assert.IsTrue(va2.m_HeuristicCalled);
             Assert.AreEqual(va2.m_DiscreteBufferSize, 4);
         }
-
 
         /// <summary>
         /// Test that sensors sort by name consistently across culture settings.

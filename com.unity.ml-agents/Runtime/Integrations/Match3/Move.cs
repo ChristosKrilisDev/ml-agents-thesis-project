@@ -79,6 +79,7 @@ namespace Unity.MLAgents.Integrations.Match3
             }
             Direction dir;
             int row, col;
+
             if (moveIndex < (maxCols - 1) * maxRows)
             {
                 dir = Direction.Right;
@@ -92,6 +93,7 @@ namespace Unity.MLAgents.Integrations.Match3
                 col = offset % maxCols;
                 row = offset / maxCols;
             }
+
             return new Move
             {
                 MoveIndex = moveIndex,
@@ -113,9 +115,11 @@ namespace Unity.MLAgents.Integrations.Match3
             var switchoverIndex = (maxCols - 1) * maxRows;
 
             MoveIndex++;
+
             if (MoveIndex < switchoverIndex)
             {
                 Column++;
+
                 if (Column == maxCols - 1)
                 {
                     Row++;
@@ -132,6 +136,7 @@ namespace Unity.MLAgents.Integrations.Match3
             else
             {
                 Column++;
+
                 if (Column == maxCols)
                 {
                     Row++;
@@ -186,6 +191,7 @@ namespace Unity.MLAgents.Integrations.Match3
             }
 
             int moveIndex;
+
             if (dir == Direction.Right)
             {
                 moveIndex = col + row * (maxBoardSize.Columns - 1);
@@ -217,6 +223,7 @@ namespace Unity.MLAgents.Integrations.Match3
             // Get the maximum row and column this move would affect.
             var maxMoveRow = Mathf.Max(Row, otherRow);
             var maxMoveCol = Mathf.Max(Column, otherCol);
+
             return maxMoveRow < boardSize.Rows && maxMoveCol < boardSize.Columns;
         }
 

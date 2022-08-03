@@ -13,6 +13,7 @@ namespace Unity.MLAgents.Tests
         public SamplerTests()
         {
             m_Channel = SideChannelManager.GetSideChannel<EnvironmentParametersChannel>();
+
             // if running test on its own
             if (m_Channel == null)
             {
@@ -26,6 +27,7 @@ namespace Unity.MLAgents.Tests
             var min_value = 1.0f;
             var max_value = 2.0f;
             var parameter = "parameter1";
+
             using (var outgoingMsg = new OutgoingMessage())
             {
                 outgoingMsg.WriteString(parameter);
@@ -48,6 +50,7 @@ namespace Unity.MLAgents.Tests
             var mean = 3.0f;
             var stddev = 0.2f;
             var parameter = "parameter2";
+
             using (var outgoingMsg = new OutgoingMessage())
             {
                 outgoingMsg.WriteString(parameter);
@@ -73,6 +76,7 @@ namespace Unity.MLAgents.Tests
             intervals[2] = 3.2f;
             intervals[3] = 4.1f;
             var parameter = "parameter3";
+
             using (var outgoingMsg = new OutgoingMessage())
             {
                 outgoingMsg.WriteString(parameter);
@@ -91,6 +95,7 @@ namespace Unity.MLAgents.Tests
         internal static byte[] GetByteMessage(SideChannel sideChannel, OutgoingMessage msg)
         {
             var message = msg.ToByteArray();
+
             using (var memStream = new MemoryStream())
             {
                 using (var binaryWriter = new BinaryWriter(memStream))
@@ -99,6 +104,7 @@ namespace Unity.MLAgents.Tests
                     binaryWriter.Write(message.Length);
                     binaryWriter.Write(message);
                 }
+
                 return memStream.ToArray();
             }
         }

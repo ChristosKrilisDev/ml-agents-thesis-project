@@ -45,7 +45,6 @@ namespace Unity.MLAgents.Sensors
         private int m_CellObservationSize;
         private Vector3 m_CellCenterOffset;
 
-
         /// <summary>
         /// Create a GridSensorBase with the specified configuration.
         /// </summary>
@@ -86,31 +85,26 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public SensorCompressionType CompressionType
         {
-            get { return m_CompressionType; }
+            get => m_CompressionType;
             set
             {
                 if (!IsDataNormalized() && value == SensorCompressionType.PNG)
                 {
                     Debug.LogWarning($"Compression type {value} is only supported with normalized data. " +
                         "The sensor will not compress the data.");
+
                     return;
                 }
                 m_CompressionType = value;
             }
         }
 
-        internal float[] PerceptionBuffer
-        {
-            get { return m_PerceptionBuffer; }
-        }
+        internal float[] PerceptionBuffer => m_PerceptionBuffer;
 
         /// <summary>
         /// The tags which the sensor dectects.
         /// </summary>
-        protected string[] DetectableTags
-        {
-            get { return m_DetectableTags; }
-        }
+        protected string[] DetectableTags => m_DetectableTags;
 
         /// <inheritdoc/>
         public void Reset() { }
@@ -158,6 +152,7 @@ namespace Unity.MLAgents.Sensors
             {
                 var allBytes = new List<byte>();
                 var numImages = (m_CellObservationSize + 2) / 3;
+
                 for (var i = 0; i < numImages; i++)
                 {
                     var channelIndex = 3 * i;
@@ -271,6 +266,7 @@ namespace Unity.MLAgents.Sensors
         internal void ProcessDetectedObject(GameObject detectedObject, int cellIndex)
         {
             Profiler.BeginSample("GridSensor.ProcessDetectedObject");
+
             for (var i = 0; i < m_DetectableTags.Length; i++)
             {
                 if (!ReferenceEquals(detectedObject, null) && detectedObject.CompareTag(m_DetectableTags[i]))
@@ -287,6 +283,7 @@ namespace Unity.MLAgents.Sensors
                     GetObjectData(detectedObject, i, m_CellDataBuffer);
                     ValidateValues(m_CellDataBuffer, detectedObject);
                     Array.Copy(m_CellDataBuffer, 0, m_PerceptionBuffer, cellIndex * m_CellObservationSize, m_CellObservationSize);
+
                     break;
                 }
             }
@@ -297,6 +294,7 @@ namespace Unity.MLAgents.Sensors
         public void Update()
         {
             ResetPerceptionBuffer();
+
             using (TimerStack.Instance.Scoped("GridSensor.Update"))
             {
                 if (m_GridPerception != null)
@@ -318,6 +316,7 @@ namespace Unity.MLAgents.Sensors
             using (TimerStack.Instance.Scoped("GridSensor.Write"))
             {
                 var index = 0;
+
                 for (var h = m_GridSize.z - 1; h >= 0; h--)
                 {
                     for (var w = 0; w < m_GridSize.x; w++)
@@ -329,6 +328,7 @@ namespace Unity.MLAgents.Sensors
                         }
                     }
                 }
+
                 return index;
             }
         }

@@ -15,13 +15,14 @@ namespace Unity.MLAgents.Tests
         public static float[][] DuplicateArray(float[] array, int numCopies)
         {
             var duplicated = new float[numCopies][];
+
             for (var i = 0; i < numCopies; i++)
             {
                 duplicated[i] = array;
             }
+
             return duplicated;
         }
-
 
         /// <summary>
         /// Asserts that the sub-arrays of the total array are equal to specific subarrays at specific subarray indicies and equal to a default everywhere else.
@@ -59,6 +60,7 @@ namespace Unity.MLAgents.Tests
             var subarrayIndex = 0;
             var lenOfData = expectedDefaultArray.Length;
             var numArrays = total.Length / lenOfData;
+
             for (var i = 0; i < numArrays; i++)
             {
                 totalIndex = i * lenOfData;
@@ -66,6 +68,7 @@ namespace Unity.MLAgents.Tests
                 if (indicies.Contains(i))
                 {
                     subarrayIndex = Array.IndexOf(indicies, i);
+
                     for (subIndex = 0; subIndex < lenOfData; subIndex++)
                     {
                         Assert.AreEqual(expectedArrays[subarrayIndex][subIndex], total[totalIndex],

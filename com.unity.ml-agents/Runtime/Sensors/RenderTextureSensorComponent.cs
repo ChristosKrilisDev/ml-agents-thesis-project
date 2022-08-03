@@ -25,8 +25,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public RenderTexture RenderTexture
         {
-            get { return m_RenderTexture; }
-            set { m_RenderTexture = value; }
+            get => m_RenderTexture;
+            set => m_RenderTexture = value;
         }
 
         [HideInInspector] [SerializeField] [FormerlySerializedAs("sensorName")]
@@ -38,8 +38,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public string SensorName
         {
-            get { return m_SensorName; }
-            set { m_SensorName = value; }
+            get => m_SensorName;
+            set => m_SensorName = value;
         }
 
         [HideInInspector] [SerializeField] [FormerlySerializedAs("grayscale")]
@@ -51,8 +51,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public bool Grayscale
         {
-            get { return m_Grayscale; }
-            set { m_Grayscale = value; }
+            get => m_Grayscale;
+            set => m_Grayscale = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -68,7 +68,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public SensorCompressionType CompressionType
         {
-            get { return m_Compression; }
+            get => m_Compression;
             set
             {
                 m_Compression = value;
@@ -82,8 +82,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int ObservationStacks
         {
-            get { return m_ObservationStacks; }
-            set { m_ObservationStacks = value; }
+            get => m_ObservationStacks;
+            set => m_ObservationStacks = value;
         }
 
         /// <inheritdoc/>
@@ -91,6 +91,7 @@ namespace Unity.MLAgents.Sensors
         {
             Dispose();
             m_Sensor = new RenderTextureSensor(RenderTexture, Grayscale, SensorName, m_Compression);
+
             if (ObservationStacks != 1)
             {
                 return new ISensor[]
@@ -98,6 +99,7 @@ namespace Unity.MLAgents.Sensors
                     new StackingSensor(m_Sensor, ObservationStacks)
                 };
             }
+
             return new ISensor[]
             {
                 m_Sensor

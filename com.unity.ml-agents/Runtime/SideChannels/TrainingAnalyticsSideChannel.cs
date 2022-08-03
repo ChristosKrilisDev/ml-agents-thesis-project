@@ -24,6 +24,7 @@ namespace Unity.MLAgents.SideChannels
         protected override void OnMessageReceived(IncomingMessage msg)
         {
             Google.Protobuf.WellKnownTypes.Any anyMessage = null;
+
             try
             {
                 anyMessage = Google.Protobuf.WellKnownTypes.Any.Parser.ParseFrom(msg.GetRawBytes());

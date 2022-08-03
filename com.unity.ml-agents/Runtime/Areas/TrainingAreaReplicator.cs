@@ -31,24 +31,12 @@ namespace Unity.MLAgents.Areas
         /// <summary>
         /// The size of the computed grid to pack the training areas into.
         /// </summary>
-        public int3 GridSize
-        {
-            get
-            {
-                return m_GridSize;
-            }
-        }
+        public int3 GridSize => m_GridSize;
 
         /// <summary>
         /// The name of the training area.
         /// </summary>
-        public string TrainingAreaName
-        {
-            get
-            {
-                return m_TrainingAreaName;
-            }
-        }
+        public string TrainingAreaName => m_TrainingAreaName;
 
         /// <summary>
         /// Called before the simulation begins to computed the grid size for distributing

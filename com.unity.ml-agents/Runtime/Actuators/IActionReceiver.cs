@@ -94,14 +94,17 @@ namespace Unity.MLAgents.Actuators
             var continuousActionSegment = ActionSegment<float>.Empty;
             var discreteActionSegment = ActionSegment<int>.Empty;
             var offset = 0;
+
             if (actionSpec.NumContinuousActions > 0)
             {
                 continuousActionSegment = new ActionSegment<float>(actions, 0, actionSpec.NumContinuousActions);
                 offset += actionSpec.NumContinuousActions;
             }
+
             if (actionSpec.NumDiscreteActions > 0)
             {
                 var discreteActions = new int[actionSpec.NumDiscreteActions];
+
                 for (var i = 0; i < actionSpec.NumDiscreteActions; i++)
                 {
                     discreteActions[i] = (int)actions[i + offset];
@@ -143,6 +146,7 @@ namespace Unity.MLAgents.Actuators
             }
 
             var ab = (ActionBuffers)obj;
+
             return ab.ContinuousActions.SequenceEqual(ContinuousActions) &&
                 ab.DiscreteActions.SequenceEqual(DiscreteActions);
         }

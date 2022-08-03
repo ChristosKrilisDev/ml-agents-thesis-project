@@ -51,6 +51,7 @@ namespace Unity.MLAgents.SideChannels
             var result = new List<byte[]>();
             result.AddRange(m_MessagesReceived);
             m_MessagesReceived.Clear();
+
             return result;
         }
 
@@ -64,6 +65,7 @@ namespace Unity.MLAgents.SideChannels
         {
             var result = new List<byte[]>();
             result.AddRange(m_MessagesReceived);
+
             return result;
         }
     }

@@ -51,6 +51,7 @@ namespace Unity.MLAgents.Tests
             {
                 writer[i] = 0.0f;
             }
+
             return m_Width * m_Height * m_Channels;
         }
 
@@ -84,7 +85,6 @@ namespace Unity.MLAgents.Tests
         private const string k_discrete_ONNX_v2 = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete_rank2_vector_v2_0.onnx";
         private const string k_hybrid_ONNX_recurr_v2 = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/hybrid0vis8vec_2c_2_3d_v2_0.onnx";
 
-
         // ONNX model with continuous/discrete action output (support hybrid action)
         private const string k_continuousONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/continuous2vis8vec2action_v1_0.onnx";
         private const string k_discreteONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete1vis0vec_2_3action_obsolete_recurr_v1_0.onnx";
@@ -113,6 +113,7 @@ namespace Unity.MLAgents.Tests
             validBrainParameters.VectorObservationSize = 8;
             validBrainParameters.NumStackedVectorObservations = 1;
             validBrainParameters.ActionSpec = ActionSpec.MakeContinuous(2);
+
             return validBrainParameters;
         }
 
@@ -122,6 +123,7 @@ namespace Unity.MLAgents.Tests
             validBrainParameters.VectorObservationSize = 0;
             validBrainParameters.NumStackedVectorObservations = 1;
             validBrainParameters.ActionSpec = ActionSpec.MakeDiscrete(2, 3);
+
             return validBrainParameters;
         }
 
@@ -134,6 +136,7 @@ namespace Unity.MLAgents.Tests
             {
                 2
             });
+
             return validBrainParameters;
         }
 
@@ -143,6 +146,7 @@ namespace Unity.MLAgents.Tests
             validBrainParameters.VectorObservationSize = 4;
             validBrainParameters.NumStackedVectorObservations = 2;
             validBrainParameters.ActionSpec = ActionSpec.MakeDiscrete(3, 3, 3);
+
             return validBrainParameters;
         }
 
@@ -155,6 +159,7 @@ namespace Unity.MLAgents.Tests
             {
                 2, 3
             });
+
             return validBrainParameters;
         }
 
@@ -344,6 +349,7 @@ namespace Unity.MLAgents.Tests
                     sensor_21_20_3.CreateSensors()[0]
                 }, new ActuatorComponent[0]
             );
+
             foreach (var e in errors)
             {
                 Debug.Log(e.Message);

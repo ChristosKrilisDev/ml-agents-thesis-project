@@ -35,6 +35,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
             };
             // make sure using Next agrees with FromMoveIndex.
             var advanceMove = Move.FromMoveIndex(0, boardSize);
+
             for (var moveIndex = 0; moveIndex < Move.NumPotentialMoves(boardSize); moveIndex++)
             {
                 var moveFromIndex = Move.FromMoveIndex(moveIndex, boardSize);

@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Runtime.CompilerServices;
 
-
 [assembly: InternalsVisibleTo("Unity.ML-Agents.DevTests.Editor")]
 namespace Unity.MLAgents
 {
@@ -14,7 +13,7 @@ namespace Unity.MLAgents
 
         public bool ConnectTrainer
         {
-            get { return m_ConnectTrainer; }
+            get => m_ConnectTrainer;
             set
             {
                 m_ConnectTrainer = value;
@@ -24,7 +23,7 @@ namespace Unity.MLAgents
 
         public int EditorPort
         {
-            get { return m_EditorPort; }
+            get => m_EditorPort;
             set
             {
                 m_EditorPort = value;

@@ -44,6 +44,7 @@ namespace Unity.MLAgents.Tests
             agent1.SetPolicy(policy);
 
             StackingSensor sensor = null;
+
             foreach (var s in agent1.sensors)
             {
                 if (s is StackingSensor)
@@ -73,6 +74,7 @@ namespace Unity.MLAgents.Tests
             {
                 0f, 0f, 0f
             });
+
             for (var i = 0; i < 20; i++)
             {
                 agent1.RequestDecision();
@@ -236,6 +238,7 @@ namespace Unity.MLAgents.Tests
                         }
                     }
                 }
+
                 return ObservationSpec.Shape[0] * ObservationSpec.Shape[1] * ObservationSpec.Shape[2];
             }
 
@@ -246,6 +249,7 @@ namespace Unity.MLAgents.Tests
                 writer.SetTarget(flattenedObservation, ObservationSpec.Shape, 0);
                 Write(writer);
                 var bytes = Array.ConvertAll(flattenedObservation, (z) => (byte)z);
+
                 return bytes;
             }
 

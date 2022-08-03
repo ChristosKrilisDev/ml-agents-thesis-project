@@ -20,14 +20,8 @@ namespace Unity.MLAgents.Integrations.Match3
         /// </summary>
         public string SensorName
         {
-            get
-            {
-                return m_SensorName;
-            }
-            set
-            {
-                m_SensorName = value;
-            }
+            get => m_SensorName;
+            set => m_SensorName = value;
         }
 
         [HideInInspector] [SerializeField] [FormerlySerializedAs("ObservationType")]
@@ -38,14 +32,8 @@ namespace Unity.MLAgents.Integrations.Match3
         /// </summary>
         public Match3ObservationType ObservationType
         {
-            get
-            {
-                return m_ObservationType;
-            }
-            set
-            {
-                m_ObservationType = value;
-            }
+            get => m_ObservationType;
+            set => m_ObservationType = value;
         }
 
         private ISensor[] m_Sensors;
@@ -57,6 +45,7 @@ namespace Unity.MLAgents.Integrations.Match3
             Dispose();
 
             var board = GetComponent<AbstractBoard>();
+
             if (!board)
             {
                 return Array.Empty<ISensor>();
@@ -73,6 +62,7 @@ namespace Unity.MLAgents.Integrations.Match3
                 {
                     cellSensor
                 };
+
             return m_Sensors;
         }
 

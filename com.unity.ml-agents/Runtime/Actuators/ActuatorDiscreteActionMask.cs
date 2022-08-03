@@ -54,6 +54,7 @@ namespace Unity.MLAgents.Actuators
             {
                 m_BranchSizes = new int[m_NumBranches];
                 var start = 0;
+
                 for (var i = 0; i < m_Actuators.Count; i++)
                 {
                     var actuator = m_Actuators[i];
@@ -136,6 +137,7 @@ namespace Unity.MLAgents.Actuators
             }
             var start = m_StartingActionIndices[branch];
             var end = m_StartingActionIndices[branch + 1];
+
             for (var i = start; i < end; i++)
             {
                 if (!m_CurrentMask[i])
@@ -143,6 +145,7 @@ namespace Unity.MLAgents.Actuators
                     return false;
                 }
             }
+
             return true;
         }
     }

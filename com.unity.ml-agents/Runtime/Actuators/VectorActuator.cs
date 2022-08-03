@@ -13,14 +13,8 @@ namespace Unity.MLAgents.Actuators
         private ActionBuffers m_ActionBuffers;
         internal ActionBuffers ActionBuffers
         {
-            get
-            {
-                return m_ActionBuffers;
-            }
-            private set
-            {
-                m_ActionBuffers = value;
-            }
+            get => m_ActionBuffers;
+            private set => m_ActionBuffers = value;
         }
 
         /// <summary>
@@ -32,8 +26,8 @@ namespace Unity.MLAgents.Actuators
         /// <param name="actionSpec"></param>
         /// <param name="name"></param>
         public VectorActuator(IActionReceiver actionReceiver,
-            ActionSpec actionSpec,
-            string name = "VectorActuator")
+                              ActionSpec actionSpec,
+                              string name = "VectorActuator")
             : this(actionReceiver, actionReceiver as IHeuristicProvider, actionSpec, name)
         {
         }
@@ -47,14 +41,15 @@ namespace Unity.MLAgents.Actuators
         /// <param name="actionSpec"></param>
         /// <param name="name"></param>
         public VectorActuator(IActionReceiver actionReceiver,
-            IHeuristicProvider heuristicProvider,
-            ActionSpec actionSpec,
-            string name = "VectorActuator")
+                              IHeuristicProvider heuristicProvider,
+                              ActionSpec actionSpec,
+                              string name = "VectorActuator")
         {
             m_ActionReceiver = actionReceiver;
             m_HeuristicProvider = heuristicProvider;
             ActionSpec = actionSpec;
             string suffix;
+
             if (actionSpec.NumContinuousActions == 0)
             {
                 suffix = "-Discrete";

@@ -44,6 +44,7 @@ namespace Unity.MLAgents.Tests
                 Assert.AreEqual(obs.FloatData.Data[i], i + 1);
 
             }
+
             for (var i = 8; i < 80; i++)
             {
                 Assert.AreEqual(obs.FloatData.Data[i], 0);
@@ -89,6 +90,7 @@ namespace Unity.MLAgents.Tests
                 Assert.AreEqual(obs.FloatData.Data[i], i + 1);
 
             }
+
             for (var i = 8; i < 80; i++)
             {
                 Assert.AreEqual(obs.FloatData.Data[i], 0);

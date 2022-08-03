@@ -24,7 +24,6 @@ namespace Unity.MLAgentsExamples
         public bool respawnIfFallsOffPlatform = true; //If the target falls off the platform, reset the position.
         public float fallDistance = 5; //distance below the starting height that will trigger a respawn
 
-
         private Vector3 m_startingPos; //the starting position of the target
         //private Agent m_agentTouching; //the agent currently touching the target
 
@@ -52,6 +51,7 @@ namespace Unity.MLAgentsExamples
         private void OnEnable()
         {
             m_startingPos = transform.position;
+
             if (respawnIfTouched)
             {
                 MoveTargetToRandomPosition();
@@ -85,6 +85,7 @@ namespace Unity.MLAgentsExamples
             if (col.transform.CompareTag(tagToDetect))
             {
                 onCollisionEnterEvent.Invoke(col);
+
                 if (respawnIfTouched)
                 {
                     MoveTargetToRandomPosition();

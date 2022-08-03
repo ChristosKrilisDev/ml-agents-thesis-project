@@ -16,6 +16,7 @@ namespace Unity.MLAgents.Sensors
             if (m_SensorShapes == null)
             {
                 m_SensorShapes = new List<ObservationSpec>(sensors.Count);
+
                 // First agent, save the sensor sizes
                 foreach (var sensor in sensors)
                 {
@@ -34,10 +35,12 @@ namespace Unity.MLAgents.Sensors
                         sensors.Count
                     );
                 }
+
                 for (var i = 0; i < Mathf.Min(m_SensorShapes.Count, sensors.Count); i++)
                 {
                     var cachedSpec = m_SensorShapes[i];
                     var sensorSpec = sensors[i].GetObservationSpec();
+
                     if (cachedSpec.Shape != sensorSpec.Shape)
                     {
                         Debug.AssertFormat(

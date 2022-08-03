@@ -24,18 +24,22 @@ namespace Unity.MLAgents.Inference
         {
             var actionSize = tensorProxy.shape[tensorProxy.shape.Length - 1];
             var agentIndex = 0;
+
             for (var i = 0; i < actionIds.Count; i++)
             {
                 var agentId = actionIds[i];
+
                 if (lastActions.ContainsKey(agentId))
                 {
                     var actionBuffer = lastActions[agentId];
+
                     if (actionBuffer.IsEmpty())
                     {
                         actionBuffer = new ActionBuffers(m_ActionSpec);
                         lastActions[agentId] = actionBuffer;
                     }
                     var continuousBuffer = actionBuffer.ContinuousActions;
+
                     for (var j = 0; j < actionSize; j++)
                     {
                         continuousBuffer[j] = tensorProxy.data[agentIndex, j];
@@ -53,7 +57,6 @@ namespace Unity.MLAgents.Inference
     {
         private readonly ActionSpec m_ActionSpec;
 
-
         public DiscreteActionOutputApplier(ActionSpec actionSpec, int seed, ITensorAllocator allocator)
         {
             m_ActionSpec = actionSpec;
@@ -63,18 +66,22 @@ namespace Unity.MLAgents.Inference
         {
             var agentIndex = 0;
             var actionSize = tensorProxy.shape[tensorProxy.shape.Length - 1];
+
             for (var i = 0; i < actionIds.Count; i++)
             {
                 var agentId = actionIds[i];
+
                 if (lastActions.ContainsKey(agentId))
                 {
                     var actionBuffer = lastActions[agentId];
+
                     if (actionBuffer.IsEmpty())
                     {
                         actionBuffer = new ActionBuffers(m_ActionSpec);
                         lastActions[agentId] = actionBuffer;
                     }
                     var discreteBuffer = actionBuffer.DiscreteActions;
+
                     for (var j = 0; j < actionSize; j++)
                     {
                         discreteBuffer[j] = (int)tensorProxy.data[agentIndex, j];
@@ -84,7 +91,6 @@ namespace Unity.MLAgents.Inference
             }
         }
     }
-
 
     /// <summary>
     /// The Applier for the Discrete Action output tensor. Uses multinomial to sample discrete
@@ -97,7 +103,6 @@ namespace Unity.MLAgents.Inference
         private readonly ActionSpec m_ActionSpec;
         private readonly int[] m_StartActionIndices;
         private readonly float[] m_CdfBuffer;
-
 
         public LegacyDiscreteActionOutputApplier(ActionSpec actionSpec, int seed, ITensorAllocator allocator)
         {
@@ -115,18 +120,22 @@ namespace Unity.MLAgents.Inference
         public void Apply(TensorProxy tensorProxy, IList<int> actionIds, Dictionary<int, ActionBuffers> lastActions)
         {
             var agentIndex = 0;
+
             for (var i = 0; i < actionIds.Count; i++)
             {
                 var agentId = actionIds[i];
+
                 if (lastActions.ContainsKey(agentId))
                 {
                     var actionBuffer = lastActions[agentId];
+
                     if (actionBuffer.IsEmpty())
                     {
                         actionBuffer = new ActionBuffers(m_ActionSpec);
                         lastActions[agentId] = actionBuffer;
                     }
                     var discreteBuffer = actionBuffer.DiscreteActions;
+
                     for (var j = 0; j < m_ActionSize.Length; j++)
                     {
                         ComputeCdf(tensorProxy, agentIndex, m_StartActionIndices[j], m_ActionSize[j]);
@@ -150,6 +159,7 @@ namespace Unity.MLAgents.Inference
         {
             // Find the class maximum
             var maxProb = float.NegativeInfinity;
+
             for (var cls = 0; cls < branchSize; ++cls)
             {
                 maxProb = Mathf.Max(logProbs.data[batch, cls + channelOffset], maxProb);
@@ -157,6 +167,7 @@ namespace Unity.MLAgents.Inference
 
             // Sum the log probabilities and compute CDF
             var sumProb = 0.0f;
+
             for (var cls = 0; cls < branchSize; ++cls)
             {
                 sumProb += Mathf.Exp(logProbs.data[batch, cls + channelOffset] - maxProb);
@@ -183,10 +194,12 @@ namespace Unity.MLAgents.Inference
         {
             var agentIndex = 0;
             var memorySize = tensorProxy.data.width;
+
             for (var i = 0; i < actionIds.Count; i++)
             {
                 var agentId = actionIds[i];
                 List<float> memory;
+
                 if (!m_Memories.TryGetValue(agentId, out memory)
                     || memory.Count < memorySize)
                 {

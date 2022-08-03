@@ -109,10 +109,12 @@ namespace Unity.MLAgents.Demonstrations
 
             m_FileSystem = fileSystem ?? new FileSystem();
             var behaviorParams = GetComponent<BehaviorParameters>();
+
             if (string.IsNullOrEmpty(DemonstrationName))
             {
                 DemonstrationName = behaviorParams.BehaviorName;
             }
+
             if (string.IsNullOrEmpty(DemonstrationDirectory))
             {
                 DemonstrationDirectory = Path.Combine(Application.dataPath, k_DefaultDirectoryName);
@@ -136,11 +138,13 @@ namespace Unity.MLAgents.Demonstrations
         {
             var rgx = new Regex("[^a-zA-Z0-9 -]");
             demoName = rgx.Replace(demoName, "");
+
             // If the string is too long, it will overflow the metadata.
             if (demoName.Length > maxNameLength)
             {
                 demoName = demoName.Substring(0, maxNameLength);
             }
+
             return demoName;
         }
 
@@ -164,6 +168,7 @@ namespace Unity.MLAgents.Demonstrations
             var literalName = demonstrationName;
             var filePath = Path.Combine(demonstrationDirectory, literalName + k_ExtensionType);
             var uniqueNameCounter = 0;
+
             while (fileSystem.File.Exists(filePath))
             {
                 // TODO should we use a timestamp instead of a counter here? This loops an increasing number of times

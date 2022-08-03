@@ -54,6 +54,7 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
                 1f
             }), ActionSegment<int>.Empty);
             var context = new InputActuatorEventContext(1, m_Device);
+
             using (context.GetEventForFrame(out var eventPtr))
             {
                 m_Adaptor.WriteToInputEventForAction(eventPtr, m_Action, m_Control, new ActionSpec(), actionBuffers);
@@ -71,6 +72,7 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
                 1f
             }), ActionSegment<int>.Empty);
             var context = new InputActuatorEventContext(1, m_Device);
+
             using (context.GetEventForFrame(out var eventPtr))
             {
                 m_Adaptor.WriteToInputEventForAction(eventPtr, m_Action, m_Control, new ActionSpec(), actionBuffers);

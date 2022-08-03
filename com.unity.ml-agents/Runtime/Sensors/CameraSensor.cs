@@ -23,8 +23,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public Camera Camera
         {
-            get { return m_Camera; }
-            set { m_Camera = value; }
+            get => m_Camera;
+            set => m_Camera = value;
         }
 
         /// <summary>
@@ -32,8 +32,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public SensorCompressionType CompressionType
         {
-            get { return m_CompressionType; }
-            set { m_CompressionType = value; }
+            get => m_CompressionType;
+            set => m_CompressionType = value;
         }
 
         /// <summary>
@@ -92,6 +92,7 @@ namespace Unity.MLAgents.Sensors
                 ObservationToTexture(m_Camera, m_Texture, m_Width, m_Height);
                 // TODO support more types here, e.g. JPG
                 var compressed = m_Texture.EncodeToPNG();
+
                 return compressed;
             }
         }
@@ -107,6 +108,7 @@ namespace Unity.MLAgents.Sensors
             {
                 ObservationToTexture(m_Camera, m_Texture, m_Width, m_Height);
                 var numWritten = writer.WriteTexture(m_Texture, m_Grayscale);
+
                 return numWritten;
             }
         }

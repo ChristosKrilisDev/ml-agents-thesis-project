@@ -66,6 +66,7 @@ namespace Unity.MLAgents.Inference
             m_InferenceDevice = inferenceDevice;
             m_DeterministicInference = deterministicInference;
             m_TensorAllocator = new TensorCachingAllocator();
+
             if (model != null)
             {
 #if BARRACUDA_VERBOSE
@@ -79,6 +80,7 @@ namespace Unity.MLAgents.Inference
                 var failedCheck = BarracudaModelParamLoader.CheckModelVersion(
                     barracudaModel
                 );
+
                 if (failedCheck != null)
                 {
                     if (failedCheck.CheckType == BarracudaModelParamLoader.FailedCheck.CheckTypeEnum.Error)
@@ -88,20 +90,25 @@ namespace Unity.MLAgents.Inference
                 }
 
                 WorkerFactory.Type executionDevice;
+
                 switch (inferenceDevice)
                 {
                     case InferenceDevice.CPU:
                         executionDevice = WorkerFactory.Type.CSharp;
+
                         break;
                     case InferenceDevice.GPU:
                         executionDevice = WorkerFactory.Type.ComputePrecompiled;
+
                         break;
                     case InferenceDevice.Burst:
                         executionDevice = WorkerFactory.Type.CSharpBurst;
+
                         break;
                     case InferenceDevice.Default: // fallthrough
                     default:
                         executionDevice = WorkerFactory.Type.CSharpBurst;
+
                         break;
                 }
                 m_Engine = WorkerFactory.CreateWorker(executionDevice, barracudaModel, m_Verbose);
@@ -123,19 +130,14 @@ namespace Unity.MLAgents.Inference
             m_InferenceOutputs = new List<TensorProxy>();
         }
 
-        public InferenceDevice InferenceDevice
-        {
-            get { return m_InferenceDevice; }
-        }
+        public InferenceDevice InferenceDevice => m_InferenceDevice;
 
-        public NNModel Model
-        {
-            get { return m_Model; }
-        }
+        public NNModel Model => m_Model;
 
         private void PrepareBarracudaInputs(IReadOnlyList<TensorProxy> infInputs)
         {
             m_InputsByName.Clear();
+
             for (var i = 0; i < infInputs.Count; i++)
             {
                 var inp = infInputs[i];
@@ -153,6 +155,7 @@ namespace Unity.MLAgents.Inference
         private void FetchBarracudaOutputs(string[] names)
         {
             m_InferenceOutputs.Clear();
+
             foreach (var n in names)
             {
                 var output = m_Engine.PeekOutput(n);
@@ -178,6 +181,7 @@ namespace Unity.MLAgents.Inference
             {
                 m_LastActionsReceived[info.episodeId] = ActionBuffers.Empty;
             }
+
             if (info.done)
             {
                 // If the agent is done, we remove the key from the last action dictionary since no action
@@ -189,10 +193,12 @@ namespace Unity.MLAgents.Inference
         public void DecideBatch()
         {
             var currentBatchSize = m_Infos.Count;
+
             if (currentBatchSize == 0)
             {
                 return;
             }
+
             if (!m_ObservationsInitialized)
             {
                 // Just grab the first agent in the collection (any will suffice, really).
@@ -247,6 +253,7 @@ namespace Unity.MLAgents.Inference
             {
                 return m_LastActionsReceived[agentId];
             }
+
             return ActionBuffers.Empty;
         }
     }

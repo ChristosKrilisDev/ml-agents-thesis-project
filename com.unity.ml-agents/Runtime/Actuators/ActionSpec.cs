@@ -28,18 +28,22 @@ namespace Unity.MLAgents.Actuators
         /// <summary>
         /// The number of continuous actions that an Agent can take.
         /// </summary>
-        public int NumContinuousActions { get { return m_NumContinuousActions; } set { m_NumContinuousActions = value; } }
+        public int NumContinuousActions
+        {
+            get => m_NumContinuousActions;
+            set => m_NumContinuousActions = value;
+        }
 
         /// <summary>
         /// The number of branches for discrete actions that an Agent can take.
         /// </summary>
-        public int NumDiscreteActions { get { return BranchSizes == null ? 0 : BranchSizes.Length; } }
+        public int NumDiscreteActions => BranchSizes == null ? 0 : BranchSizes.Length;
 
         /// <summary>
         /// Get the total number of Discrete Actions that can be taken by calculating the Sum
         /// of all of the Discrete Action branch sizes.
         /// </summary>
-        public int SumOfDiscreteBranchSizes { get { return BranchSizes == null ? 0 : BranchSizes.Sum(); } }
+        public int SumOfDiscreteBranchSizes => BranchSizes == null ? 0 : BranchSizes.Sum();
 
         /// <summary>
         /// Creates a Continuous <see cref="ActionSpec"/> with the number of actions available.
@@ -49,6 +53,7 @@ namespace Unity.MLAgents.Actuators
         public static ActionSpec MakeContinuous(int numActions)
         {
             var actuatorSpace = new ActionSpec(numActions, null);
+
             return actuatorSpace;
         }
 
@@ -62,6 +67,7 @@ namespace Unity.MLAgents.Actuators
         public static ActionSpec MakeDiscrete(params int[] branchSizes)
         {
             var actuatorSpace = new ActionSpec(0, branchSizes);
+
             return actuatorSpace;
         }
 
@@ -102,6 +108,7 @@ namespace Unity.MLAgents.Actuators
         {
             var numContinuous = 0;
             var numDiscrete = 0;
+
             for (var i = 0; i < specs.Length; i++)
             {
                 var spec = specs[i];
@@ -116,9 +123,11 @@ namespace Unity.MLAgents.Actuators
 
             var branchSizes = new int[numDiscrete];
             var offset = 0;
+
             for (var i = 0; i < specs.Length; i++)
             {
                 var spec = specs[i];
+
                 if (spec.BranchSizes.Length == 0)
                 {
                     continue;
@@ -131,6 +140,7 @@ namespace Unity.MLAgents.Actuators
                     branchSizesLength);
                 offset += branchSizesLength;
             }
+
             return new ActionSpec(numContinuous, branchSizes);
         }
     }

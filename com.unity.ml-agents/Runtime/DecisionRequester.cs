@@ -45,13 +45,7 @@ namespace Unity.MLAgents
         /// <summary>
         /// Get the Agent attached to the DecisionRequester.
         /// </summary>
-        public Agent Agent
-        {
-            get
-            {
-                return m_Agent;
-            }
-        }
+        public Agent Agent => m_Agent;
 
         internal void Awake()
         {

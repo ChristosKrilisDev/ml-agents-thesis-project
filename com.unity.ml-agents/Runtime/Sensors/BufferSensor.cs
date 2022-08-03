@@ -14,7 +14,6 @@ namespace Unity.MLAgents.Sensors
         private int m_CurrentNumObservables;
         private ObservationSpec m_ObservationSpec;
 
-
         /// <summary>
         /// Creates the BufferSensor.
         /// </summary>
@@ -53,10 +52,12 @@ namespace Unity.MLAgents.Sensors
                     $"{m_ObsSize} but received {obs.Length} observations instead."
                 );
             }
+
             if (m_CurrentNumObservables >= m_MaxNumObs)
             {
                 return;
             }
+
             for (var i = 0; i < obs.Length; i++)
             {
                 m_ObservationBuffer[m_CurrentNumObservables * m_ObsSize + i] = obs[i];
@@ -71,6 +72,7 @@ namespace Unity.MLAgents.Sensors
             {
                 writer[i] = m_ObservationBuffer[i];
             }
+
             return m_ObsSize * m_MaxNumObs;
         }
 

@@ -67,6 +67,7 @@ namespace Unity.MLAgents.Editor
             EditorGUILayout.PropertyField(so.FindProperty("rayMissColor"), true);
 
             EditorGUI.indentLevel--;
+
             if (EditorGUI.EndChangeCheck())
             {
                 m_RequireSensorUpdate = true;

@@ -33,16 +33,19 @@ namespace Unity.MLAgents.SideChannels
         protected override void OnMessageReceived(IncomingMessage msg)
         {
             var messageType = (ConfigurationType)msg.ReadInt32();
+
             switch (messageType)
             {
                 case ConfigurationType.ScreenResolution:
                     var width = msg.ReadInt32();
                     var height = msg.ReadInt32();
                     Screen.SetResolution(width, height, false);
+
                     break;
                 case ConfigurationType.QualityLevel:
                     var qualityLevel = msg.ReadInt32();
                     QualitySettings.SetQualityLevel(qualityLevel, true);
+
                     break;
                 case ConfigurationType.TimeScale:
                     var timeScale = msg.ReadFloat32();
@@ -56,19 +59,23 @@ namespace Unity.MLAgents.SideChannels
 #endif
                     timeScale = Mathf.Clamp(timeScale, 1, maxTimeScale);
                     Time.timeScale = timeScale;
+
                     break;
                 case ConfigurationType.TargetFrameRate:
                     var targetFrameRate = msg.ReadInt32();
                     Application.targetFrameRate = targetFrameRate;
+
                     break;
                 case ConfigurationType.CaptureFrameRate:
                     var captureFrameRate = msg.ReadInt32();
                     Time.captureFramerate = captureFrameRate;
+
                     break;
                 default:
                     Debug.LogWarning(
                         "Unknown engine configuration received from Python. Make sure" +
                         " your Unity and Python versions are compatible.");
+
                     break;
             }
         }

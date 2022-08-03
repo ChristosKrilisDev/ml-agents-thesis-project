@@ -34,10 +34,12 @@ namespace Unity.MLAgents.Inference.Utils
             if (m_HasSpare)
             {
                 m_HasSpare = false;
+
                 return m_SpareUnscaled * m_Stddev + m_Mean;
             }
 
             double u, v, s;
+
             do
             {
                 u = m_Random.NextDouble() * 2.0 - 1.0;

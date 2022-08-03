@@ -39,7 +39,6 @@ namespace Unity.MLAgents
         /// </summary>
         public float groupReward;
 
-
         /// <summary>
         /// Whether the agent is done or not.
         /// </summary>
@@ -69,11 +68,13 @@ namespace Unity.MLAgents
         public void CopyActions(ActionBuffers actionBuffers)
         {
             var continuousActions = storedActions.ContinuousActions;
+
             for (var i = 0; i < actionBuffers.ContinuousActions.Length; i++)
             {
                 continuousActions[i] = actionBuffers.ContinuousActions[i];
             }
             var discreteActions = storedActions.DiscreteActions;
+
             for (var i = 0; i < actionBuffers.DiscreteActions.Length; i++)
             {
                 discreteActions[i] = actionBuffers.DiscreteActions[i];
@@ -88,9 +89,9 @@ namespace Unity.MLAgents
     internal class AgentVectorActuator : VectorActuator
     {
         public AgentVectorActuator(IActionReceiver actionReceiver,
-            IHeuristicProvider heuristicProvider,
-            ActionSpec actionSpec,
-            string name = "VectorActuator"
+                                   IHeuristicProvider heuristicProvider,
+                                   ActionSpec actionSpec,
+                                   string name = "VectorActuator"
         ) : base(actionReceiver, heuristicProvider, actionSpec, name)
         {
         }
@@ -570,6 +571,7 @@ namespace Unity.MLAgents
             m_Info.maxStepReached = doneReason == DoneReason.MaxStepReached;
             m_Info.groupId = m_GroupId;
             UpdateSensors();
+
             // Make sure the latest observations are being passed to training.
             using (m_CollectObservationsChecker.Start())
             {
@@ -661,10 +663,7 @@ namespace Unity.MLAgents
         /// <returns>
         /// Current step count.
         /// </returns>
-        public int StepCount
-        {
-            get { return m_StepCount; }
-        }
+        public int StepCount => m_StepCount;
 
         /// <summary>
         /// Returns the number of episodes that the Agent has completed (either <see cref="Agent.EndEpisode()"/>
@@ -673,10 +672,7 @@ namespace Unity.MLAgents
         /// <returns>
         /// Current episode count.
         /// </returns>
-        public int CompletedEpisodes
-        {
-            get { return m_CompletedEpisodes; }
-        }
+        public int CompletedEpisodes => m_CompletedEpisodes;
 
         /// <summary>
         /// Overrides the current step reward of the agent and updates the episode
@@ -953,10 +949,12 @@ namespace Unity.MLAgents
             {
                 m_PolicyFactory = GetComponent<BehaviorParameters>();
             }
+
             if (m_PolicyFactory.ObservableAttributeHandling != ObservableAttributeOptions.Ignore)
             {
                 var excludeInherited =
                     m_PolicyFactory.ObservableAttributeHandling == ObservableAttributeOptions.ExcludeInherited;
+
                 using (TimerStack.Instance.Scoped("CreateObservableSensors"))
                 {
                     var observableSensors = ObservableAttribute.CreateObservableSensors(this, excludeInherited);
@@ -966,6 +964,7 @@ namespace Unity.MLAgents
 
             // Get all attached sensor components
             SensorComponent[] attachedSensorComponents;
+
             if (m_PolicyFactory.UseChildSensors)
             {
                 attachedSensorComponents = GetComponentsInChildren<SensorComponent>();
@@ -976,6 +975,7 @@ namespace Unity.MLAgents
             }
 
             sensors.Capacity += attachedSensorComponents.Length;
+
             foreach (var component in attachedSensorComponents)
             {
                 sensors.AddRange(component.CreateSensors());
@@ -983,9 +983,11 @@ namespace Unity.MLAgents
 
             // Support legacy CollectObservations
             var param = m_PolicyFactory.BrainParameters;
+
             if (param.VectorObservationSize > 0)
             {
                 collectObservationsSensor = new VectorSensor(param.VectorObservationSize);
+
                 if (param.NumStackedVectorObservations > 1)
                 {
                     stackedCollectObservationsSensor = new StackingSensor(
@@ -1019,6 +1021,7 @@ namespace Unity.MLAgents
             for (var i = 0; i < sensors.Count; i++)
             {
                 var sensor = sensors[i];
+
                 if (sensor is IDisposable disposableSensor)
                 {
                     disposableSensor.Dispose();
@@ -1029,6 +1032,7 @@ namespace Unity.MLAgents
         private void InitializeActuators()
         {
             ActuatorComponent[] attachedActuators;
+
             if (m_PolicyFactory.UseChildActuators)
             {
                 attachedActuators = GetComponentsInChildren<ActuatorComponent>();
@@ -1078,6 +1082,7 @@ namespace Unity.MLAgents
             }
 
             UpdateSensors();
+
             using (TimerStack.Instance.Scoped("CollectObservations"))
             {
                 using (m_CollectObservationsChecker.Start())
@@ -1085,6 +1090,7 @@ namespace Unity.MLAgents
                     CollectObservations(collectObservationsSensor);
                 }
             }
+
             using (TimerStack.Instance.Scoped("WriteActionMask"))
             {
                 m_ActuatorManager.WriteActionMask();
@@ -1309,6 +1315,7 @@ namespace Unity.MLAgents
         {
             ResetData();
             m_StepCount = 0;
+
             using (m_OnEpisodeBeginChecker.Start())
             {
                 OnEpisodeBegin();
@@ -1327,6 +1334,7 @@ namespace Unity.MLAgents
         {
             var middle = (min + max) / 2;
             var range = (max - min) / 2;
+
             return rawAction * range + middle;
         }
 
@@ -1386,6 +1394,7 @@ namespace Unity.MLAgents
             else
             {
                 var newGroupId = multiAgentGroup.GetId();
+
                 if (m_GroupId == 0 || m_GroupId == newGroupId)
                 {
                     m_GroupId = newGroupId;

@@ -63,6 +63,7 @@ namespace Unity.MLAgents.Tests
             for (var i = 0; i < numSamples; i++)
             {
                 var x = rn.NextDouble();
+
                 if (i == 0)
                 {
                     oldM = newM = x;

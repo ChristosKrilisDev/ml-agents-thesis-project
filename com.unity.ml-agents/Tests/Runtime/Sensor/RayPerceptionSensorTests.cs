@@ -17,6 +17,7 @@ namespace Unity.MLAgents.Tests
                 90f, 60f, 120f, 30f, 150f, 0f, 180f
             };
             Assert.AreEqual(expectedAngles.Length, angles.Length);
+
             for (var i = 0; i < angles.Length; i++)
             {
                 Assert.AreEqual(expectedAngles[i], angles[i], .01);
@@ -46,6 +47,7 @@ namespace Unity.MLAgents.Tests
         public void RemoveGameObjects()
         {
             var objects = Object.FindObjectsOfType<GameObject>();
+
             foreach (var o in objects)
             {
                 Object.DestroyImmediate(o);
@@ -86,7 +88,6 @@ namespace Unity.MLAgents.Tests
             sphere3.tag = k_SphereTag;
             sphere3.name = "sphere3";
 
-
             Physics.SyncTransforms();
         }
 
@@ -108,6 +109,7 @@ namespace Unity.MLAgents.Tests
             {
                 0f, .5f
             };
+
             foreach (var castRadius in radii)
             {
                 perception.SphereCastRadius = castRadius;
@@ -216,10 +218,12 @@ namespace Unity.MLAgents.Tests
             {
                 false, true
             };
+
             foreach (var filterCubeLayer in filterCubeLayers)
             {
                 // Set the layer mask to either the default, or one that ignores the close cube's layer
                 var layerMask = Physics.DefaultRaycastLayers;
+
                 if (filterCubeLayer)
                 {
                     layerMask &= ~(1 << cubeFiltered.layer);
@@ -273,6 +277,7 @@ namespace Unity.MLAgents.Tests
             {
                 0f, .5f
             };
+
             foreach (var castRadius in radii)
             {
                 perception.SphereCastRadius = castRadius;
@@ -362,6 +367,7 @@ namespace Unity.MLAgents.Tests
             {
                 0f, .5f
             };
+
             foreach (var castRadius in radii)
             {
                 perception.SphereCastRadius = castRadius;
@@ -396,6 +402,7 @@ namespace Unity.MLAgents.Tests
             {
                 0f, .5f
             };
+
             foreach (var castRadius in radii)
             {
                 perception.SphereCastRadius = castRadius;
@@ -430,6 +437,7 @@ namespace Unity.MLAgents.Tests
             {
                 0f, .5f
             };
+
             foreach (var castRadius in radii)
             {
                 perception.SphereCastRadius = castRadius;

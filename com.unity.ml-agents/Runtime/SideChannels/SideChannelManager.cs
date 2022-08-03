@@ -32,6 +32,7 @@ namespace Unity.MLAgents.SideChannels
         public static void RegisterSideChannel(SideChannel sideChannel)
         {
             var channelId = sideChannel.ChannelId;
+
             if (s_RegisteredChannels.ContainsKey(channelId))
             {
                 throw new UnityAgentsException(
@@ -41,9 +42,11 @@ namespace Unity.MLAgents.SideChannels
 
             // Process any messages that we've already received for this channel ID.
             var numMessages = s_CachedMessages.Count;
+
             for (var i = 0; i < numMessages; i++)
             {
                 var cachedMessage = s_CachedMessages.Dequeue();
+
                 if (channelId == cachedMessage.ChannelId)
                 {
                     sideChannel.ProcessMessage(cachedMessage.Message);
@@ -99,6 +102,7 @@ namespace Unity.MLAgents.SideChannels
                     return (T)sc;
                 }
             }
+
             return null;
         }
 
@@ -134,6 +138,7 @@ namespace Unity.MLAgents.SideChannels
                     foreach (var sideChannel in sideChannels.Values)
                     {
                         var messageList = sideChannel.MessageQueue;
+
                         foreach (var message in messageList)
                         {
                             binaryWriter.Write(sideChannel.ChannelId.ToByteArray());
@@ -142,6 +147,7 @@ namespace Unity.MLAgents.SideChannels
                         }
                         sideChannel.MessageQueue.Clear();
                     }
+
                     return memStream.ToArray();
                 }
             }
@@ -157,6 +163,7 @@ namespace Unity.MLAgents.SideChannels
             foreach (var sideChannel in sideChannels.Values)
             {
                 var messageList = sideChannel.MessageQueue;
+
                 if (messageList.Count > 0)
                 {
                     return true;
@@ -185,6 +192,7 @@ namespace Unity.MLAgents.SideChannels
             while (s_CachedMessages.Count != 0)
             {
                 var cachedMessage = s_CachedMessages.Dequeue();
+
                 if (sideChannels.ContainsKey(cachedMessage.ChannelId))
                 {
                     sideChannels[cachedMessage.ChannelId].ProcessMessage(cachedMessage.Message);
@@ -201,6 +209,7 @@ namespace Unity.MLAgents.SideChannels
             {
                 return;
             }
+
             using (var memStream = new MemoryStream(dataReceived))
             {
                 using (var binaryReader = new BinaryReader(memStream))
@@ -209,6 +218,7 @@ namespace Unity.MLAgents.SideChannels
                     {
                         var channelId = Guid.Empty;
                         byte[] message = null;
+
                         try
                         {
                             channelId = new Guid(binaryReader.ReadBytes(16));
@@ -222,6 +232,7 @@ namespace Unity.MLAgents.SideChannels
                                 "version of MLAgents in Unity is compatible with the Python version. Original error : "
                                 + ex.Message);
                         }
+
                         if (sideChannels.ContainsKey(channelId))
                         {
                             sideChannels[channelId].ProcessMessage(message);

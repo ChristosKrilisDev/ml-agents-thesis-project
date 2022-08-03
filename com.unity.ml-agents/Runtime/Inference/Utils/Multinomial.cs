@@ -38,6 +38,7 @@ namespace Unity.MLAgents.Inference.Utils
         {
             var p = (float)m_Random.NextDouble() * cmf[branchSize - 1];
             var cls = 0;
+
             while (cmf[cls] < p)
             {
                 ++cls;

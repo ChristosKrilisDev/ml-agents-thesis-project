@@ -26,6 +26,7 @@ namespace Unity.MLAgents.Sensors
             if (string.IsNullOrEmpty(name))
             {
                 name = $"VectorSensor_size{observationSize}";
+
                 if (observationType != ObservationType.Default)
                 {
                     name += $"_{observationType.ToString()}";
@@ -41,6 +42,7 @@ namespace Unity.MLAgents.Sensors
         public int Write(ObservationWriter writer)
         {
             var expectedObservations = m_ObservationSpec.Shape[0];
+
             if (m_Observations.Count > expectedObservations)
             {
                 // Too many observations, truncate
@@ -57,12 +59,14 @@ namespace Unity.MLAgents.Sensors
                     "Fewer observations ({0}) made than vector observation size ({1}). The observations will be padded.",
                     m_Observations.Count, expectedObservations
                 );
+
                 for (var i = m_Observations.Count; i < expectedObservations; i++)
                 {
                     m_Observations.Add(0);
                 }
             }
             writer.AddList(m_Observations);
+
             return expectedObservations;
         }
 

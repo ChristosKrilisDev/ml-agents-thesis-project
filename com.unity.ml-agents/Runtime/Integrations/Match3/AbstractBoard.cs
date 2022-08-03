@@ -158,6 +158,7 @@ namespace Unity.MLAgents.Integrations.Match3
             var currentBoardSize = GetCurrentBoardSize();
 
             var currentMove = Move.FromMoveIndex(0, maxBoardSize);
+
             for (var i = 0; i < NumMoves(); i++)
             {
                 if (currentMove.InRangeForBoard(currentBoardSize))
@@ -178,6 +179,7 @@ namespace Unity.MLAgents.Integrations.Match3
             var currentBoardSize = GetCurrentBoardSize();
 
             var currentMove = Move.FromMoveIndex(0, maxBoardSize);
+
             for (var i = 0; i < NumMoves(); i++)
             {
                 if (currentMove.InRangeForBoard(currentBoardSize) && IsMoveValid(currentMove))
@@ -213,6 +215,7 @@ namespace Unity.MLAgents.Integrations.Match3
                 }
 
                 var moveMatches = CheckHalfMove(otherRow, otherCol, moveVal, move.Direction);
+
                 if (moveMatches)
                 {
                     // early out
@@ -220,6 +223,7 @@ namespace Unity.MLAgents.Integrations.Match3
                 }
 
                 var otherMatches = CheckHalfMove(move.Row, move.Column, oppositeVal, move.OtherDirection());
+
                 return otherMatches;
             }
         }
@@ -299,6 +303,7 @@ namespace Unity.MLAgents.Integrations.Match3
         internal void CheckBoardSizes(BoardSize originalMaxBoardSize)
         {
             var currentBoardSize = GetCurrentBoardSize();
+
             if (!(currentBoardSize <= originalMaxBoardSize))
             {
                 Debug.LogWarning(

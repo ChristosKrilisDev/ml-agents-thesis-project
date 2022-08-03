@@ -121,16 +121,13 @@ namespace Unity.MLAgents
         ///Reports whether the Academy has been initialized yet.
         /// </summary>
         /// <value><c>True</c> if the Academy is initialized, <c>false</c> otherwise.</value>
-        public static bool IsInitialized
-        {
-            get { return s_Lazy.IsValueCreated; }
-        }
+        public static bool IsInitialized => s_Lazy.IsValueCreated;
 
         /// <summary>
         /// The singleton Academy object.
         /// </summary>
         /// <value>Getting the instance initializes the Academy, if necessary.</value>
-        public static Academy Instance { get { return s_Lazy.Value; } }
+        public static Academy Instance => s_Lazy.Value;
 
         // Fields not provided in the Inspector.
 
@@ -141,10 +138,7 @@ namespace Unity.MLAgents
         /// <value>
         /// <c>True</c>, if communicator is on, <c>false</c> otherwise.
         /// </value>
-        public bool IsCommunicatorOn
-        {
-            get { return Communicator != null; }
-        }
+        public bool IsCommunicatorOn => Communicator != null;
 
         /// The number of episodes completed by the environment. Incremented
         /// each time the environment is reset.
@@ -181,7 +175,7 @@ namespace Unity.MLAgents
         /// </summary>
         public int InferenceSeed
         {
-            set { m_InferenceSeed = value; }
+            set => m_InferenceSeed = value;
         }
 
         private int m_NumAreas;
@@ -189,19 +183,12 @@ namespace Unity.MLAgents
         /// <summary>
         /// Number of training areas to instantiate.
         /// </summary>
-        public int NumAreas
-        {
-            get
-            {
-                return m_NumAreas;
-            }
-        }
+        public int NumAreas => m_NumAreas;
 
         /// <summary>
         /// Returns the RLCapabilities of the python client that the unity process is connected to.
         /// </summary>
         internal UnityRLCapabilities TrainerCapabilities { get; set; }
-
 
         // The Academy uses a series of events to communicate with agents
         // to facilitate synchronization. More specifically, it ensures
@@ -219,7 +206,6 @@ namespace Unity.MLAgents
         // Signals to the Agent that a new step is about to start.
         // This will mark the Agent as Done if it has reached its maxSteps.
         internal event Action AgentIncrementStep;
-
 
         /// <summary>
         /// Signals to all of the <see cref="Agent"/>s that their step is about to begin.
@@ -247,7 +233,6 @@ namespace Unity.MLAgents
 
         private AcademyFixedUpdateStepper m_FixedUpdateStepper;
         private GameObject m_StepperObject;
-
 
         /// <summary>
         /// Private constructor called the first time the Academy is used.
@@ -310,6 +295,7 @@ namespace Unity.MLAgents
             // Don't show this object in the hierarchy
             m_StepperObject.hideFlags = HideFlags.HideInHierarchy;
             m_FixedUpdateStepper = m_StepperObject.AddComponent<AcademyFixedUpdateStepper>();
+
             try
             {
                 // This try-catch is because DontDestroyOnLoad cannot be used in Editor Tests
@@ -330,6 +316,7 @@ namespace Unity.MLAgents
             }
 
             m_FixedUpdateStepper = null;
+
             if (Application.isEditor)
             {
                 Object.DestroyImmediate(m_StepperObject);
@@ -348,7 +335,7 @@ namespace Unity.MLAgents
         /// <value>Set <c>true</c> to enable automatic stepping; <c>false</c> to disable.</value>
         public bool AutomaticSteppingEnabled
         {
-            get { return m_FixedUpdateStepper != null; }
+            get => m_FixedUpdateStepper != null;
             set
             {
                 if (value)
@@ -367,6 +354,7 @@ namespace Unity.MLAgents
         {
             var args = Environment.GetCommandLineArgs();
             var inputPort = "";
+
             for (var i = 0; i < args.Length; i++)
             {
                 if (args[i] == k_PortCommandLineFlag)
@@ -402,20 +390,14 @@ namespace Unity.MLAgents
         /// retrieved here.
         /// </summary>
         /// <returns></returns>
-        public EnvironmentParameters EnvironmentParameters
-        {
-            get { return m_EnvironmentParameters; }
-        }
+        public EnvironmentParameters EnvironmentParameters => m_EnvironmentParameters;
 
         /// <summary>
         /// Returns the <see cref="StatsRecorder"/> instance. This instance can be used
         /// to record any statistics from the Unity environment.
         /// </summary>
         /// <returns></returns>
-        public StatsRecorder StatsRecorder
-        {
-            get { return m_StatsRecorder; }
-        }
+        public StatsRecorder StatsRecorder => m_StatsRecorder;
 
         /// <summary>
         /// Initializes the environment, configures it and initializes the Academy.
@@ -434,6 +416,7 @@ namespace Unity.MLAgents
 
             // Try to launch the communicator by using the arguments passed at launch
             var port = ReadPortFromArgs();
+
             if (port > 0)
             {
                 Communicator = CommunicatorFactory.Create();
@@ -460,6 +443,7 @@ namespace Unity.MLAgents
                         communicatorInitParams,
                         out var unityRlInitParameters
                     );
+
                     if (initSuccessful)
                     {
                         UnityEngine.Random.InitState(unityRlInitParameters.seed);
@@ -525,10 +509,7 @@ namespace Unity.MLAgents
         /// <value>
         /// Current episode number.
         /// </value>
-        public int EpisodeCount
-        {
-            get { return m_EpisodeCount; }
-        }
+        public int EpisodeCount => m_EpisodeCount;
 
         /// <summary>
         /// The current step count (within the current episode).
@@ -536,10 +517,7 @@ namespace Unity.MLAgents
         /// <value>
         /// Current step count.
         /// </value>
-        public int StepCount
-        {
-            get { return m_StepCount; }
-        }
+        public int StepCount => m_StepCount;
 
         /// <summary>
         /// Returns the total step count.
@@ -547,10 +525,7 @@ namespace Unity.MLAgents
         /// <value>
         /// Total step count.
         /// </value>
-        public int TotalStepCount
-        {
-            get { return m_TotalStepCount; }
-        }
+        public int TotalStepCount => m_TotalStepCount;
 
         /// <summary>
         /// Forces the full reset. The done flags are not affected. Is either
@@ -632,12 +607,14 @@ namespace Unity.MLAgents
             NNModel model, ActionSpec actionSpec, InferenceDevice inferenceDevice, bool deterministicInference = false)
         {
             var modelRunner = m_ModelRunners.Find(x => x.HasModel(model, inferenceDevice));
+
             if (modelRunner == null)
             {
                 modelRunner = new ModelRunner(model, actionSpec, inferenceDevice, m_InferenceSeed, deterministicInference);
                 m_ModelRunners.Add(modelRunner);
                 m_InferenceSeed++;
             }
+
             return modelRunner;
         }
 

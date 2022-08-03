@@ -3,7 +3,6 @@ using Unity.Barracuda;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Inference;
 
-
 namespace Unity.MLAgents.Tests
 {
     public class ObservationWriterTests

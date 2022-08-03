@@ -106,6 +106,7 @@ namespace Unity.MLAgents.Tests.Actuators
             masker.SetActionEnabled(1, 3, false);
             masker.ResetMask();
             var mask = masker.GetMask();
+
             for (var i = 0; i < 15; i++)
             {
                 Assert.IsFalse(mask[i]);
@@ -156,6 +157,7 @@ namespace Unity.MLAgents.Tests.Actuators
             masker.SetActionEnabled(0, 3, false);
             masker.SetActionEnabled(2, 1, false);
             var mask = masker.GetMask();
+
             for (var i = 0; i < 15; i++)
             {
                 if (i == 0 || i == 1 || i == 3 || i == 10)

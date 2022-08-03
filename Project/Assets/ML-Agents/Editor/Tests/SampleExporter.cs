@@ -37,6 +37,7 @@ namespace Unity.MLAgents
         {
             var oldBurst = EditorPrefs.GetBool("BurstCompilation");
             EditorPrefs.SetBool("BurstCompilation", false);
+
             try
             {
                 // Path to Project/Assets
@@ -56,22 +57,25 @@ namespace Unity.MLAgents
 
                 // Path to the examples dir in the project
                 var examplesDir = Path.Combine(Application.dataPath, k_MLAgentsDir, k_MLAgentsExamplesDir);
+
                 foreach (var exampleDirectory in Directory.GetDirectories(examplesDir))
                 {
                     var mlAgentsSamplePath = Path.Combine(exampleDirectory, k_MLAgentsSampleFile);
+
                     if (File.Exists(mlAgentsSamplePath))
                     {
                         var sampleJson = JsonConvert.DeserializeObject<MLAgentsSampleJson>(File.ReadAllText(mlAgentsSamplePath));
                         Debug.Log(JsonConvert.SerializeObject(sampleJson));
+
                         foreach (var scene in sampleJson.scenes)
                         {
                             var scenePath = Path.Combine(exampleDirectory, scene);
+
                             if (File.Exists(scenePath))
                             {
                                 // Create a Sample Directory
                                 var currentSampleDir = Directory.CreateDirectory(Path.Combine(samplesDir,
                                     Path.GetFileNameWithoutExtension(scenePath)));
-
 
                                 var scriptsPath = Path.Combine(exampleDirectory, k_MLAgentsScriptsDirName);
                                 Debug.Log($"Scene Path: {scenePath}");
@@ -79,12 +83,14 @@ namespace Unity.MLAgents
                                 {
                                     scenePath.Substring(scenePath.IndexOf("Assets"))
                                 };
+
                                 if (!Directory.Exists(Path.Combine(scriptsPath)))
                                 {
                                     scriptsPath = exampleDirectory;
                                 }
 
                                 scriptsPath = scriptsPath.Substring(scriptsPath.IndexOf("Assets"));
+
                                 foreach (var guid in AssetDatabase.FindAssets("t:Script", new[]
                                     {
                                         scriptsPath

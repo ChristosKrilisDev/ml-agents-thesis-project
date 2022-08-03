@@ -77,6 +77,7 @@ namespace Unity.MLAgents.Tests
         protected override GridSensorBase[] GetGridSensors()
         {
             var sensorList = new List<GridSensorBase>();
+
             if (m_UseOneHotTag)
             {
                 var testSensor = new OneHotGridSensor(
@@ -88,6 +89,7 @@ namespace Unity.MLAgents.Tests
                 );
                 sensorList.Add(testSensor);
             }
+
             if (m_UseGridSensorBase)
             {
                 var testSensor = new GridSensorBase(
@@ -99,6 +101,7 @@ namespace Unity.MLAgents.Tests
                 );
                 sensorList.Add(testSensor);
             }
+
             if (m_UseTestingGridSensor)
             {
                 var testSensor = new SimpleTestGridSensor(
@@ -110,6 +113,7 @@ namespace Unity.MLAgents.Tests
                 );
                 sensorList.Add(testSensor);
             }
+
             return sensorList.ToArray();
         }
 

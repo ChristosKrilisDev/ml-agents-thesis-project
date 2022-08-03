@@ -39,6 +39,5 @@ namespace Unity.MLAgents.Tests
 #endif
         }
 
-
     }
 }

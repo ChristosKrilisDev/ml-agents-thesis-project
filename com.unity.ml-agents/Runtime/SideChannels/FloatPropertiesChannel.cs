@@ -49,6 +49,7 @@ namespace Unity.MLAgents.SideChannels
         public void Set(string key, float value)
         {
             m_FloatProperties[key] = value;
+
             using (var msgOut = new OutgoingMessage())
             {
                 msgOut.WriteString(key);
@@ -72,6 +73,7 @@ namespace Unity.MLAgents.SideChannels
         {
             float valueOut;
             var hasKey = m_FloatProperties.TryGetValue(key, out valueOut);
+
             return hasKey ? valueOut : defaultValue;
         }
 

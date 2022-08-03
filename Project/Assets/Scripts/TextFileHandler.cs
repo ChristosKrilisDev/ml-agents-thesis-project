@@ -7,14 +7,12 @@ public class TextFileHandler
     private const string m_path = "D:/RL_Vs_Dijktra_Thesis_Project/Thesis/Project/Assets/Resources/RL_DATA.txt";
     private const string m_Header = "Episode , agent distance , dijkstra distance ,  goal , avr rewards";
 
-
     public TextFileHandler(string index)
     {
         var writer = new StreamWriter(m_path, true);
         writer.WriteLine("\n----------\nTake : " + index + "\t" + m_Header + "\n----------\n");
         writer.Close();
     }
-
 
     //[MenuItem("Tools/Write file")]
     public void WriteString(float episodeCounter, float agentDistance, float dijkstraDistance, bool hasFindTarget, float avrRewards)
@@ -28,7 +26,6 @@ public class TextFileHandler
         writer.Close();
 
     }
-
 
     private string getFormatedString(float episodeCounter, float agentDistance, float dijkstraDistance, bool hasFindTarget, float avrRewards)
     {

@@ -9,7 +9,6 @@ namespace Unity.MLAgentsExamples
         shift : Makes camera accelerate
         space : Moves camera on X and Z axis only.  So camera doesn't gain any height*/
 
-
         public float mainSpeed = 100.0f; // regular speed
         public float shiftAdd = 250.0f; // multiplied by how long shift is held.  Basically running
         public float maxShift = 1000.0f; // Maximum speed when holdin gshift
@@ -55,6 +54,7 @@ namespace Unity.MLAgentsExamples
 
             // Keyboard commands
             var p = GetBaseInput();
+
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 m_TotalRun += Time.deltaTime;
@@ -71,6 +71,7 @@ namespace Unity.MLAgentsExamples
 
             p = p * Time.deltaTime;
             var newPosition = transform.position;
+
             if (Input.GetKey(KeyCode.Space)
                 || movementStaysFlat && !(rotateOnlyIfMousedown && Input.GetMouseButton(1)))
             {
@@ -90,6 +91,7 @@ namespace Unity.MLAgentsExamples
         {
             // returns the basic values, if it's 0 than it's not active.
             var pVelocity = new Vector3();
+
             if (Input.GetKey(KeyCode.W))
             {
                 pVelocity += new Vector3(0, 0, 1);

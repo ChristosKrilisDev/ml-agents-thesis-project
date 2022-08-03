@@ -32,23 +32,11 @@ namespace Unity.MLAgents.Tests
         {
         }
 
-        public Vector3[] CellLocalPositions
-        {
-            get
-            {
-                return (Vector3[])typeof(BoxOverlapChecker).GetField("m_CellLocalPositions",
-                    BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
-            }
-        }
+        public Vector3[] CellLocalPositions => (Vector3[])typeof(BoxOverlapChecker).GetField("m_CellLocalPositions",
+            BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
 
-        public Collider[] ColliderBuffer
-        {
-            get
-            {
-                return (Collider[])typeof(BoxOverlapChecker).GetField("m_ColliderBuffer",
-                    BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
-            }
-        }
+        public Collider[] ColliderBuffer => (Collider[])typeof(BoxOverlapChecker).GetField("m_ColliderBuffer",
+            BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
 
         public static TestBoxOverlapChecker CreateChecker(
             float cellScaleX = 1f,
@@ -180,6 +168,7 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(5, boxOverlap.ColliderBuffer.Length);
 
             Object.DestroyImmediate(testGo);
+
             foreach (var go in testObjects)
             {
                 Object.DestroyImmediate(go);
@@ -223,6 +212,7 @@ namespace Unity.MLAgents.Tests
             });
 
             Object.DestroyImmediate(testGo);
+
             foreach (var go in testObjects)
             {
                 Object.DestroyImmediate(go);
@@ -263,6 +253,7 @@ namespace Unity.MLAgents.Tests
             helper.Verify(3, testObjects);
 
             Object.DestroyImmediate(testGo);
+
             foreach (var go in testObjects)
             {
                 Object.DestroyImmediate(go);
@@ -284,6 +275,7 @@ namespace Unity.MLAgents.Tests
             {
                 Assert.AreEqual(expectNumInvoke, m_NumInvoked);
                 Assert.AreEqual(expectedObjects.Count, m_ParsedObjects.Count);
+
                 foreach (var obj in expectedObjects)
                 {
                     Assert.Contains(obj, m_ParsedObjects);
@@ -300,9 +292,11 @@ namespace Unity.MLAgents.Tests
             gridSensorComponent.SetComponentParameters(useGridSensorBase: true, useTestingGridSensor: true);
             var sensors = gridSensorComponent.CreateSensors();
             var numChecker = 0;
+
             foreach (var sensor in sensors)
             {
                 var gridsensor = (GridSensorBase)sensor;
+
                 if (gridsensor.m_GridPerception != null)
                 {
                     numChecker += 1;

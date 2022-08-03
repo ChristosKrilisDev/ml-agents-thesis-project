@@ -142,6 +142,7 @@ namespace Unity.MLAgents.Editor
             position.y += k_LineHeight;
             position.x += 20;
             position.width -= 20;
+
             for (var branchIndex = 0;
                  branchIndex < branchSizes.arraySize;
                  branchIndex++)
@@ -166,6 +167,7 @@ namespace Unity.MLAgents.Editor
         {
             var actionSpecProperty = property.FindPropertyRelative(k_ActionSpecName);
             var numActionLines = 3 + actionSpecProperty.FindPropertyRelative(k_DiscreteBranchSizeName).arraySize;
+
             return numActionLines * k_LineHeight;
         }
     }

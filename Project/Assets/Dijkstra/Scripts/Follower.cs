@@ -51,6 +51,7 @@ namespace Dijstra.path
             UnityEditor.EditorApplication.update += Update;
 #endif
             var e = m_Path.PathNodes.GetEnumerator();
+
             while (e.MoveNext())
             {
                 m_Current = e.Current;

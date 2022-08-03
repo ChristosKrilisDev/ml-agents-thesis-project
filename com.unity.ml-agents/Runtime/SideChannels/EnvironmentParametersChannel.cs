@@ -61,6 +61,7 @@ namespace Unity.MLAgents.SideChannels
         {
             var key = msg.ReadString();
             var type = msg.ReadInt32();
+
             if ((int)EnvironmentDataTypes.Float == type)
             {
                 var value = msg.ReadFloat32();
@@ -76,6 +77,7 @@ namespace Unity.MLAgents.SideChannels
                 var seed = msg.ReadInt32();
                 var samplerType = msg.ReadInt32();
                 Func<float> sampler = () => 0.0f;
+
                 if ((int)SamplerType.Uniform == samplerType)
                 {
                     var min = msg.ReadFloat32();
@@ -117,6 +119,7 @@ namespace Unity.MLAgents.SideChannels
         {
             Func<float> valueOut;
             var hasKey = m_Parameters.TryGetValue(key, out valueOut);
+
             return hasKey ? valueOut.Invoke() : defaultValue;
         }
 

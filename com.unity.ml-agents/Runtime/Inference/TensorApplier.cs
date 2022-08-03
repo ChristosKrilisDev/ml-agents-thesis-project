@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Unity.Barracuda;
 using Unity.MLAgents.Actuators;
 
-
 namespace Unity.MLAgents.Inference
 {
     /// <summary>
@@ -61,23 +60,28 @@ namespace Unity.MLAgents.Inference
             }
 
             var model = (Model)barracudaModel;
+
             if (!model.SupportsContinuousAndDiscrete())
             {
                 actionSpec.CheckAllContinuousOrDiscrete();
             }
+
             if (actionSpec.NumContinuousActions > 0)
             {
                 var tensorName = model.ContinuousOutputName(deterministicInference);
                 m_Dict[tensorName] = new ContinuousActionOutputApplier(actionSpec);
             }
             var modelVersion = model.GetVersion();
+
             if (actionSpec.NumDiscreteActions > 0)
             {
                 var tensorName = model.DiscreteOutputName(deterministicInference);
+
                 if (modelVersion == (int)BarracudaModelParamLoader.ModelApiVersion.MLAgents1_0)
                 {
                     m_Dict[tensorName] = new LegacyDiscreteActionOutputApplier(actionSpec, seed, allocator);
                 }
+
                 if (modelVersion == (int)BarracudaModelParamLoader.ModelApiVersion.MLAgents2_0)
                 {
                     m_Dict[tensorName] = new DiscreteActionOutputApplier(actionSpec, seed, allocator);
@@ -100,6 +104,7 @@ namespace Unity.MLAgents.Inference
             for (var tensorIndex = 0; tensorIndex < tensors.Count; tensorIndex++)
             {
                 var tensor = tensors[tensorIndex];
+
                 if (!m_Dict.ContainsKey(tensor.name))
                 {
                     throw new UnityAgentsException(

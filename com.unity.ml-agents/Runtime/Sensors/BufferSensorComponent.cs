@@ -16,8 +16,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public string SensorName
         {
-            get { return m_SensorName; }
-            set { m_SensorName = value; }
+            get => m_SensorName;
+            set => m_SensorName = value;
         }
         [HideInInspector] [SerializeField]
         private string m_SensorName = "BufferSensor";
@@ -28,8 +28,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int ObservableSize
         {
-            get { return m_ObservableSize; }
-            set { m_ObservableSize = value; }
+            get => m_ObservableSize;
+            set => m_ObservableSize = value;
         }
         [HideInInspector] [SerializeField]
         private int m_ObservableSize;
@@ -40,8 +40,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int MaxNumObservables
         {
-            get { return m_MaxNumObservables; }
-            set { m_MaxNumObservables = value; }
+            get => m_MaxNumObservables;
+            set => m_MaxNumObservables = value;
         }
         [HideInInspector] [SerializeField]
         private int m_MaxNumObservables;
@@ -52,6 +52,7 @@ namespace Unity.MLAgents.Sensors
         public override ISensor[] CreateSensors()
         {
             m_Sensor = new BufferSensor(MaxNumObservables, ObservableSize, m_SensorName);
+
             return new ISensor[]
             {
                 m_Sensor

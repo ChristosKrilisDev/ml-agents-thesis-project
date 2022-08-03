@@ -83,7 +83,6 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             Assert.AreEqual(2, poseExtractor.NumPoses);
         }
 
-
         /// <summary>
         /// A simple "chain" hierarchy, where each object is parented to the one before it.
         ///   0 <- 1 <- 2 <- ...
@@ -94,6 +93,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             public ChainPoseExtractor(int size)
             {
                 var parents = new int[size];
+
                 for (var i = 0; i < size; i++)
                 {
                     parents[i] = i - 1;
@@ -105,6 +105,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             {
                 var rotation = Quaternion.identity;
                 var translation = offset + new Vector3(index, index, index);
+
                 return new Pose
                 {
                     rotation = rotation,
@@ -129,8 +130,8 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             chain.UpdateModelSpacePoses();
             chain.UpdateLocalSpacePoses();
 
-
             var modelPoseIndex = 0;
+
             foreach (var modelSpace in chain.GetEnabledModelSpacePoses())
             {
                 if (modelPoseIndex == 0)
@@ -149,6 +150,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             Assert.AreEqual(size, modelPoseIndex);
 
             var localPoseIndex = 0;
+
             foreach (var localSpace in chain.GetEnabledLocalSpacePoses())
             {
                 if (localPoseIndex == 0)
@@ -215,6 +217,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             {
                 var size = 2;
                 var parents = new int[size];
+
                 // Parents are intentionally invalid - expect -1 at root
                 for (var i = 0; i < size; i++)
                 {

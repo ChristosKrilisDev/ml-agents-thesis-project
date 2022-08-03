@@ -1,12 +1,11 @@
 ﻿using Dijstra.path;
 using UnityEngine;
 
-
 namespace ML_Agents.Finder.Scripts
 {
     public class NodePassage : MonoBehaviour
     {
-    
+
         [SerializeField]
         private Node currentNode;
         [SerializeField]
@@ -16,7 +15,7 @@ namespace ML_Agents.Finder.Scripts
         // {
         //     (currentNode, passageNode) = (passageNode, currentNode);
         // }
-        
+
         public float NodePassageDistance()
         {
             return Vector2.Distance(currentNode.transform.position, passageNode.transform.position);

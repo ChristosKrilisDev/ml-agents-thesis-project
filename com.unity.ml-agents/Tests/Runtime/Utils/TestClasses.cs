@@ -38,14 +38,8 @@ namespace Unity.MLAgents.Utils.Tests
     {
         internal AgentInfo _Info
         {
-            get
-            {
-                return (AgentInfo)typeof(Agent).GetField("m_Info", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
-            }
-            set
-            {
-                typeof(Agent).GetField("m_Info", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(this, value);
-            }
+            get => (AgentInfo)typeof(Agent).GetField("m_Info", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
+            set => typeof(Agent).GetField("m_Info", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(this, value);
         }
 
         internal void SetPolicy(IPolicy policy)
@@ -135,6 +129,7 @@ namespace Unity.MLAgents.Utils.Tests
         public int Write(ObservationWriter writer)
         {
             numWriteCalls++;
+
             // No-op
             return 0;
         }
@@ -142,6 +137,7 @@ namespace Unity.MLAgents.Utils.Tests
         public byte[] GetCompressedObservation()
         {
             numCompressedCalls++;
+
             return new byte[]
             {
                 0

@@ -87,6 +87,7 @@ namespace Unity.MLAgents.Tests.Analytics
             tbiEvent.Config = "{}";
 
             var sanitizedEvent = TrainingAnalytics.SanitizeTrainingBehaviorInitializedEvent(tbiEvent);
+
             return sanitizedEvent.BehaviorName;
         }
 

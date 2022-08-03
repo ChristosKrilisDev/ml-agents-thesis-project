@@ -3,7 +3,6 @@ using UnityEngine;
 using NUnit.Framework;
 using Unity.MLAgents.Extensions.Sensors;
 
-
 namespace Unity.MLAgents.Extensions.Tests.Sensors
 {
 
@@ -69,7 +68,6 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
                 lowerLimit = -3,
                 upperLimit = 1
             };
-
 
 #if UNITY_2020_2_OR_NEWER
             // ArticulationBody.velocity is read-only in 2020.1

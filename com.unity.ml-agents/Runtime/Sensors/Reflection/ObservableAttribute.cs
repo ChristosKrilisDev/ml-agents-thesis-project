@@ -106,9 +106,11 @@ namespace Unity.MLAgents.Sensors.Reflection
             // TODO cache these (and properties) by type, so that we only have to reflect once.
             var bindingFlags = k_BindingFlags | (excludeInherited ? BindingFlags.DeclaredOnly : 0);
             var fields = o.GetType().GetFields(bindingFlags);
+
             foreach (var field in fields)
             {
                 var attr = (ObservableAttribute)GetCustomAttribute(field, typeof(ObservableAttribute));
+
                 if (attr != null)
                 {
                     yield return (field, attr);
@@ -126,9 +128,11 @@ namespace Unity.MLAgents.Sensors.Reflection
         {
             var bindingFlags = k_BindingFlags | (excludeInherited ? BindingFlags.DeclaredOnly : 0);
             var properties = o.GetType().GetProperties(bindingFlags);
+
             foreach (var prop in properties)
             {
                 var attr = (ObservableAttribute)GetCustomAttribute(prop, typeof(ObservableAttribute));
+
                 if (attr != null)
                 {
                     yield return (prop, attr);
@@ -145,9 +149,11 @@ namespace Unity.MLAgents.Sensors.Reflection
         internal static List<ISensor> CreateObservableSensors(object o, bool excludeInherited)
         {
             var sensorsOut = new List<ISensor>();
+
             foreach (var (field, attr) in GetObservableFields(o, excludeInherited))
             {
                 var sensor = CreateReflectionSensor(o, field, null, attr);
+
                 if (sensor != null)
                 {
                     sensorsOut.Add(sensor);
@@ -162,6 +168,7 @@ namespace Unity.MLAgents.Sensors.Reflection
                     continue;
                 }
                 var sensor = CreateReflectionSensor(o, null, prop, attr);
+
                 if (sensor != null)
                 {
                     sensorsOut.Add(sensor);
@@ -186,6 +193,7 @@ namespace Unity.MLAgents.Sensors.Reflection
             string memberName;
             string declaringTypeName;
             Type memberType;
+
             if (fieldInfo != null)
             {
                 declaringTypeName = fieldInfo.DeclaringType.Name;
@@ -206,6 +214,7 @@ namespace Unity.MLAgents.Sensors.Reflection
             }
 
             string sensorName;
+
             if (string.IsNullOrEmpty(observableAttribute.m_Name))
             {
                 sensorName = $"ObservableAttribute:{declaringTypeName}.{memberName}";
@@ -225,6 +234,7 @@ namespace Unity.MLAgents.Sensors.Reflection
             };
 
             ISensor sensor = null;
+
             if (memberType.IsEnum)
             {
                 sensor = new EnumReflectionSensor(reflectionSensorInfo);
@@ -255,6 +265,7 @@ namespace Unity.MLAgents.Sensors.Reflection
         internal static int GetTotalObservationSize(object o, bool excludeInherited, List<string> errorsOut)
         {
             var sizeOut = 0;
+
             foreach (var (field, attr) in GetObservableFields(o, excludeInherited))
             {
                 if (s_TypeToSensorInfo.ContainsKey(field.FieldType))

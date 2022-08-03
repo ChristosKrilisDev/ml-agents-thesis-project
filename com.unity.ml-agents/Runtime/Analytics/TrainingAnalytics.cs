@@ -71,9 +71,11 @@ namespace Unity.MLAgents.Analytics
             {
                 return true;
             }
+
             foreach (var eventName in s_EventNames)
             {
                 var result = EditorAnalytics.RegisterEventWithLimit(eventName, k_MaxEventsPerHour, k_MaxNumberOfElements, k_VendorKey);
+
                 if (result != AnalyticsResult.Ok)
                 {
                     return false;
@@ -171,6 +173,7 @@ namespace Unity.MLAgents.Analytics
             }
 
             var data = GetEventForRemotePolicy(behaviorName, sensors, actionSpec, actuators);
+
             // Note - to debug, use JsonUtility.ToJson on the event.
             // Debug.Log(
             //     $"Would send event {k_RemotePolicyInitializedEventName} with body {JsonUtility.ToJson(data, true)}"
@@ -185,6 +188,7 @@ namespace Unity.MLAgents.Analytics
         internal static string ParseBehaviorName(string fullyQualifiedBehaviorName)
         {
             var lastQuestionIndex = fullyQualifiedBehaviorName.LastIndexOf("?");
+
             if (lastQuestionIndex < 0)
             {
                 // Nothing to remove
@@ -255,12 +259,14 @@ namespace Unity.MLAgents.Analytics
             remotePolicyEvent.TrainingSessionGuid = s_TrainingSessionGuid.ToString();
             remotePolicyEvent.ActionSpec = EventActionSpec.FromActionSpec(actionSpec);
             remotePolicyEvent.ObservationSpecs = new List<EventObservationSpec>(sensors.Count);
+
             foreach (var sensor in sensors)
             {
                 remotePolicyEvent.ObservationSpecs.Add(EventObservationSpec.FromSensor(sensor));
             }
 
             remotePolicyEvent.ActuatorInfos = new List<EventActuatorInfo>(actuators.Count);
+
             foreach (var actuator in actuators)
             {
                 remotePolicyEvent.ActuatorInfos.Add(EventActuatorInfo.FromActuator(actuator));
@@ -268,6 +274,7 @@ namespace Unity.MLAgents.Analytics
 
             remotePolicyEvent.MLAgentsEnvsVersion = s_TrainerPackageVersion;
             remotePolicyEvent.TrainerCommunicationVersion = s_TrainerCommunicationVersion;
+
             return remotePolicyEvent;
         }
     }

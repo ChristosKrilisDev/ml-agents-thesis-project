@@ -112,10 +112,12 @@ namespace Unity.MLAgents.Sensors
                     {
                         throw new IndexOutOfRangeException($"height value {h} must be in range [0, {m_TensorShape.height - 1}]");
                     }
+
                     if (w < 0 || w >= m_TensorShape.width)
                     {
                         throw new IndexOutOfRangeException($"width value {w} must be in range [0, {m_TensorShape.width - 1}]");
                     }
+
                     if (ch < 0 || ch >= m_TensorShape.channels)
                     {
                         throw new IndexOutOfRangeException($"channel value {ch} must be in range [0, {m_TensorShape.channels - 1}]");
@@ -256,6 +258,7 @@ namespace Unity.MLAgents.Sensors
             var height = texture.height;
 
             var texturePixels = texture.GetPixels32();
+
             // During training, we convert from Texture to PNG before sending to the trainer, which has the
             // effect of flipping the image. We need another flip here at inference time to match this.
             for (var h = height - 1; h >= 0; h--)
@@ -292,6 +295,7 @@ namespace Unity.MLAgents.Sensors
             var height = texture.height;
 
             var rawBytes = texture.GetRawTextureData<byte>();
+
             // During training, we convert from Texture to PNG before sending to the trainer, which has the
             // effect of flipping the image. We need another flip here at inference time to match this.
             for (var h = height - 1; h >= 0; h--)

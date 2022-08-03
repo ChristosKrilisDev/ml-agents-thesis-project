@@ -23,8 +23,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public string SensorName
         {
-            get { return m_SensorName; }
-            set { m_SensorName = value; }
+            get => m_SensorName;
+            set => m_SensorName = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -36,8 +36,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public Vector3 CellScale
         {
-            get { return m_CellScale; }
-            set { m_CellScale = value; }
+            get => m_CellScale;
+            set => m_CellScale = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -48,7 +48,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public Vector3Int GridSize
         {
-            get { return m_GridSize; }
+            get => m_GridSize;
             set
             {
                 if (value.y != 1)
@@ -69,8 +69,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public bool RotateWithAgent
         {
-            get { return m_RotateWithAgent; }
-            set { m_RotateWithAgent = value; }
+            get => m_RotateWithAgent;
+            set => m_RotateWithAgent = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -81,8 +81,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public GameObject AgentGameObject
         {
-            get { return m_AgentGameObject == null ? gameObject : m_AgentGameObject; }
-            set { m_AgentGameObject = value; }
+            get => m_AgentGameObject == null ? gameObject : m_AgentGameObject;
+            set => m_AgentGameObject = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -93,8 +93,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public string[] DetectableTags
         {
-            get { return m_DetectableTags; }
-            set { m_DetectableTags = value; }
+            get => m_DetectableTags;
+            set => m_DetectableTags = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -104,8 +104,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public LayerMask ColliderMask
         {
-            get { return m_ColliderMask; }
-            set { m_ColliderMask = value; }
+            get => m_ColliderMask;
+            set => m_ColliderMask = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -117,8 +117,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int MaxColliderBufferSize
         {
-            get { return m_MaxColliderBufferSize; }
-            set { m_MaxColliderBufferSize = value; }
+            get => m_MaxColliderBufferSize;
+            set => m_MaxColliderBufferSize = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -132,8 +132,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int InitialColliderBufferSize
         {
-            get { return m_InitialColliderBufferSize; }
-            set { m_InitialColliderBufferSize = value; }
+            get => m_InitialColliderBufferSize;
+            set => m_InitialColliderBufferSize = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -143,8 +143,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public Color[] DebugColors
         {
-            get { return m_DebugColors; }
-            set { m_DebugColors = value; }
+            get => m_DebugColors;
+            set => m_DebugColors = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -154,8 +154,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public float GizmoYOffset
         {
-            get { return m_GizmoYOffset; }
-            set { m_GizmoYOffset = value; }
+            get => m_GizmoYOffset;
+            set => m_GizmoYOffset = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -165,8 +165,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public bool ShowGizmos
         {
-            get { return m_ShowGizmos; }
-            set { m_ShowGizmos = value; }
+            get => m_ShowGizmos;
+            set => m_ShowGizmos = value;
         }
 
         [HideInInspector] [SerializeField]
@@ -176,7 +176,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public SensorCompressionType CompressionType
         {
-            get { return m_CompressionType; }
+            get => m_CompressionType;
             set
             {
                 m_CompressionType = value;
@@ -194,8 +194,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int ObservationStacks
         {
-            get { return m_ObservationStacks; }
-            set { m_ObservationStacks = value; }
+            get => m_ObservationStacks;
+            set => m_ObservationStacks = value;
         }
 
         /// <inheritdoc/>
@@ -218,6 +218,7 @@ namespace Unity.MLAgents.Sensors
             m_GridPerception.RegisterDebugSensor(m_DebugSensor);
 
             m_Sensors = GetGridSensors().ToList();
+
             if (m_Sensors == null || m_Sensors.Count < 1)
             {
                 throw new UnityAgentsException("GridSensorComponent received no sensors. Specify at least one observation type (OneHot/Counting) to use grid sensors." +
@@ -226,6 +227,7 @@ namespace Unity.MLAgents.Sensors
 
             // Only one sensor needs to reference the boxOverlapChecker, so that it gets updated exactly once
             m_Sensors[0].m_GridPerception = m_GridPerception;
+
             foreach (var sensor in m_Sensors)
             {
                 m_GridPerception.RegisterSensor(sensor);
@@ -234,10 +236,12 @@ namespace Unity.MLAgents.Sensors
             if (ObservationStacks != 1)
             {
                 var sensors = new ISensor[m_Sensors.Count];
+
                 for (var i = 0; i < m_Sensors.Count; i++)
                 {
                     sensors[i] = new StackingSensor(m_Sensors[i], ObservationStacks);
                 }
+
                 return sensors;
             }
             else
@@ -256,6 +260,7 @@ namespace Unity.MLAgents.Sensors
             var sensorList = new List<GridSensorBase>();
             var sensor = new OneHotGridSensor(m_SensorName + "-OneHot", m_CellScale, m_GridSize, m_DetectableTags, m_CompressionType);
             sensorList.Add(sensor);
+
             return sensorList.ToArray();
         }
 
@@ -268,6 +273,7 @@ namespace Unity.MLAgents.Sensors
             {
                 m_GridPerception.RotateWithAgent = m_RotateWithAgent;
                 m_GridPerception.ColliderMask = m_ColliderMask;
+
                 foreach (var sensor in m_Sensors)
                 {
                     sensor.CompressionType = m_CompressionType;
@@ -292,6 +298,7 @@ namespace Unity.MLAgents.Sensors
                 var scale = new Vector3(m_CellScale.x, 1, m_CellScale.z);
                 var gizmoYOffset = new Vector3(0, m_GizmoYOffset, 0);
                 var oldGizmoMatrix = Gizmos.matrix;
+
                 for (var i = 0; i < m_DebugSensor.PerceptionBuffer.Length; i++)
                 {
                     var cellPosition = m_GridPerception.GetCellGlobalPosition(i);
@@ -299,6 +306,7 @@ namespace Unity.MLAgents.Sensors
                     Gizmos.matrix = oldGizmoMatrix * cubeTransform;
                     var colorIndex = cellColors[i] - 1;
                     var debugRayColor = Color.white;
+
                     if (colorIndex > -1 && m_DebugColors.Length > colorIndex)
                     {
                         debugRayColor = m_DebugColors[(int)colorIndex];

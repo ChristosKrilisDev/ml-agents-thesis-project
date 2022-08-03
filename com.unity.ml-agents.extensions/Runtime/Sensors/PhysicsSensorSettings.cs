@@ -65,18 +65,12 @@ namespace Unity.MLAgents.Extensions.Sensors
         /// <summary>
         /// Whether any model space observations are being used.
         /// </summary>
-        public bool UseModelSpace
-        {
-            get { return UseModelSpaceTranslations || UseModelSpaceRotations || UseModelSpaceLinearVelocity; }
-        }
+        public bool UseModelSpace => UseModelSpaceTranslations || UseModelSpaceRotations || UseModelSpaceLinearVelocity;
 
         /// <summary>
         /// Whether any local space observations are being used.
         /// </summary>
-        public bool UseLocalSpace
-        {
-            get { return UseLocalSpaceTranslations || UseLocalSpaceRotations || UseLocalSpaceLinearVelocity; }
-        }
+        public bool UseLocalSpace => UseLocalSpaceTranslations || UseLocalSpaceRotations || UseLocalSpaceLinearVelocity;
     }
 
     internal static class ObservationWriterPhysicsExtensions
@@ -92,6 +86,7 @@ namespace Unity.MLAgents.Extensions.Sensors
         public static int WritePoses(this ObservationWriter writer, PhysicsSensorSettings settings, PoseExtractor poseExtractor, int baseOffset = 0)
         {
             var offset = baseOffset;
+
             if (settings.UseModelSpace)
             {
                 foreach (var pose in poseExtractor.GetEnabledModelSpacePoses())

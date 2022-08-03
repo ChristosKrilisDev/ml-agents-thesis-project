@@ -28,8 +28,8 @@ namespace Unity.MLAgents.Tests
         private class TestClass
         {
             // Non-observables
-            private int m_NonObservableInt;
-            private float m_NonObservableFloat;
+            //private int m_NonObservableInt;
+            //private float m_NonObservableFloat;
 
             //
             // Int
@@ -42,14 +42,8 @@ namespace Unity.MLAgents.Tests
             [Observable]
             public int IntProperty
             {
-                get
-                {
-                    return m_IntProperty;
-                }
-                set
-                {
-                    m_IntProperty = value;
-                }
+                get => m_IntProperty;
+                set => m_IntProperty = value;
             }
 
             //
@@ -62,14 +56,8 @@ namespace Unity.MLAgents.Tests
             [Observable("floatProperty")]
             public float FloatProperty
             {
-                get
-                {
-                    return m_FloatProperty;
-                }
-                set
-                {
-                    m_FloatProperty = value;
-                }
+                get => m_FloatProperty;
+                set => m_FloatProperty = value;
             }
 
             //
@@ -82,14 +70,8 @@ namespace Unity.MLAgents.Tests
             [Observable("boolProperty")]
             public bool BoolProperty
             {
-                get
-                {
-                    return m_BoolProperty;
-                }
-                set
-                {
-                    m_BoolProperty = value;
-                }
+                get => m_BoolProperty;
+                set => m_BoolProperty = value;
             }
 
             //
@@ -104,14 +86,8 @@ namespace Unity.MLAgents.Tests
             [Observable("vector2Property")]
             public Vector2 Vector2Property
             {
-                get
-                {
-                    return m_Vector2Property;
-                }
-                set
-                {
-                    m_Vector2Property = value;
-                }
+                get => m_Vector2Property;
+                set => m_Vector2Property = value;
             }
 
             //
@@ -125,14 +101,8 @@ namespace Unity.MLAgents.Tests
             [Observable("vector3Property")]
             public Vector3 Vector3Property
             {
-                get
-                {
-                    return m_Vector3Property;
-                }
-                set
-                {
-                    m_Vector3Property = value;
-                }
+                get => m_Vector3Property;
+                set => m_Vector3Property = value;
             }
 
             //
@@ -147,14 +117,8 @@ namespace Unity.MLAgents.Tests
             [Observable("vector4Property")]
             public Vector4 Vector4Property
             {
-                get
-                {
-                    return m_Vector4Property;
-                }
-                set
-                {
-                    m_Vector4Property = value;
-                }
+                get => m_Vector4Property;
+                set => m_Vector4Property = value;
             }
 
             //
@@ -168,14 +132,8 @@ namespace Unity.MLAgents.Tests
             [Observable("quaternionProperty")]
             public Quaternion QuaternionProperty
             {
-                get
-                {
-                    return m_QuaternionProperty;
-                }
-                set
-                {
-                    m_QuaternionProperty = value;
-                }
+                get => m_QuaternionProperty;
+                set => m_QuaternionProperty = value;
             }
 
             //
@@ -183,45 +141,33 @@ namespace Unity.MLAgents.Tests
             //
 
             [Observable("enumMember")]
-            public TestEnum m_EnumMember = TestEnum.ValueA;
+            //public TestEnum m_EnumMember = TestEnum.ValueA;
 
             private TestEnum m_EnumProperty = TestEnum.ValueC;
 
             [Observable("enumProperty")]
             public TestEnum EnumProperty
             {
-                get
-                {
-                    return m_EnumProperty;
-                }
-                set
-                {
-                    m_EnumProperty = value;
-                }
+                get => m_EnumProperty;
+                set => m_EnumProperty = value;
             }
 
-            [Observable("badEnumMember")]
-            public TestEnum m_BadEnumMember = (TestEnum)1337;
+            //[Observable("badEnumMember")]
+            //public TestEnum m_BadEnumMember = (TestEnum)1337;
 
             //
             // Flags
             //
-            [Observable("flagMember")]
-            public TestFlags m_FlagMember = TestFlags.FlagA;
+            //[Observable("flagMember")]
+            //public TestFlags m_FlagMember = TestFlags.FlagA;
 
             private TestFlags m_FlagProperty = TestFlags.FlagB | TestFlags.FlagC;
 
             [Observable("flagProperty")]
             public TestFlags FlagProperty
             {
-                get
-                {
-                    return m_FlagProperty;
-                }
-                set
-                {
-                    m_FlagProperty = value;
-                }
+                get => m_FlagProperty;
+                set => m_FlagProperty = value;
             }
 
         }
@@ -257,6 +203,7 @@ namespace Unity.MLAgents.Tests
             var sensors = ObservableAttribute.CreateObservableSensors(testClass, false);
 
             var sensorsByName = new Dictionary<string, ISensor>();
+
             foreach (var sensor in sensors)
             {
                 sensorsByName[sensor.GetName()] = sensor;
@@ -378,14 +325,8 @@ namespace Unity.MLAgents.Tests
             [Observable]
             private double DoubleProperty
             {
-                get
-                {
-                    return m_Double;
-                }
-                set
-                {
-                    m_Double = value;
-                }
+                get => m_Double;
+                set => m_Double = value;
             }
 
             private float m_WriteOnlyProperty;
@@ -394,10 +335,7 @@ namespace Unity.MLAgents.Tests
             // No get property, so we shouldn't be able to make a sensor out of this.
             public float WriteOnlyProperty
             {
-                set
-                {
-                    m_WriteOnlyProperty = value;
-                }
+                set => m_WriteOnlyProperty = value;
             }
         }
 
@@ -451,14 +389,14 @@ namespace Unity.MLAgents.Tests
             [Observable("base")]
             public float m_BaseField;
 
-            [Observable("private")]
-            private float m_PrivateField;
+           // [Observable("private")]
+          //  private float m_PrivateField;
         }
 
         private class DerivedClass : BaseClass
         {
-            [Observable("derived")]
-            private float m_DerivedField;
+           // [Observable("derived")]
+            //private float m_DerivedField;
         }
 
         [Test]

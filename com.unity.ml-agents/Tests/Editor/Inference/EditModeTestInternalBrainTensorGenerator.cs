@@ -42,6 +42,7 @@ namespace Unity.MLAgents.Tests
                 agentA,
                 agentB
             };
+
             foreach (var agent in agents)
             {
                 agent.LazyInitialize();
@@ -70,9 +71,9 @@ namespace Unity.MLAgents.Tests
                 }
             };
 
-
             agentA._Info = infoA;
             agentB._Info = infoB;
+
             return agents;
         }
 

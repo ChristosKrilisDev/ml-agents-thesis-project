@@ -32,6 +32,7 @@ namespace Unity.MLAgents.Tests
             boxGo.AddComponent<BoxCollider>();
 
             TestGridSensorConfig.Reset();
+
             yield return null;
         }
 

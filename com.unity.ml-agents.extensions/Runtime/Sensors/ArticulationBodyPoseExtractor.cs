@@ -22,13 +22,16 @@ namespace Unity.MLAgents.Extensions.Sensors
             if (!rootBody.isRoot)
             {
                 Debug.Log("Must pass ArticulationBody.isRoot");
+
                 return;
             }
 
             var bodies = rootBody.GetComponentsInChildren<ArticulationBody>();
+
             if (bodies[0] != rootBody)
             {
                 Debug.Log("Expected root body at index 0");
+
                 return;
             }
 
@@ -38,6 +41,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             parentIndices[0] = -1;
 
             var bodyToIndex = new Dictionary<ArticulationBody, int>();
+
             for (var i = 0; i < numBodies; i++)
             {
                 bodyToIndex[m_Bodies[i]] = i;
@@ -69,6 +73,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             var body = m_Bodies[index];
             var go = body.gameObject;
             var t = go.transform;
+
             return new Pose
             {
                 rotation = t.rotation,
@@ -82,13 +87,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             return m_Bodies[index];
         }
 
-        internal ArticulationBody[] Bodies
-        {
-            get
-            {
-                return m_Bodies;
-            }
-        }
+        internal ArticulationBody[] Bodies => m_Bodies;
 
         internal IEnumerable<ArticulationBody> GetEnabledArticulationBodies()
         {
@@ -100,6 +99,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             for (var i = 0; i < m_Bodies.Length; i++)
             {
                 var articBody = m_Bodies[i];
+
                 if (articBody == null)
                 {
                     // Ignore a virtual root.

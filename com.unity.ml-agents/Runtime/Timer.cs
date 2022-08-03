@@ -59,6 +59,7 @@ namespace Unity.MLAgents
             get
             {
                 var currentTicks = m_TotalTicks;
+
                 if (m_TickStart != 0)
                 {
                     currentTicks += DateTime.Now.Ticks - m_TickStart;
@@ -74,7 +75,7 @@ namespace Unity.MLAgents
         [DataMember(Name = "total")]
         public double TotalSeconds
         {
-            get { return CurrentTicks * s_TicksToSeconds; }
+            get => CurrentTicks * s_TicksToSeconds;
             set { } // Serialization needs this, but unused.
         }
 
@@ -87,6 +88,7 @@ namespace Unity.MLAgents
             get
             {
                 long totalChildTicks = 0;
+
                 if (m_Children != null)
                 {
                     foreach (var child in m_Children.Values)
@@ -96,24 +98,20 @@ namespace Unity.MLAgents
                 }
 
                 var selfTicks = Mathf.Max(0, CurrentTicks - totalChildTicks);
+
                 return selfTicks * s_TicksToSeconds;
             }
             set { } // Serialization needs this, but unused.
         }
 
-        public IReadOnlyDictionary<string, TimerNode> Children
-        {
-            get { return m_Children; }
-        }
+        public IReadOnlyDictionary<string, TimerNode> Children => m_Children;
 
-        public int NumCalls
-        {
-            get { return m_NumCalls; }
-        }
+        public int NumCalls => m_NumCalls;
 
         public TimerNode(string name, bool isRoot = false)
         {
             m_FullName = name;
+
             if (isRoot)
             {
                 // The root node is considered always running. This means that when we output stats, it'll
@@ -170,6 +168,7 @@ namespace Unity.MLAgents
                 var childFullName = m_FullName + s_Separator + name;
                 var newChild = new TimerNode(childFullName);
                 m_Children[name] = newChild;
+
                 return newChild;
             }
 
@@ -187,6 +186,7 @@ namespace Unity.MLAgents
             var indent = new string(' ', 2 * level); // TODO generalize
             var shortName = level == 0 ? m_FullName : m_FullName.Replace(parentName + s_Separator, "");
             string timerString;
+
             if (level == 0)
             {
                 timerString = $"{shortName}(root)\n";
@@ -204,6 +204,7 @@ namespace Unity.MLAgents
                     timerString += c.DebugGetTimerString(m_FullName, level + 1);
                 }
             }
+
             return timerString;
         }
     }
@@ -236,15 +237,9 @@ namespace Unity.MLAgents
             m_Metadata[key] = value;
         }
 
-        public Dictionary<string, GaugeNode> Gauges
-        {
-            get { return m_Gauges; }
-        }
+        public Dictionary<string, GaugeNode> Gauges => m_Gauges;
 
-        public Dictionary<string, string> Metadata
-        {
-            get { return m_Metadata; }
-        }
+        public Dictionary<string, string> Metadata => m_Metadata;
     }
 
     /// <summary>
@@ -372,15 +367,9 @@ namespace Unity.MLAgents
         /// <summary>
         /// The singleton <see cref="TimerStack"/> instance.
         /// </summary>
-        public static TimerStack Instance
-        {
-            get { return k_Instance; }
-        }
+        public static TimerStack Instance => k_Instance;
 
-        internal RootNode RootNode
-        {
-            get { return m_RootNode; }
-        }
+        internal RootNode RootNode => m_RootNode;
 
         /// <summary>
         /// Updates the referenced gauge in the root node with the provided value.
@@ -392,6 +381,7 @@ namespace Unity.MLAgents
             if (!float.IsNaN(value))
             {
                 GaugeNode gauge;
+
                 if (m_RootNode.Gauges.TryGetValue(name, out gauge))
                 {
                     gauge.Update(value);
@@ -430,6 +420,7 @@ namespace Unity.MLAgents
         public TimerStack Scoped(string name)
         {
             Push(name);
+
             return this;
         }
 

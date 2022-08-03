@@ -53,6 +53,7 @@ namespace Unity.MLAgentsExamples
             bp.rb.transform.rotation = bp.startingRot;
             bp.rb.velocity = Vector3.zero;
             bp.rb.angularVelocity = Vector3.zero;
+
             if (bp.groundContact)
             {
                 bp.groundContact.touchingGround = false;
@@ -131,6 +132,7 @@ namespace Unity.MLAgentsExamples
 
             // Add & setup the ground contact script
             bp.groundContact = t.GetComponent<GroundContact>();
+
             if (!bp.groundContact)
             {
                 bp.groundContact = t.gameObject.AddComponent<GroundContact>();
@@ -167,6 +169,7 @@ namespace Unity.MLAgentsExamples
                     bodyPart.currentJointForceSqrMag = bodyPart.joint.currentForce.magnitude;
                     bodyPart.currentJointTorque = bodyPart.joint.currentTorque;
                     bodyPart.currentJointTorqueSqrMag = bodyPart.joint.currentTorque.magnitude;
+
                     if (Application.isEditor)
                     {
                         if (bodyPart.jointForceCurve.length > 1000)

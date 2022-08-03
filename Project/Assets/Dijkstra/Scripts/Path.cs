@@ -9,12 +9,10 @@ namespace Dijstra.path
         private List<Node> _pathNodes = new List<Node>();
         private float _length = 0f;
 
-
         public List<Node> PathNodes => _pathNodes;
         public List<float> pDistances = new List<float>();
-        public float length =>  _length; 
-        
-        
+        public float length => _length;
+
         public void Bake()
         {
             pDistances.Clear();
@@ -39,10 +37,9 @@ namespace Dijstra.path
             Debug.Log(ToString());
         }
 
-
         public override string ToString()
         {
-            return string.Format("Nodes: {0} Path Length: {1}", 
+            return string.Format("Nodes: {0} Path Length: {1}",
                 string.Join(", ", PathNodes.Select(node => node.name).ToArray()),
                 length);
         }

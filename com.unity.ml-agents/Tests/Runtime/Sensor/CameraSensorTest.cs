@@ -23,6 +23,7 @@ namespace Unity.MLAgents.Tests
                     var height = 16;
                     var camera = Camera.main;
                     var c = new GameObject();
+
                     if (ReferenceEquals(null, camera))
                     {
                         camera = c.AddComponent<Camera>();

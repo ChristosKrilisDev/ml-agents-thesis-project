@@ -24,6 +24,7 @@ namespace Unity.MLAgents.Tests.Policies
         private static void CheckAndSetBuffer(in ActionBuffers actionsOut)
         {
             var continuousActions = actionsOut.ContinuousActions;
+
             for (var continuousIndex = 0; continuousIndex < continuousActions.Length; continuousIndex++)
             {
                 Assert.AreEqual(continuousActions[continuousIndex], 0.0f);
@@ -31,13 +32,13 @@ namespace Unity.MLAgents.Tests.Policies
             }
 
             var discreteActions = actionsOut.DiscreteActions;
+
             for (var discreteIndex = 0; discreteIndex < discreteActions.Length; discreteIndex++)
             {
                 Assert.AreEqual(discreteActions[discreteIndex], 0);
                 discreteActions[discreteIndex] = 1;
             }
         }
-
 
         private class ActionClearedAgent : Agent
         {
@@ -95,6 +96,7 @@ namespace Unity.MLAgents.Tests.Policies
             public override IActuator[] CreateActuators()
             {
                 ActionClearedActuator = new ActionClearedActuator(ActionSpec);
+
                 return new IActuator[]
                 {
                     ActionClearedActuator
@@ -121,6 +123,7 @@ namespace Unity.MLAgents.Tests.Policies
             agent.LazyInitialize();
 
             const int k_NumSteps = 5;
+
             for (var i = 0; i < k_NumSteps; i++)
             {
                 agent.RequestDecision();

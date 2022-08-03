@@ -14,6 +14,7 @@ namespace Unity.MLAgents.Tests
             public void Implode()
             {
                 NumCalls++;
+
                 using (m_checker.Start())
                 {
                     Implode();
@@ -44,6 +45,7 @@ namespace Unity.MLAgents.Tests
                 // This method throws from inside the checker the first time.
                 // Later calls do nothing.
                 NumCalls++;
+
                 using (m_checker.Start())
                 {
                     if (NumCalls == 1)

@@ -249,8 +249,8 @@ namespace Unity.MLAgents.Tests
                 };
                 Academy.Instance.TrainerCapabilities = caps;
 
-
                 var obsProto = dummySensor.GetObservationProto(obsWriter);
+
                 if (expectCompressed)
                 {
                     Assert.Greater(obsProto.CompressedData.Length, 0);

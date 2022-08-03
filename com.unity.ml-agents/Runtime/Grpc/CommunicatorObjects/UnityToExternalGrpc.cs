@@ -99,7 +99,7 @@ namespace Unity.MLAgents.CommunicatorObjects
             /// <param name="cancellationToken">An optional token for canceling the call.</param>
             /// <returns>The call object.</returns>
             public virtual grpc::AsyncUnaryCall<global::Unity.MLAgents.CommunicatorObjects.UnityMessageProto> ExchangeAsync(global::Unity.MLAgents.CommunicatorObjects.UnityMessageProto request, grpc::Metadata headers = null, global::System.DateTime? deadline = null,
-                global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+                                                                                                                            global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
             {
                 return ExchangeAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
             }
@@ -125,7 +125,7 @@ namespace Unity.MLAgents.CommunicatorObjects
         public static grpc::ServerServiceDefinition BindService(UnityToExternalProtoBase serviceImpl)
         {
             return grpc::ServerServiceDefinition.CreateBuilder()
-                .AddMethod(__Method_Exchange, serviceImpl.Exchange).Build();
+                       .AddMethod(__Method_Exchange, serviceImpl.Exchange).Build();
         }
 
     }

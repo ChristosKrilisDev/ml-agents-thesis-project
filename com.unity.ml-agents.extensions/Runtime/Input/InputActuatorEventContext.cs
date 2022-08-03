@@ -57,6 +57,7 @@ namespace Unity.MLAgents.Extensions.Input
                 m_EventBuffer = StateEvent.From(InputDevice, out m_Ptr);
             }
             eventPtr = m_Ptr;
+
             return this;
         }
 
@@ -69,6 +70,7 @@ namespace Unity.MLAgents.Extensions.Input
             }
 #endif
             m_Count++;
+
             if (m_Count == NumTimesToProcess && m_Ptr.valid)
             {
                 InputSystem.QueueEvent(m_Ptr);

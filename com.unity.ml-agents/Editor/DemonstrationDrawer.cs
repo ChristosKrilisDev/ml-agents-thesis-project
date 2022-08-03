@@ -27,7 +27,6 @@ namespace Unity.MLAgents.Editor
         private const string k_NumDiscreteActionsName = "BranchSizes";
         private const string k_ShapeName = "shape";
 
-
         private void OnEnable()
         {
             m_BrainParameters = serializedObject.FindProperty(k_BrainParametersName);
@@ -63,9 +62,11 @@ namespace Unity.MLAgents.Editor
         {
             var actionSize = actionSizeProperty.arraySize;
             var actionLabel = new StringBuilder("[ ");
+
             for (var i = 0; i < actionSize; i++)
             {
                 actionLabel.Append(actionSizeProperty.GetArrayElementAtIndex(i).intValue);
+
                 if (i < actionSize - 1)
                 {
                     actionLabel.Append(", ");
@@ -73,6 +74,7 @@ namespace Unity.MLAgents.Editor
             }
 
             actionLabel.Append(" ]");
+
             return actionLabel.ToString();
         }
 
@@ -100,6 +102,7 @@ namespace Unity.MLAgents.Editor
         {
             var shapesLabels = new List<string>();
             var numObservations = obsSummariesProperty.arraySize;
+
             for (var i = 0; i < numObservations; i++)
             {
                 var summary = obsSummariesProperty.GetArrayElementAtIndex(i);

@@ -36,31 +36,16 @@ namespace Unity.MLAgents.Inference
         public TensorType valueType;
 
         // Since Type is not serializable, we use the DisplayType for the Inspector
-        public Type DataType
-        {
-            get
-            {
-                return k_TypeMap[valueType];
-            }
-        }
+        public Type DataType => k_TypeMap[valueType];
 
         public long[] shape;
         public Tensor data;
 
-        public long Height
-        {
-            get { return shape.Length == 4 ? shape[1] : shape[5]; }
-        }
+        public long Height => shape.Length == 4 ? shape[1] : shape[5];
 
-        public long Width
-        {
-            get { return shape.Length == 4 ? shape[2] : shape[6]; }
-        }
+        public long Width => shape.Length == 4 ? shape[2] : shape[6];
 
-        public long Channels
-        {
-            get { return shape.Length == 4 ? shape[3] : shape[7]; }
-        }
+        public long Channels => shape.Length == 4 ? shape[3] : shape[7];
     }
 
     internal static class TensorUtils
@@ -113,6 +98,7 @@ namespace Unity.MLAgents.Inference
         public static TensorProxy TensorProxyFromBarracuda(Tensor src, string nameOverride = null)
         {
             var shape = TensorShapeFromBarracuda(src.shape);
+
             return new TensorProxy
             {
                 name = nameOverride ?? src.name,
@@ -133,6 +119,7 @@ namespace Unity.MLAgents.Inference
             var height = tensorProxy.data.height;
             var width = tensorProxy.data.width;
             var channels = tensorProxy.data.channels;
+
             for (var h = 0; h < height; h++)
             {
                 for (var w = 0; w < width; w++)

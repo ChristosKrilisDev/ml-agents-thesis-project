@@ -35,10 +35,7 @@ namespace Unity.MLAgents.Demonstrations
         /// <summary>
         /// Number of steps written so far.
         /// </summary>
-        internal int NumSteps
-        {
-            get { return m_MetaData.numberSteps; }
-        }
+        internal int NumSteps => m_MetaData.numberSteps;
 
         /// <summary>
         /// Writes the initial data to the stream.
@@ -119,6 +116,7 @@ namespace Unity.MLAgents.Demonstrations
             // Increment meta-data counters.
             m_MetaData.numberSteps++;
             m_CumulativeReward += info.reward;
+
             if (info.done)
             {
                 EndEpisode();
@@ -126,6 +124,7 @@ namespace Unity.MLAgents.Demonstrations
 
             // Generate observations and add AgentInfo to file.
             var agentProto = info.ToInfoActionPairProto();
+
             foreach (var sensor in sensors)
             {
                 agentProto.AgentInfo.Observations.Add(sensor.GetObservationProto(m_ObservationWriter));
@@ -133,7 +132,6 @@ namespace Unity.MLAgents.Demonstrations
 
             agentProto.WriteDelimitedTo(m_Writer);
         }
-
 
         /// <summary>
         /// Performs all clean-up necessary.

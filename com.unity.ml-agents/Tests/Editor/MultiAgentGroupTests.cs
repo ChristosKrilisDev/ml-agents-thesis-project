@@ -9,29 +9,11 @@ namespace Unity.MLAgents.Tests
     {
         private class TestAgent : Agent
         {
-            internal int _GroupId
-            {
-                get
-                {
-                    return (int)typeof(Agent).GetField("m_GroupId", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
-                }
-            }
+            internal int _GroupId => (int)typeof(Agent).GetField("m_GroupId", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
 
-            internal float _GroupReward
-            {
-                get
-                {
-                    return (float)typeof(Agent).GetField("m_GroupReward", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
-                }
-            }
+            internal float _GroupReward => (float)typeof(Agent).GetField("m_GroupReward", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
 
-            internal Action<Agent> _OnAgentDisabledActions
-            {
-                get
-                {
-                    return (Action<Agent>)typeof(Agent).GetField("OnAgentDisabled", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
-                }
-            }
+            internal Action<Agent> _OnAgentDisabledActions => (Action<Agent>)typeof(Agent).GetField("OnAgentDisabled", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
         }
 
         [Test]

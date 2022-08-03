@@ -40,6 +40,7 @@ namespace Unity.MLAgents.Analytics
         public static EventActionSpec FromActionSpec(ActionSpec actionSpec)
         {
             var branchSizes = actionSpec.BranchSizes ?? Array.Empty<int>();
+
             return new EventActionSpec
             {
                 NumContinuousActions = actionSpec.NumContinuousActions,
@@ -62,6 +63,7 @@ namespace Unity.MLAgents.Analytics
         public static EventActuatorInfo FromActuator(IActuator actuator)
         {
             var builtInActuatorType = Actuators.BuiltInActuatorType.Unknown;
+
             if (actuator is IBuiltInActuator builtInActuator)
             {
                 builtInActuatorType = builtInActuator.GetBuiltInActuatorType();
@@ -106,6 +108,7 @@ namespace Unity.MLAgents.Analytics
             var shape = obsSpec.Shape;
             var dimProps = obsSpec.DimensionProperties;
             var dimInfos = new EventObservationDimensionInfo[shape.Length];
+
             for (var i = 0; i < shape.Length; i++)
             {
                 dimInfos[i].Size = shape[i];

@@ -11,7 +11,8 @@ namespace Dijstra.path
         protected List<Node> m_Nodes = new List<Node>();
 
         [HideInInspector]
-        public Node m_Start;        [HideInInspector]
+        public Node m_Start;
+        [HideInInspector]
         public Node m_CheckPoint;
         [HideInInspector]
         public Node m_End;
@@ -21,12 +22,9 @@ namespace Dijstra.path
         public List<float> d_distances = new List<float>();
         public List<float> p_distnaces = new List<float>();
 
-        public virtual List<Node> nodes
-        {
-            get { return m_Nodes; }
-        }
+        public virtual List<Node> nodes => m_Nodes;
 
-        #region ConnectNodes
+    #region ConnectNodes
 
         /// <summary>
         /// auto connect nodes of a 1D list
@@ -63,9 +61,9 @@ namespace Dijstra.path
 
         }
 
-        #endregion
-        
-        #region Dijktra
+    #endregion
+
+    #region Dijktra
 
         /// <summary>
         /// DIJKSTRA
@@ -78,6 +76,7 @@ namespace Dijstra.path
         {
             d_distances.Clear();
             p_distnaces.Clear();
+
             // We don't accept null arguments
             if (start == null || end == null)
             {
@@ -91,6 +90,7 @@ namespace Dijstra.path
             if (start == end)
             {
                 path.PathNodes.Add(start);
+
                 return path;
             }
 
@@ -114,6 +114,7 @@ namespace Dijstra.path
 
             // Set the starting Node distance to zero
             distances[start] = 0f;
+
             while (unvisited.Count != 0)
             {
 
@@ -143,6 +144,7 @@ namespace Dijstra.path
 
                     // Insert the source onto the final result
                     path.PathNodes.Insert(0, current);
+
                     break;
                 }
 
@@ -170,10 +172,11 @@ namespace Dijstra.path
             }
             path.Bake();
             p_distnaces = path.pDistances;
+
             return path;
         }
 
-        #endregion
+    #endregion
 
     }
 }

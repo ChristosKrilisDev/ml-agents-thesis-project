@@ -213,35 +213,17 @@ public partial class TestPushBlockActions : IInputActionCollection2, IDisposable
 
     public InputBinding? bindingMask
     {
-        get
-        {
-            return asset.bindingMask;
-        }
-        set
-        {
-            asset.bindingMask = value;
-        }
+        get => asset.bindingMask;
+        set => asset.bindingMask = value;
     }
 
     public ReadOnlyArray<InputDevice>? devices
     {
-        get
-        {
-            return asset.devices;
-        }
-        set
-        {
-            asset.devices = value;
-        }
+        get => asset.devices;
+        set => asset.devices = value;
     }
 
-    public ReadOnlyArray<InputControlScheme> controlSchemes
-    {
-        get
-        {
-            return asset.controlSchemes;
-        }
-    }
+    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
 
     public bool Contains(InputAction action)
     {
@@ -267,13 +249,7 @@ public partial class TestPushBlockActions : IInputActionCollection2, IDisposable
     {
         asset.Disable();
     }
-    public IEnumerable<InputBinding> bindings
-    {
-        get
-        {
-            return asset.bindings;
-        }
-    }
+    public IEnumerable<InputBinding> bindings => asset.bindings;
 
     public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
     {
@@ -293,32 +269,14 @@ public partial class TestPushBlockActions : IInputActionCollection2, IDisposable
     {
         private TestPushBlockActions m_Wrapper;
         public MovementActions(TestPushBlockActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @movement
-        {
-            get
-            {
-                return m_Wrapper.m_Movement_movement;
-            }
-        }
+        public InputAction @movement => m_Wrapper.m_Movement_movement;
 
-        public InputAction @jump
-        {
-            get
-            {
-                return m_Wrapper.m_Movement_jump;
-            }
-        }
+        public InputAction @jump => m_Wrapper.m_Movement_jump;
 
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
-        public bool enabled
-        {
-            get
-            {
-                return Get().enabled;
-            }
-        }
+        public bool enabled => Get().enabled;
 
         public static implicit operator InputActionMap(MovementActions set) { return set.Get(); }
         public void SetCallbacks(IMovementActions instance)
@@ -333,6 +291,7 @@ public partial class TestPushBlockActions : IInputActionCollection2, IDisposable
                 @jump.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_MovementActionsCallbackInterface = instance;
+
             if (instance != null)
             {
                 @movement.started += instance.OnMovement;
@@ -344,13 +303,7 @@ public partial class TestPushBlockActions : IInputActionCollection2, IDisposable
             }
         }
     }
-    public MovementActions @Movement
-    {
-        get
-        {
-            return new MovementActions(this);
-        }
-    }
+    public MovementActions @Movement => new MovementActions(this);
 
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
@@ -358,6 +311,7 @@ public partial class TestPushBlockActions : IInputActionCollection2, IDisposable
         get
         {
             if (m_KeyboardSchemeIndex == -1) m_KeyboardSchemeIndex = asset.FindControlSchemeIndex("Keyboard");
+
             return asset.controlSchemes[m_KeyboardSchemeIndex];
         }
     }

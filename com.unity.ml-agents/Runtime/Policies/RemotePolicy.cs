@@ -4,7 +4,6 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Analytics;
 
-
 namespace Unity.MLAgents.Policies
 {
     /// <summary>
@@ -67,6 +66,7 @@ namespace Unity.MLAgents.Policies
             m_Communicator?.DecideBatch();
             var actions = m_Communicator?.GetActions(m_FullyQualifiedBehaviorName, m_AgentId);
             m_LastActionBuffer = actions == null ? ActionBuffers.Empty : (ActionBuffers)actions;
+
             return ref m_LastActionBuffer;
         }
 

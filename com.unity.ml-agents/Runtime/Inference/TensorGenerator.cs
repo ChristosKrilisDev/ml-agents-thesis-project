@@ -77,12 +77,12 @@ namespace Unity.MLAgents.Inference
             m_Dict[TensorNames.RandomNormalEpsilonPlaceholder] =
                 new RandomNormalInputGenerator(seed, allocator);
 
-
             // Generators for Outputs
             if (model.HasContinuousOutputs(deterministicInference))
             {
                 m_Dict[model.ContinuousOutputName(deterministicInference)] = new BiDimensionalOutputGenerator(allocator);
             }
+
             if (model.HasDiscreteOutputs(deterministicInference))
             {
                 m_Dict[model.DiscreteOutputName(deterministicInference)] = new BiDimensionalOutputGenerator(allocator);
@@ -100,12 +100,14 @@ namespace Unity.MLAgents.Inference
                 // All other observations use a unique ObservationInputGenerator
                 var visIndex = 0;
                 ObservationGenerator vecObsGen = null;
+
                 for (var sensorIndex = 0; sensorIndex < sensors.Count; sensorIndex++)
                 {
                     var sensor = sensors[sensorIndex];
                     var rank = sensor.GetObservationSpec().Rank;
                     ObservationGenerator obsGen = null;
                     string obsGenName = null;
+
                     switch (rank)
                     {
                         case 1:
@@ -115,12 +117,14 @@ namespace Unity.MLAgents.Inference
                             }
                             obsGen = vecObsGen;
                             obsGenName = TensorNames.VectorObservationPlaceholder;
+
                             break;
                         case 2:
                             // If the tensor is of rank 2, we use the index of the sensor
                             // to create the name
                             obsGen = new ObservationGenerator(allocator);
                             obsGenName = TensorNames.GetObservationName(sensorIndex);
+
                             break;
                         case 3:
                             // If the tensor is of rank 3, we use the "visual observation
@@ -128,6 +132,7 @@ namespace Unity.MLAgents.Inference
                             obsGen = new ObservationGenerator(allocator);
                             obsGenName = TensorNames.GetVisualObservationName(visIndex);
                             visIndex++;
+
                             break;
                         default:
                             throw new UnityAgentsException(
@@ -168,6 +173,7 @@ namespace Unity.MLAgents.Inference
             for (var tensorIndex = 0; tensorIndex < tensors.Count; tensorIndex++)
             {
                 var tensor = tensors[tensorIndex];
+
                 if (!m_Dict.ContainsKey(tensor.name))
                 {
                     throw new UnityAgentsException(

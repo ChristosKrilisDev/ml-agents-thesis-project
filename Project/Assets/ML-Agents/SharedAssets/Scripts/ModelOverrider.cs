@@ -10,7 +10,6 @@ using Unity.MLAgents.Policies;
 using UnityEditor;
 #endif
 
-
 /// <summary>
 /// Utility class to allow the NNModel file for an agent to be overriden during inference.
 /// This is used internally to validate the file after training is done.
@@ -50,7 +49,6 @@ public class ModelOverrider : MonoBehaviour
     // Cached loaded NNModels, with the behavior name as the key.
     private Dictionary<string, NNModel> m_CachedModels = new Dictionary<string, NNModel>();
 
-
     // Max episodes to run. Only used if > 0
     // Will default to 1 if override models are specified, otherwise 0.
     private int m_MaxEpisodes;
@@ -71,21 +69,16 @@ public class ModelOverrider : MonoBehaviour
     private static int s_PreviousAgentCompletedEpisodes;
     private static int s_PreviousNumSteps;
 
-    private int TotalCompletedEpisodes
-    {
-        get { return m_PreviousAgentCompletedEpisodes + (m_Agent == null ? 0 : m_Agent.CompletedEpisodes); }
-    }
+    private int TotalCompletedEpisodes => m_PreviousAgentCompletedEpisodes + (m_Agent == null ? 0 : m_Agent.CompletedEpisodes);
 
-    private int TotalNumSteps
-    {
-        get { return m_PreviousNumSteps + m_NumSteps; }
-    }
+    private int TotalNumSteps => m_PreviousNumSteps + m_NumSteps;
 
     public bool HasOverrides
     {
         get
         {
             GetAssetPathFromCommandLine();
+
             return !string.IsNullOrEmpty(m_BehaviorNameOverrideDirectory);
         }
     }
@@ -127,12 +120,14 @@ public class ModelOverrider : MonoBehaviour
         var timeoutSeconds = 0;
 
         string[] commandLineArgsOverride = null;
+
         if (!string.IsNullOrEmpty(debugCommandLineOverride) && Application.isEditor)
         {
             commandLineArgsOverride = debugCommandLineOverride.Split(' ');
         }
 
         var args = commandLineArgsOverride ?? Environment.GetCommandLineArgs();
+
         for (var i = 0; i < args.Length; i++)
         {
             if (args[i] == k_CommandLineModelOverrideDirectoryFlag && i < args.Length - 1)
@@ -143,6 +138,7 @@ public class ModelOverrider : MonoBehaviour
             {
                 var overrideExtension = args[i + 1].Trim().ToLower();
                 var isKnownExtension = k_SupportedExtensions.Contains(overrideExtension);
+
                 if (!isKnownExtension)
                 {
                     Debug.LogError($"loading unsupported format: {overrideExtension}");
@@ -192,6 +188,7 @@ public class ModelOverrider : MonoBehaviour
         m_Agent = GetComponent<Agent>();
 
         GetAssetPathFromCommandLine();
+
         if (HasOverrides)
         {
             OverrideModel();
@@ -249,6 +246,7 @@ public class ModelOverrider : MonoBehaviour
         if (string.IsNullOrEmpty(m_BehaviorNameOverrideDirectory))
         {
             Debug.Log($"No override directory set.");
+
             return null;
         }
 
@@ -263,14 +261,17 @@ public class ModelOverrider : MonoBehaviour
         byte[] rawModel = null;
         var isOnnx = false;
         string assetName = null;
+
         foreach (var overrideExtension in overrideExtensions)
         {
             var assetPath = Path.Combine(m_BehaviorNameOverrideDirectory, $"{behaviorName}.{overrideExtension}");
+
             try
             {
                 rawModel = File.ReadAllBytes(assetPath);
                 isOnnx = overrideExtension.Equals("onnx");
                 assetName = "Override - " + Path.GetFileName(assetPath);
+
                 break;
             }
             catch (IOException)
@@ -284,12 +285,14 @@ public class ModelOverrider : MonoBehaviour
             Debug.Log($"Couldn't load model file(s) for {behaviorName} in {m_BehaviorNameOverrideDirectory} (full path: {Path.GetFullPath(m_BehaviorNameOverrideDirectory)}");
             // Cache the null so we don't repeatedly try to load a missing file
             m_CachedModels[behaviorName] = null;
+
             return null;
         }
 
         var asset = isOnnx ? LoadOnnxModel(rawModel) : LoadBarracudaModel(rawModel);
         asset.name = assetName;
         m_CachedModels[behaviorName] = asset;
+
         return asset;
     }
 
@@ -298,6 +301,7 @@ public class ModelOverrider : MonoBehaviour
         var asset = ScriptableObject.CreateInstance<NNModel>();
         asset.modelData = ScriptableObject.CreateInstance<NNModelData>();
         asset.modelData.Value = rawModel;
+
         return asset;
     }
 
@@ -307,6 +311,7 @@ public class ModelOverrider : MonoBehaviour
         var onnxModel = converter.Convert(rawModel);
 
         var assetData = ScriptableObject.CreateInstance<NNModelData>();
+
         using (var memoryStream = new MemoryStream())
         using (var writer = new BinaryWriter(memoryStream))
         {
@@ -318,9 +323,9 @@ public class ModelOverrider : MonoBehaviour
 
         var asset = ScriptableObject.CreateInstance<NNModel>();
         asset.modelData = assetData;
+
         return asset;
     }
-
 
     /// <summary>
     /// Load the NNModel file from the specified path, and give it to the attached agent.
@@ -333,6 +338,7 @@ public class ModelOverrider : MonoBehaviour
         m_Agent.LazyInitialize();
 
         NNModel nnModel = null;
+
         try
         {
             nnModel = GetModelForBehaviorName(OriginalBehaviorName);
@@ -356,6 +362,7 @@ public class ModelOverrider : MonoBehaviour
         {
             var modelName = nnModel != null ? nnModel.name : "<null>";
             Debug.Log($"Overriding behavior {OriginalBehaviorName} for agent with model {modelName}");
+
             try
             {
                 m_Agent.SetModel(GetOverrideBehaviorName(OriginalBehaviorName), nnModel);

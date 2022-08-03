@@ -19,8 +19,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public string SensorName
         {
-            get { return m_SensorName; }
-            set { m_SensorName = value; }
+            get => m_SensorName;
+            set => m_SensorName = value;
         }
 
         [SerializeField] [FormerlySerializedAs("detectableTags")]
@@ -33,8 +33,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public List<string> DetectableTags
         {
-            get { return m_DetectableTags; }
-            set { m_DetectableTags = value; }
+            get => m_DetectableTags;
+            set => m_DetectableTags = value;
         }
 
         [HideInInspector] [SerializeField] [FormerlySerializedAs("raysPerDirection")]
@@ -48,9 +48,9 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int RaysPerDirection
         {
-            get { return m_RaysPerDirection; }
+            get => m_RaysPerDirection;
             // Note: can't change at runtime
-            set { m_RaysPerDirection = value; }
+            set => m_RaysPerDirection = value;
         }
 
         [HideInInspector] [SerializeField] [FormerlySerializedAs("maxRayDegrees")]
@@ -65,10 +65,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public float MaxRayDegrees
         {
-            get
-            {
-                return m_MaxRayDegrees;
-            }
+            get => m_MaxRayDegrees;
             set
             {
                 m_MaxRayDegrees = value;
@@ -86,10 +83,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public float SphereCastRadius
         {
-            get
-            {
-                return m_SphereCastRadius;
-            }
+            get => m_SphereCastRadius;
             set
             {
                 m_SphereCastRadius = value;
@@ -107,10 +101,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public float RayLength
         {
-            get
-            {
-                return m_RayLength;
-            }
+            get => m_RayLength;
             set
             {
                 m_RayLength = value;
@@ -129,10 +120,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public LayerMask RayLayerMask
         {
-            get
-            {
-                return m_RayLayerMask;
-            }
+            get => m_RayLayerMask;
             set
             {
                 m_RayLayerMask = value;
@@ -151,8 +139,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int ObservationStacks
         {
-            get { return m_ObservationStacks; }
-            set { m_ObservationStacks = value; }
+            get => m_ObservationStacks;
+            set => m_ObservationStacks = value;
         }
 
         /// <summary>
@@ -176,13 +164,7 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// Get the RayPerceptionSensor that was created.
         /// </summary>
-        public RayPerceptionSensor RaySensor
-        {
-            get
-            {
-                return m_RaySensor;
-            }
-        }
+        public RayPerceptionSensor RaySensor => m_RaySensor;
 
         /// <summary>
         /// Returns the <see cref="RayPerceptionCastType"/> for the associated raycast sensor.
@@ -221,6 +203,7 @@ namespace Unity.MLAgents.Sensors
             if (ObservationStacks != 1)
             {
                 var stackingSensor = new StackingSensor(m_RaySensor, ObservationStacks);
+
                 return new ISensor[]
                 {
                     stackingSensor
@@ -250,11 +233,13 @@ namespace Unity.MLAgents.Sensors
             var anglesOut = new float[2 * raysPerDirection + 1];
             var delta = maxRayDegrees / raysPerDirection;
             anglesOut[0] = 90f;
+
             for (var i = 0; i < raysPerDirection; i++)
             {
                 anglesOut[2 * i + 1] = 90 - (i + 1) * delta;
                 anglesOut[2 * i + 2] = 90 + (i + 1) * delta;
             }
+
             return anglesOut;
         }
 
@@ -321,6 +306,7 @@ namespace Unity.MLAgents.Sensors
                 // and there's no way to turn off the "Tag ... is not defined" error logs.
                 // So just don't use any tags here.
                 rayInput.DetectableTags = null;
+
                 for (var rayIndex = 0; rayIndex < rayInput.Angles.Count; rayIndex++)
                 {
                     var rayOutput = RayPerceptionSensor.PerceiveSingleRay(rayInput, rayIndex);

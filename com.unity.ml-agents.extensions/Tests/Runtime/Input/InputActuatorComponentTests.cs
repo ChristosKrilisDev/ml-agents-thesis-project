@@ -51,6 +51,7 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
         {
             m_ActuatorComponent.CleanupActionAsset();
             var objects = Object.FindObjectsOfType<GameObject>();
+
             foreach (var o in objects)
             {
                 Object.DestroyImmediate(o);

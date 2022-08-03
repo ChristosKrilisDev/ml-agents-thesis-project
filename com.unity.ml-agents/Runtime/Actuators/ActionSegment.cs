@@ -89,6 +89,7 @@ namespace Unity.MLAgents.Actuators
                 {
                     throw new IndexOutOfRangeException($"Index out of bounds, expected a number between 0 and {Length}");
                 }
+
                 return Array[Offset + index];
             }
             set
@@ -147,6 +148,7 @@ namespace Unity.MLAgents.Actuators
             {
                 return false;
             }
+
             return Equals((ActionSegment<T>)obj);
         }
 
@@ -171,6 +173,7 @@ namespace Unity.MLAgents.Actuators
                 var hashCode = Offset;
                 hashCode = hashCode * 397 ^ Length;
                 hashCode = hashCode * 397 ^ (Array != null ? Array.GetHashCode() : 0);
+
                 return hashCode;
             }
         }
@@ -204,8 +207,10 @@ namespace Unity.MLAgents.Actuators
                 if (m_Current < m_End)
                 {
                     m_Current++;
+
                     return m_Current < m_End;
                 }
+
                 return false;
             }
 
@@ -217,17 +222,12 @@ namespace Unity.MLAgents.Actuators
                         throw new InvalidOperationException("Enumerator not started.");
                     if (m_Current >= m_End)
                         throw new InvalidOperationException("Enumerator has reached the end already.");
+
                     return m_Array[m_Current];
                 }
             }
 
-            object IEnumerator.Current
-            {
-                get
-                {
-                    return Current;
-                }
-            }
+            object IEnumerator.Current => Current;
 
             void IEnumerator.Reset()
             {

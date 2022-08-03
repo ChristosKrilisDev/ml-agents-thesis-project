@@ -55,7 +55,6 @@ namespace Unity.MLAgents.Tests
         private Test3DSensorComponent sensor_21_20_3;
         private Test3DSensorComponent sensor_20_22_3;
 
-
         private ActionSpec GetContinuous2vis8vec2actionActionSpec()
         {
             return ActionSpec.MakeContinuous(2);
@@ -186,7 +185,6 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(actionSpec.NumDiscreteActions, modelRunner.GetAction(1).DiscreteActions.Length);
             modelRunner.Dispose();
         }
-
 
         [Test]
         public void TestRunModel_stochastic()

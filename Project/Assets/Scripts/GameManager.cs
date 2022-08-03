@@ -5,11 +5,10 @@ using System.Collections.Generic;
 using ML_Agents.Finder.Scripts;
 using UnityEngine;
 
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; //singleton
-    
+
     [SerializeField] private bool _canWriteData = false;
     private TextFileHandler _fileHandler;
     private DateTime _localDate = DateTime.Now;
@@ -19,10 +18,9 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-        
+
         EpisodeHandler.Init();
-        
-        
+
         if (!_canWriteData) return;
 
         if (!PlayerPrefs.HasKey("Index")) PlayerPrefs.SetInt("Index", _index);
@@ -38,13 +36,10 @@ public class GameManager : MonoBehaviour
         else Debug.Log("Text file handler already exist");
     }
 
-
-
     public void WriteData(float episodeCounter, float agentDistance, float dijkstraDistance, bool hasFindTarget, float avrRewards)
     {
         if (_canWriteData)
             _fileHandler.WriteString(episodeCounter, agentDistance, dijkstraDistance, hasFindTarget, avrRewards);
     }
-
 
 }

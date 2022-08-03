@@ -36,6 +36,7 @@ namespace Unity.MLAgents.Extensions.Sensors
 
             var numJointExtractorObservations = 0;
             m_JointExtractors = new List<IJointExtractor>(poseExtractor.NumEnabledPoses);
+
             foreach (var rb in poseExtractor.GetEnabledRigidbodies())
             {
                 var jointExtractor = new RigidBodyJointExtractor(rb);
@@ -57,6 +58,7 @@ namespace Unity.MLAgents.Extensions.Sensors
 
             var numJointExtractorObservations = 0;
             m_JointExtractors = new List<IJointExtractor>(poseExtractor.NumEnabledPoses);
+
             foreach (var articBody in poseExtractor.GetEnabledArticulationBodies())
             {
                 var jointExtractor = new ArticulationBodyJointExtractor(articBody);
@@ -80,10 +82,12 @@ namespace Unity.MLAgents.Extensions.Sensors
         public int Write(ObservationWriter writer)
         {
             var numWritten = writer.WritePoses(m_Settings, m_PoseExtractor);
+
             foreach (var jointExtractor in m_JointExtractors)
             {
                 numWritten += jointExtractor.Write(m_Settings, writer, numWritten);
             }
+
             return numWritten;
         }
 

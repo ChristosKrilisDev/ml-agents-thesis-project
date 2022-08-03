@@ -59,7 +59,6 @@ namespace Unity.MLAgents.Tests
 
             applier.Apply(inputTensor, agentIds, actionDict);
 
-
             Assert.AreEqual(actionDict[0].ContinuousActions[0], 1);
             Assert.AreEqual(actionDict[0].ContinuousActions[1], 2);
             Assert.AreEqual(actionDict[0].ContinuousActions[2], 3);
@@ -105,7 +104,6 @@ namespace Unity.MLAgents.Tests
                     1, ActionBuffers.Empty
                 }
             };
-
 
             applier.Apply(inputTensor, agentIds, actionDict);
 
@@ -153,7 +151,6 @@ namespace Unity.MLAgents.Tests
                     1, ActionBuffers.Empty
                 }
             };
-
 
             applier.Apply(inputTensor, agentIds, actionDict);
 
@@ -216,7 +213,6 @@ namespace Unity.MLAgents.Tests
                     1, ActionBuffers.Empty
                 }
             };
-
 
             continuousApplier.Apply(continuousInputTensor, agentIds, actionDict);
             discreteApplier.Apply(discreteInputTensor, agentIds, actionDict);
@@ -286,7 +282,6 @@ namespace Unity.MLAgents.Tests
                     1, ActionBuffers.Empty
                 }
             };
-
 
             continuousApplier.Apply(continuousInputTensor, agentIds, actionDict);
             discreteApplier.Apply(discreteInputTensor, agentIds, actionDict);

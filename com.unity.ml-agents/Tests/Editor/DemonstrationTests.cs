@@ -82,7 +82,6 @@ namespace Unity.MLAgents.Tests
                 })
             };
 
-
             demoWriter.Record(agentInfo, new System.Collections.Generic.List<ISensor>());
             demoRec.Close();
 
@@ -156,6 +155,7 @@ namespace Unity.MLAgents.Tests
             {
                 var vecObs = obs.FloatData.Data;
                 Assert.AreEqual(bpA.BrainParameters.VectorObservationSize, vecObs.Count);
+
                 for (var i = 0; i < vecObs.Count; i++)
                 {
                     Assert.AreEqual((float)i + 1, vecObs[i]);

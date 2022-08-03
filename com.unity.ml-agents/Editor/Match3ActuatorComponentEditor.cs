@@ -13,9 +13,11 @@ namespace Unity.MLAgents.Editor
 
             var component = (Match3ActuatorComponent)target;
             var board = component.GetComponent<AbstractBoard>();
+
             if (board == null)
             {
                 EditorGUILayout.HelpBox("You must provide an implementation of an AbstractBoard.", MessageType.Warning);
+
                 return;
             }
 

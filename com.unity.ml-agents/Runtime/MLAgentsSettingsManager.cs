@@ -17,7 +17,6 @@ namespace Unity.MLAgents
         internal const string EditorBuildSettingsConfigKey = "com.unity.ml-agents.settings";
         private static MLAgentsSettings s_Settings;
 
-
         // setter will trigger callback for refreshing editor UI if using editor
         public static MLAgentsSettings Settings
         {
@@ -27,6 +26,7 @@ namespace Unity.MLAgents
                 {
                     Initialize();
                 }
+
                 return s_Settings;
             }
             set
@@ -61,6 +61,7 @@ namespace Unity.MLAgents
         internal static void InitializeInEditor()
         {
             var settings = ScriptableObject.CreateInstance<MLAgentsSettings>();
+
             if (EditorBuildSettings.TryGetConfigObject(EditorBuildSettingsConfigKey,
                 out MLAgentsSettings settingsAsset))
             {

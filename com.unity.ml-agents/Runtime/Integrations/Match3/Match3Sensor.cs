@@ -93,6 +93,7 @@ namespace Unity.MLAgents.Integrations.Match3
         public static Match3Sensor CellTypeSensor(AbstractBoard board, Match3ObservationType obsType, string name)
         {
             var maxBoardSize = board.GetMaxBoardSize();
+
             return new Match3Sensor(board, board.GetCellType, maxBoardSize.NumCellTypes, obsType, name);
         }
 
@@ -107,11 +108,13 @@ namespace Unity.MLAgents.Integrations.Match3
         public static Match3Sensor SpecialTypeSensor(AbstractBoard board, Match3ObservationType obsType, string name)
         {
             var maxBoardSize = board.GetMaxBoardSize();
+
             if (maxBoardSize.NumSpecialTypes == 0)
             {
                 return null;
             }
             var specialSize = maxBoardSize.NumSpecialTypes + 1;
+
             return new Match3Sensor(board, board.GetSpecialType, specialSize, obsType, name);
         }
 
@@ -173,6 +176,7 @@ namespace Unity.MLAgents.Integrations.Match3
             m_Board.CheckBoardSizes(m_MaxBoardSize);
             var height = m_MaxBoardSize.Rows;
             var width = m_MaxBoardSize.Columns;
+
             if (ReferenceEquals(null, m_ObservationTexture))
             {
                 m_ObservationTexture = new Texture2D(width, height, TextureFormat.RGB24, false);
@@ -190,6 +194,7 @@ namespace Unity.MLAgents.Integrations.Match3
             // fit in in 2 images, but we'll use 3 total (2 PNGs for the 4 cell type channels, and 1 for
             // the special types).
             var numCellImages = (m_OneHotSize + 2) / 3;
+
             for (var i = 0; i < numCellImages; i++)
             {
                 m_TextureUtil.EncodeToTexture(
@@ -285,6 +290,7 @@ namespace Unity.MLAgents.Integrations.Match3
         )
         {
             var i = 0;
+
             // There's an implicit flip converting to PNG from texture, so make sure we
             // counteract that when forming the texture by iterating through h in reverse.
             for (var h = m_MaxHeight - 1; h >= 0; h--)
@@ -292,9 +298,11 @@ namespace Unity.MLAgents.Integrations.Match3
                 for (var w = 0; w < m_MaxWidth; w++)
                 {
                     var colorVal = Color.black;
+
                     if (h < currentHeight && w < currentWidth)
                     {
                         var oneHotValue = gridValueProvider(h, w);
+
                         if (oneHotValue >= channelOffset && oneHotValue < channelOffset + 3)
                         {
                             colorVal = s_OneHotColors[oneHotValue - channelOffset];

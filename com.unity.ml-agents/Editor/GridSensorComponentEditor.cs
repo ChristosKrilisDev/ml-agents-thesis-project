@@ -45,11 +45,13 @@ namespace Unity.MLAgents.Editor
                 // detectable tags
                 var detectableTags = so.FindProperty(nameof(GridSensorComponent.m_DetectableTags));
                 var newSize = EditorGUILayout.IntField("Detectable Tags", detectableTags.arraySize);
+
                 if (newSize != detectableTags.arraySize)
                 {
                     detectableTags.arraySize = newSize;
                 }
                 EditorGUI.indentLevel++;
+
                 for (var i = 0; i < detectableTags.arraySize; i++)
                 {
                     var objectTag = detectableTags.GetArrayElementAtIndex(i);
@@ -78,12 +80,14 @@ namespace Unity.MLAgents.Editor
             // detectable objects
             var debugColors = so.FindProperty(nameof(GridSensorComponent.m_DebugColors));
             var detectableObjectSize = so.FindProperty(nameof(GridSensorComponent.m_DetectableTags)).arraySize;
+
             if (detectableObjectSize != debugColors.arraySize)
             {
                 debugColors.arraySize = detectableObjectSize;
             }
             EditorGUILayout.LabelField("Debug Colors");
             EditorGUI.indentLevel++;
+
             for (var i = 0; i < debugColors.arraySize; i++)
             {
                 var debugColor = debugColors.GetArrayElementAtIndex(i);

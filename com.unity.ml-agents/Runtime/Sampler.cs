@@ -15,12 +15,14 @@ namespace Unity.MLAgents
         public static Func<float> CreateUniformSampler(float min, float max, int seed)
         {
             var distr = new Random(seed);
+
             return () => min + (float)distr.NextDouble() * (max - min);
         }
 
         public static Func<float> CreateGaussianSampler(float mean, float stddev, int seed)
         {
             var distr = new RandomNormal(seed, mean, stddev);
+
             return () => (float)distr.NextDouble();
         }
 
@@ -36,6 +38,7 @@ namespace Unity.MLAgents
             var intervalSizes = new float[numIntervals];
             // List that will store uniform distributions
             IList<Func<float>> intervalFuncs = new Func<float>[numIntervals];
+
             // Collect all intervals and store as uniform distrus
             // Collect all interval sizes
             for (var i = 0; i < numIntervals; i++)
@@ -47,11 +50,13 @@ namespace Unity.MLAgents
                 intervalSizes[i] = intervalSize;
                 intervalFuncs[i] = () => min + (float)distr.NextDouble() * intervalSize;
             }
+
             // Normalize interval lengths
             for (var i = 0; i < numIntervals; i++)
             {
                 intervalSizes[i] = intervalSizes[i] / sumIntervalSizes;
             }
+
             // Build cmf for intervals
             for (var i = 1; i < numIntervals; i++)
             {
@@ -61,8 +66,10 @@ namespace Unity.MLAgents
             float MultiRange()
             {
                 var sampledInterval = intervalDistr.Sample(intervalSizes);
+
                 return intervalFuncs[sampledInterval].Invoke();
             }
+
             return MultiRange;
         }
     }
