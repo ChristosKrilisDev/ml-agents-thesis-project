@@ -7,10 +7,10 @@ namespace Unity.MLAgents.Actuators
     /// </summary>
     internal class VectorActuator : IActuator, IBuiltInActuator
     {
-        IActionReceiver m_ActionReceiver;
-        IHeuristicProvider m_HeuristicProvider;
+        private IActionReceiver m_ActionReceiver;
+        private IHeuristicProvider m_HeuristicProvider;
 
-        ActionBuffers m_ActionBuffers;
+        private ActionBuffers m_ActionBuffers;
         internal ActionBuffers ActionBuffers
         {
             get => m_ActionBuffers;
@@ -28,7 +28,9 @@ namespace Unity.MLAgents.Actuators
         public VectorActuator(IActionReceiver actionReceiver,
                               ActionSpec actionSpec,
                               string name = "VectorActuator")
-            : this(actionReceiver, actionReceiver as IHeuristicProvider, actionSpec, name) { }
+            : this(actionReceiver, actionReceiver as IHeuristicProvider, actionSpec, name)
+        {
+        }
 
         /// <summary>
         /// Create a VectorActuator that forwards to the provided IActionReceiver.
@@ -47,6 +49,7 @@ namespace Unity.MLAgents.Actuators
             m_HeuristicProvider = heuristicProvider;
             ActionSpec = actionSpec;
             string suffix;
+
             if (actionSpec.NumContinuousActions == 0)
             {
                 suffix = "-Discrete";

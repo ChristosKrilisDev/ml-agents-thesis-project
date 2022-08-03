@@ -41,11 +41,11 @@ namespace Unity.MLAgents.SideChannels
     /// </summary>
     internal class EnvironmentParametersChannel : SideChannel
     {
-        Dictionary<string, Func<float>> m_Parameters = new Dictionary<string, Func<float>>();
-        Dictionary<string, Action<float>> m_RegisteredActions =
+        private Dictionary<string, Func<float>> m_Parameters = new Dictionary<string, Func<float>>();
+        private Dictionary<string, Action<float>> m_RegisteredActions =
             new Dictionary<string, Action<float>>();
 
-        const string k_EnvParamsId = "534c891e-810f-11ea-a9d0-822485860400";
+        private const string k_EnvParamsId = "534c891e-810f-11ea-a9d0-822485860400";
 
         /// <summary>
         /// Initializes the side channel. The constructor is internal because only one instance is
@@ -61,6 +61,7 @@ namespace Unity.MLAgents.SideChannels
         {
             var key = msg.ReadString();
             var type = msg.ReadInt32();
+
             if ((int)EnvironmentDataTypes.Float == type)
             {
                 var value = msg.ReadFloat32();
@@ -73,25 +74,26 @@ namespace Unity.MLAgents.SideChannels
             }
             else if ((int)EnvironmentDataTypes.Sampler == type)
             {
-                int seed = msg.ReadInt32();
-                int samplerType = msg.ReadInt32();
+                var seed = msg.ReadInt32();
+                var samplerType = msg.ReadInt32();
                 Func<float> sampler = () => 0.0f;
+
                 if ((int)SamplerType.Uniform == samplerType)
                 {
-                    float min = msg.ReadFloat32();
-                    float max = msg.ReadFloat32();
+                    var min = msg.ReadFloat32();
+                    var max = msg.ReadFloat32();
                     sampler = SamplerFactory.CreateUniformSampler(min, max, seed);
                 }
                 else if ((int)SamplerType.Gaussian == samplerType)
                 {
-                    float mean = msg.ReadFloat32();
-                    float stddev = msg.ReadFloat32();
+                    var mean = msg.ReadFloat32();
+                    var stddev = msg.ReadFloat32();
 
                     sampler = SamplerFactory.CreateGaussianSampler(mean, stddev, seed);
                 }
                 else if ((int)SamplerType.MultiRangeUniform == samplerType)
                 {
-                    IList<float> intervals = msg.ReadFloatList();
+                    var intervals = msg.ReadFloatList();
                     sampler = SamplerFactory.CreateMultiRangeUniformSampler(intervals, seed);
                 }
                 else
@@ -116,7 +118,8 @@ namespace Unity.MLAgents.SideChannels
         public float GetWithDefault(string key, float defaultValue)
         {
             Func<float> valueOut;
-            bool hasKey = m_Parameters.TryGetValue(key, out valueOut);
+            var hasKey = m_Parameters.TryGetValue(key, out valueOut);
+
             return hasKey ? valueOut.Invoke() : defaultValue;
         }
 

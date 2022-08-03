@@ -15,29 +15,29 @@ namespace Unity.MLAgents.Inference
 
     internal class ModelRunner
     {
-        List<AgentInfoSensorsPair> m_Infos = new List<AgentInfoSensorsPair>();
-        Dictionary<int, ActionBuffers> m_LastActionsReceived = new Dictionary<int, ActionBuffers>();
-        List<int> m_OrderedAgentsRequestingDecisions = new List<int>();
+        private List<AgentInfoSensorsPair> m_Infos = new List<AgentInfoSensorsPair>();
+        private Dictionary<int, ActionBuffers> m_LastActionsReceived = new Dictionary<int, ActionBuffers>();
+        private List<int> m_OrderedAgentsRequestingDecisions = new List<int>();
 
-        ITensorAllocator m_TensorAllocator;
-        TensorGenerator m_TensorGenerator;
-        TensorApplier m_TensorApplier;
+        private ITensorAllocator m_TensorAllocator;
+        private TensorGenerator m_TensorGenerator;
+        private TensorApplier m_TensorApplier;
 
-        NNModel m_Model;
-        string m_ModelName;
-        InferenceDevice m_InferenceDevice;
-        IWorker m_Engine;
-        bool m_Verbose = false;
-        bool m_DeterministicInference;
-        string[] m_OutputNames;
-        IReadOnlyList<TensorProxy> m_InferenceInputs;
-        List<TensorProxy> m_InferenceOutputs;
-        Dictionary<string, Tensor> m_InputsByName;
-        Dictionary<int, List<float>> m_Memories = new Dictionary<int, List<float>>();
+        private NNModel m_Model;
+        private string m_ModelName;
+        private InferenceDevice m_InferenceDevice;
+        private IWorker m_Engine;
+        private bool m_Verbose = false;
+        private bool m_DeterministicInference;
+        private string[] m_OutputNames;
+        private IReadOnlyList<TensorProxy> m_InferenceInputs;
+        private List<TensorProxy> m_InferenceOutputs;
+        private Dictionary<string, Tensor> m_InputsByName;
+        private Dictionary<int, List<float>> m_Memories = new Dictionary<int, List<float>>();
 
-        SensorShapeValidator m_SensorShapeValidator = new SensorShapeValidator();
+        private SensorShapeValidator m_SensorShapeValidator = new SensorShapeValidator();
 
-        bool m_ObservationsInitialized;
+        private bool m_ObservationsInitialized;
 
         /// <summary>
         /// Initializes the Brain with the Model that it will use when selecting actions for
@@ -66,6 +66,7 @@ namespace Unity.MLAgents.Inference
             m_InferenceDevice = inferenceDevice;
             m_DeterministicInference = deterministicInference;
             m_TensorAllocator = new TensorCachingAllocator();
+
             if (model != null)
             {
 #if BARRACUDA_VERBOSE
@@ -77,8 +78,9 @@ namespace Unity.MLAgents.Inference
                 barracudaModel = ModelLoader.Load(model);
 
                 var failedCheck = BarracudaModelParamLoader.CheckModelVersion(
-                        barracudaModel
-                    );
+                    barracudaModel
+                );
+
                 if (failedCheck != null)
                 {
                     if (failedCheck.CheckType == BarracudaModelParamLoader.FailedCheck.CheckTypeEnum.Error)
@@ -88,20 +90,25 @@ namespace Unity.MLAgents.Inference
                 }
 
                 WorkerFactory.Type executionDevice;
+
                 switch (inferenceDevice)
                 {
                     case InferenceDevice.CPU:
                         executionDevice = WorkerFactory.Type.CSharp;
+
                         break;
                     case InferenceDevice.GPU:
                         executionDevice = WorkerFactory.Type.ComputePrecompiled;
+
                         break;
                     case InferenceDevice.Burst:
                         executionDevice = WorkerFactory.Type.CSharpBurst;
+
                         break;
                     case InferenceDevice.Default: // fallthrough
                     default:
                         executionDevice = WorkerFactory.Type.CSharpBurst;
+
                         break;
                 }
                 m_Engine = WorkerFactory.CreateWorker(executionDevice, barracudaModel, m_Verbose);
@@ -123,19 +130,14 @@ namespace Unity.MLAgents.Inference
             m_InferenceOutputs = new List<TensorProxy>();
         }
 
-        public InferenceDevice InferenceDevice
-        {
-            get { return m_InferenceDevice; }
-        }
+        public InferenceDevice InferenceDevice => m_InferenceDevice;
 
-        public NNModel Model
-        {
-            get { return m_Model; }
-        }
+        public NNModel Model => m_Model;
 
-        void PrepareBarracudaInputs(IReadOnlyList<TensorProxy> infInputs)
+        private void PrepareBarracudaInputs(IReadOnlyList<TensorProxy> infInputs)
         {
             m_InputsByName.Clear();
+
             for (var i = 0; i < infInputs.Count; i++)
             {
                 var inp = infInputs[i];
@@ -150,9 +152,10 @@ namespace Unity.MLAgents.Inference
             m_TensorAllocator?.Reset(false);
         }
 
-        void FetchBarracudaOutputs(string[] names)
+        private void FetchBarracudaOutputs(string[] names)
         {
             m_InferenceOutputs.Clear();
+
             foreach (var n in names)
             {
                 var output = m_Engine.PeekOutput(n);
@@ -178,6 +181,7 @@ namespace Unity.MLAgents.Inference
             {
                 m_LastActionsReceived[info.episodeId] = ActionBuffers.Empty;
             }
+
             if (info.done)
             {
                 // If the agent is done, we remove the key from the last action dictionary since no action
@@ -189,10 +193,12 @@ namespace Unity.MLAgents.Inference
         public void DecideBatch()
         {
             var currentBatchSize = m_Infos.Count;
+
             if (currentBatchSize == 0)
             {
                 return;
             }
+
             if (!m_ObservationsInitialized)
             {
                 // Just grab the first agent in the collection (any will suffice, really).
@@ -247,6 +253,7 @@ namespace Unity.MLAgents.Inference
             {
                 return m_LastActionsReceived[agentId];
             }
+
             return ActionBuffers.Empty;
         }
     }

@@ -6,14 +6,15 @@ namespace Unity.MLAgents.Tests
     [TestFixture]
     public class RecursionCheckerTests
     {
-        class InfiniteRecurser
+        private class InfiniteRecurser
         {
-            RecursionChecker m_checker = new RecursionChecker("InfiniteRecurser");
+            private RecursionChecker m_checker = new RecursionChecker("InfiniteRecurser");
             public int NumCalls;
 
             public void Implode()
             {
                 NumCalls++;
+
                 using (m_checker.Start())
                 {
                     Implode();
@@ -34,9 +35,9 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(2, rc.NumCalls);
         }
 
-        class OneTimeThrower
+        private class OneTimeThrower
         {
-            RecursionChecker m_checker = new RecursionChecker("OneTimeThrower");
+            private RecursionChecker m_checker = new RecursionChecker("OneTimeThrower");
             public int NumCalls;
 
             public void DoStuff()
@@ -44,6 +45,7 @@ namespace Unity.MLAgents.Tests
                 // This method throws from inside the checker the first time.
                 // Later calls do nothing.
                 NumCalls++;
+
                 using (m_checker.Start())
                 {
                     if (NumCalls == 1)

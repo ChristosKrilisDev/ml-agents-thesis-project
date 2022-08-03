@@ -11,14 +11,13 @@ namespace Unity.MLAgents.Editor
 {
     internal class MLAgentsSettingsProvider : SettingsProvider, IDisposable
     {
-        const string k_SettingsPath = "Project/ML-Agents";
+        private const string k_SettingsPath = "Project/ML-Agents";
         private static MLAgentsSettingsProvider s_Instance;
         private string[] m_AvailableSettingsAssets;
         private int m_CurrentSelectedSettingsAsset;
         private SerializedObject m_SettingsObject;
         [SerializeField]
         private MLAgentsSettings m_Settings;
-
 
         private MLAgentsSettingsProvider(string path, SettingsScope scope = SettingsScope.Project)
             : base(path, scope)
@@ -54,6 +53,7 @@ namespace Unity.MLAgents.Editor
             if (EditorGUILayout.DropdownButton(EditorGUIUtility.IconContent("_Popup"), FocusType.Passive, EditorStyles.label))
             {
                 var menu = new GenericMenu();
+
                 for (var i = 0; i < m_AvailableSettingsAssets.Length; i++)
                 {
                     menu.AddItem(ExtractDisplayName(m_AvailableSettingsAssets[i]), m_CurrentSelectedSettingsAsset == i, (path) =>
@@ -87,6 +87,7 @@ namespace Unity.MLAgents.Editor
             var projectName = PlayerSettings.productName;
             var path = EditorUtility.SaveFilePanel("Create ML-Agents Settings File", "Assets",
                 projectName + ".mlagents.settings", "asset");
+
             if (string.IsNullOrEmpty(path))
             {
                 return;
@@ -94,14 +95,17 @@ namespace Unity.MLAgents.Editor
 
             path = path.Replace("\\", "/"); // Make sure we only get '/' separators.
             var assetPath = Application.dataPath + "/";
+
             if (!path.StartsWith(assetPath, StringComparison.CurrentCultureIgnoreCase))
             {
                 Debug.LogError(string.Format(
                     "Settings must be stored in Assets folder of the project (got: '{0}')", path));
+
                 return;
             }
 
             var extension = Path.GetExtension(path);
+
             if (string.Compare(extension, ".asset", StringComparison.InvariantCultureIgnoreCase) != 0)
             {
                 path += ".asset";
@@ -156,6 +160,7 @@ namespace Unity.MLAgents.Editor
 
             m_Settings = MLAgentsSettingsManager.Settings;
             var currentSettingsPath = AssetDatabase.GetAssetPath(m_Settings);
+
             if (string.IsNullOrEmpty(currentSettingsPath))
             {
                 if (m_AvailableSettingsAssets.Length > 0)
@@ -179,6 +184,7 @@ namespace Unity.MLAgents.Editor
         private static string[] FindSettingsInProject()
         {
             var guids = AssetDatabase.FindAssets("t:MLAgentsSettings");
+
             return guids.Select(guid => AssetDatabase.GUIDToAssetPath(guid)).ToArray();
         }
 

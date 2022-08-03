@@ -6,7 +6,6 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Demonstrations;
 using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
-
 using Unity.MLAgents.Analytics;
 using Unity.MLAgents.CommunicatorObjects;
 using UnityEngine;
@@ -152,7 +151,7 @@ namespace Unity.MLAgents.Tests
             demoMetaData.ToProto();
         }
 
-        class DummySensor : ISensor
+        private class DummySensor : ISensor
         {
             public ObservationSpec ObservationSpec;
             public SensorCompressionType CompressionType;
@@ -169,7 +168,10 @@ namespace Unity.MLAgents.Tests
 
             public byte[] GetCompressedObservation()
             {
-                return new byte[] { 13, 37 };
+                return new byte[]
+                {
+                    13, 37
+                };
             }
 
             public void Update() { }
@@ -194,15 +196,30 @@ namespace Unity.MLAgents.Tests
             var variants = new[]
             {
                 // Vector observations
-                (new[] {3}, SensorCompressionType.None, false, false),
+                (new[]
+                {
+                    3
+                }, SensorCompressionType.None, false, false),
                 // Uncompressed floats
-                (new[] {4, 4, 3}, SensorCompressionType.None, false, false),
+                (new[]
+                {
+                    4, 4, 3
+                }, SensorCompressionType.None, false, false),
                 // Compressed floats, 3 channels
-                (new[] {4, 4, 3}, SensorCompressionType.PNG, false, true),
+                (new[]
+                {
+                    4, 4, 3
+                }, SensorCompressionType.PNG, false, true),
 
                 // Compressed floats, >3 channels
-                (new[] {4, 4, 4}, SensorCompressionType.PNG, false, false), // Unsupported - results in uncompressed
-                (new[] {4, 4, 4}, SensorCompressionType.PNG, true, true), // Supported compressed
+                (new[]
+                {
+                    4, 4, 4
+                }, SensorCompressionType.PNG, false, false), // Unsupported - results in uncompressed
+                (new[]
+                {
+                    4, 4, 4
+                }, SensorCompressionType.PNG, true, true) // Supported compressed
             };
 
             foreach (var (shape, compressionType, supportsMultiPngObs, expectCompressed) in variants)
@@ -232,8 +249,8 @@ namespace Unity.MLAgents.Tests
                 };
                 Academy.Instance.TrainerCapabilities = caps;
 
-
                 var obsProto = dummySensor.GetObservationProto(obsWriter);
+
                 if (expectCompressed)
                 {
                     Assert.Greater(obsProto.CompressedData.Length, 0);
@@ -252,7 +269,7 @@ namespace Unity.MLAgents.Tests
         {
             var trainingEnvInit = new TrainingEnvironmentInitialized
             {
-                PythonVersion = "test",
+                PythonVersion = "test"
             };
             var trainingEnvInitEvent = trainingEnvInit.ToTrainingEnvironmentInitializedEvent();
             Assert.AreEqual(trainingEnvInit.PythonVersion, trainingEnvInitEvent.TrainerPythonVersion);
@@ -264,7 +281,7 @@ namespace Unity.MLAgents.Tests
                 CuriosityRewardEnabled = true,
 
                 RecurrentEnabled = true,
-                SelfPlayEnabled = true,
+                SelfPlayEnabled = true
             };
             var trainingBehavInitEvent = trainingBehavInit.ToTrainingBehaviorInitializedEvent();
             Assert.AreEqual(trainingBehavInit.BehaviorName, trainingBehavInitEvent.BehaviorName);

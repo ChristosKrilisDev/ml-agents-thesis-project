@@ -23,27 +23,25 @@ namespace Unity.MLAgents.Analytics
 {
     internal static class TrainingAnalytics
     {
-        const string k_VendorKey = "unity.ml-agents";
-        const string k_TrainingEnvironmentInitializedEventName = "ml_agents_training_environment_initialized";
-        const string k_TrainingBehaviorInitializedEventName = "ml_agents_training_behavior_initialized";
-        const string k_RemotePolicyInitializedEventName = "ml_agents_remote_policy_initialized";
+        private const string k_VendorKey = "unity.ml-agents";
+        private const string k_TrainingEnvironmentInitializedEventName = "ml_agents_training_environment_initialized";
+        private const string k_TrainingBehaviorInitializedEventName = "ml_agents_training_behavior_initialized";
+        private const string k_RemotePolicyInitializedEventName = "ml_agents_remote_policy_initialized";
 
         private static readonly string[] s_EventNames =
         {
-            k_TrainingEnvironmentInitializedEventName,
-            k_TrainingBehaviorInitializedEventName,
-            k_RemotePolicyInitializedEventName
+            k_TrainingEnvironmentInitializedEventName, k_TrainingBehaviorInitializedEventName, k_RemotePolicyInitializedEventName
         };
 
         /// <summary>
         /// Hourly limit for this event name
         /// </summary>
-        const int k_MaxEventsPerHour = 1000;
+        private const int k_MaxEventsPerHour = 1000;
 
         /// <summary>
         /// Maximum number of items in this event.
         /// </summary>
-        const int k_MaxNumberOfElements = 1000;
+        private const int k_MaxNumberOfElements = 1000;
 
         private static bool s_SentEnvironmentInitialized;
 
@@ -51,7 +49,7 @@ namespace Unity.MLAgents.Analytics
         /// <summary>
         /// Whether or not we've registered this particular event yet
         /// </summary>
-        static bool s_EventsRegistered;
+        private static bool s_EventsRegistered;
 
         /// <summary>
         /// Behaviors that we've already sent events for.
@@ -73,9 +71,11 @@ namespace Unity.MLAgents.Analytics
             {
                 return true;
             }
+
             foreach (var eventName in s_EventNames)
             {
-                AnalyticsResult result = EditorAnalytics.RegisterEventWithLimit(eventName, k_MaxEventsPerHour, k_MaxNumberOfElements, k_VendorKey);
+                var result = EditorAnalytics.RegisterEventWithLimit(eventName, k_MaxEventsPerHour, k_MaxNumberOfElements, k_VendorKey);
+
                 if (result != AnalyticsResult.Ok)
                 {
                     return false;
@@ -173,6 +173,7 @@ namespace Unity.MLAgents.Analytics
             }
 
             var data = GetEventForRemotePolicy(behaviorName, sensors, actionSpec, actuators);
+
             // Note - to debug, use JsonUtility.ToJson on the event.
             // Debug.Log(
             //     $"Would send event {k_RemotePolicyInitializedEventName} with body {JsonUtility.ToJson(data, true)}"
@@ -187,6 +188,7 @@ namespace Unity.MLAgents.Analytics
         internal static string ParseBehaviorName(string fullyQualifiedBehaviorName)
         {
             var lastQuestionIndex = fullyQualifiedBehaviorName.LastIndexOf("?");
+
             if (lastQuestionIndex < 0)
             {
                 // Nothing to remove
@@ -257,12 +259,14 @@ namespace Unity.MLAgents.Analytics
             remotePolicyEvent.TrainingSessionGuid = s_TrainingSessionGuid.ToString();
             remotePolicyEvent.ActionSpec = EventActionSpec.FromActionSpec(actionSpec);
             remotePolicyEvent.ObservationSpecs = new List<EventObservationSpec>(sensors.Count);
+
             foreach (var sensor in sensors)
             {
                 remotePolicyEvent.ObservationSpecs.Add(EventObservationSpec.FromSensor(sensor));
             }
 
             remotePolicyEvent.ActuatorInfos = new List<EventActuatorInfo>(actuators.Count);
+
             foreach (var actuator in actuators)
             {
                 remotePolicyEvent.ActuatorInfos.Add(EventActuatorInfo.FromActuator(actuator));
@@ -270,6 +274,7 @@ namespace Unity.MLAgents.Analytics
 
             remotePolicyEvent.MLAgentsEnvsVersion = s_TrainerPackageVersion;
             remotePolicyEvent.TrainerCommunicationVersion = s_TrainerCommunicationVersion;
+
             return remotePolicyEvent;
         }
     }

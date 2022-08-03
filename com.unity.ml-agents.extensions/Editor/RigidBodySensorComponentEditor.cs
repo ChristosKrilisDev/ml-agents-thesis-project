@@ -8,7 +8,7 @@ namespace Unity.MLAgents.Extensions.Editor
     [CanEditMultipleObjects]
     internal class RigidBodySensorComponentEditor : UnityEditor.Editor
     {
-        bool ShowHierarchy = true;
+        private bool ShowHierarchy = true;
 
         public override void OnInspectorGUI()
         {
@@ -16,6 +16,7 @@ namespace Unity.MLAgents.Extensions.Editor
             so.Update();
 
             var rbSensorComp = so.targetObject as RigidBodySensorComponent;
+
             if (rbSensorComp.IsTrivial())
             {
                 EditorGUILayout.HelpBox(
@@ -43,10 +44,12 @@ namespace Unity.MLAgents.Extensions.Editor
 
                 // Collapsible tree for the body hierarchy
                 ShowHierarchy = EditorGUILayout.Foldout(ShowHierarchy, "Hierarchy", true);
+
                 if (ShowHierarchy)
                 {
                     var treeNodes = rbSensorComp.GetDisplayNodes();
                     var originalIndent = EditorGUI.indentLevel;
+
                     foreach (var node in treeNodes)
                     {
                         var obj = node.NodeObject;
@@ -64,12 +67,12 @@ namespace Unity.MLAgents.Extensions.Editor
             EditorGUI.EndDisabledGroup();
 
             so.ApplyModifiedProperties();
+
             if (requireExtractorUpdate)
             {
                 rbSensorComp.ResetPoseExtractor();
             }
         }
-
 
     }
 }

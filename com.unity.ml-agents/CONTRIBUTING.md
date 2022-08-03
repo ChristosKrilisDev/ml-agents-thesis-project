@@ -53,6 +53,7 @@ We run continuous integration on all PRs; all tests must be passing before the P
 Several static checks are run on the codebase using the
 [pre-commit framework](https://pre-commit.com/) during CI. To execute the same
 checks locally, run:
+
 ```bash
 pip install pre-commit>=2.8.0
 pip install identify>==2.1.3

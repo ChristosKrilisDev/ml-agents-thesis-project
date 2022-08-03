@@ -6,9 +6,9 @@ namespace Unity.MLAgents.Tests
 {
     public class RandomNormalTest
     {
-        const float k_FirstValue = -1.19580f;
-        const float k_SecondValue = -0.97345f;
-        const double k_Epsilon = 0.0001;
+        private const float k_FirstValue = -1.19580f;
+        private const float k_SecondValue = -0.97345f;
+        private const double k_Epsilon = 0.0001;
 
         [Test]
         public void RandomNormalTestTwoDouble()
@@ -63,6 +63,7 @@ namespace Unity.MLAgents.Tests
             for (var i = 0; i < numSamples; i++)
             {
                 var x = rn.NextDouble();
+
                 if (i == 0)
                 {
                     oldM = newM = x;

@@ -31,7 +31,7 @@ namespace Unity.MLAgents.Actuators
         /// </summary>
         public static ActionSegment<T> Empty = new ActionSegment<T>(System.Array.Empty<T>(), 0, 0);
 
-        static void CheckParameters(IReadOnlyCollection<T> actionArray, int offset, int length)
+        private static void CheckParameters(IReadOnlyCollection<T> actionArray, int offset, int length)
         {
 #if DEBUG
             if (offset + length > actionArray.Count)
@@ -49,7 +49,9 @@ namespace Unity.MLAgents.Actuators
         /// </summary>
         /// <param name="actionArray">The action array to use for the this segment.</param>
         public ActionSegment(T[] actionArray)
-            : this(actionArray ?? System.Array.Empty<T>(), 0, actionArray?.Length ?? 0) { }
+            : this(actionArray ?? System.Array.Empty<T>(), 0, actionArray?.Length ?? 0)
+        {
+        }
 
         /// <summary>
         /// Construct an <see cref="ActionSegment{T}"/> with an underlying array
@@ -87,6 +89,7 @@ namespace Unity.MLAgents.Actuators
                 {
                     throw new IndexOutOfRangeException($"Index out of bounds, expected a number between 0 and {Length}");
                 }
+
                 return Array[Offset + index];
             }
             set
@@ -145,6 +148,7 @@ namespace Unity.MLAgents.Actuators
             {
                 return false;
             }
+
             return Equals((ActionSegment<T>)obj);
         }
 
@@ -167,8 +171,9 @@ namespace Unity.MLAgents.Actuators
             unchecked
             {
                 var hashCode = Offset;
-                hashCode = (hashCode * 397) ^ Length;
-                hashCode = (hashCode * 397) ^ (Array != null ? Array.GetHashCode() : 0);
+                hashCode = hashCode * 397 ^ Length;
+                hashCode = hashCode * 397 ^ (Array != null ? Array.GetHashCode() : 0);
+
                 return hashCode;
             }
         }
@@ -177,12 +182,12 @@ namespace Unity.MLAgents.Actuators
         /// A private <see cref="IEnumerator{T}"/> for the <see cref="ActionSegment{T}"/> value type which follows its
         /// rules of being a view into an underlying <see cref="Array"/>.
         /// </summary>
-        struct Enumerator : IEnumerator<T>
+        private struct Enumerator : IEnumerator<T>
         {
-            readonly T[] m_Array;
-            readonly int m_Start;
-            readonly int m_End; // cache Offset + Count, since it's a little slow
-            int m_Current;
+            private readonly T[] m_Array;
+            private readonly int m_Start;
+            private readonly int m_End; // cache Offset + Count, since it's a little slow
+            private int m_Current;
 
             internal Enumerator(ActionSegment<T> arraySegment)
             {
@@ -202,8 +207,10 @@ namespace Unity.MLAgents.Actuators
                 if (m_Current < m_End)
                 {
                     m_Current++;
+
                     return m_Current < m_End;
                 }
+
                 return false;
             }
 
@@ -215,6 +222,7 @@ namespace Unity.MLAgents.Actuators
                         throw new InvalidOperationException("Enumerator not started.");
                     if (m_Current >= m_End)
                         throw new InvalidOperationException("Enumerator has reached the end already.");
+
                     return m_Array[m_Current];
                 }
             }

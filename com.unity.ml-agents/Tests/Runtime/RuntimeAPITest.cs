@@ -35,6 +35,7 @@ namespace Tests
         {
             var wrappedSensors = wrappedComponent.CreateSensors();
             var sensorsOut = new ISensor[wrappedSensors.Length];
+
             for (var i = 0; i < wrappedSensors.Length; i++)
             {
                 sensorsOut[i] = new StackingSensor(wrappedSensors[i], numStacks);
@@ -65,21 +66,30 @@ namespace Tests
             var behaviorParams = gameObject.AddComponent<BehaviorParameters>();
             behaviorParams.BrainParameters.VectorObservationSize = 3;
             behaviorParams.BrainParameters.NumStackedVectorObservations = 2;
-            behaviorParams.BrainParameters.VectorActionDescriptions = new[] { "Continuous1", "TestActionA", "TestActionB" };
-            behaviorParams.BrainParameters.ActionSpec = new ActionSpec(1, new[] { 2, 2 });
+            behaviorParams.BrainParameters.VectorActionDescriptions = new[]
+            {
+                "Continuous1", "TestActionA", "TestActionB"
+            };
+            behaviorParams.BrainParameters.ActionSpec = new ActionSpec(1, new[]
+            {
+                2, 2
+            });
             behaviorParams.BehaviorName = "TestBehavior";
             behaviorParams.TeamId = 42;
             behaviorParams.UseChildSensors = true;
             behaviorParams.DeterministicInference = false;
             behaviorParams.ObservableAttributeHandling = ObservableAttributeOptions.ExamineAll;
 
-
             // Can't actually create an Agent with InferenceOnly and no model, so change back
             behaviorParams.BehaviorType = BehaviorType.Default;
 #if MLA_UNITY_PHYSICS_MODULE
             var sensorComponent = gameObject.AddComponent<RayPerceptionSensorComponent3D>();
             sensorComponent.SensorName = "ray3d";
-            sensorComponent.DetectableTags = new List<string> { "Player", "Respawn" };
+            sensorComponent.DetectableTags = new List<string>
+            {
+                "Player",
+                "Respawn"
+            };
             sensorComponent.RaysPerDirection = 3;
 
             // Make a StackingSensor that wraps the RayPerceptionSensorComponent3D
@@ -91,7 +101,6 @@ namespace Tests
             // ISensor isn't set up yet.
             Assert.IsNull(sensorComponent.RaySensor);
 #endif
-
 
             // Make sure we can set the behavior type correctly after the agent is initialized
             // (this creates a new policy).
@@ -122,7 +131,10 @@ namespace Tests
 
             var actions = agent.GetStoredActionBuffers().DiscreteActions;
             // default Heuristic implementation should return zero actions.
-            Assert.AreEqual(new ActionSegment<int>(new[] { 0, 0 }), actions);
+            Assert.AreEqual(new ActionSegment<int>(new[]
+            {
+                0, 0
+            }), actions);
             Assert.AreEqual(1, agent.numHeuristicCalls);
 
             Academy.Instance.EnvironmentStep();

@@ -43,7 +43,7 @@ namespace Unity.MLAgents
         /// <summary>
         /// The side channel that is used to receive the new parameter values.
         /// </summary>
-        readonly StatsSideChannel m_Channel;
+        private readonly StatsSideChannel m_Channel;
 
         /// <summary>
         /// Constructor.

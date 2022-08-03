@@ -11,8 +11,8 @@ namespace Unity.MLAgents.Integrations.Match3
     [AddComponentMenu("ML Agents/Match 3 Actuator", (int)MenuGroup.Actuators)]
     public class Match3ActuatorComponent : ActuatorComponent
     {
-        [HideInInspector, SerializeField, FormerlySerializedAs("ActuatorName")]
-        string m_ActuatorName = "Match3 Actuator";
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("ActuatorName")]
+        private string m_ActuatorName = "Match3 Actuator";
 
         /// <summary>
         /// Name of the generated Match3Actuator object.
@@ -24,8 +24,8 @@ namespace Unity.MLAgents.Integrations.Match3
             set => m_ActuatorName = value;
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("RandomSeed")]
-        int m_RandomSeed = -1;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("RandomSeed")]
+        private int m_RandomSeed = -1;
 
         /// <summary>
         /// A random seed used in the actuator's heuristic, if needed.
@@ -36,9 +36,9 @@ namespace Unity.MLAgents.Integrations.Match3
             set => m_RandomSeed = value;
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("ForceHeuristic")]
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("ForceHeuristic")]
         [Tooltip("Force using the Agent's Heuristic() method to decide the action. This should only be used in testing.")]
-        bool m_ForceHeuristic;
+        private bool m_ForceHeuristic;
 
         /// <summary>
         /// Force using the Agent's Heuristic() method to decide the action. This should only be used in testing.
@@ -53,13 +53,18 @@ namespace Unity.MLAgents.Integrations.Match3
         public override IActuator[] CreateActuators()
         {
             var board = GetComponent<AbstractBoard>();
+
             if (!board)
             {
                 return Array.Empty<IActuator>();
             }
 
             var seed = m_RandomSeed == -1 ? gameObject.GetInstanceID() : m_RandomSeed + 1;
-            return new IActuator[] { new Match3Actuator(board, m_ForceHeuristic, seed, m_ActuatorName) };
+
+            return new IActuator[]
+            {
+                new Match3Actuator(board, m_ForceHeuristic, seed, m_ActuatorName)
+            };
         }
 
         /// <inheritdoc/>
@@ -68,12 +73,14 @@ namespace Unity.MLAgents.Integrations.Match3
             get
             {
                 var board = GetComponent<AbstractBoard>();
+
                 if (board == null)
                 {
                     return ActionSpec.MakeContinuous(0);
                 }
 
                 var numMoves = Move.NumPotentialMoves(board.GetMaxBoardSize());
+
                 return ActionSpec.MakeDiscrete(numMoves);
             }
         }

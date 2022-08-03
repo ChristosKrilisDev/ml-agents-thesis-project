@@ -4,7 +4,6 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Analytics;
 
-
 namespace Unity.MLAgents.Policies
 {
     /// <summary>
@@ -13,11 +12,11 @@ namespace Unity.MLAgents.Policies
     /// </summary>
     internal class RemotePolicy : IPolicy
     {
-        int m_AgentId;
-        string m_FullyQualifiedBehaviorName;
-        ActionSpec m_ActionSpec;
-        ActionBuffers m_LastActionBuffer;
-        bool m_AnalyticsSent;
+        private int m_AgentId;
+        private string m_FullyQualifiedBehaviorName;
+        private ActionSpec m_ActionSpec;
+        private ActionBuffers m_LastActionBuffer;
+        private bool m_AnalyticsSent;
 
         internal ICommunicator m_Communicator;
 
@@ -47,7 +46,7 @@ namespace Unity.MLAgents.Policies
         }
 
         [Conditional("MLA_UNITY_ANALYTICS_MODULE")]
-        void SendAnalytics(IList<ISensor> sensors)
+        private void SendAnalytics(IList<ISensor> sensors)
         {
             if (!m_AnalyticsSent)
             {
@@ -67,6 +66,7 @@ namespace Unity.MLAgents.Policies
             m_Communicator?.DecideBatch();
             var actions = m_Communicator?.GetActions(m_FullyQualifiedBehaviorName, m_AgentId);
             m_LastActionBuffer = actions == null ? ActionBuffers.Empty : (ActionBuffers)actions;
+
             return ref m_LastActionBuffer;
         }
 

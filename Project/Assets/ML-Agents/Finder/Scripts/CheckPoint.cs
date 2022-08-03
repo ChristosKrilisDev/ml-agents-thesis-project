@@ -1,56 +1,60 @@
 using UnityEngine;
 
-public class CheckPoint : MonoBehaviour
+namespace ML_Agents.Finder.Scripts
 {
-    public Material onMaterial;
-    public Material offMaterial;
-    public GameObject myButton;
-    public GameObject goalObj = null;
-
-    private Transform nodeGoal;
-
-    bool m_State;
-    GameObject m_Area;
-    PFArea m_AreaComponent;
-    int m_goalIndex;
-
-    public bool GetState()
+    public class CheckPoint : MonoBehaviour
     {
-        return m_State;
-    }
+        private const string SWITCH_ON_TAG = "switchOn";
+        private const string SWITCH_OFF_TAG = "switchOff";
 
-    void Start()
-    {
-        m_Area = gameObject.transform.parent.gameObject;
-        m_AreaComponent = m_Area.GetComponent<PFArea>();
-    }
+        private PathFindArea _areaComponent;
+        private GameObject _goalNode;
+        private Renderer _renderer;
+        private BoxCollider _boxCollider;
+        private GameObject _myButton;
+        private Material _onMaterial;
+        private Material _offMaterial;
 
-    public void ResetSwitch(int cpSpawnAreaIndex, int goalSpawnIndex)
-    {
-        this.gameObject.GetComponent<BoxCollider>().enabled = true;
+        private GameObject Area => transform.parent.gameObject;
+        public bool GetState { get; private set; }
 
-        m_AreaComponent.PlaceObject(gameObject, cpSpawnAreaIndex);
-        goalObj =  m_AreaComponent.CreateGoalObject(1, goalSpawnIndex);   //pre-create final goal to get all nodes 
-        goalObj.gameObject.SetActive(false);
-        //m_goalIndex = goalSpawnIndex;
-
-        m_State = false;
-        tag = "switchOff";
-        transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        myButton.GetComponent<Renderer>().material = offMaterial;
-    }
-
-    void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.CompareTag("agent") && m_State == false)
+        private void Awake()
         {
-            this.gameObject.GetComponent<BoxCollider>().enabled = false;
-            goalObj.gameObject.SetActive(true);
-            myButton.GetComponent<Renderer>().material = onMaterial;
-            m_State = true;
-            //m_AreaComponent.CreateGoalObject(1, m_goalIndex);   //create final goal
+            _areaComponent = Area.GetComponent<PathFindArea>();
+            _boxCollider = gameObject.GetComponent<BoxCollider>();
 
-            tag = "switchOn";
+            _myButton = transform.GetChild(0).gameObject;
+            _renderer = _myButton.GetComponent<Renderer>();
+
+            _onMaterial = EpisodeHandler.OnButtonMaterial;
+            _offMaterial = EpisodeHandler.OffButtonMaterial;
+        }
+
+        public void Init(int cpSpawnIndex, int goalSpawnIndex)
+        {
+            _areaComponent.PlaceNode(gameObject, cpSpawnIndex);
+            _goalNode = _areaComponent.CreateGoalNode(goalSpawnIndex); //pre-create final node to get all nodes
+
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+
+            ToggleState(true);
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            if (other.gameObject.CompareTag("agent") && !GetState)
+                ToggleState(false);
+        }
+
+        private void ToggleState(bool isInitState)
+        {
+            _boxCollider.enabled = isInitState;
+            GetState = !isInitState;
+            _goalNode.SetActive(!isInitState);
+
+            _renderer.material = isInitState ? _offMaterial : _onMaterial;
+            tag = isInitState ? SWITCH_OFF_TAG : SWITCH_ON_TAG;
+
         }
     }
 }

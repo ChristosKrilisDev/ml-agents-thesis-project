@@ -1,3 +1,756 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=ML/@EntryIndexedValue">ML</s:String>
-	<s:Boolean x:Key="/Default/UserDictionary/Words/=Dont/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/CodeEditing/Unity/AdditionalFileLayout/Pattern/@EntryValue">&lt;Patterns xmlns="urn:schemas-jetbrains-com:member-reordering-patterns"
+          xmlns:unity="urn:schemas-jetbrains-com:member-reordering-patterns-unity"&gt;
+
+    &lt;!-- StyleCop Unity Classes Layout --&gt;
+
+    &lt;TypePattern DisplayName="StyleCop Unity Classes Layout" RemoveRegions="All" Priority="150"&gt;
+        &lt;TypePattern.Match&gt;
+            &lt;unity:SerializableClass /&gt;
+        &lt;/TypePattern.Match&gt;
+        &lt;Region Name="Constants and Fields"&gt;
+            &lt;Entry DisplayName="Constants"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;Kind Is="Constant" /&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+            &lt;Entry DisplayName="Static fields"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Field" /&gt;
+                        &lt;Static /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Kind Order="Constant Field" /&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                    &lt;Readonly /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+            &lt;Entry DisplayName="Fields"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Field" /&gt;
+                        &lt;Not&gt;
+                            &lt;unity:SerializedField /&gt;
+                        &lt;/Not&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                    &lt;Readonly /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Serialized Fields" Priority="150"&gt;
+            &lt;Entry DisplayName="Serialized Fields"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;unity:SerializedField /&gt;
+                &lt;/Entry.Match&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Constructors and Destructors"&gt;
+            &lt;Entry DisplayName="Constructors and destructors"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;Or&gt;
+                        &lt;Kind Is="Constructor" /&gt;
+                        &lt;Kind Is="Destructor" /&gt;
+                    &lt;/Or&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Static /&gt;
+                    &lt;Kind Order="Constructor Destructor" /&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Public Events and Delegates"&gt;
+            &lt;Entry DisplayName="Delegates"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;Kind Is="Delegate" /&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                    &lt;Static /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+            &lt;Entry DisplayName="Public events"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Event" /&gt;
+                        &lt;Access Is="Public" /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access Order="Public" /&gt;
+                    &lt;Static /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Protected Events"&gt;
+            &lt;Entry DisplayName="Protected events"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Event" /&gt;
+                        &lt;Or&gt;
+                            &lt;Access Is="Protected" /&gt;
+                            &lt;Access Is="ProtectedInternal" /&gt;
+                        &lt;/Or&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Private Events"&gt;
+            &lt;Entry DisplayName="Private events"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Event" /&gt;
+                        &lt;Access Is="Private" /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                    &lt;Static /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Enums"&gt;
+            &lt;Entry DisplayName="Enums"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;Kind Is="Enum" /&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Interfaces"&gt;
+            &lt;Entry DisplayName="Interfaces"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;Kind Is="Interface" /&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Public Properties"&gt;
+            &lt;Entry DisplayName="Public properties"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Property" /&gt;
+                        &lt;Access Is="Public" /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access Order="Public" /&gt;
+                    &lt;Static /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Protected Properties"&gt;
+            &lt;Entry DisplayName="Protected properties"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Property" /&gt;
+                        &lt;Or&gt;
+                            &lt;Access Is="Protected" /&gt;
+                            &lt;Access Is="ProtectedInternal" /&gt;
+                        &lt;/Or&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Private Properties"&gt;
+            &lt;Entry DisplayName="Private properties"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Property" /&gt;
+                        &lt;Access Is="Private" /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                    &lt;Static /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Public Indexers"&gt;
+            &lt;Entry DisplayName="Public indexers"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Indexer" /&gt;
+                        &lt;Access Is="Public" /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access Order="Public" /&gt;
+                    &lt;Static /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Protected Indexers"&gt;
+            &lt;Entry DisplayName="Protected indexers"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Indexer" /&gt;
+                        &lt;Or&gt;
+                            &lt;Access Is="Protected" /&gt;
+                            &lt;Access Is="ProtectedInternal" /&gt;
+                        &lt;/Or&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Private Indexers"&gt;
+            &lt;Entry DisplayName="Private indexers"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Indexer" /&gt;
+                        &lt;Access Is="Private" /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                    &lt;Static /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="${ImplementsInterface} Implementation" Priority="100"&gt;
+            &lt;Region.GroupBy&gt;
+                &lt;ImplementsInterface /&gt;
+            &lt;/Region.GroupBy&gt;
+            &lt;Entry DisplayName="Interface events"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Event" /&gt;
+                        &lt;ImplementsInterface /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;ImplementsInterface Immediate="True" /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+            &lt;Entry DisplayName="Interface properties"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Property" /&gt;
+                        &lt;ImplementsInterface /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;ImplementsInterface Immediate="True" /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+            &lt;Entry DisplayName="Interface indexers" Priority="100"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Indexer" /&gt;
+                        &lt;ImplementsInterface /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;ImplementsInterface Immediate="True" /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+            &lt;Entry DisplayName="Interface methods"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Method" /&gt;
+                        &lt;ImplementsInterface /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;ImplementsInterface Immediate="True" /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Setup and Teardown"&gt;
+            &lt;Entry DisplayName="Setup/Teardown Methods"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Method" /&gt;
+                        &lt;Or&gt;
+                            &lt;HasAttribute Name="NUnit.Framework.SetUpAttribute" Inherited="True" /&gt;
+                            &lt;HasAttribute Name="NUnit.Framework.TearDownAttribute" Inherited="True" /&gt;
+                            &lt;HasAttribute Name="NUnit.Framework.FixtureSetUpAttribute" Inherited="True" /&gt;
+                            &lt;HasAttribute Name="NUnit.Framework.FixtureTearDownAttribute" Inherited="True" /&gt;
+                        &lt;/Or&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Tests"&gt;
+            &lt;Entry DisplayName="Test Methods" Priority="100"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Method" /&gt;
+                        &lt;HasAttribute Name="NUnit.Framework.TestAttribute" /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Public Methods"&gt;
+            &lt;Entry DisplayName="Public operators"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Operator" /&gt;
+                        &lt;Or&gt;
+                            &lt;Access Is="Public" /&gt;
+                            &lt;Access Is="Internal" /&gt;
+                        &lt;/Or&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access /&gt;
+                    &lt;Static /&gt;
+                    &lt;Virtual /&gt;
+                    &lt;Override /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+            &lt;Entry DisplayName="Public methods"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Method" /&gt;
+                        &lt;Or&gt;
+                            &lt;Access Is="Public" /&gt;
+                            &lt;Access Is="Internal" /&gt;
+                        &lt;/Or&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access /&gt;
+                    &lt;Static /&gt;
+                    &lt;Virtual /&gt;
+                    &lt;Override /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Protected Methods"&gt;
+            &lt;Entry DisplayName="Protected Operators"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Operator" /&gt;
+                        &lt;Or&gt;
+                            &lt;Access Is="Protected" /&gt;
+                            &lt;Access Is="ProtectedInternal" /&gt;
+                        &lt;/Or&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access /&gt;
+                    &lt;Static /&gt;
+                    &lt;Virtual /&gt;
+                    &lt;Override /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+            &lt;Entry DisplayName="Protected Methods"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Method" /&gt;
+                        &lt;Or&gt;
+                            &lt;Access Is="Protected" /&gt;
+                            &lt;Access Is="ProtectedInternal" /&gt;
+                        &lt;/Or&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access /&gt;
+                    &lt;Static /&gt;
+                    &lt;Virtual /&gt;
+                    &lt;Override /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Event Handlers" Priority="100"&gt;
+            &lt;Entry DisplayName="Event handlers"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Method" /&gt;
+                        &lt;Access Is="Private" /&gt;
+                        &lt;HandlesEvent /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Static /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Unity Methods" Priority="150"&gt;
+            &lt;Entry DisplayName="Unity Methods"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;unity:EventFunction /&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;unity:EventFunctionName /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Private Methods"&gt;
+            &lt;Entry DisplayName="Private operators"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Operator" /&gt;
+                        &lt;Access Is="Private" /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access /&gt;
+                    &lt;Static /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+            &lt;Entry DisplayName="Private methods"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;And&gt;
+                        &lt;Kind Is="Method" /&gt;
+                        &lt;Access Is="Private" /&gt;
+                    &lt;/And&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Access /&gt;
+                    &lt;Static /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Region Name="Nested Types"&gt;
+            &lt;Entry DisplayName="Nested structs"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;Kind Is="Struct" /&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Static /&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+            &lt;Entry DisplayName="Nested classes"&gt;
+                &lt;Entry.Match&gt;
+                    &lt;Kind Is="Class" /&gt;
+                &lt;/Entry.Match&gt;
+                &lt;Entry.SortBy&gt;
+                    &lt;Static /&gt;
+                    &lt;Access Order="Public Internal ProtectedInternal Protected Private" /&gt;
+                    &lt;Name /&gt;
+                &lt;/Entry.SortBy&gt;
+            &lt;/Entry&gt;
+        &lt;/Region&gt;
+        &lt;Entry DisplayName="All other members" /&gt;
+    &lt;/TypePattern&gt;
+&lt;/Patterns&gt;
+</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=284328F1_002DC930_002DE0A0_002D98E8_002D4E0D438F2A2E/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=50C52F2E_002D64B1_002DD37F_002D6680_002D719F7B6F2582/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=5E791ECF_002D8D8A_002D559C_002D5711_002D46D93E1F29CE/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=644FF346_002D80EA_002DFCCC_002DA15E_002D4AA12B01A762/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=76EA01EE_002D4974_002DD3AB_002DBF59_002D495FC422CB4D/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7860E4E7_002D899D_002D3128_002D1A3F_002D1797633A946C_002Fd_003AAssets_002Fd_003ASerializableDictionary/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7BE664D3_002DD424_002DFDE7_002D4FEC_002DFDFBC8846F8F_002Fd_003AAssets_002Fd_003APlugins_002Fd_003ADemigiant_002Fd_003ADOTween/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=95760EAA_002DEE33_002D59F8_002DD80D_002D0A40BD191E67/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=A65B4DBF_002D2016_002DADF7_002DCE99_002DE02F0FDDF41A/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=B253546A_002D34CF_002D5D9C_002D0BAF_002D2804A0787F50/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=B4798FBC_002D0718_002D0269_002DE38F_002D6F6CDB13FFED_002Fd_003AAssets_002Fd_003ASerializableDictionary_002Ff_003ASerializableDictionary_002Ecs/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=B4798FBC_002D0718_002D0269_002DE38F_002D6F6CDB13FFED_002Fd_003AAssets_002Fd_003ATextMesh_0020Pro/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=B98A448C_002D6212_002DEE3C_002D5E5B_002DBC674DED2A21/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/ALIGN_LINQ_QUERY/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/ALIGN_MULTILINE_CALLS_CHAIN/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/ALIGN_MULTILINE_PARAMETER/@EntryValue">True</s:Boolean>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AROUND_SINGLE_LINE_TYPE/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_BEFORE_BLOCK_STATEMENTS/@EntryValue">1</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_BEFORE_CONTROL_TRANSFER_STATEMENTS/@EntryValue">1</s:Int64>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/INDENT_PREPROCESSOR_REGION/@EntryValue">OUTDENT</s:String>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/KEEP_BLANK_LINES_IN_CODE/@EntryValue">1</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/KEEP_BLANK_LINES_IN_DECLARATIONS/@EntryValue">1</s:Int64>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=DDR/@EntryIndexedValue">DDR</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=EQ/@EntryIndexedValue">EQ</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=GO/@EntryIndexedValue">GO</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=GUID/@EntryIndexedValue">GUID</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=SFX/@EntryIndexedValue">SFX</s:String>
+	<s:Boolean x:Key="/Default/CodeStyle/Naming/CSharpNaming/ApplyAutoDetectedRules/@EntryValue">False</s:Boolean>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=Constants/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="AA_BB" /&gt;</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=EnumMember/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="AaBb_AaBb" /&gt;</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=Event/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="On" Suffix="" Style="AaBb" /&gt;</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=PrivateConstants/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="AA_BB" /&gt;</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=PublicFields/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="AaBb"&gt;&lt;ExtraRule Prefix="On" Suffix="" Style="AaBb" /&gt;&lt;/Policy&gt;</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/UserRules/=110218a1_002Dc4d4_002D4137_002Db798_002D981bc635cddc/@EntryIndexedValue">&lt;Policy&gt;&lt;Descriptor Staticness="Instance" AccessRightKinds="Private, Protected, ProtectedInternal" Description="Unity serialized field (Non-public)"&gt;&lt;ElementKinds&gt;&lt;Kind Name="UNITY_SERIALISED_FIELD" /&gt;&lt;/ElementKinds&gt;&lt;/Descriptor&gt;&lt;Policy Inspect="True" Prefix="_" Suffix="" Style="aaBb" /&gt;&lt;/Policy&gt;</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/UserRules/=5f0fdb63_002Dc892_002D4d2c_002D9324_002D15c80b22a7ef/@EntryIndexedValue">&lt;Policy&gt;&lt;Descriptor Staticness="Instance" AccessRightKinds="Any" Description="Unity serialized field"&gt;&lt;ElementKinds&gt;&lt;Kind Name="UNITY_SERIALISED_FIELD" /&gt;&lt;/ElementKinds&gt;&lt;/Descriptor&gt;&lt;Policy Inspect="True" Prefix="_" Suffix="" Style="aaBb" /&gt;&lt;/Policy&gt;</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/UserRules/=e66e0435_002Dde09_002D4fdf_002Da4ba_002D16a598a0c336/@EntryIndexedValue">&lt;Policy&gt;&lt;Descriptor Staticness="Instance" AccessRightKinds="Public" Description="Unity serialized field (Public)"&gt;&lt;ElementKinds&gt;&lt;Kind Name="UNITY_SERIALISED_FIELD" /&gt;&lt;/ElementKinds&gt;&lt;/Descriptor&gt;&lt;Policy Inspect="True" Prefix="" Suffix="" Style="AaBb" /&gt;&lt;/Policy&gt;</s:String>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpKeepExistingMigration/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpPlaceEmbeddedOnSameLineMigration/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpUseContinuousIndentInsideBracesMigration/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ESettingsUpgrade_002EMigrateBlankLinesAroundFieldToBlankLinesAroundProperty/@EntryIndexedValue">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=0D3F26BF1543F7428813D7AFE13FCDEB/Position/@EntryValue">13</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=13BCCD0B6ED212459750FB930F532E88/Position/@EntryValue">3</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=2B54107B610AD84BBA91E5BAD4D39F5B/Position/@EntryValue">12</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=2E4969B6A6B3984F99989AF480374340/Position/@EntryValue">8</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=33A304147CDAAC478CB57C944DD1422D/Position/@EntryValue">1</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=38ACF55F0772564291AEB5436552DB13/Position/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=4013A0AF3E778A4893D6E19540AE2F1B/Position/@EntryValue">2</s:Int64>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=4A3D3015A417544287748691E517D35D/EntryName/@EntryValue">SheetProcessor</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=4A3D3015A417544287748691E517D35D/Position/@EntryValue">15</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=7F7624DABBE66344ACB4799D7CE68822/Position/@EntryValue">14</s:Int64>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=87F9510EF7E97240926C856A5F1E7AF9/EntryName/@EntryValue">DIm Day Node Editor</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=87F9510EF7E97240926C856A5F1E7AF9/Position/@EntryValue">17</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=8BAA0179604063478FD5B7B5384FABAA/Position/@EntryValue">6</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=8C285D2E09A2EE4193B27CACDCAE18C6/Position/@EntryValue">4</s:Int64>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=928D0936FD07CF42959F4E2C6153EED2/EntryName/@EntryValue">Dim Day Node</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=928D0936FD07CF42959F4E2C6153EED2/Position/@EntryValue">16</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=A073BDE145011A4AB4AA7744144744AF/Position/@EntryValue">7</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=A278814B10816840A78843B8227564E5/Position/@EntryValue">10</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=C7A27F7BE50E4F4DBB1FDDBEACDBFC94/Position/@EntryValue">9</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=D23ABDFDB28D6A46A9344CE25CB40564/Position/@EntryValue">11</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=7F292FD322E41246839AFE76D9914B34/Entry/=EAFE9DCAB5D5DC4D933F8D618D71538E/Position/@EntryValue">5</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=F0CA621CDF5AB24282D8CDC11C520997/Entry/=2CBD6971A7955044AD2624B84FB49E38/Position/@EntryValue">9</s:Int64>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=F0CA621CDF5AB24282D8CDC11C520997/Entry/=4A3D3015A417544287748691E517D35D/EntryName/@EntryValue">&lt;No Name&gt;</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=F0CA621CDF5AB24282D8CDC11C520997/Entry/=4A3D3015A417544287748691E517D35D/Position/@EntryValue">10</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=F0CA621CDF5AB24282D8CDC11C520997/Entry/=567DCF4B487C244A9F6BB46E4E9F3B84/Position/@EntryValue">6</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=F0CA621CDF5AB24282D8CDC11C520997/Entry/=7F2A1BE8D0078241A9AE7802038BAD3C/Position/@EntryValue">7</s:Int64>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=F0CA621CDF5AB24282D8CDC11C520997/Entry/=87F9510EF7E97240926C856A5F1E7AF9/EntryName/@EntryValue">DIm Day Node Editor</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=F0CA621CDF5AB24282D8CDC11C520997/Entry/=87F9510EF7E97240926C856A5F1E7AF9/Position/@EntryValue">12</s:Int64>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=F0CA621CDF5AB24282D8CDC11C520997/Entry/=928D0936FD07CF42959F4E2C6153EED2/EntryName/@EntryValue">Dim Day Node</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=F0CA621CDF5AB24282D8CDC11C520997/Entry/=928D0936FD07CF42959F4E2C6153EED2/Position/@EntryValue">11</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=F0CA621CDF5AB24282D8CDC11C520997/Entry/=C4795E57DDEC1C4F97BBC8C7173EBBCA/Position/@EntryValue">8</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/CustomProperties/=FileName/@EntryIndexedValue">NewProcessor</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/CustomProperties/=ValidateFileName/@EntryIndexedValue">False</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Description/@EntryValue">SheetProcessor</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Text/@EntryValue">using DDR.Graph;
+using UnityEngine;
+
+namespace DDR.GUI.Sheets
+{
+    public class $NAME$: Sheet
+    {
+        public override void Init(DDRNode node)
+        {
+            State = State.Busy;
+            
+            if (node is not $TYPE$ nodeData)
+            {
+                Debug.LogError("Invalid processor node");
+                return;
+            }
+            
+            $END$
+            Height = _backgroundSpriteRenderer.sprite.bounds.size.y;
+        }
+
+        public override void Reset()
+        {
+            
+        }
+        
+        public override void MoveToScroller(Vector3 position)
+        {
+            var animationEnter = DDRPlayer.AnimSettings.Values["Sheet_Scroller_Enter"];
+            transform.DOMove(position, animationEnter.Duration).SetEase(animationEnter.Ease).SetDelay(animationEnter.Delay).OnComplete(ReachedScroller);
+        }
+
+        public override void ReachedScroller()
+        {
+            OnReachedScroller.Invoke();
+            State = State.Ready;
+        }
+    }
+}
+</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/UITag/@EntryValue">DDR</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Field/=NAME/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Field/=NAME/Expression/@EntryValue">getAlphaNumericFileNameWithoutExtension()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Field/=NAME/InitialRange/@EntryValue">-1</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Field/=NAME/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Field/=TYPE/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Field/=TYPE/Expression/@EntryValue">typeName()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Field/=TYPE/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Scope/=5CD53BAD2600294CB6AD6B82170CD657/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Scope/=5CD53BAD2600294CB6AD6B82170CD657/Type/@EntryValue">InUnityCSharpRuntimeFolder</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Scope/=60090D409A41684DB6BD024A7C9E4DDB/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Scope/=60090D409A41684DB6BD024A7C9E4DDB/Type/@EntryValue">InUnityCSharpAssetsFolder</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Scope/=A32573B30A4F5B408A5C00ECA4ED3B30/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4A3D3015A417544287748691E517D35D/Scope/=A32573B30A4F5B408A5C00ECA4ED3B30/Type/@EntryValue">InUnityCSharpProject</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Description/@EntryValue">Creates a new character field</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Reformat/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Shortcut/@EntryValue">DDRC</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Text/@EntryValue">public $Type$ $END$$Name$
+{
+    get =&gt; _$Name$;
+    set =&gt; _$Name$ = value;
+}
+[SerializeField] protected $Type$ $Name$;
+protected $Type$ _$Name$;</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Field/=Name/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Field/=Name/InitialRange/@EntryValue">1</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Field/=Name/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Field/=Type/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Field/=Type/Expression/@EntryValue">typeName()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Field/=Type/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=60099E259961CC4BB948F3513BDC5774/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Applicability/=Surround/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Categories/=Imported_0020Visual_0020C_0023_0020Snippets/@EntryIndexedValue">Imported Visual C# Snippets</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Description/@EntryValue">Creates modifyer var and getter </s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/IsBlessed/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Reformat/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Shortcut/@EntryValue">modif</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Text/@EntryValue">public int $END$$ModName$Modifier
+{
+    get =&gt; _$ModName$Modifier;
+    set
+    { 
+        if(value == _$ModName$Modifier) return;
+        _$ModName$Modifier = Mathf.Max(value, 0);
+    } 
+}
+protected int _$ModName$Modifier;</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Field/=ModName/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Field/=ModName/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Scope/=4B847A5ED8F7574F925C66209222DF71/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Scope/=4B847A5ED8F7574F925C66209222DF71/Type/@EntryValue">AtLineStart</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Scope/=74A278E9BF386142B53D57114609A033/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Scope/=74A278E9BF386142B53D57114609A033/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=777D9A345A44BA428C55220E9EAD7EDB/Scope/=74A278E9BF386142B53D57114609A033/Type/@EntryValue">InCSharpExceptStringLiterals</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/CustomProperties/=FileName/@EntryIndexedValue">NewNodeEditor</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/CustomProperties/=ValidateFileName/@EntryIndexedValue">False</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Description/@EntryValue">DIm Day Node Editor</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Text/@EntryValue">using DDR.Data;
+using UnityEditor;
+using UnityEngine;
+using XNodeEditor;
+
+namespace DDR.Graph.Editor
+{
+    [CustomNodeEditor(typeof($TYPE$))]
+    public class $NAME$ : DDRNodeEditor
+    {
+        private $TYPE$ _targetObject;
+
+        public override void OnBodyGUI()
+        {
+            serializedObject.Update();
+            _targetObject ??= target as $TYPE$;
+            
+            SerializePortPair(_targetObject, nameof($TYPE$.Input), nameof($TYPE$.Output));
+            
+            $END$
+            
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        public override int GetWidth()
+        {
+            return 240;
+        }
+
+        public override Color GetTint()
+        {
+            return NodeEditorPreferences.GetSettings().GetColors()._defaultNodeColor;
+        }
+    }
+}</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/UITag/@EntryValue">DDR</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Field/=NAME/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Field/=NAME/Expression/@EntryValue">getAlphaNumericFileNameWithoutExtension()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Field/=NAME/InitialRange/@EntryValue">-1</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Field/=NAME/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Field/=TYPE/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Field/=TYPE/Expression/@EntryValue">typeName()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Field/=TYPE/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Scope/=16F25D72357EAF4A8C8E3FEF06B172AA/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=87F9510EF7E97240926C856A5F1E7AF9/Scope/=16F25D72357EAF4A8C8E3FEF06B172AA/Type/@EntryValue">InUnityCSharpEditorFolder</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/CustomProperties/=FileName/@EntryIndexedValue">NewNode</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/CustomProperties/=ValidateFileName/@EntryIndexedValue">False</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Description/@EntryValue">Dim Day Node</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Text/@EntryValue">using UnityEngine;
+using XNode;
+
+namespace DDR.Graph
+{
+	[CreateNodeMenu("$MENU_PATH$/$NAME$")]
+	public class $NAME$: DDRNode 
+	{
+    #region Serialized Fields
+        $END$
+    #endregion
+
+    #region Public Methods
+
+        public override object GetValue(NodePort port)
+        {
+            return 1;
+        }
+
+        public override void Process()
+        {
+        }
+
+    #endregion
+	}
+}
+</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/UITag/@EntryValue">DDR</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Field/=MENU_005FPATH/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Field/=MENU_005FPATH/Expression/@EntryValue">constant("New")</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Field/=MENU_005FPATH/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Field/=NAME/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Field/=NAME/Expression/@EntryValue">getAlphaNumericFileNameWithoutExtension()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Field/=NAME/InitialRange/@EntryValue">-1</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Field/=NAME/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Scope/=5CD53BAD2600294CB6AD6B82170CD657/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Scope/=5CD53BAD2600294CB6AD6B82170CD657/Type/@EntryValue">InUnityCSharpRuntimeFolder</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Scope/=60090D409A41684DB6BD024A7C9E4DDB/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Scope/=60090D409A41684DB6BD024A7C9E4DDB/Type/@EntryValue">InUnityCSharpAssetsFolder</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Scope/=A32573B30A4F5B408A5C00ECA4ED3B30/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=928D0936FD07CF42959F4E2C6153EED2/Scope/=A32573B30A4F5B408A5C00ECA4ED3B30/Type/@EntryValue">InUnityCSharpProject</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Cinemachine/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Datas/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Plebis/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=tweens/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

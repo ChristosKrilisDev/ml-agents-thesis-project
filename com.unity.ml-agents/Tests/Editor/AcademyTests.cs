@@ -15,12 +15,13 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(Academy.k_PackageVersion, packageInfo.version);
         }
 
-        class RecursiveAgent : Agent
+        private class RecursiveAgent : Agent
         {
-            int m_collectObsCount;
+            private int m_collectObsCount;
             public override void CollectObservations(VectorSensor sensor)
             {
                 m_collectObsCount++;
+
                 if (m_collectObsCount == 1)
                 {
                     // NEVER DO THIS IN REAL CODE!
@@ -45,7 +46,6 @@ namespace Unity.MLAgents.Tests
             // Make sure the Academy reset to a good state and is still steppable.
             Academy.Instance.EnvironmentStep();
         }
-
 
     }
 }

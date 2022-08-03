@@ -15,7 +15,11 @@ namespace Unity.MLAgents.Tests
             var actionSpec = ActionSpec.MakeDiscrete(3, 2);
 
             var applier = new DiscreteActionOutputApplier(actionSpec, 2020, null);
-            var agentIds = new List<int> { 42, 1337 };
+            var agentIds = new List<int>
+            {
+                42,
+                1337
+            };
             var actionBuffers = new Dictionary<int, ActionBuffers>();
             actionBuffers[42] = new ActionBuffers(actionSpec);
             actionBuffers[1337] = new ActionBuffers(actionSpec);
@@ -30,9 +34,12 @@ namespace Unity.MLAgents.Tests
                         2.0f, // Agent 0, branch 0
                         1.0f, // Agent 0, branch 1
                         0.0f, // Agent 1, branch 0
-                        0.0f  // Agent 1, branch 1
+                        0.0f // Agent 1, branch 1
                     }),
-                shape = new long[] { 2, 2 },
+                shape = new long[]
+                {
+                    2, 2
+                },
                 valueType = TensorProxy.TensorType.FloatingPoint
             };
 
@@ -62,15 +69,19 @@ namespace Unity.MLAgents.Tests
                     new[]
                     {
                         smallLogProb, smallLogProb, largeLogProb, // Agent 0, branch 0
-                        smallLogProb, largeLogProb,               // Agent 0, branch 1
+                        smallLogProb, largeLogProb, // Agent 0, branch 1
                         largeLogProb, smallLogProb, smallLogProb, // Agent 1, branch 0
-                        largeLogProb, smallLogProb,               // Agent 1, branch 1
+                        largeLogProb, smallLogProb // Agent 1, branch 1
                     }),
                 valueType = TensorProxy.TensorType.FloatingPoint
             };
 
             var applier = new LegacyDiscreteActionOutputApplier(actionSpec, 2020, null);
-            var agentIds = new List<int> { 42, 1337 };
+            var agentIds = new List<int>
+            {
+                42,
+                1337
+            };
             var actionBuffers = new Dictionary<int, ActionBuffers>();
             actionBuffers[42] = new ActionBuffers(actionSpec);
             actionBuffers[1337] = new ActionBuffers(actionSpec);

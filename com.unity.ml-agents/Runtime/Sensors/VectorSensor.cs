@@ -11,9 +11,9 @@ namespace Unity.MLAgents.Sensors
     {
         // TODO use float[] instead
         // TODO allow setting float[]
-        List<float> m_Observations;
-        ObservationSpec m_ObservationSpec;
-        string m_Name;
+        private List<float> m_Observations;
+        private ObservationSpec m_ObservationSpec;
+        private string m_Name;
 
         /// <summary>
         /// Initializes the sensor.
@@ -26,6 +26,7 @@ namespace Unity.MLAgents.Sensors
             if (string.IsNullOrEmpty(name))
             {
                 name = $"VectorSensor_size{observationSize}";
+
                 if (observationType != ObservationType.Default)
                 {
                     name += $"_{observationType.ToString()}";
@@ -41,6 +42,7 @@ namespace Unity.MLAgents.Sensors
         public int Write(ObservationWriter writer)
         {
             var expectedObservations = m_ObservationSpec.Shape[0];
+
             if (m_Observations.Count > expectedObservations)
             {
                 // Too many observations, truncate
@@ -57,12 +59,14 @@ namespace Unity.MLAgents.Sensors
                     "Fewer observations ({0}) made than vector observation size ({1}). The observations will be padded.",
                     m_Observations.Count, expectedObservations
                 );
-                for (int i = m_Observations.Count; i < expectedObservations; i++)
+
+                for (var i = m_Observations.Count; i < expectedObservations; i++)
                 {
                     m_Observations.Add(0);
                 }
             }
             writer.AddList(m_Observations);
+
             return expectedObservations;
         }
 
@@ -117,12 +121,12 @@ namespace Unity.MLAgents.Sensors
             return BuiltInSensorType.VectorSensor;
         }
 
-        void Clear()
+        private void Clear()
         {
             m_Observations.Clear();
         }
 
-        void AddFloatObs(float obs)
+        private void AddFloatObs(float obs)
         {
             Utilities.DebugCheckNanAndInfinity(obs, nameof(obs), nameof(AddFloatObs));
             m_Observations.Add(obs);

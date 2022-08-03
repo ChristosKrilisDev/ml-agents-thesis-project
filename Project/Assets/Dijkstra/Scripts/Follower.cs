@@ -23,7 +23,7 @@ namespace Dijstra.path
         protected Path m_Path = new Path();
         protected Node m_Current;
 
-        void Start()
+        private void Start()
         {
             m_Path = m_Graph.GetShortestPath(m_Start, m_End);
             Follow(m_Path);
@@ -37,7 +37,7 @@ namespace Dijstra.path
         {
             StopCoroutine("FollowPath");
             m_Path = path;
-            transform.position = m_Path.nodes[0].transform.position;
+            transform.position = m_Path.PathNodes[0].transform.position;
             StartCoroutine("FollowPath");
         }
 
@@ -45,21 +45,22 @@ namespace Dijstra.path
         /// Following the path.
         /// </summary>
         /// <returns>The path.</returns>
-        IEnumerator FollowPath()
+        private IEnumerator FollowPath()
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.update += Update;
 #endif
-            var e = m_Path.nodes.GetEnumerator();
+            var e = m_Path.PathNodes.GetEnumerator();
+
             while (e.MoveNext())
             {
                 m_Current = e.Current;
 
                 // Wait until we reach the current target node and then go to next node
                 yield return new WaitUntil(() =>
-              {
-                  return transform.position == m_Current.transform.position;
-              });
+                {
+                    return transform.position == m_Current.transform.position;
+                });
             }
             m_Current = null;
 #if UNITY_EDITOR
@@ -67,7 +68,7 @@ namespace Dijstra.path
 #endif
         }
 
-        void Update()
+        private void Update()
         {
             if (m_Current != null)
             {

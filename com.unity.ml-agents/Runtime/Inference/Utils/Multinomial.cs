@@ -10,7 +10,7 @@ namespace Unity.MLAgents.Inference.Utils
     /// </summary>
     internal class Multinomial
     {
-        readonly System.Random m_Random;
+        private readonly System.Random m_Random;
 
         /// <summary>
         /// Constructor.
@@ -38,6 +38,7 @@ namespace Unity.MLAgents.Inference.Utils
         {
             var p = (float)m_Random.NextDouble() * cmf[branchSize - 1];
             var cls = 0;
+
             while (cmf[cls] < p)
             {
                 ++cls;

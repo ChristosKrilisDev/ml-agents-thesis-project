@@ -158,6 +158,7 @@ namespace Unity.MLAgents.Integrations.Match3
             var currentBoardSize = GetCurrentBoardSize();
 
             var currentMove = Move.FromMoveIndex(0, maxBoardSize);
+
             for (var i = 0; i < NumMoves(); i++)
             {
                 if (currentMove.InRangeForBoard(currentBoardSize))
@@ -178,6 +179,7 @@ namespace Unity.MLAgents.Integrations.Match3
             var currentBoardSize = GetCurrentBoardSize();
 
             var currentMove = Move.FromMoveIndex(0, maxBoardSize);
+
             for (var i = 0; i < NumMoves(); i++)
             {
                 if (currentMove.InRangeForBoard(currentBoardSize) && IsMoveValid(currentMove))
@@ -212,14 +214,16 @@ namespace Unity.MLAgents.Integrations.Match3
                     }
                 }
 
-                bool moveMatches = CheckHalfMove(otherRow, otherCol, moveVal, move.Direction);
+                var moveMatches = CheckHalfMove(otherRow, otherCol, moveVal, move.Direction);
+
                 if (moveMatches)
                 {
                     // early out
                     return true;
                 }
 
-                bool otherMatches = CheckHalfMove(move.Row, move.Column, oppositeVal, move.OtherDirection());
+                var otherMatches = CheckHalfMove(move.Row, move.Column, oppositeVal, move.OtherDirection());
+
                 return otherMatches;
             }
         }
@@ -233,7 +237,7 @@ namespace Unity.MLAgents.Integrations.Match3
         /// <param name="newValue"></param>
         /// <param name="incomingDirection"></param>
         /// <returns></returns>
-        bool CheckHalfMove(int newRow, int newCol, int newValue, Direction incomingDirection)
+        private bool CheckHalfMove(int newRow, int newCol, int newValue, Direction incomingDirection)
         {
             var currentBoardSize = GetCurrentBoardSize();
             int matchedLeft = 0, matchedRight = 0, matchedUp = 0, matchedDown = 0;
@@ -282,7 +286,7 @@ namespace Unity.MLAgents.Integrations.Match3
                 }
             }
 
-            if ((matchedUp + matchedDown >= 2) || (matchedLeft + matchedRight >= 2))
+            if (matchedUp + matchedDown >= 2 || matchedLeft + matchedRight >= 2)
             {
                 return true;
             }
@@ -299,6 +303,7 @@ namespace Unity.MLAgents.Integrations.Match3
         internal void CheckBoardSizes(BoardSize originalMaxBoardSize)
         {
             var currentBoardSize = GetCurrentBoardSize();
+
             if (!(currentBoardSize <= originalMaxBoardSize))
             {
                 Debug.LogWarning(

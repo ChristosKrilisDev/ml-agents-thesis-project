@@ -34,10 +34,7 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// The compression type that the sensor will use for its observations.
         /// </summary>
-        public SensorCompressionType SensorCompressionType
-        {
-            get => m_SensorCompressionType;
-        }
+        public SensorCompressionType SensorCompressionType => m_SensorCompressionType;
 
         internal int[] m_CompressedChannelMapping;
 
@@ -52,10 +49,7 @@ namespace Unity.MLAgents.Sensors
         /// For example, mapping for CameraSensor using grayscale and stacking of two: [0, 0, 0, 1, 1, 1]
         /// Mapping for GridSensor of 4 channels and stacking of two: [0, 1, 2, 3, -1, -1, 4, 5, 6, 7, -1, -1]
         /// </remarks>
-        public int[] CompressedChannelMapping
-        {
-            get => m_CompressedChannelMapping;
-        }
+        public int[] CompressedChannelMapping => m_CompressedChannelMapping;
 
         /// <summary>
         /// Return a CompressionSpec indicating possible compression.
@@ -90,15 +84,18 @@ namespace Unity.MLAgents.Sensors
         internal bool IsTrivialMapping()
         {
             var mapping = CompressedChannelMapping;
+
             if (mapping == null)
             {
                 return true;
             }
+
             // check if mapping equals zero mapping
             if (mapping.Length == 3 && mapping.All(m => m == 0))
             {
                 return true;
             }
+
             // check if mapping equals identity mapping
             for (var i = 0; i < mapping.Length; i++)
             {
@@ -107,6 +104,7 @@ namespace Unity.MLAgents.Sensors
                     return false;
                 }
             }
+
             return true;
         }
     }

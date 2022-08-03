@@ -22,9 +22,9 @@ namespace Unity.MLAgents.Extensions.Input
         /// </summary>
         public readonly int NumTimesToProcess;
         public readonly InputDevice InputDevice;
-        NativeArray<byte> m_EventBuffer;
-        InputEventPtr m_Ptr;
-        int m_Count;
+        private NativeArray<byte> m_EventBuffer;
+        private InputEventPtr m_Ptr;
+        private int m_Count;
 
 #if UNITY_EDITOR
         public static InputActuatorEventContext s_EditorContext = new InputActuatorEventContext();
@@ -57,6 +57,7 @@ namespace Unity.MLAgents.Extensions.Input
                 m_EventBuffer = StateEvent.From(InputDevice, out m_Ptr);
             }
             eventPtr = m_Ptr;
+
             return this;
         }
 
@@ -69,6 +70,7 @@ namespace Unity.MLAgents.Extensions.Input
             }
 #endif
             m_Count++;
+
             if (m_Count == NumTimesToProcess && m_Ptr.valid)
             {
                 InputSystem.QueueEvent(m_Ptr);

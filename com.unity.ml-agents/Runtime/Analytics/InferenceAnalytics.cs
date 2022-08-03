@@ -11,7 +11,6 @@ using UnityEngine;
 using UnityEngine.Analytics;
 #endif
 
-
 #if UNITY_EDITOR
 using UnityEditor;
 #if MLA_UNITY_ANALYTICS_MODULE
@@ -19,30 +18,28 @@ using UnityEditor.Analytics;
 #endif // MLA_UNITY_ANALYTICS_MODULE
 #endif // UNITY_EDITOR
 
-
 namespace Unity.MLAgents.Analytics
 {
     internal class InferenceAnalytics
     {
-        const string k_VendorKey = "unity.ml-agents";
-        const string k_EventName = "ml_agents_inferencemodelset";
-        const int k_EventVersion = 1;
+        private const string k_VendorKey = "unity.ml-agents";
+        private const string k_EventName = "ml_agents_inferencemodelset";
+        private const int k_EventVersion = 1;
 
         /// <summary>
         /// Whether or not we've registered this particular event yet
         /// </summary>
-        static bool s_EventRegistered;
+        private static bool s_EventRegistered;
 
         /// <summary>
         /// Hourly limit for this event name
         /// </summary>
-        const int k_MaxEventsPerHour = 1000;
+        private const int k_MaxEventsPerHour = 1000;
 
         /// <summary>
         /// Maximum number of items in this event.
         /// </summary>
-        const int k_MaxNumberOfElements = 1000;
-
+        private const int k_MaxNumberOfElements = 1000;
 
 #if UNITY_EDITOR && MLA_UNITY_ANALYTICS_MODULE && ENABLE_CLOUD_SERVICES_ANALYTICS
         /// <summary>
@@ -51,7 +48,7 @@ namespace Unity.MLAgents.Analytics
         private static HashSet<NNModel> s_SentModels;
 #endif
 
-        static bool EnableAnalytics()
+        private static bool EnableAnalytics()
         {
 #if UNITY_EDITOR && MLA_UNITY_ANALYTICS_MODULE && ENABLE_CLOUD_SERVICES_ANALYTICS
             if (s_EventRegistered)
@@ -59,17 +56,19 @@ namespace Unity.MLAgents.Analytics
                 return true;
             }
 
-            AnalyticsResult result = EditorAnalytics.RegisterEventWithLimit(k_EventName, k_MaxEventsPerHour, k_MaxNumberOfElements, k_VendorKey, k_EventVersion);
+            var result = EditorAnalytics.RegisterEventWithLimit(k_EventName, k_MaxEventsPerHour, k_MaxNumberOfElements, k_VendorKey, k_EventVersion);
+
             if (result == AnalyticsResult.Ok)
             {
                 s_EventRegistered = true;
             }
+
             if (s_EventRegistered && s_SentModels == null)
             {
                 s_SentModels = new HashSet<NNModel>();
             }
 
-#else  // no editor, no analytics
+#else // no editor, no analytics
             s_EventRegistered = false;
 #endif
             return s_EventRegistered;
@@ -124,6 +123,7 @@ namespace Unity.MLAgents.Analytics
             }
 
             var data = GetEventForModel(nnModel, behaviorName, inferenceDevice, sensors, actionSpec, actuators);
+
             // Note - to debug, use JsonUtility.ToJson on the event.
             // Debug.Log(JsonUtility.ToJson(data, true));
             if (AnalyticsUtils.s_SendEditorAnalytics)
@@ -180,12 +180,14 @@ namespace Unity.MLAgents.Analytics
 
             inferenceEvent.ActionSpec = EventActionSpec.FromActionSpec(actionSpec);
             inferenceEvent.ObservationSpecs = new List<EventObservationSpec>(sensors.Count);
+
             foreach (var sensor in sensors)
             {
                 inferenceEvent.ObservationSpecs.Add(EventObservationSpec.FromSensor(sensor));
             }
 
             inferenceEvent.ActuatorInfos = new List<EventActuatorInfo>(actuators.Count);
+
             foreach (var actuator in actuators)
             {
                 inferenceEvent.ActuatorInfos.Add(EventActuatorInfo.FromActuator(actuator));
@@ -193,6 +195,7 @@ namespace Unity.MLAgents.Analytics
 
             inferenceEvent.TotalWeightSizeBytes = GetModelWeightSize(barracudaModel);
             inferenceEvent.ModelHash = GetModelHash(barracudaModel);
+
             return inferenceEvent;
         }
 
@@ -203,9 +206,10 @@ namespace Unity.MLAgents.Analytics
         /// </summary>
         /// <param name="barracudaModel"></param>
         /// <returns></returns>
-        static long GetModelWeightSize(Model barracudaModel)
+        private static long GetModelWeightSize(Model barracudaModel)
         {
             long totalWeightsSizeInBytes = 0;
+
             for (var l = 0; l < barracudaModel.layers.Count; ++l)
             {
                 for (var d = 0; d < barracudaModel.layers[l].datasets.Length; ++d)
@@ -213,13 +217,14 @@ namespace Unity.MLAgents.Analytics
                     totalWeightsSizeInBytes += barracudaModel.layers[l].datasets[d].length;
                 }
             }
+
             return totalWeightsSizeInBytes;
         }
 
         /// <summary>
         /// Wrapper around Hash128 that supports Append(float[], int, int)
         /// </summary>
-        struct MLAgentsHash128
+        private struct MLAgentsHash128
         {
             private Hash128 m_Hash;
 
@@ -263,7 +268,7 @@ namespace Unity.MLAgents.Analytics
         /// </summary>
         /// <param name="barracudaModel"></param>
         /// <returns></returns>
-        static string GetModelHash(Model barracudaModel)
+        private static string GetModelHash(Model barracudaModel)
         {
             var hash = new MLAgentsHash128();
 

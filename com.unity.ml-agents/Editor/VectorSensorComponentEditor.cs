@@ -3,7 +3,7 @@ using Unity.MLAgents.Sensors;
 
 namespace Unity.MLAgents.Editor
 {
-    [CustomEditor(typeof(VectorSensorComponent), editorForChildClasses: true)]
+    [CustomEditor(typeof(VectorSensorComponent), true)]
     [CanEditMultipleObjects]
     internal class VectorSensorComponentEditor : UnityEditor.Editor
     {

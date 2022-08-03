@@ -2,7 +2,7 @@ using UnityEditor;
 using Unity.MLAgents.Sensors;
 namespace Unity.MLAgents.Editor
 {
-    [CustomEditor(typeof(RenderTextureSensorComponent), editorForChildClasses: true)]
+    [CustomEditor(typeof(RenderTextureSensorComponent), true)]
     [CanEditMultipleObjects]
     internal class RenderTextureSensorComponentEditor : UnityEditor.Editor
     {
@@ -34,7 +34,7 @@ namespace Unity.MLAgents.Editor
             }
         }
 
-        void UpdateSensor()
+        private void UpdateSensor()
         {
             var sensorComponent = serializedObject.targetObject as RenderTextureSensorComponent;
             sensorComponent?.UpdateSensor();

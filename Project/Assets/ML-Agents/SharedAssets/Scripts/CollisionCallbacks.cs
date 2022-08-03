@@ -17,7 +17,6 @@ namespace Unity.MLAgentsExamples
         //            Debug.Log($"OnBoolEvent {value}");
         //        }
 
-
         [Header("Collider Tag To Detect")]
         public string tagToDetect = "agent"; //collider tag to detect
 

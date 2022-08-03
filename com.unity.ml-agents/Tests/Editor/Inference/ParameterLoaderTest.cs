@@ -16,16 +16,19 @@ namespace Unity.MLAgents.Tests
 
         public override ISensor[] CreateSensors()
         {
-            return new ISensor[] { Sensor };
+            return new ISensor[]
+            {
+                Sensor
+            };
         }
     }
 
     public class Test3DSensor : ISensor, IBuiltInSensor
     {
-        int m_Width;
-        int m_Height;
-        int m_Channels;
-        string m_Name;
+        private int m_Width;
+        private int m_Height;
+        private int m_Channels;
+        private string m_Name;
         // Dummy value for the IBuiltInSensor interface
         public const int k_BuiltInSensorType = -42;
 
@@ -44,10 +47,11 @@ namespace Unity.MLAgents.Tests
 
         public int Write(ObservationWriter writer)
         {
-            for (int i = 0; i < m_Width * m_Height * m_Channels; i++)
+            for (var i = 0; i < m_Width * m_Height * m_Channels; i++)
             {
                 writer[i] = 0.0f;
             }
+
             return m_Width * m_Height * m_Channels;
         }
 
@@ -78,74 +82,84 @@ namespace Unity.MLAgents.Tests
     [TestFixture]
     public class ParameterLoaderTest
     {
-        const string k_discrete_ONNX_v2 = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete_rank2_vector_v2_0.onnx";
-        const string k_hybrid_ONNX_recurr_v2 = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/hybrid0vis8vec_2c_2_3d_v2_0.onnx";
-
+        private const string k_discrete_ONNX_v2 = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete_rank2_vector_v2_0.onnx";
+        private const string k_hybrid_ONNX_recurr_v2 = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/hybrid0vis8vec_2c_2_3d_v2_0.onnx";
 
         // ONNX model with continuous/discrete action output (support hybrid action)
-        const string k_continuousONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/continuous2vis8vec2action_v1_0.onnx";
-        const string k_discreteONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete1vis0vec_2_3action_obsolete_recurr_v1_0.onnx";
-        const string k_hybridONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/hybrid0vis53vec_3c_2daction_v1_0.onnx";
+        private const string k_continuousONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/continuous2vis8vec2action_v1_0.onnx";
+        private const string k_discreteONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete1vis0vec_2_3action_obsolete_recurr_v1_0.onnx";
+        private const string k_hybridONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/hybrid0vis53vec_3c_2daction_v1_0.onnx";
         // NN model with single action output (deprecated, does not support hybrid action).
         // Same BrainParameters settings as the corresponding ONNX model.
-        const string k_continuousNNPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/continuous2vis8vec2action_deprecated_v1_0.nn";
-        const string k_discreteNNPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete1vis0vec_2_3action_recurr_deprecated_v1_0.nn";
+        private const string k_continuousNNPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/continuous2vis8vec2action_deprecated_v1_0.nn";
+        private const string k_discreteNNPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete1vis0vec_2_3action_recurr_deprecated_v1_0.nn";
 
-        NNModel rank2ONNXModel;
-        NNModel hybridRecurrV2Model;
-        NNModel continuousONNXModel;
-        NNModel discreteONNXModel;
-        NNModel hybridONNXModel;
-        NNModel continuousNNModel;
-        NNModel discreteNNModel;
-        Test3DSensorComponent sensor_21_20_3;
-        Test3DSensorComponent sensor_20_22_3;
-        BufferSensor sensor_23_20;
-        VectorSensor sensor_8;
-        VectorSensor sensor_10;
+        private NNModel rank2ONNXModel;
+        private NNModel hybridRecurrV2Model;
+        private NNModel continuousONNXModel;
+        private NNModel discreteONNXModel;
+        private NNModel hybridONNXModel;
+        private NNModel continuousNNModel;
+        private NNModel discreteNNModel;
+        private Test3DSensorComponent sensor_21_20_3;
+        private Test3DSensorComponent sensor_20_22_3;
+        private BufferSensor sensor_23_20;
+        private VectorSensor sensor_8;
+        private VectorSensor sensor_10;
 
-        BrainParameters GetContinuous2vis8vec2actionBrainParameters()
+        private BrainParameters GetContinuous2vis8vec2actionBrainParameters()
         {
             var validBrainParameters = new BrainParameters();
             validBrainParameters.VectorObservationSize = 8;
             validBrainParameters.NumStackedVectorObservations = 1;
             validBrainParameters.ActionSpec = ActionSpec.MakeContinuous(2);
+
             return validBrainParameters;
         }
 
-        BrainParameters GetDiscrete1vis0vec_2_3action_recurrModelBrainParameters()
+        private BrainParameters GetDiscrete1vis0vec_2_3action_recurrModelBrainParameters()
         {
             var validBrainParameters = new BrainParameters();
             validBrainParameters.VectorObservationSize = 0;
             validBrainParameters.NumStackedVectorObservations = 1;
             validBrainParameters.ActionSpec = ActionSpec.MakeDiscrete(2, 3);
+
             return validBrainParameters;
         }
 
-        BrainParameters GetHybridBrainParameters()
+        private BrainParameters GetHybridBrainParameters()
         {
             var validBrainParameters = new BrainParameters();
             validBrainParameters.VectorObservationSize = 53;
             validBrainParameters.NumStackedVectorObservations = 1;
-            validBrainParameters.ActionSpec = new ActionSpec(3, new[] { 2 });
+            validBrainParameters.ActionSpec = new ActionSpec(3, new[]
+            {
+                2
+            });
+
             return validBrainParameters;
         }
 
-        BrainParameters GetRank2BrainParameters()
+        private BrainParameters GetRank2BrainParameters()
         {
             var validBrainParameters = new BrainParameters();
             validBrainParameters.VectorObservationSize = 4;
             validBrainParameters.NumStackedVectorObservations = 2;
             validBrainParameters.ActionSpec = ActionSpec.MakeDiscrete(3, 3, 3);
+
             return validBrainParameters;
         }
 
-        BrainParameters GetRecurrHybridBrainParameters()
+        private BrainParameters GetRecurrHybridBrainParameters()
         {
             var validBrainParameters = new BrainParameters();
             validBrainParameters.VectorObservationSize = 8;
             validBrainParameters.NumStackedVectorObservations = 1;
-            validBrainParameters.ActionSpec = new ActionSpec(2, new int[] { 2, 3 });
+            validBrainParameters.ActionSpec = new ActionSpec(2, new int[]
+            {
+                2, 3
+            });
+
             return validBrainParameters;
         }
 
@@ -268,25 +282,37 @@ namespace Unity.MLAgents.Tests
 
             var errors = BarracudaModelParamLoader.CheckModel(
                 model, validBrainParameters,
-                new ISensor[] { sensor_23_20, sensor_10, sensor_8 }, new ActuatorComponent[0]
+                new ISensor[]
+                {
+                    sensor_23_20, sensor_10, sensor_8
+                }, new ActuatorComponent[0]
             );
             Assert.AreEqual(0, errors.Count()); // There should not be any errors
 
             errors = BarracudaModelParamLoader.CheckModel(
                 model, validBrainParameters,
-                new ISensor[] { sensor_23_20, sensor_10 }, new ActuatorComponent[0]
+                new ISensor[]
+                {
+                    sensor_23_20, sensor_10
+                }, new ActuatorComponent[0]
             );
             Assert.AreNotEqual(0, errors.Count()); // Wrong number of sensors
 
             errors = BarracudaModelParamLoader.CheckModel(
                 model, validBrainParameters,
-                new ISensor[] { new BufferSensor(20, 40, "BufferSensor"), sensor_10, sensor_8 }, new ActuatorComponent[0]
+                new ISensor[]
+                {
+                    new BufferSensor(20, 40, "BufferSensor"), sensor_10, sensor_8
+                }, new ActuatorComponent[0]
             );
             Assert.AreNotEqual(0, errors.Count()); // Wrong buffer sensor size
 
             errors = BarracudaModelParamLoader.CheckModel(
                 model, validBrainParameters,
-                new ISensor[] { sensor_23_20, sensor_10, sensor_10 }, new ActuatorComponent[0]
+                new ISensor[]
+                {
+                    sensor_23_20, sensor_10, sensor_10
+                }, new ActuatorComponent[0]
             );
             Assert.AreNotEqual(0, errors.Count()); // Wrong vector sensor size
         }
@@ -302,9 +328,7 @@ namespace Unity.MLAgents.Tests
                 model, validBrainParameters,
                 new ISensor[]
                 {
-                    new VectorSensor(8),
-                    sensor_21_20_3.CreateSensors()[0],
-                    sensor_20_22_3.CreateSensors()[0]
+                    new VectorSensor(8), sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
                 },
                 new ActuatorComponent[0]
             );
@@ -320,8 +344,12 @@ namespace Unity.MLAgents.Tests
 
             var errors = BarracudaModelParamLoader.CheckModel(
                 model, validBrainParameters,
-                new ISensor[] { sensor_21_20_3.CreateSensors()[0] }, new ActuatorComponent[0]
+                new ISensor[]
+                {
+                    sensor_21_20_3.CreateSensors()[0]
+                }, new ActuatorComponent[0]
             );
+
             foreach (var e in errors)
             {
                 Debug.Log(e.Message);
@@ -338,22 +366,37 @@ namespace Unity.MLAgents.Tests
 
             var errors = BarracudaModelParamLoader.CheckModel(
                 model, validBrainParameters,
-                new ISensor[] { sensor_8 }, new ActuatorComponent[0]
+                new ISensor[]
+                {
+                    sensor_8
+                }, new ActuatorComponent[0]
             );
             Assert.AreEqual(num_errors, errors.Count()); // There should not be any errors
 
             var invalidBrainParameters = GetRecurrHybridBrainParameters();
-            invalidBrainParameters.ActionSpec = new ActionSpec(1, new int[] { 2, 3 });
+            invalidBrainParameters.ActionSpec = new ActionSpec(1, new int[]
+            {
+                2, 3
+            });
             errors = BarracudaModelParamLoader.CheckModel(
                 model, invalidBrainParameters,
-                new ISensor[] { sensor_8 }, new ActuatorComponent[0]
+                new ISensor[]
+                {
+                    sensor_8
+                }, new ActuatorComponent[0]
             );
             Assert.AreEqual(1, errors.Count()); // 1 continuous action instead of 2
 
-            invalidBrainParameters.ActionSpec = new ActionSpec(2, new int[] { 3, 2 });
+            invalidBrainParameters.ActionSpec = new ActionSpec(2, new int[]
+            {
+                3, 2
+            });
             errors = BarracudaModelParamLoader.CheckModel(
                 model, invalidBrainParameters,
-                new ISensor[] { sensor_8 }, new ActuatorComponent[0]
+                new ISensor[]
+                {
+                    sensor_8
+                }, new ActuatorComponent[0]
             );
             Assert.AreEqual(1, errors.Count()); // Discrete action branches flipped
         }
@@ -386,21 +429,19 @@ namespace Unity.MLAgents.Tests
                 model, brainParameters,
                 new ISensor[]
                 {
-                    sensor_21_20_3.CreateSensors()[0],
-                    sensor_20_22_3.CreateSensors()[0]
+                    sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
                 },
                 new ActuatorComponent[0]
             );
             Assert.Greater(errors.Count(), 0);
 
             brainParameters = GetContinuous2vis8vec2actionBrainParameters();
-            brainParameters.NumStackedVectorObservations = 2;// Invalid stacking
+            brainParameters.NumStackedVectorObservations = 2; // Invalid stacking
             errors = BarracudaModelParamLoader.CheckModel(
                 model, brainParameters,
                 new ISensor[]
                 {
-                    sensor_21_20_3.CreateSensors()[0],
-                    sensor_20_22_3.CreateSensors()[0]
+                    sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
                 },
                 new ActuatorComponent[0]
             );
@@ -434,15 +475,19 @@ namespace Unity.MLAgents.Tests
             brainParameters.VectorObservationSize = 9; // Invalid observation
             var errors = BarracudaModelParamLoader.CheckModel(
                 model, brainParameters,
-                new ISensor[] { }, new ActuatorComponent[0]
+                new ISensor[]
+                {
+                }, new ActuatorComponent[0]
             );
             Assert.Greater(errors.Count(), 0);
 
             brainParameters = GetContinuous2vis8vec2actionBrainParameters();
-            brainParameters.NumStackedVectorObservations = 2;// Invalid stacking
+            brainParameters.NumStackedVectorObservations = 2; // Invalid stacking
             errors = BarracudaModelParamLoader.CheckModel(
                 model, brainParameters,
-                new ISensor[] { }, new ActuatorComponent[0]
+                new ISensor[]
+                {
+                }, new ActuatorComponent[0]
             );
             Assert.Greater(errors.Count(), 0);
         }
@@ -458,8 +503,7 @@ namespace Unity.MLAgents.Tests
             var errors = BarracudaModelParamLoader.CheckModel(
                 model, brainParameters, new ISensor[]
                 {
-                    sensor_21_20_3.CreateSensors()[0],
-                    sensor_20_22_3.CreateSensors()[0]
+                    sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
                 },
                 new ActuatorComponent[0]
             );
@@ -470,8 +514,7 @@ namespace Unity.MLAgents.Tests
             errors = BarracudaModelParamLoader.CheckModel(
                 model, brainParameters, new ISensor[]
                 {
-                    sensor_21_20_3.CreateSensors()[0],
-                    sensor_20_22_3.CreateSensors()[0]
+                    sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
                 },
                 new ActuatorComponent[0]
             );
@@ -488,7 +531,10 @@ namespace Unity.MLAgents.Tests
             brainParameters.ActionSpec = ActionSpec.MakeDiscrete(3, 3); // Invalid action
             var errors = BarracudaModelParamLoader.CheckModel(
                 model, brainParameters,
-                new ISensor[] { sensor_21_20_3.CreateSensors()[0] },
+                new ISensor[]
+                {
+                    sensor_21_20_3.CreateSensors()[0]
+                },
                 new ActuatorComponent[0]
             );
             Assert.Greater(errors.Count(), 0);
@@ -498,7 +544,10 @@ namespace Unity.MLAgents.Tests
             errors = BarracudaModelParamLoader.CheckModel(
                 model,
                 brainParameters,
-                new ISensor[] { sensor_21_20_3.CreateSensors()[0] },
+                new ISensor[]
+                {
+                    sensor_21_20_3.CreateSensors()[0]
+                },
                 new ActuatorComponent[0]
             );
             Assert.Greater(errors.Count(), 0);
@@ -510,14 +559,16 @@ namespace Unity.MLAgents.Tests
             var model = ModelLoader.Load(hybridONNXModel);
 
             var brainParameters = GetHybridBrainParameters();
-            brainParameters.ActionSpec = new ActionSpec(3, new[] { 3 }); // Invalid discrete action size
+            brainParameters.ActionSpec = new ActionSpec(3, new[]
+            {
+                3
+            }); // Invalid discrete action size
             var errors = BarracudaModelParamLoader.CheckModel(
                 model,
                 brainParameters,
                 new ISensor[]
                 {
-                    sensor_21_20_3.CreateSensors()[0],
-                    sensor_20_22_3.CreateSensors()[0]
+                    sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
                 },
                 new ActuatorComponent[0]
             );
@@ -530,8 +581,7 @@ namespace Unity.MLAgents.Tests
                 brainParameters,
                 new ISensor[]
                 {
-                    sensor_21_20_3.CreateSensors()[0],
-                    sensor_20_22_3.CreateSensors()[0]
+                    sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
                 },
                 new ActuatorComponent[0]
             );
@@ -547,8 +597,7 @@ namespace Unity.MLAgents.Tests
                 brainParameters,
                 new ISensor[]
                 {
-                    sensor_21_20_3.CreateSensors()[0],
-                    sensor_20_22_3.CreateSensors()[0]
+                    sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
                 },
                 new ActuatorComponent[0]
             );

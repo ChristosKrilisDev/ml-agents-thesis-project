@@ -13,7 +13,7 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class BiDimensionalOutputGenerator : TensorGenerator.IGenerator
     {
-        readonly ITensorAllocator m_Allocator;
+        private readonly ITensorAllocator m_Allocator;
 
         public BiDimensionalOutputGenerator(ITensorAllocator allocator)
         {
@@ -32,7 +32,7 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class BatchSizeGenerator : TensorGenerator.IGenerator
     {
-        readonly ITensorAllocator m_Allocator;
+        private readonly ITensorAllocator m_Allocator;
 
         public BatchSizeGenerator(ITensorAllocator allocator)
         {
@@ -55,7 +55,7 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class SequenceLengthGenerator : TensorGenerator.IGenerator
     {
-        readonly ITensorAllocator m_Allocator;
+        private readonly ITensorAllocator m_Allocator;
 
         public SequenceLengthGenerator(ITensorAllocator allocator)
         {
@@ -79,8 +79,8 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class RecurrentInputGenerator : TensorGenerator.IGenerator
     {
-        readonly ITensorAllocator m_Allocator;
-        Dictionary<int, List<float>> m_Memories;
+        private readonly ITensorAllocator m_Allocator;
+        private Dictionary<int, List<float>> m_Memories;
 
         public RecurrentInputGenerator(
             ITensorAllocator allocator,
@@ -98,6 +98,7 @@ namespace Unity.MLAgents.Inference
             var memorySize = tensorProxy.data.width;
 
             var agentIndex = 0;
+
             for (var infoIndex = 0; infoIndex < infos.Count; infoIndex++)
             {
                 var infoSensorPair = infos[infoIndex];
@@ -108,6 +109,7 @@ namespace Unity.MLAgents.Inference
                 {
                     m_Memories.Remove(info.episodeId);
                 }
+
                 if (!m_Memories.TryGetValue(info.episodeId, out memory))
                 {
                     for (var j = 0; j < memorySize; j++)
@@ -115,8 +117,10 @@ namespace Unity.MLAgents.Inference
                         tensorProxy.data[agentIndex, 0, j, 0] = 0;
                     }
                     agentIndex++;
+
                     continue;
                 }
+
                 for (var j = 0; j < Math.Min(memorySize, memory.Count); j++)
                 {
                     if (j >= memory.Count)
@@ -138,7 +142,7 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class PreviousActionInputGenerator : TensorGenerator.IGenerator
     {
-        readonly ITensorAllocator m_Allocator;
+        private readonly ITensorAllocator m_Allocator;
 
         public PreviousActionInputGenerator(ITensorAllocator allocator)
         {
@@ -151,11 +155,13 @@ namespace Unity.MLAgents.Inference
 
             var actionSize = tensorProxy.shape[tensorProxy.shape.Length - 1];
             var agentIndex = 0;
+
             for (var infoIndex = 0; infoIndex < infos.Count; infoIndex++)
             {
                 var infoSensorPair = infos[infoIndex];
                 var info = infoSensorPair.agentInfo;
                 var pastAction = info.storedActions.DiscreteActions;
+
                 if (!pastAction.IsEmpty())
                 {
                     for (var j = 0; j < actionSize; j++)
@@ -177,7 +183,7 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class ActionMaskInputGenerator : TensorGenerator.IGenerator
     {
-        readonly ITensorAllocator m_Allocator;
+        private readonly ITensorAllocator m_Allocator;
 
         public ActionMaskInputGenerator(ITensorAllocator allocator)
         {
@@ -190,14 +196,16 @@ namespace Unity.MLAgents.Inference
 
             var maskSize = tensorProxy.shape[tensorProxy.shape.Length - 1];
             var agentIndex = 0;
+
             for (var infoIndex = 0; infoIndex < infos.Count; infoIndex++)
             {
                 var infoSensorPair = infos[infoIndex];
                 var agentInfo = infoSensorPair.agentInfo;
                 var maskList = agentInfo.discreteActionMasks;
+
                 for (var j = 0; j < maskSize; j++)
                 {
-                    var isUnmasked = (maskList != null && maskList[j]) ? 0.0f : 1.0f;
+                    var isUnmasked = maskList != null && maskList[j] ? 0.0f : 1.0f;
                     tensorProxy.data[agentIndex, j] = isUnmasked;
                 }
                 agentIndex++;
@@ -212,8 +220,8 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class RandomNormalInputGenerator : TensorGenerator.IGenerator
     {
-        readonly RandomNormal m_RandomNormal;
-        readonly ITensorAllocator m_Allocator;
+        private readonly RandomNormal m_RandomNormal;
+        private readonly ITensorAllocator m_Allocator;
 
         public RandomNormalInputGenerator(int seed, ITensorAllocator allocator)
         {
@@ -236,9 +244,9 @@ namespace Unity.MLAgents.Inference
     /// </summary>
     internal class ObservationGenerator : TensorGenerator.IGenerator
     {
-        readonly ITensorAllocator m_Allocator;
-        List<int> m_SensorIndices = new List<int>();
-        ObservationWriter m_ObservationWriter = new ObservationWriter();
+        private readonly ITensorAllocator m_Allocator;
+        private List<int> m_SensorIndices = new List<int>();
+        private ObservationWriter m_ObservationWriter = new ObservationWriter();
 
         public ObservationGenerator(ITensorAllocator allocator)
         {
@@ -254,9 +262,11 @@ namespace Unity.MLAgents.Inference
         {
             TensorUtils.ResizeTensor(tensorProxy, batchSize, m_Allocator);
             var agentIndex = 0;
+
             for (var infoIndex = 0; infoIndex < infos.Count; infoIndex++)
             {
                 var info = infos[infoIndex];
+
                 if (info.agentInfo.done)
                 {
                     // If the agent is done, we might have a stale reference to the sensors
@@ -267,6 +277,7 @@ namespace Unity.MLAgents.Inference
                 else
                 {
                     var tensorOffset = 0;
+
                     // Write each sensor consecutively to the tensor
                     for (var sensorIndexIndex = 0; sensorIndexIndex < m_SensorIndices.Count; sensorIndexIndex++)
                     {

@@ -8,7 +8,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
     public class PoseExtractorTests
     {
 
-        class BasicPoseExtractor : PoseExtractor
+        private class BasicPoseExtractor : PoseExtractor
         {
             protected internal override Pose GetPoseAt(int index)
             {
@@ -21,7 +21,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             }
         }
 
-        class UselessPoseExtractor : BasicPoseExtractor
+        private class UselessPoseExtractor : BasicPoseExtractor
         {
             public void Init(int[] parentIndices)
             {
@@ -75,22 +75,25 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
         public void TestSimpleExtractor()
         {
             var poseExtractor = new UselessPoseExtractor();
-            var parentIndices = new[] { -1, 0 };
+            var parentIndices = new[]
+            {
+                -1, 0
+            };
             poseExtractor.Init(parentIndices);
             Assert.AreEqual(2, poseExtractor.NumPoses);
         }
-
 
         /// <summary>
         /// A simple "chain" hierarchy, where each object is parented to the one before it.
         ///   0 <- 1 <- 2 <- ...
         /// </summary>
-        class ChainPoseExtractor : PoseExtractor
+        private class ChainPoseExtractor : PoseExtractor
         {
             public Vector3 offset;
             public ChainPoseExtractor(int size)
             {
                 var parents = new int[size];
+
                 for (var i = 0; i < size; i++)
                 {
                     parents[i] = i - 1;
@@ -102,6 +105,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             {
                 var rotation = Quaternion.identity;
                 var translation = offset + new Vector3(index, index, index);
+
                 return new Pose
                 {
                     rotation = rotation,
@@ -126,8 +130,8 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             chain.UpdateModelSpacePoses();
             chain.UpdateLocalSpacePoses();
 
-
             var modelPoseIndex = 0;
+
             foreach (var modelSpace in chain.GetEnabledModelSpacePoses())
             {
                 if (modelPoseIndex == 0)
@@ -146,6 +150,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             Assert.AreEqual(size, modelPoseIndex);
 
             var localPoseIndex = 0;
+
             foreach (var localSpace in chain.GetEnabledLocalSpacePoses())
             {
                 if (localPoseIndex == 0)
@@ -188,24 +193,31 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
         {
             // Degenerate case with a loop
             var poseExtractor = new UselessPoseExtractor();
-            poseExtractor.Init(new[] { -1, 2, 1 });
+            poseExtractor.Init(new[]
+            {
+                -1, 2, 1
+            });
 
             // This just shouldn't blow up
             poseExtractor.GetDisplayNodes();
 
             // Self-loop
-            poseExtractor.Init(new[] { -1, 1 });
+            poseExtractor.Init(new[]
+            {
+                -1, 1
+            });
 
             // This just shouldn't blow up
             poseExtractor.GetDisplayNodes();
         }
 
-        class BadPoseExtractor : BasicPoseExtractor
+        private class BadPoseExtractor : BasicPoseExtractor
         {
             public BadPoseExtractor()
             {
                 var size = 2;
                 var parents = new int[size];
+
                 // Parents are intentionally invalid - expect -1 at root
                 for (var i = 0; i < size; i++)
                 {
@@ -231,7 +243,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
         [Test]
         public void TestInverse()
         {
-            Pose t = new Pose
+            var t = new Pose
             {
                 rotation = Quaternion.AngleAxis(23.0f, new Vector3(1, 1, 1).normalized),
                 position = new Vector3(-1.0f, 2.0f, 3.0f)

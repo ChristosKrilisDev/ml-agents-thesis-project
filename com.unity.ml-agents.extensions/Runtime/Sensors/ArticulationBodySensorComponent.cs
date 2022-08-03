@@ -4,7 +4,7 @@ using Unity.MLAgents.Sensors;
 
 namespace Unity.MLAgents.Extensions.Sensors
 {
-    public class ArticulationBodySensorComponent  : SensorComponent
+    public class ArticulationBodySensorComponent : SensorComponent
     {
         public ArticulationBody RootBody;
 
@@ -18,7 +18,10 @@ namespace Unity.MLAgents.Extensions.Sensors
         /// <returns></returns>
         public override ISensor[] CreateSensors()
         {
-            return new ISensor[] {new PhysicsBodySensor(RootBody, Settings, sensorName)};
+            return new ISensor[]
+            {
+                new PhysicsBodySensor(RootBody, Settings, sensorName)
+            };
         }
 
     }

@@ -12,7 +12,10 @@ namespace Unity.MLAgents.Tests
         [Test]
         public void TestCameraSensor()
         {
-            foreach (var grayscale in new[] { true, false })
+            foreach (var grayscale in new[]
+                {
+                    true, false
+                })
             {
                 foreach (SensorCompressionType compression in Enum.GetValues(typeof(SensorCompressionType)))
                 {
@@ -20,6 +23,7 @@ namespace Unity.MLAgents.Tests
                     var height = 16;
                     var camera = Camera.main;
                     var c = new GameObject();
+
                     if (ReferenceEquals(null, camera))
                     {
                         camera = c.AddComponent<Camera>();
@@ -30,7 +34,10 @@ namespace Unity.MLAgents.Tests
                     var obs = sensor.GetObservationProto(obsWriter);
 
                     Assert.AreEqual((int)compression, (int)obs.CompressionType);
-                    var expectedShape = new[] { height, width, grayscale ? 1 : 3 };
+                    var expectedShape = new[]
+                    {
+                        height, width, grayscale ? 1 : 3
+                    };
                     Assert.AreEqual(expectedShape, obs.Shape);
                     UnityEngine.Object.DestroyImmediate(c);
                 }

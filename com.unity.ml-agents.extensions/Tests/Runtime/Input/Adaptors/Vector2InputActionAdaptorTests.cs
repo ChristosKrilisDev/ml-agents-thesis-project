@@ -9,10 +9,10 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
 {
     public class Vector2InputActionAdaptorTests : InputTestFixture
     {
-        Vector2InputActionAdaptor m_Adaptor;
-        InputDevice m_Device;
-        InputControl<Vector2> m_Control;
-        InputAction m_Action;
+        private Vector2InputActionAdaptor m_Adaptor;
+        private InputDevice m_Device;
+        private InputControl<Vector2> m_Control;
+        private InputAction m_Action;
 
         public override void Setup()
         {
@@ -49,8 +49,12 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
         [Test]
         public void TestQueueEvent()
         {
-            var actionBuffers = new ActionBuffers(new ActionSegment<float>(new[] { 0f, 1f }), ActionSegment<int>.Empty);
+            var actionBuffers = new ActionBuffers(new ActionSegment<float>(new[]
+            {
+                0f, 1f
+            }), ActionSegment<int>.Empty);
             var context = new InputActuatorEventContext(1, m_Device);
+
             using (context.GetEventForFrame(out var eventPtr))
             {
                 m_Adaptor.WriteToInputEventForAction(eventPtr, m_Action, m_Control, new ActionSpec(), actionBuffers);
@@ -64,8 +68,12 @@ namespace Unity.MLAgents.Extensions.Tests.Runtime.Input
         [Test]
         public void TestWriteToHeuristic()
         {
-            var actionBuffers = new ActionBuffers(new ActionSegment<float>(new[] { 0f, 1f }), ActionSegment<int>.Empty);
+            var actionBuffers = new ActionBuffers(new ActionSegment<float>(new[]
+            {
+                0f, 1f
+            }), ActionSegment<int>.Empty);
             var context = new InputActuatorEventContext(1, m_Device);
+
             using (context.GetEventForFrame(out var eventPtr))
             {
                 m_Adaptor.WriteToInputEventForAction(eventPtr, m_Action, m_Control, new ActionSpec(), actionBuffers);

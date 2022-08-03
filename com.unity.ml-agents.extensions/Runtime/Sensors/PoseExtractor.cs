@@ -16,15 +16,14 @@ namespace Unity.MLAgents.Extensions.Sensors
     /// </summary>
     public abstract class PoseExtractor
     {
-        int[] m_ParentIndices;
-        Pose[] m_ModelSpacePoses;
-        Pose[] m_LocalSpacePoses;
+        private int[] m_ParentIndices;
+        private Pose[] m_ModelSpacePoses;
+        private Pose[] m_LocalSpacePoses;
 
-        Vector3[] m_ModelSpaceLinearVelocities;
-        Vector3[] m_LocalSpaceLinearVelocities;
+        private Vector3[] m_ModelSpaceLinearVelocities;
+        private Vector3[] m_LocalSpaceLinearVelocities;
 
-        bool[] m_PoseEnabled;
-
+        private bool[] m_PoseEnabled;
 
         /// <summary>
         /// Read iterator for the enabled model space transforms.
@@ -115,6 +114,7 @@ namespace Unity.MLAgents.Extensions.Sensors
                 }
 
                 var numEnabled = 0;
+
                 for (var i = 0; i < m_PoseEnabled.Length; i++)
                 {
                     numEnabled += m_PoseEnabled[i] ? 1 : 0;
@@ -127,10 +127,7 @@ namespace Unity.MLAgents.Extensions.Sensors
         /// <summary>
         /// Number of total poses in the hierarchy (read-only).
         /// </summary>
-        public int NumPoses
-        {
-            get { return m_ModelSpacePoses?.Length ?? 0; }
-        }
+        public int NumPoses => m_ModelSpacePoses?.Length ?? 0;
 
         /// <summary>
         /// Get the parent index of the body at the specified index.
@@ -184,6 +181,7 @@ namespace Unity.MLAgents.Extensions.Sensors
             m_LocalSpaceLinearVelocities = new Vector3[numPoses];
 
             m_PoseEnabled = new bool[numPoses];
+
             // All poses are enabled by default. Generally we'll want to disable the root though.
             for (var i = 0; i < numPoses; i++)
             {
@@ -215,7 +213,6 @@ namespace Unity.MLAgents.Extensions.Sensors
         {
             return null;
         }
-
 
         /// <summary>
         /// Update the internal model space transform storage based on the underlying system.
@@ -289,7 +286,7 @@ namespace Unity.MLAgents.Extensions.Sensors
         /// <returns></returns>
         public int GetNumPoseObservations(PhysicsSensorSettings settings)
         {
-            int obsPerPose = 0;
+            var obsPerPose = 0;
             obsPerPose += settings.UseModelSpaceTranslations ? 3 : 0;
             obsPerPose += settings.UseModelSpaceRotations ? 4 : 0;
             obsPerPose += settings.UseLocalSpaceTranslations ? 3 : 0;
@@ -308,9 +305,11 @@ namespace Unity.MLAgents.Extensions.Sensors
 
             var pose = m_ModelSpacePoses;
             var localPose = m_LocalSpacePoses;
+
             for (var i = 0; i < pose.Length; i++)
             {
                 var current = pose[i];
+
                 if (m_ParentIndices[i] == -1)
                 {
                     continue;
@@ -367,9 +366,11 @@ namespace Unity.MLAgents.Extensions.Sensors
 
             // List of children for each node
             var tree = new Dictionary<int, List<int>>();
+
             for (var i = 0; i < NumPoses; i++)
             {
                 var parent = GetParentIndex(i);
+
                 if (i == -1)
                 {
                     continue;
@@ -405,6 +406,7 @@ namespace Unity.MLAgents.Extensions.Sensors
                 {
                     // Push to the stack in reverse order
                     var children = tree[current];
+
                     for (var childIdx = children.Count - 1; childIdx >= 0; childIdx--)
                     {
                         stack.Push((children[childIdx], depth + 1));
@@ -441,7 +443,12 @@ namespace Unity.MLAgents.Extensions.Sensors
         {
             var rotationInverse = Quaternion.Inverse(pose.rotation);
             var translationInverse = -(rotationInverse * pose.position);
-            return new Pose { rotation = rotationInverse, position = translationInverse };
+
+            return new Pose
+            {
+                rotation = rotationInverse,
+                position = translationInverse
+            };
         }
 
         /// <summary>

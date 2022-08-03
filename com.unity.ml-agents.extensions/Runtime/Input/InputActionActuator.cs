@@ -15,12 +15,12 @@ namespace Unity.MLAgents.Extensions.Input
     /// </summary>
     public class InputActionActuator : IActuator, IBuiltInActuator
     {
-        readonly BehaviorParameters m_BehaviorParameters;
-        readonly InputAction m_Action;
-        readonly IRLActionInputAdaptor m_InputAdaptor;
-        InputActuatorEventContext m_InputActuatorEventContext;
-        InputDevice m_Device;
-        InputControl m_Control;
+        private readonly BehaviorParameters m_BehaviorParameters;
+        private readonly InputAction m_Action;
+        private readonly IRLActionInputAdaptor m_InputAdaptor;
+        private InputActuatorEventContext m_InputActuatorEventContext;
+        private InputDevice m_Device;
+        private InputControl m_Control;
 
         /// <summary>
         /// Construct an <see cref="InputActionActuator"/> with the <see cref="BehaviorParameters"/> of the
@@ -54,6 +54,7 @@ namespace Unity.MLAgents.Extensions.Input
         public void OnActionReceived(ActionBuffers actionBuffers)
         {
             Profiler.BeginSample("InputActionActuator.OnActionReceived");
+
             if (!m_BehaviorParameters.IsInHeuristicMode())
             {
                 using (m_InputActuatorEventContext.GetEventForFrame(out var eventPtr))

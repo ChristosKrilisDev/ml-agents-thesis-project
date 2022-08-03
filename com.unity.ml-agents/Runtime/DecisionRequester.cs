@@ -40,15 +40,12 @@ namespace Unity.MLAgents
         public bool TakeActionsBetweenDecisions = true;
 
         [NonSerialized]
-        Agent m_Agent;
+        private Agent m_Agent;
 
         /// <summary>
         /// Get the Agent attached to the DecisionRequester.
         /// </summary>
-        public Agent Agent
-        {
-            get => m_Agent;
-        }
+        public Agent Agent => m_Agent;
 
         internal void Awake()
         {
@@ -57,7 +54,7 @@ namespace Unity.MLAgents
             Academy.Instance.AgentPreStep += MakeRequests;
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             if (Academy.IsInitialized)
             {
@@ -81,7 +78,7 @@ namespace Unity.MLAgents
         /// decision, and whether or not it should take actions between decisions.
         /// </summary>
         /// <param name="academyStepCount">The current step count of the academy.</param>
-        void MakeRequests(int academyStepCount)
+        private void MakeRequests(int academyStepCount)
         {
             var context = new DecisionRequestContext
             {

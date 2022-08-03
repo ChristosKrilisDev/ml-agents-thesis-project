@@ -25,29 +25,39 @@ namespace Unity.MLAgents.Extensions.Input
     [AddComponentMenu("ML Agents/Input Actuator", (int)MenuGroup.Actuators)]
     public class InputActuatorComponent : ActuatorComponent
     {
-        InputActionAsset m_InputAsset;
-        IInputActionCollection2 m_AssetCollection;
-        PlayerInput m_PlayerInput;
-        BehaviorParameters m_BehaviorParameters;
-        IActuator[] m_Actuators;
-        InputDevice m_Device;
+        private InputActionAsset m_InputAsset;
+        private IInputActionCollection2 m_AssetCollection;
+        private PlayerInput m_PlayerInput;
+        private BehaviorParameters m_BehaviorParameters;
+        private IActuator[] m_Actuators;
+        private InputDevice m_Device;
 
         /// <summary>
         /// Mapping of <see cref="InputControl"/> types to types of <see cref="IRLActionInputAdaptor"/> concrete classes.
         /// </summary>
         public static Dictionary<Type, Type> controlTypeToAdaptorType = new Dictionary<Type, Type>
         {
-            { typeof(Vector2Control), typeof(Vector2InputActionAdaptor) },
-            { typeof(ButtonControl), typeof(ButtonInputActionAdaptor) },
-            { typeof(IntegerControl), typeof(IntegerInputActionAdaptor) },
-            { typeof(AxisControl), typeof(FloatInputActionAdaptor) },
-            { typeof(DoubleControl), typeof(DoubleInputActionAdaptor) }
+            {
+                typeof(Vector2Control), typeof(Vector2InputActionAdaptor)
+            },
+            {
+                typeof(ButtonControl), typeof(ButtonInputActionAdaptor)
+            },
+            {
+                typeof(IntegerControl), typeof(IntegerInputActionAdaptor)
+            },
+            {
+                typeof(AxisControl), typeof(FloatInputActionAdaptor)
+            },
+            {
+                typeof(DoubleControl), typeof(DoubleInputActionAdaptor)
+            }
         };
 
-        string m_LayoutName;
+        private string m_LayoutName;
         [SerializeField]
-        ActionSpec m_ActionSpec;
-        InputControlScheme m_ControlScheme;
+        private ActionSpec m_ActionSpec;
+        private InputControlScheme m_ControlScheme;
 
         public const string mlAgentsLayoutFormat = "MLAT";
         public const string mlAgentsLayoutName = "MLAgentsLayout";
@@ -76,7 +86,7 @@ namespace Unity.MLAgents.Extensions.Input
             }
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             CleanupActionAsset();
         }
@@ -138,25 +148,29 @@ namespace Unity.MLAgents.Extensions.Input
 
             m_ActionSpec = CombineActuatorActionSpecs(m_Actuators);
             collection.Enable();
+
             return m_Actuators;
         }
 
-        static ActionSpec CombineActuatorActionSpecs(IActuator[] actuators)
+        private static ActionSpec CombineActuatorActionSpecs(IActuator[] actuators)
         {
             var specs = new ActionSpec[actuators.Length];
+
             for (var i = 0; i < actuators.Length; i++)
             {
                 specs[i] = actuators[i].ActionSpec;
             }
+
             return ActionSpec.Combine(specs);
         }
 
         internal static IActuator[] CreateActuatorsFromMap(InputActionMap inputActionMap,
-            BehaviorParameters behaviorParameters,
-            InputDevice inputDevice,
-            InputActuatorEventContext context)
+                                                           BehaviorParameters behaviorParameters,
+                                                           InputDevice inputDevice,
+                                                           InputActuatorEventContext context)
         {
             var actuators = new IActuator[inputActionMap.actions.Count];
+
             for (var i = 0; i < inputActionMap.actions.Count; i++)
             {
                 var action = inputActionMap.actions[i];
@@ -173,6 +187,7 @@ namespace Unity.MLAgents.Extensions.Input
                     mlAgentsControlSchemeName);
                 action.bindingMask = InputBinding.MaskByGroup(mlAgentsControlSchemeName);
             }
+
             return actuators;
         }
 
@@ -192,6 +207,7 @@ namespace Unity.MLAgents.Extensions.Input
             }
             var collection = m_AssetCollection ?? m_InputAsset;
             m_ControlScheme = CreateControlScheme(m_Device, isInHeuristicMode, m_InputAsset);
+
             if (m_InputAsset.FindControlSchemeIndex(m_ControlScheme.name) != -1)
             {
                 m_InputAsset.RemoveControlScheme(m_ControlScheme.name);
@@ -202,7 +218,10 @@ namespace Unity.MLAgents.Extensions.Input
                 var inputActionMap = m_InputAsset.FindActionMap(m_PlayerInput.defaultActionMap);
                 m_InputAsset.AddControlScheme(m_ControlScheme);
                 collection.bindingMask = InputBinding.MaskByGroup(m_ControlScheme.bindingGroup);
-                collection.devices = new ReadOnlyArray<InputDevice>(new[] { m_Device });
+                collection.devices = new ReadOnlyArray<InputDevice>(new[]
+                {
+                    m_Device
+                });
                 inputActionMap.bindingMask = collection.bindingMask;
                 inputActionMap.devices = collection.devices;
             }
@@ -225,8 +244,8 @@ namespace Unity.MLAgents.Extensions.Input
         /// <param name="isInHeuristicMode">if we are in heuristic mode, we need to add other other device requirements.</param>
         /// <param name="asset">The InputActionAsset to get the device requirements from</param>
         internal static InputControlScheme CreateControlScheme(InputControl device,
-            bool isInHeuristicMode,
-            InputActionAsset asset)
+                                                               bool isInHeuristicMode,
+                                                               InputActionAsset asset)
         {
             var deviceRequirements = new List<InputControlScheme.DeviceRequirement>
             {
@@ -241,6 +260,7 @@ namespace Unity.MLAgents.Extensions.Input
                 for (var i = 0; i < asset.controlSchemes.Count; i++)
                 {
                     var scheme = asset.controlSchemes[i];
+
                     for (var ii = 0; ii < scheme.deviceRequirements.Count; ii++)
                     {
                         deviceRequirements.Add(scheme.deviceRequirements[ii]);
@@ -269,14 +289,16 @@ namespace Unity.MLAgents.Extensions.Input
                 {
                     // TODO does this need to change based on the action map we use?
                     var builder = new InputControlLayout.Builder()
-                        .WithName(layoutName)
-                        .WithFormat(mlAgentsLayoutFormat);
+                                  .WithName(layoutName)
+                                  .WithFormat(mlAgentsLayoutFormat);
+
                     for (var i = 0; i < defaultMap.actions.Count; i++)
                     {
                         var action = defaultMap.actions[i];
                         builder.AddControl(action.name)
-                            .WithLayout(action.expectedControlType);
+                               .WithLayout(action.expectedControlType);
                     }
+
                     return builder.Build();
                 }, layoutName);
             }
@@ -291,6 +313,7 @@ namespace Unity.MLAgents.Extensions.Input
                 (m_InputAsset, m_AssetCollection) = assetProvider.GetInputActionAsset();
                 Assert.IsNotNull(m_InputAsset, "An InputActionAsset could not be found on IInputActionAssetProvider or PlayerInput.");
             }
+
             if (m_PlayerInput == null)
             {
                 m_PlayerInput = GetComponent<PlayerInput>();
@@ -309,6 +332,7 @@ namespace Unity.MLAgents.Extensions.Input
         internal void CleanupActionAsset()
         {
             InputSystem.RemoveLayout(mlAgentsLayoutName);
+
             if (!ReferenceEquals(m_Device, null))
             {
                 InputSystem.RemoveDevice(m_Device);
@@ -336,9 +360,9 @@ namespace Unity.MLAgents.Extensions.Input
             m_Device = null;
         }
 
-        int m_ActuatorsWrittenToEvent;
-        NativeArray<byte> m_InputBufferForFrame;
-        InputEventPtr m_InputEventPtrForFrame;
+        private int m_ActuatorsWrittenToEvent;
+        private NativeArray<byte> m_InputBufferForFrame;
+        private InputEventPtr m_InputEventPtrForFrame;
         public InputEventPtr GetEventForFrame()
         {
 #if UNITY_EDITOR
@@ -366,6 +390,7 @@ namespace Unity.MLAgents.Extensions.Input
             }
 #endif
             m_ActuatorsWrittenToEvent++;
+
             if (m_ActuatorsWrittenToEvent == m_Actuators.Length && m_InputEventPtrForFrame.valid)
             {
                 InputSystem.QueueEvent(m_InputEventPtrForFrame);

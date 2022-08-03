@@ -17,10 +17,10 @@ namespace Unity.MLAgents.Demonstrations
         /// </summary>
         internal const int MetaDataBytes = 32;
 
-        DemonstrationMetaData m_MetaData;
-        Stream m_Writer;
-        float m_CumulativeReward;
-        ObservationWriter m_ObservationWriter = new ObservationWriter();
+        private DemonstrationMetaData m_MetaData;
+        private Stream m_Writer;
+        private float m_CumulativeReward;
+        private ObservationWriter m_ObservationWriter = new ObservationWriter();
 
         /// <summary>
         /// Create a DemonstrationWriter that will write to the specified stream.
@@ -35,10 +35,7 @@ namespace Unity.MLAgents.Demonstrations
         /// <summary>
         /// Number of steps written so far.
         /// </summary>
-        internal int NumSteps
-        {
-            get { return m_MetaData.numberSteps; }
-        }
+        internal int NumSteps => m_MetaData.numberSteps;
 
         /// <summary>
         /// Writes the initial data to the stream.
@@ -55,7 +52,10 @@ namespace Unity.MLAgents.Demonstrations
                 return;
             }
 
-            m_MetaData = new DemonstrationMetaData { demonstrationName = demonstrationName };
+            m_MetaData = new DemonstrationMetaData
+            {
+                demonstrationName = demonstrationName
+            };
             var metaProto = m_MetaData.ToProto();
             metaProto.WriteDelimitedTo(m_Writer);
 
@@ -66,7 +66,7 @@ namespace Unity.MLAgents.Demonstrations
         /// Writes meta-data. Note that this is called at the *end* of recording, but writes to the
         /// beginning of the file.
         /// </summary>
-        void WriteMetadata()
+        private void WriteMetadata()
         {
             if (m_Writer == null)
             {
@@ -86,7 +86,7 @@ namespace Unity.MLAgents.Demonstrations
         /// </summary>
         /// <param name="brainName">The name of the Brain the agent is attached to.</param>
         /// <param name="brainParameters">The parameters of the Brain the agent is attached to.</param>
-        void WriteBrainParameters(string brainName, BrainParameters brainParameters)
+        private void WriteBrainParameters(string brainName, BrainParameters brainParameters)
         {
             if (m_Writer == null)
             {
@@ -116,6 +116,7 @@ namespace Unity.MLAgents.Demonstrations
             // Increment meta-data counters.
             m_MetaData.numberSteps++;
             m_CumulativeReward += info.reward;
+
             if (info.done)
             {
                 EndEpisode();
@@ -123,6 +124,7 @@ namespace Unity.MLAgents.Demonstrations
 
             // Generate observations and add AgentInfo to file.
             var agentProto = info.ToInfoActionPairProto();
+
             foreach (var sensor in sensors)
             {
                 agentProto.AgentInfo.Observations.Add(sensor.GetObservationProto(m_ObservationWriter));
@@ -130,7 +132,6 @@ namespace Unity.MLAgents.Demonstrations
 
             agentProto.WriteDelimitedTo(m_Writer);
         }
-
 
         /// <summary>
         /// Performs all clean-up necessary.
@@ -153,7 +154,7 @@ namespace Unity.MLAgents.Demonstrations
         /// <summary>
         /// Performs necessary episode-completion steps.
         /// </summary>
-        void EndEpisode()
+        private void EndEpisode()
         {
             m_MetaData.numberEpisodes += 1;
         }

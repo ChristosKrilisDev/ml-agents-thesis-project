@@ -3,7 +3,7 @@ using Unity.MLAgents.Sensors;
 
 namespace Unity.MLAgents.Editor
 {
-    [CustomEditor(typeof(CameraSensorComponent), editorForChildClasses: true)]
+    [CustomEditor(typeof(CameraSensorComponent), true)]
     [CanEditMultipleObjects]
     internal class CameraSensorComponentEditor : UnityEditor.Editor
     {
@@ -39,7 +39,7 @@ namespace Unity.MLAgents.Editor
             }
         }
 
-        void UpdateSensor()
+        private void UpdateSensor()
         {
             var sensorComponent = serializedObject.targetObject as CameraSensorComponent;
             sensorComponent?.UpdateSensor();

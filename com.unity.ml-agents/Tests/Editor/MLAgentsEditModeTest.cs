@@ -121,7 +121,6 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(0, agent1.agentActionCalls);
             Assert.AreEqual(0, agent2.agentActionCalls);
 
-
             agent2.LazyInitialize();
             agent1.LazyInitialize();
 
@@ -163,6 +162,7 @@ namespace Unity.MLAgents.Tests
             var aca = Academy.Instance;
 
             var numberReset = 0;
+
             for (var i = 0; i < 10; i++)
             {
                 Assert.AreEqual(numberReset, aca.EpisodeCount);
@@ -217,6 +217,7 @@ namespace Unity.MLAgents.Tests
             var numberAgent2Initialization = 0;
             var requestDecision = 0;
             var requestAction = 0;
+
             for (var i = 0; i < 50; i++)
             {
                 Assert.AreEqual(numberAgent1Episodes, agent1.agentOnEpisodeBeginCalls);
@@ -227,11 +228,13 @@ namespace Unity.MLAgents.Tests
                 Assert.AreEqual(requestAction, agent2.agentActionCalls);
                 Assert.AreEqual((i + 1) / 2, agent1.collectObservationsCalls);
                 Assert.AreEqual(requestDecision, agent2.collectObservationsCalls);
+
                 // Agent 1 starts a new episode at the first step
                 if (i == 0)
                 {
                     numberAgent1Episodes += 1;
                 }
+
                 //Agent 2 is only initialized at step 2
                 if (i == 2)
                 {
@@ -245,14 +248,14 @@ namespace Unity.MLAgents.Tests
 
                 // We are testing request decision and request actions when called
                 // at different intervals
-                if ((i % 3 == 0) && (i > 2))
+                if (i % 3 == 0 && i > 2)
                 {
                     //Every 3 steps after agent 2 is initialized, request decision
                     requestDecision += 1;
                     requestAction += 1;
                     agent2.RequestDecision();
                 }
-                else if ((i % 5 == 0) && (i > 2))
+                else if (i % 5 == 0 && i > 2)
                 {
                     // Every 5 steps after agent 2 is initialized, request action
                     requestAction += 1;
@@ -282,6 +285,7 @@ namespace Unity.MLAgents.Tests
 
             var numberReset = 0;
             var stepsSinceReset = 0;
+
             for (var i = 0; i < 50; i++)
             {
                 Assert.AreEqual(stepsSinceReset, aca.StepCount);
@@ -325,6 +329,7 @@ namespace Unity.MLAgents.Tests
             var numberAcaReset = 0;
             var acaStepsSinceReset = 0;
             var agent2StepForEpisode = 0;
+
             for (var i = 0; i < 5000; i++)
             {
                 Assert.AreEqual(acaStepsSinceReset, aca.StepCount);
@@ -417,7 +422,6 @@ namespace Unity.MLAgents.Tests
             decisionRequester.DecisionPeriod = 2;
             decisionRequester.Awake();
 
-
             agent1.MaxStep = 20;
 
             agent2.LazyInitialize();
@@ -429,6 +433,7 @@ namespace Unity.MLAgents.Tests
             for (var i = 0; i < 50; i++)
             {
                 expectedAgent1ActionForEpisode += 1;
+
                 if (expectedAgent1ActionForEpisode == agent1.MaxStep || i == 0)
                 {
                     expectedAgent1ActionForEpisode = 0;
@@ -479,7 +484,7 @@ namespace Unity.MLAgents.Tests
                 expectedAgentStepCount += 1;
 
                 // If the next step will put the agent at maxSteps, we expect it to reset
-                if (agent1.StepCount == maxStep - 1 || (i == 0))
+                if (agent1.StepCount == maxStep - 1 || i == 0)
                 {
                     expectedEpisodes += 1;
                 }
@@ -525,6 +530,7 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(agent1.GetPolicy().GetType(), typeof(HeuristicPolicy));
 
             var numSteps = 10;
+
             for (var i = 0; i < numSteps; i++)
             {
                 aca.EnvironmentStep();
@@ -555,7 +561,10 @@ namespace Unity.MLAgents.Tests
 
             Assert.Throws<NotImplementedException>(() =>
             {
-                nullList.CopyTo(new[] { 0f }, 0);
+                nullList.CopyTo(new[]
+                {
+                    0f
+                }, 0);
             });
 
             nullList.Add(0);
@@ -592,7 +601,7 @@ namespace Unity.MLAgents.Tests
             }
         }
 
-        static void _InnerAgentTestOnEnableOverride(bool callBase = false)
+        private static void _InnerAgentTestOnEnableOverride(bool callBase = false)
         {
             var go = new GameObject();
             var agent = go.AddComponent<OnEnableAgent>();
@@ -602,6 +611,7 @@ namespace Unity.MLAgents.Tests
             Assert.NotNull(onEnable);
             onEnable.Invoke(agent, null);
             Assert.NotNull(sendInfo);
+
             if (agent.callBase)
             {
                 Assert.DoesNotThrow(() => sendInfo.Invoke(agent, null));
@@ -650,7 +660,6 @@ namespace Unity.MLAgents.Tests
             public float DerivedField;
         }
 
-
         [Test]
         public void TestObservableAttributeBehaviorIgnore()
         {
@@ -671,7 +680,8 @@ namespace Unity.MLAgents.Tests
                 var bp = go.GetComponent<BehaviorParameters>();
                 bp.ObservableAttributeHandling = behavior;
                 agent.LazyInitialize();
-                int numAttributeSensors = 0;
+                var numAttributeSensors = 0;
+
                 foreach (var sensor in agent.sensors)
                 {
                     if (sensor.GetType() != typeof(VectorSensor))
@@ -696,7 +706,7 @@ namespace Unity.MLAgents.Tests
             }
         }
 
-        class CollectObsEndEpisodeAgent : Agent
+        private class CollectObsEndEpisodeAgent : Agent
         {
             public override void CollectObservations(VectorSensor sensor)
             {
@@ -705,7 +715,7 @@ namespace Unity.MLAgents.Tests
             }
         }
 
-        class OnEpisodeBeginEndEpisodeAgent : Agent
+        private class OnEpisodeBeginEndEpisodeAgent : Agent
         {
             public override void OnEpisodeBegin()
             {
@@ -714,7 +724,7 @@ namespace Unity.MLAgents.Tests
             }
         }
 
-        void TestRecursiveThrows<T>() where T : Agent
+        private void TestRecursiveThrows<T>() where T : Agent
         {
             var gameObj = new GameObject();
             var agent = gameObj.AddComponent<T>();

@@ -8,22 +8,21 @@ namespace Unity.MLAgents.Sensors
     /// </summary>
     public class RenderTextureSensor : ISensor, IBuiltInSensor, IDisposable
     {
-        RenderTexture m_RenderTexture;
-        bool m_Grayscale;
-        string m_Name;
+        private RenderTexture m_RenderTexture;
+        private bool m_Grayscale;
+        private string m_Name;
         private ObservationSpec m_ObservationSpec;
-        SensorCompressionType m_CompressionType;
-        Texture2D m_Texture;
+        private SensorCompressionType m_CompressionType;
+        private Texture2D m_Texture;
 
         /// <summary>
         /// The compression type used by the sensor.
         /// </summary>
         public SensorCompressionType CompressionType
         {
-            get { return m_CompressionType; }
-            set { m_CompressionType = value; }
+            get => m_CompressionType;
+            set => m_CompressionType = value;
         }
-
 
         /// <summary>
         /// Initializes the sensor.
@@ -67,6 +66,7 @@ namespace Unity.MLAgents.Sensors
                 ObservationToTexture(m_RenderTexture, m_Texture);
                 // TODO support more types here, e.g. JPG
                 var compressed = m_Texture.EncodeToPNG();
+
                 return compressed;
             }
         }
@@ -78,6 +78,7 @@ namespace Unity.MLAgents.Sensors
             {
                 ObservationToTexture(m_RenderTexture, m_Texture);
                 var numWritten = writer.WriteTexture(m_Texture, m_Grayscale);
+
                 return numWritten;
             }
         }

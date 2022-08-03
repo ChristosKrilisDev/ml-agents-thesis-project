@@ -9,7 +9,11 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
         [Test]
         public void TestMoveEquivalence()
         {
-            var board10x10 = new BoardSize { Rows = 10, Columns = 10 };
+            var board10x10 = new BoardSize
+            {
+                Rows = 10,
+                Columns = 10
+            };
             var moveUp = Move.FromPositionAndDirection(1, 1, Direction.Up, board10x10);
             var moveDown = Move.FromPositionAndDirection(2, 1, Direction.Down, board10x10);
             Assert.AreEqual(moveUp.MoveIndex, moveDown.MoveIndex);
@@ -31,6 +35,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
             };
             // make sure using Next agrees with FromMoveIndex.
             var advanceMove = Move.FromMoveIndex(0, boardSize);
+
             for (var moveIndex = 0; moveIndex < Move.NumPotentialMoves(boardSize); moveIndex++)
             {
                 var moveFromIndex = Move.FromMoveIndex(moveIndex, boardSize);
@@ -55,7 +60,11 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
         [TestCase(5, 9, Direction.Right)]
         public void TestInvalidMove(int row, int col, Direction dir)
         {
-            var board10x10 = new BoardSize { Rows = 10, Columns = 10 };
+            var board10x10 = new BoardSize
+            {
+                Rows = 10,
+                Columns = 10
+            };
             Assert.Throws<IndexOutOfRangeException>(() =>
             {
                 Move.FromPositionAndDirection(row, col, dir, board10x10);

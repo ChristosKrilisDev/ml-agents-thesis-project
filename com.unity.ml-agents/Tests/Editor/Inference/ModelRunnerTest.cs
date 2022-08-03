@@ -33,42 +33,44 @@ namespace Unity.MLAgents.Tests
     [TestFixture]
     public class ModelRunnerTest
     {
-        const string k_hybrid_ONNX_recurr_v2 = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/hybrid0vis8vec_2c_2_3d_v2_0.onnx";
+        private const string k_hybrid_ONNX_recurr_v2 = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/hybrid0vis8vec_2c_2_3d_v2_0.onnx";
 
-        const string k_continuousONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/continuous2vis8vec2action_v1_0.onnx";
-        const string k_discreteONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete1vis0vec_2_3action_obsolete_recurr_v1_0.onnx";
-        const string k_hybridONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/hybrid0vis53vec_3c_2daction_v1_0.onnx";
-        const string k_continuousNNPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/continuous2vis8vec2action_deprecated_v1_0.nn";
-        const string k_discreteNNPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete1vis0vec_2_3action_recurr_deprecated_v1_0.nn";
+        private const string k_continuousONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/continuous2vis8vec2action_v1_0.onnx";
+        private const string k_discreteONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete1vis0vec_2_3action_obsolete_recurr_v1_0.onnx";
+        private const string k_hybridONNXPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/hybrid0vis53vec_3c_2daction_v1_0.onnx";
+        private const string k_continuousNNPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/continuous2vis8vec2action_deprecated_v1_0.nn";
+        private const string k_discreteNNPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/discrete1vis0vec_2_3action_recurr_deprecated_v1_0.nn";
         // models with deterministic action tensors
         private const string k_deterministic_discreteNNPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/deterDiscrete1obs3action_v2_0.onnx";
         private const string k_deterministic_continuousNNPath = "Packages/com.unity.ml-agents/Tests/Editor/TestModels/deterContinuous2vis8vec2action_v2_0.onnx";
 
-        NNModel hybridONNXModelV2;
-        NNModel continuousONNXModel;
-        NNModel discreteONNXModel;
-        NNModel hybridONNXModel;
-        NNModel continuousNNModel;
-        NNModel discreteNNModel;
-        NNModel deterministicDiscreteNNModel;
-        NNModel deterministicContinuousNNModel;
-        Test3DSensorComponent sensor_21_20_3;
-        Test3DSensorComponent sensor_20_22_3;
+        private NNModel hybridONNXModelV2;
+        private NNModel continuousONNXModel;
+        private NNModel discreteONNXModel;
+        private NNModel hybridONNXModel;
+        private NNModel continuousNNModel;
+        private NNModel discreteNNModel;
+        private NNModel deterministicDiscreteNNModel;
+        private NNModel deterministicContinuousNNModel;
+        private Test3DSensorComponent sensor_21_20_3;
+        private Test3DSensorComponent sensor_20_22_3;
 
-
-        ActionSpec GetContinuous2vis8vec2actionActionSpec()
+        private ActionSpec GetContinuous2vis8vec2actionActionSpec()
         {
             return ActionSpec.MakeContinuous(2);
         }
 
-        ActionSpec GetDiscrete1vis0vec_2_3action_recurrModelActionSpec()
+        private ActionSpec GetDiscrete1vis0vec_2_3action_recurrModelActionSpec()
         {
             return ActionSpec.MakeDiscrete(2, 3);
         }
 
-        ActionSpec GetHybrid0vis53vec_3c_2dActionSpec()
+        private ActionSpec GetHybrid0vis53vec_3c_2dActionSpec()
         {
-            return new ActionSpec(3, new[] { 2 });
+            return new ActionSpec(3, new[]
+            {
+                2
+            });
         }
 
         [SetUp]
@@ -127,11 +129,17 @@ namespace Unity.MLAgents.Tests
                 modelRunner.Dispose();
             });
             // This one was trained with 2.0 so it should not raise an error:
-            modelRunner = new ModelRunner(hybridONNXModelV2, new ActionSpec(2, new[] { 2, 3 }), inferenceDevice);
+            modelRunner = new ModelRunner(hybridONNXModelV2, new ActionSpec(2, new[]
+            {
+                2, 3
+            }), inferenceDevice);
             modelRunner.Dispose();
 
             // V2.0 Model that has serialized deterministic action tensors, discrete
-            modelRunner = new ModelRunner(deterministicDiscreteNNModel, new ActionSpec(0, new[] { 7 }), inferenceDevice);
+            modelRunner = new ModelRunner(deterministicDiscreteNNModel, new ActionSpec(0, new[]
+            {
+                7
+            }), inferenceDevice);
             modelRunner.Dispose();
             // V2.0 Model that has serialized deterministic action tensors, continuous
             modelRunner = new ModelRunner(deterministicContinuousNNModel,
@@ -158,16 +166,16 @@ namespace Unity.MLAgents.Tests
             var sensor_8 = new Sensors.VectorSensor(8, "VectorSensor8");
             var info1 = new AgentInfo();
             info1.episodeId = 1;
-            modelRunner.PutObservations(info1, new[] {
-                sensor_8,
-                sensor_21_20_3.CreateSensors()[0],
-                sensor_20_22_3.CreateSensors()[0] }.ToList());
+            modelRunner.PutObservations(info1, new[]
+            {
+                sensor_8, sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
+            }.ToList());
             var info2 = new AgentInfo();
             info2.episodeId = 2;
-            modelRunner.PutObservations(info2, new[] {
-                sensor_8,
-                sensor_21_20_3.CreateSensors()[0],
-                sensor_20_22_3.CreateSensors()[0] }.ToList());
+            modelRunner.PutObservations(info2, new[]
+            {
+                sensor_8, sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
+            }.ToList());
 
             modelRunner.DecideBatch();
 
@@ -177,7 +185,6 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(actionSpec.NumDiscreteActions, modelRunner.GetAction(1).DiscreteActions.Length);
             modelRunner.Dispose();
         }
-
 
         [Test]
         public void TestRunModel_stochastic()
@@ -189,9 +196,7 @@ namespace Unity.MLAgents.Tests
             var info1 = new AgentInfo();
             var obs = new[]
             {
-                sensor_8,
-                sensor_21_20_3.CreateSensors()[0],
-                sensor_20_22_3.CreateSensors()[0]
+                sensor_8, sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
             }.ToList();
             info1.episodeId = 1;
             modelRunner.PutObservations(info1, obs);
@@ -214,9 +219,7 @@ namespace Unity.MLAgents.Tests
             var info1 = new AgentInfo();
             var obs = new[]
             {
-                sensor_8,
-                sensor_21_20_3.CreateSensors()[0],
-                sensor_20_22_3.CreateSensors()[0]
+                sensor_8, sensor_21_20_3.CreateSensors()[0], sensor_20_22_3.CreateSensors()[0]
             }.ToList();
             var deterministicModelRunner = new ModelRunner(deterministicContinuousNNModel, actionSpec, InferenceDevice.Burst,
                 deterministicInference: true);

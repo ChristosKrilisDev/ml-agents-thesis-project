@@ -14,7 +14,7 @@ namespace Unity.MLAgentsExamples
     {
 
         [Header("Collider Tag To Detect")]
-        public string tagToDetect = "agent"; //collider tag to detect 
+        public string tagToDetect = "agent"; //collider tag to detect
 
         [Header("Target Placement")]
         public float spawnRadius; //The radius in which a target can be randomly spawned.
@@ -22,11 +22,10 @@ namespace Unity.MLAgentsExamples
 
         [Header("Target Fell Protection")]
         public bool respawnIfFallsOffPlatform = true; //If the target falls off the platform, reset the position.
-        public float fallDistance = 5; //distance below the starting height that will trigger a respawn 
-
+        public float fallDistance = 5; //distance below the starting height that will trigger a respawn
 
         private Vector3 m_startingPos; //the starting position of the target
-        private Agent m_agentTouching; //the agent currently touching the target
+        //private Agent m_agentTouching; //the agent currently touching the target
 
         [System.Serializable]
         public class TriggerEvent : UnityEvent<Collider>
@@ -49,16 +48,17 @@ namespace Unity.MLAgentsExamples
         public CollisionEvent onCollisionExitEvent = new CollisionEvent();
 
         // Start is called before the first frame update
-        void OnEnable()
+        private void OnEnable()
         {
             m_startingPos = transform.position;
+
             if (respawnIfTouched)
             {
                 MoveTargetToRandomPosition();
             }
         }
 
-        void Update()
+        private void Update()
         {
             if (respawnIfFallsOffPlatform)
             {
@@ -75,7 +75,7 @@ namespace Unity.MLAgentsExamples
         /// </summary>
         public void MoveTargetToRandomPosition()
         {
-            var newTargetPos = m_startingPos + (Random.insideUnitSphere * spawnRadius);
+            var newTargetPos = m_startingPos + Random.insideUnitSphere * spawnRadius;
             newTargetPos.y = m_startingPos.y;
             transform.position = newTargetPos;
         }
@@ -85,6 +85,7 @@ namespace Unity.MLAgentsExamples
             if (col.transform.CompareTag(tagToDetect))
             {
                 onCollisionEnterEvent.Invoke(col);
+
                 if (respawnIfTouched)
                 {
                     MoveTargetToRandomPosition();

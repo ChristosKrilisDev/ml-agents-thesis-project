@@ -9,6 +9,7 @@ using Unity.MLAgents.Inference;
 using Unity.MLAgents.Policies;
 using Unity.MLAgents.SideChannels;
 using Unity.Barracuda;
+using Object = UnityEngine.Object;
 
 /**
  * Welcome to Unity Machine Learning Agents (ML-Agents).
@@ -30,13 +31,13 @@ namespace Unity.MLAgents
     /// </summary>
     internal class AcademyFixedUpdateStepper : MonoBehaviour
     {
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             // Check if the stepper belongs to the current Academy and destroy it if it's not.
             // This is to prevent from having leaked stepper from previous runs.
             if (!Academy.IsInitialized || !Academy.Instance.IsStepperOwner(this))
             {
-                Destroy(this.gameObject);
+                Destroy(gameObject);
             }
             else
             {
@@ -101,7 +102,7 @@ namespace Unity.MLAgents
         ///     </item>
         /// </list>
         /// </remarks>
-        const string k_ApiVersion = "1.5.0";
+        private const string k_ApiVersion = "1.5.0";
 
         /// <summary>
         /// Unity package version of com.unity.ml-agents.
@@ -109,27 +110,24 @@ namespace Unity.MLAgents
         /// </summary>
         internal const string k_PackageVersion = "2.2.1-exp.1";
 
-        const int k_EditorTrainingPort = 5004;
+        private const int k_EditorTrainingPort = 5004;
 
-        const string k_PortCommandLineFlag = "--mlagents-port";
+        private const string k_PortCommandLineFlag = "--mlagents-port";
 
         // Lazy initializer pattern, see https://csharpindepth.com/articles/singleton#lazy
-        static Lazy<Academy> s_Lazy = new Lazy<Academy>(() => new Academy());
+        private static Lazy<Academy> s_Lazy = new Lazy<Academy>(() => new Academy());
 
         /// <summary>
         ///Reports whether the Academy has been initialized yet.
         /// </summary>
         /// <value><c>True</c> if the Academy is initialized, <c>false</c> otherwise.</value>
-        public static bool IsInitialized
-        {
-            get { return s_Lazy.IsValueCreated; }
-        }
+        public static bool IsInitialized => s_Lazy.IsValueCreated;
 
         /// <summary>
         /// The singleton Academy object.
         /// </summary>
         /// <value>Getting the instance initializes the Academy, if necessary.</value>
-        public static Academy Instance { get { return s_Lazy.Value; } }
+        public static Academy Instance => s_Lazy.Value;
 
         // Fields not provided in the Inspector.
 
@@ -140,38 +138,35 @@ namespace Unity.MLAgents
         /// <value>
         /// <c>True</c>, if communicator is on, <c>false</c> otherwise.
         /// </value>
-        public bool IsCommunicatorOn
-        {
-            get { return Communicator != null; }
-        }
+        public bool IsCommunicatorOn => Communicator != null;
 
         /// The number of episodes completed by the environment. Incremented
         /// each time the environment is reset.
-        int m_EpisodeCount;
+        private int m_EpisodeCount;
 
         /// The number of steps completed within the current episode. Incremented
         /// each time a step is taken in the environment. Is reset to 0 during
         /// <see cref="EnvironmentReset"/>.
-        int m_StepCount;
+        private int m_StepCount;
 
         /// The number of total number of steps completed during the whole simulation. Incremented
         /// each time a step is taken in the environment.
-        int m_TotalStepCount;
+        private int m_TotalStepCount;
 
         /// Pointer to the communicator currently in use by the Academy.
         internal ICommunicator Communicator;
 
-        bool m_Initialized;
-        List<ModelRunner> m_ModelRunners = new List<ModelRunner>();
+        private bool m_Initialized;
+        private List<ModelRunner> m_ModelRunners = new List<ModelRunner>();
 
         // Flag used to keep track of the first time the Academy is reset.
-        bool m_HadFirstReset;
+        private bool m_HadFirstReset;
 
         // Detect an Academy step called by user code that is also called by the Academy.
         private RecursionChecker m_StepRecursionChecker = new RecursionChecker("EnvironmentStep");
 
         // Random seed used for inference.
-        int m_InferenceSeed;
+        private int m_InferenceSeed;
 
         /// <summary>
         /// Set the random seed used for inference. This should be set before any Agents are added
@@ -180,10 +175,10 @@ namespace Unity.MLAgents
         /// </summary>
         public int InferenceSeed
         {
-            set { m_InferenceSeed = value; }
+            set => m_InferenceSeed = value;
         }
 
-        int m_NumAreas;
+        private int m_NumAreas;
 
         /// <summary>
         /// Number of training areas to instantiate.
@@ -194,7 +189,6 @@ namespace Unity.MLAgents
         /// Returns the RLCapabilities of the python client that the unity process is connected to.
         /// </summary>
         internal UnityRLCapabilities TrainerCapabilities { get; set; }
-
 
         // The Academy uses a series of events to communicate with agents
         // to facilitate synchronization. More specifically, it ensures
@@ -212,7 +206,6 @@ namespace Unity.MLAgents
         // Signals to the Agent that a new step is about to start.
         // This will mark the Agent as Done if it has reached its maxSteps.
         internal event Action AgentIncrementStep;
-
 
         /// <summary>
         /// Signals to all of the <see cref="Agent"/>s that their step is about to begin.
@@ -238,9 +231,8 @@ namespace Unity.MLAgents
         /// </summary>
         public event Action OnEnvironmentReset;
 
-        AcademyFixedUpdateStepper m_FixedUpdateStepper;
-        GameObject m_StepperObject;
-
+        private AcademyFixedUpdateStepper m_FixedUpdateStepper;
+        private GameObject m_StepperObject;
 
         /// <summary>
         /// Private constructor called the first time the Academy is used.
@@ -248,7 +240,7 @@ namespace Unity.MLAgents
         /// structures, initialize the environment and check for the existence
         /// of a communicator.
         /// </summary>
-        Academy()
+        private Academy()
         {
             Application.quitting += Dispose;
 
@@ -264,7 +256,7 @@ namespace Unity.MLAgents
         /// Clean up the Academy when switching from edit mode to play mode
         /// </summary>
         /// <param name="state">State.</param>
-        void HandleOnPlayModeChanged(PlayModeStateChange state)
+        private void HandleOnPlayModeChanged(PlayModeStateChange state)
         {
             if (state == PlayModeStateChange.ExitingEditMode)
             {
@@ -292,7 +284,7 @@ namespace Unity.MLAgents
         /// Enable stepping of the Academy during the FixedUpdate phase. This is done by creating
         /// a temporary GameObject with a MonoBehaviour that calls Academy.EnvironmentStep().
         /// </summary>
-        void EnableAutomaticStepping()
+        private void EnableAutomaticStepping()
         {
             if (m_FixedUpdateStepper != null)
             {
@@ -303,10 +295,11 @@ namespace Unity.MLAgents
             // Don't show this object in the hierarchy
             m_StepperObject.hideFlags = HideFlags.HideInHierarchy;
             m_FixedUpdateStepper = m_StepperObject.AddComponent<AcademyFixedUpdateStepper>();
+
             try
             {
                 // This try-catch is because DontDestroyOnLoad cannot be used in Editor Tests
-                GameObject.DontDestroyOnLoad(m_StepperObject);
+                Object.DontDestroyOnLoad(m_StepperObject);
             }
             catch { }
         }
@@ -315,7 +308,7 @@ namespace Unity.MLAgents
         /// Disable stepping of the Academy during the FixedUpdate phase. If this is called, the Academy must be
         /// stepped manually by the user by calling Academy.EnvironmentStep().
         /// </summary>
-        void DisableAutomaticStepping()
+        private void DisableAutomaticStepping()
         {
             if (m_FixedUpdateStepper == null)
             {
@@ -323,13 +316,14 @@ namespace Unity.MLAgents
             }
 
             m_FixedUpdateStepper = null;
+
             if (Application.isEditor)
             {
-                UnityEngine.Object.DestroyImmediate(m_StepperObject);
+                Object.DestroyImmediate(m_StepperObject);
             }
             else
             {
-                UnityEngine.Object.Destroy(m_StepperObject);
+                Object.Destroy(m_StepperObject);
             }
 
             m_StepperObject = null;
@@ -341,7 +335,7 @@ namespace Unity.MLAgents
         /// <value>Set <c>true</c> to enable automatic stepping; <c>false</c> to disable.</value>
         public bool AutomaticSteppingEnabled
         {
-            get { return m_FixedUpdateStepper != null; }
+            get => m_FixedUpdateStepper != null;
             set
             {
                 if (value)
@@ -356,10 +350,11 @@ namespace Unity.MLAgents
         }
 
         // Used to read Python-provided environment parameters
-        static int ReadPortFromArgs()
+        private static int ReadPortFromArgs()
         {
             var args = Environment.GetCommandLineArgs();
             var inputPort = "";
+
             for (var i = 0; i < args.Length; i++)
             {
                 if (args[i] == k_PortCommandLineFlag)
@@ -385,8 +380,8 @@ namespace Unity.MLAgents
             }
         }
 
-        EnvironmentParameters m_EnvironmentParameters;
-        StatsRecorder m_StatsRecorder;
+        private EnvironmentParameters m_EnvironmentParameters;
+        private StatsRecorder m_StatsRecorder;
 
         /// <summary>
         /// Returns the <see cref="EnvironmentParameters"/> instance. If training
@@ -395,25 +390,19 @@ namespace Unity.MLAgents
         /// retrieved here.
         /// </summary>
         /// <returns></returns>
-        public EnvironmentParameters EnvironmentParameters
-        {
-            get { return m_EnvironmentParameters; }
-        }
+        public EnvironmentParameters EnvironmentParameters => m_EnvironmentParameters;
 
         /// <summary>
         /// Returns the <see cref="StatsRecorder"/> instance. This instance can be used
         /// to record any statistics from the Unity environment.
         /// </summary>
         /// <returns></returns>
-        public StatsRecorder StatsRecorder
-        {
-            get { return m_StatsRecorder; }
-        }
+        public StatsRecorder StatsRecorder => m_StatsRecorder;
 
         /// <summary>
         /// Initializes the environment, configures it and initializes the Academy.
         /// </summary>
-        void InitializeEnvironment()
+        private void InitializeEnvironment()
         {
             TimerStack.Instance.AddMetadata("communication_protocol_version", k_ApiVersion);
             TimerStack.Instance.AddMetadata("com.unity.ml-agents_version", k_PackageVersion);
@@ -427,6 +416,7 @@ namespace Unity.MLAgents
 
             // Try to launch the communicator by using the arguments passed at launch
             var port = ReadPortFromArgs();
+
             if (port > 0)
             {
                 Communicator = CommunicatorFactory.Create();
@@ -437,7 +427,7 @@ namespace Unity.MLAgents
                 // We try to exchange the first message with Python. If this fails, it means
                 // no Python Process is ready to train the environment. In this case, the
                 // environment must use Inference.
-                bool initSuccessful = false;
+                var initSuccessful = false;
                 var communicatorInitParams = new CommunicatorInitParameters
                 {
                     port = port,
@@ -453,6 +443,7 @@ namespace Unity.MLAgents
                         communicatorInitParams,
                         out var unityRlInitParameters
                     );
+
                     if (initSuccessful)
                     {
                         UnityEngine.Random.InitState(unityRlInitParameters.seed);
@@ -488,7 +479,7 @@ namespace Unity.MLAgents
             ResetActions();
         }
 
-        void ResetActions()
+        private void ResetActions()
         {
             DecideAction = () => { };
             DestroyAction = () => { };
@@ -499,7 +490,7 @@ namespace Unity.MLAgents
             OnEnvironmentReset = () => { };
         }
 
-        static void OnQuitCommandReceived()
+        private static void OnQuitCommandReceived()
         {
 #if UNITY_EDITOR
             EditorApplication.isPlaying = false;
@@ -507,7 +498,7 @@ namespace Unity.MLAgents
             Application.Quit();
         }
 
-        void OnResetCommand()
+        private void OnResetCommand()
         {
             ForcedFullReset();
         }
@@ -518,10 +509,7 @@ namespace Unity.MLAgents
         /// <value>
         /// Current episode number.
         /// </value>
-        public int EpisodeCount
-        {
-            get { return m_EpisodeCount; }
-        }
+        public int EpisodeCount => m_EpisodeCount;
 
         /// <summary>
         /// The current step count (within the current episode).
@@ -529,10 +517,7 @@ namespace Unity.MLAgents
         /// <value>
         /// Current step count.
         /// </value>
-        public int StepCount
-        {
-            get { return m_StepCount; }
-        }
+        public int StepCount => m_StepCount;
 
         /// <summary>
         /// Returns the total step count.
@@ -540,17 +525,14 @@ namespace Unity.MLAgents
         /// <value>
         /// Total step count.
         /// </value>
-        public int TotalStepCount
-        {
-            get { return m_TotalStepCount; }
-        }
+        public int TotalStepCount => m_TotalStepCount;
 
         /// <summary>
         /// Forces the full reset. The done flags are not affected. Is either
         /// called the first reset at inference and every external reset
         /// at training.
         /// </summary>
-        void ForcedFullReset()
+        private void ForcedFullReset()
         {
             EnvironmentReset();
             AgentForceReset?.Invoke();
@@ -602,7 +584,7 @@ namespace Unity.MLAgents
         /// <summary>
         /// Resets the environment, including the Academy.
         /// </summary>
-        void EnvironmentReset()
+        private void EnvironmentReset()
         {
             m_StepCount = 0;
             m_EpisodeCount++;
@@ -625,12 +607,14 @@ namespace Unity.MLAgents
             NNModel model, ActionSpec actionSpec, InferenceDevice inferenceDevice, bool deterministicInference = false)
         {
             var modelRunner = m_ModelRunners.Find(x => x.HasModel(model, inferenceDevice));
+
             if (modelRunner == null)
             {
                 modelRunner = new ModelRunner(model, actionSpec, inferenceDevice, m_InferenceSeed, deterministicInference);
                 m_ModelRunners.Add(modelRunner);
                 m_InferenceSeed++;
             }
+
             return modelRunner;
         }
 
@@ -649,7 +633,7 @@ namespace Unity.MLAgents
 
             m_EnvironmentParameters.Dispose();
             m_StatsRecorder.Dispose();
-            SideChannelManager.UnregisterAllSideChannels();  // unregister custom side channels
+            SideChannelManager.UnregisterAllSideChannels(); // unregister custom side channels
 
             if (m_ModelRunners != null)
             {
@@ -678,7 +662,7 @@ namespace Unity.MLAgents
         /// </summary>
         internal bool IsStepperOwner(AcademyFixedUpdateStepper stepper)
         {
-            return GameObject.ReferenceEquals(stepper.gameObject, Academy.Instance.m_StepperObject);
+            return ReferenceEquals(stepper.gameObject, Instance.m_StepperObject);
         }
     }
 }

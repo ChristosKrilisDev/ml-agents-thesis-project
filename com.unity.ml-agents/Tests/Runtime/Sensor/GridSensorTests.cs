@@ -11,13 +11,13 @@ namespace Unity.MLAgents.Tests
 {
     public class GridSensorTests
     {
-        GameObject testGo;
-        GameObject boxGo;
-        SimpleTestGridSensorComponent gridSensorComponent;
+        private GameObject testGo;
+        private GameObject boxGo;
+        private SimpleTestGridSensorComponent gridSensorComponent;
 
         // Use built-in tags
-        const string k_Tag1 = "Player";
-        const string k_Tag2 = "Respawn";
+        private const string k_Tag1 = "Player";
+        private const string k_Tag2 = "Respawn";
 
         [UnitySetUp]
         public IEnumerator SetupScene()
@@ -32,6 +32,7 @@ namespace Unity.MLAgents.Tests
             boxGo.AddComponent<BoxCollider>();
 
             TestGridSensorConfig.Reset();
+
             yield return null;
         }
 
@@ -46,7 +47,10 @@ namespace Unity.MLAgents.Tests
         public void TestBufferSize()
         {
             testGo.tag = k_Tag2;
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetComponentParameters(tags, gridSizeX: 3, gridSizeZ: 4, useTestingGridSensor: true);
             TestGridSensorConfig.SetParameters(5, true, false);
             var gridSensor = (SimpleTestGridSensor)gridSensorComponent.CreateSensors()[0];
@@ -57,7 +61,10 @@ namespace Unity.MLAgents.Tests
         public void TestInvalidSizeConfiguration()
         {
             testGo.tag = k_Tag2;
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetComponentParameters(tags, gridSizeY: 10, useTestingGridSensor: true);
             gridSensorComponent.CreateSensors(); // expect no exception
 
@@ -72,12 +79,15 @@ namespace Unity.MLAgents.Tests
         public void TestInvalidCompressionConfiguration()
         {
             testGo.tag = k_Tag2;
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetComponentParameters(tags, compression: SensorCompressionType.PNG, useTestingGridSensor: true);
 
             var gridSensor = (GridSensorBase)gridSensorComponent.CreateSensors()[0];
             LogAssert.Expect(LogType.Warning, $"Compression type {SensorCompressionType.PNG} is only supported with normalized data. " +
-                        "The sensor will not compress the data.");
+                "The sensor will not compress the data.");
             Assert.AreEqual(gridSensor.CompressionType, SensorCompressionType.None);
         }
 
@@ -85,12 +95,15 @@ namespace Unity.MLAgents.Tests
         public void TestCreateSensor()
         {
             testGo.tag = k_Tag2;
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetComponentParameters(tags, useGridSensorBase: true);
 
             gridSensorComponent.CreateSensors();
             var componentSensor = (List<GridSensorBase>)typeof(GridSensorComponent).GetField("m_Sensors",
-                        BindingFlags.Instance | BindingFlags.NonPublic).GetValue(gridSensorComponent);
+                BindingFlags.Instance | BindingFlags.NonPublic).GetValue(gridSensorComponent);
             Assert.AreEqual(componentSensor.Count, 1);
         }
 
@@ -99,15 +112,27 @@ namespace Unity.MLAgents.Tests
         {
             testGo.tag = k_Tag2;
 
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetComponentParameters(tags, useGridSensorBase: true);
             var gridSensor = (GridSensorBase)gridSensorComponent.CreateSensors()[0];
 
             gridSensor.Update();
 
-            int[] subarrayIndicies = new int[] { 77, 78, 87, 88 };
-            float[][] expectedSubarrays = GridObsTestUtils.DuplicateArray(new float[] { 1 }, 4);
-            float[] expectedDefault = new float[] { 0 };
+            var subarrayIndicies = new int[]
+            {
+                77, 78, 87, 88
+            };
+            var expectedSubarrays = GridObsTestUtils.DuplicateArray(new float[]
+            {
+                1
+            }, 4);
+            var expectedDefault = new float[]
+            {
+                0
+            };
             GridObsTestUtils.AssertSubarraysAtIndex(gridSensor.PerceptionBuffer, subarrayIndicies, expectedSubarrays, expectedDefault);
         }
 
@@ -115,16 +140,28 @@ namespace Unity.MLAgents.Tests
         public void TestReset()
         {
             testGo.tag = k_Tag2;
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetComponentParameters(tags, useGridSensorBase: true);
             TestGridSensorConfig.SetParameters(3, false, false);
             var gridSensor = (GridSensorBase)gridSensorComponent.CreateSensors()[0];
 
             gridSensor.Update();
 
-            int[] subarrayIndicies = new int[] { 77, 78, 87, 88 };
-            float[][] expectedSubarrays = GridObsTestUtils.DuplicateArray(new float[] { 1 }, 4);
-            float[] expectedDefault = new float[] { 0 };
+            var subarrayIndicies = new int[]
+            {
+                77, 78, 87, 88
+            };
+            var expectedSubarrays = GridObsTestUtils.DuplicateArray(new float[]
+            {
+                1
+            }, 4);
+            var expectedDefault = new float[]
+            {
+                0
+            };
             GridObsTestUtils.AssertSubarraysAtIndex(gridSensor.PerceptionBuffer, subarrayIndicies, expectedSubarrays, expectedDefault);
             Object.DestroyImmediate(boxGo);
 
@@ -139,16 +176,28 @@ namespace Unity.MLAgents.Tests
         public void TestOneHotSensor()
         {
             testGo.tag = k_Tag2;
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetComponentParameters(tags, useOneHotTag: true);
             var gridSensor = (OneHotGridSensor)gridSensorComponent.CreateSensors()[0];
             Assert.AreEqual(gridSensor.PerceptionBuffer.Length, 10 * 10 * 2);
 
             gridSensor.Update();
 
-            int[] subarrayIndicies = new int[] { 77, 78, 87, 88 };
-            float[][] expectedSubarrays = GridObsTestUtils.DuplicateArray(new float[] { 1, 0 }, 4);
-            float[] expectedDefault = new float[] { 0, 0 };
+            var subarrayIndicies = new int[]
+            {
+                77, 78, 87, 88
+            };
+            var expectedSubarrays = GridObsTestUtils.DuplicateArray(new float[]
+            {
+                1, 0
+            }, 4);
+            var expectedDefault = new float[]
+            {
+                0, 0
+            };
             GridObsTestUtils.AssertSubarraysAtIndex(gridSensor.PerceptionBuffer, subarrayIndicies, expectedSubarrays, expectedDefault);
         }
 
@@ -156,12 +205,18 @@ namespace Unity.MLAgents.Tests
         public void TestCustomSensorInvalidData()
         {
             testGo.tag = k_Tag2;
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetComponentParameters(tags, compression: SensorCompressionType.PNG, useTestingGridSensor: true);
             TestGridSensorConfig.SetParameters(5, true, false);
             var gridSensor = (SimpleTestGridSensor)gridSensorComponent.CreateSensors()[0];
 
-            gridSensor.DummyData = new float[] { 1, 2, 3, 4, 5 };
+            gridSensor.DummyData = new float[]
+            {
+                1, 2, 3, 4, 5
+            };
             Assert.Throws<UnityAgentsException>(() =>
             {
                 gridSensor.Update();
@@ -172,7 +227,10 @@ namespace Unity.MLAgents.Tests
         public void TestMultipleSensors()
         {
             testGo.tag = k_Tag2;
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetComponentParameters(tags, useOneHotTag: true, useGridSensorBase: true, useTestingGridSensor: true);
             var gridSensors = gridSensorComponent.CreateSensors();
             Assert.IsNotNull(((GridSensorBase)gridSensors[0]).m_GridPerception);
@@ -184,7 +242,10 @@ namespace Unity.MLAgents.Tests
         public void TestNoSensors()
         {
             testGo.tag = k_Tag2;
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetComponentParameters(tags);
             Assert.Throws<UnityAgentsException>(() =>
             {
@@ -196,7 +257,10 @@ namespace Unity.MLAgents.Tests
         public void TestStackedSensors()
         {
             testGo.tag = k_Tag2;
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetComponentParameters(tags, useGridSensorBase: true);
             gridSensorComponent.ObservationStacks = 3;
             var sensors = gridSensorComponent.CreateSensors();

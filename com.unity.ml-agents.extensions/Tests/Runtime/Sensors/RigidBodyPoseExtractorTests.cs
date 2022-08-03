@@ -9,10 +9,11 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
         [TearDown]
         public void RemoveGameObjects()
         {
-            var objects = GameObject.FindObjectsOfType<GameObject>();
+            var objects = Object.FindObjectsOfType<GameObject>();
+
             foreach (var o in objects)
             {
-                UnityEngine.Object.DestroyImmediate(o);
+                Object.DestroyImmediate(o);
             }
         }
 
@@ -178,7 +179,6 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             var poseExtractor2 = new RigidBodyPoseExtractor(rb1, null, null, bodyPosesEnabled);
             Assert.IsTrue(poseExtractor2.IsPoseEnabled(0));
             Assert.IsFalse(poseExtractor2.IsPoseEnabled(1));
-
 
         }
     }

@@ -8,7 +8,8 @@ namespace Unity.MLAgents.Sensors.Reflection
     {
         public Vector3ReflectionSensor(ReflectionSensorInfo reflectionSensorInfo)
             : base(reflectionSensorInfo, 3)
-        { }
+        {
+        }
 
         internal override void WriteReflectedField(ObservationWriter writer)
         {

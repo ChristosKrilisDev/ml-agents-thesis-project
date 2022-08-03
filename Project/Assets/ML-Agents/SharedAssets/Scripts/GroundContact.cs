@@ -17,16 +17,17 @@ namespace Unity.MLAgentsExamples
         public bool penalizeGroundContact; // Whether to penalize on contact.
         public float groundContactPenalty; // Penalty amount (ex: -1).
         public bool touchingGround;
-        const string k_Ground = "ground"; // Tag of ground object.
+        private const string k_Ground = "ground"; // Tag of ground object.
 
         /// <summary>
         /// Check for collision with ground, and optionally penalize agent.
         /// </summary>
-        void OnCollisionEnter(Collision col)
+        private void OnCollisionEnter(Collision col)
         {
             if (col.transform.CompareTag(k_Ground))
             {
                 touchingGround = true;
+
                 if (penalizeGroundContact)
                 {
                     agent.SetReward(groundContactPenalty);
@@ -42,7 +43,7 @@ namespace Unity.MLAgentsExamples
         /// <summary>
         /// Check for end of ground collision and reset flag appropriately.
         /// </summary>
-        void OnCollisionExit(Collision other)
+        private void OnCollisionExit(Collision other)
         {
             if (other.transform.CompareTag(k_Ground))
             {

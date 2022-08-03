@@ -33,7 +33,7 @@ namespace Unity.MLAgents.Extensions.Sensors
 
         [SerializeField]
         [HideInInspector]
-        RigidBodyPoseExtractor m_PoseExtractor;
+        private RigidBodyPoseExtractor m_PoseExtractor;
 
         /// <summary>
         /// Creates a PhysicsBodySensor.
@@ -42,7 +42,11 @@ namespace Unity.MLAgents.Extensions.Sensors
         public override ISensor[] CreateSensors()
         {
             var _sensorName = string.IsNullOrEmpty(sensorName) ? $"PhysicsBodySensor:{RootBody?.name}" : sensorName;
-            return new ISensor[] { new PhysicsBodySensor(GetPoseExtractor(), Settings, _sensorName) };
+
+            return new ISensor[]
+            {
+                new PhysicsBodySensor(GetPoseExtractor(), Settings, _sensorName)
+            };
         }
 
         /// <summary>
@@ -58,7 +62,7 @@ namespace Unity.MLAgents.Extensions.Sensors
         /// Lazy construction of the PoseExtractor.
         /// </summary>
         /// <returns></returns>
-        RigidBodyPoseExtractor GetPoseExtractor()
+        private RigidBodyPoseExtractor GetPoseExtractor()
         {
             if (m_PoseExtractor == null)
             {
@@ -75,6 +79,7 @@ namespace Unity.MLAgents.Extensions.Sensors
         {
             // Get the current enabled state of each body, so that we can reinitialize with them.
             Dictionary<Rigidbody, bool> bodyPosesEnabled = null;
+
             if (m_PoseExtractor != null)
             {
                 bodyPosesEnabled = m_PoseExtractor.GetBodyPosesEnabled();
@@ -100,6 +105,7 @@ namespace Unity.MLAgents.Extensions.Sensors
                 return false;
             }
             var joints = RootBody.GetComponentsInChildren<Joint>();
+
             if (joints.Length == 0)
             {
                 if (ReferenceEquals(VirtualRoot, null) || ReferenceEquals(VirtualRoot, RootBody.gameObject))
@@ -107,6 +113,7 @@ namespace Unity.MLAgents.Extensions.Sensors
                     return true;
                 }
             }
+
             return false;
         }
     }

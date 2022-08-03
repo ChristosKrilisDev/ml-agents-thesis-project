@@ -2,7 +2,7 @@ using UnityEditor;
 using Unity.MLAgents.Integrations.Match3;
 namespace Unity.MLAgents.Editor
 {
-    [CustomEditor(typeof(Match3SensorComponent), editorForChildClasses: true)]
+    [CustomEditor(typeof(Match3SensorComponent), true)]
     [CanEditMultipleObjects]
     internal class Match3SensorComponentEditor : UnityEditor.Editor
     {
@@ -13,9 +13,11 @@ namespace Unity.MLAgents.Editor
 
             var component = (Match3SensorComponent)target;
             var board = component.GetComponent<AbstractBoard>();
+
             if (board == null)
             {
                 EditorGUILayout.HelpBox("You must provide an implementation of an AbstractBoard.", MessageType.Warning);
+
                 return;
             }
 
@@ -38,7 +40,7 @@ namespace Unity.MLAgents.Editor
             }
         }
 
-        void UpdateSensor()
+        private void UpdateSensor()
         {
         }
     }

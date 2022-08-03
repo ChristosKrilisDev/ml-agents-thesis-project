@@ -14,7 +14,7 @@ namespace Unity.MLAgents.Tests
         {
             ValueA = -100,
             ValueB = 1,
-            ValueC = 42,
+            ValueC = 42
         }
 
         [Flags]
@@ -25,11 +25,11 @@ namespace Unity.MLAgents.Tests
             FlagC = 4
         }
 
-        class TestClass
+        private class TestClass
         {
             // Non-observables
-            int m_NonObservableInt;
-            float m_NonObservableFloat;
+            //private int m_NonObservableInt;
+            //private float m_NonObservableFloat;
 
             //
             // Int
@@ -37,7 +37,7 @@ namespace Unity.MLAgents.Tests
             [Observable]
             public int m_IntMember;
 
-            int m_IntProperty;
+            private int m_IntProperty;
 
             [Observable]
             public int IntProperty
@@ -52,7 +52,7 @@ namespace Unity.MLAgents.Tests
             [Observable("floatMember")]
             public float m_FloatMember;
 
-            float m_FloatProperty;
+            private float m_FloatProperty;
             [Observable("floatProperty")]
             public float FloatProperty
             {
@@ -66,7 +66,7 @@ namespace Unity.MLAgents.Tests
             [Observable("boolMember")]
             public bool m_BoolMember;
 
-            bool m_BoolProperty;
+            private bool m_BoolProperty;
             [Observable("boolProperty")]
             public bool BoolProperty
             {
@@ -81,7 +81,7 @@ namespace Unity.MLAgents.Tests
             [Observable("vector2Member")]
             public Vector2 m_Vector2Member;
 
-            Vector2 m_Vector2Property;
+            private Vector2 m_Vector2Property;
 
             [Observable("vector2Property")]
             public Vector2 Vector2Property
@@ -96,7 +96,7 @@ namespace Unity.MLAgents.Tests
             [Observable("vector3Member")]
             public Vector3 m_Vector3Member;
 
-            Vector3 m_Vector3Property;
+            private Vector3 m_Vector3Property;
 
             [Observable("vector3Property")]
             public Vector3 Vector3Property
@@ -112,7 +112,7 @@ namespace Unity.MLAgents.Tests
             [Observable("vector4Member")]
             public Vector4 m_Vector4Member;
 
-            Vector4 m_Vector4Property;
+            private Vector4 m_Vector4Property;
 
             [Observable("vector4Property")]
             public Vector4 Vector4Property
@@ -127,7 +127,7 @@ namespace Unity.MLAgents.Tests
             [Observable("quaternionMember")]
             public Quaternion m_QuaternionMember;
 
-            Quaternion m_QuaternionProperty;
+            private Quaternion m_QuaternionProperty;
 
             [Observable("quaternionProperty")]
             public Quaternion QuaternionProperty
@@ -141,9 +141,9 @@ namespace Unity.MLAgents.Tests
             //
 
             [Observable("enumMember")]
-            public TestEnum m_EnumMember = TestEnum.ValueA;
+            //public TestEnum m_EnumMember = TestEnum.ValueA;
 
-            TestEnum m_EnumProperty = TestEnum.ValueC;
+            private TestEnum m_EnumProperty = TestEnum.ValueC;
 
             [Observable("enumProperty")]
             public TestEnum EnumProperty
@@ -152,16 +152,16 @@ namespace Unity.MLAgents.Tests
                 set => m_EnumProperty = value;
             }
 
-            [Observable("badEnumMember")]
-            public TestEnum m_BadEnumMember = (TestEnum)1337;
+            //[Observable("badEnumMember")]
+            //public TestEnum m_BadEnumMember = (TestEnum)1337;
 
             //
             // Flags
             //
-            [Observable("flagMember")]
-            public TestFlags m_FlagMember = TestFlags.FlagA;
+            //[Observable("flagMember")]
+            //public TestFlags m_FlagMember = TestFlags.FlagA;
 
-            TestFlags m_FlagProperty = TestFlags.FlagB | TestFlags.FlagC;
+            private TestFlags m_FlagProperty = TestFlags.FlagB | TestFlags.FlagC;
 
             [Observable("flagProperty")]
             public TestFlags FlagProperty
@@ -203,39 +203,97 @@ namespace Unity.MLAgents.Tests
             var sensors = ObservableAttribute.CreateObservableSensors(testClass, false);
 
             var sensorsByName = new Dictionary<string, ISensor>();
+
             foreach (var sensor in sensors)
             {
                 sensorsByName[sensor.GetName()] = sensor;
             }
 
-            SensorTestHelper.CompareObservation(sensorsByName["ObservableAttribute:TestClass.m_IntMember"], new[] { 1.0f });
-            SensorTestHelper.CompareObservation(sensorsByName["ObservableAttribute:TestClass.IntProperty"], new[] { 2.0f });
+            SensorTestHelper.CompareObservation(sensorsByName["ObservableAttribute:TestClass.m_IntMember"], new[]
+            {
+                1.0f
+            });
+            SensorTestHelper.CompareObservation(sensorsByName["ObservableAttribute:TestClass.IntProperty"], new[]
+            {
+                2.0f
+            });
 
-            SensorTestHelper.CompareObservation(sensorsByName["floatMember"], new[] { 1.1f });
-            SensorTestHelper.CompareObservation(sensorsByName["floatProperty"], new[] { 1.2f });
+            SensorTestHelper.CompareObservation(sensorsByName["floatMember"], new[]
+            {
+                1.1f
+            });
+            SensorTestHelper.CompareObservation(sensorsByName["floatProperty"], new[]
+            {
+                1.2f
+            });
 
-            SensorTestHelper.CompareObservation(sensorsByName["boolMember"], new[] { 1.0f });
-            SensorTestHelper.CompareObservation(sensorsByName["boolProperty"], new[] { 1.0f });
+            SensorTestHelper.CompareObservation(sensorsByName["boolMember"], new[]
+            {
+                1.0f
+            });
+            SensorTestHelper.CompareObservation(sensorsByName["boolProperty"], new[]
+            {
+                1.0f
+            });
 
-            SensorTestHelper.CompareObservation(sensorsByName["vector2Member"], new[] { 2.0f, 2.1f });
-            SensorTestHelper.CompareObservation(sensorsByName["vector2Property"], new[] { 2.2f, 2.3f });
+            SensorTestHelper.CompareObservation(sensorsByName["vector2Member"], new[]
+            {
+                2.0f, 2.1f
+            });
+            SensorTestHelper.CompareObservation(sensorsByName["vector2Property"], new[]
+            {
+                2.2f, 2.3f
+            });
 
-            SensorTestHelper.CompareObservation(sensorsByName["vector3Member"], new[] { 3.0f, 3.1f, 3.2f });
-            SensorTestHelper.CompareObservation(sensorsByName["vector3Property"], new[] { 3.3f, 3.4f, 3.5f });
+            SensorTestHelper.CompareObservation(sensorsByName["vector3Member"], new[]
+            {
+                3.0f, 3.1f, 3.2f
+            });
+            SensorTestHelper.CompareObservation(sensorsByName["vector3Property"], new[]
+            {
+                3.3f, 3.4f, 3.5f
+            });
 
-            SensorTestHelper.CompareObservation(sensorsByName["vector4Member"], new[] { 4.0f, 4.1f, 4.2f, 4.3f });
-            SensorTestHelper.CompareObservation(sensorsByName["vector4Property"], new[] { 4.4f, 4.5f, 4.5f, 4.7f });
+            SensorTestHelper.CompareObservation(sensorsByName["vector4Member"], new[]
+            {
+                4.0f, 4.1f, 4.2f, 4.3f
+            });
+            SensorTestHelper.CompareObservation(sensorsByName["vector4Property"], new[]
+            {
+                4.4f, 4.5f, 4.5f, 4.7f
+            });
 
-            SensorTestHelper.CompareObservation(sensorsByName["quaternionMember"], new[] { 5.0f, 5.1f, 5.2f, 5.3f });
-            SensorTestHelper.CompareObservation(sensorsByName["quaternionProperty"], new[] { 5.4f, 5.5f, 5.5f, 5.7f });
+            SensorTestHelper.CompareObservation(sensorsByName["quaternionMember"], new[]
+            {
+                5.0f, 5.1f, 5.2f, 5.3f
+            });
+            SensorTestHelper.CompareObservation(sensorsByName["quaternionProperty"], new[]
+            {
+                5.4f, 5.5f, 5.5f, 5.7f
+            });
 
             // Actual ordering is B, C, A
-            SensorTestHelper.CompareObservation(sensorsByName["enumMember"], new[] { 0.0f, 0.0f, 1.0f });
-            SensorTestHelper.CompareObservation(sensorsByName["enumProperty"], new[] { 0.0f, 1.0f, 0.0f });
-            SensorTestHelper.CompareObservation(sensorsByName["badEnumMember"], new[] { 0.0f, 0.0f, 0.0f });
+            SensorTestHelper.CompareObservation(sensorsByName["enumMember"], new[]
+            {
+                0.0f, 0.0f, 1.0f
+            });
+            SensorTestHelper.CompareObservation(sensorsByName["enumProperty"], new[]
+            {
+                0.0f, 1.0f, 0.0f
+            });
+            SensorTestHelper.CompareObservation(sensorsByName["badEnumMember"], new[]
+            {
+                0.0f, 0.0f, 0.0f
+            });
 
-            SensorTestHelper.CompareObservation(sensorsByName["flagMember"], new[] { 1.0f, 0.0f, 0.0f });
-            SensorTestHelper.CompareObservation(sensorsByName["flagProperty"], new[] { 0.0f, 1.0f, 1.0f });
+            SensorTestHelper.CompareObservation(sensorsByName["flagMember"], new[]
+            {
+                1.0f, 0.0f, 0.0f
+            });
+            SensorTestHelper.CompareObservation(sensorsByName["flagProperty"], new[]
+            {
+                0.0f, 1.0f, 1.0f
+            });
         }
 
         [Test]
@@ -259,19 +317,19 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(0, errors.Count);
         }
 
-        class BadClass
+        private class BadClass
         {
             [Observable]
-            double m_Double;
+            private double m_Double;
 
             [Observable]
-            double DoubleProperty
+            private double DoubleProperty
             {
                 get => m_Double;
                 set => m_Double = value;
             }
 
-            float m_WriteOnlyProperty;
+            private float m_WriteOnlyProperty;
 
             [Observable]
             // No get property, so we shouldn't be able to make a sensor out of this.
@@ -295,7 +353,7 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(0, sensors.Count);
         }
 
-        class StackingClass
+        private class StackingClass
         {
             [Observable(numStackedObservations: 2)]
             public float FloatVal;
@@ -309,30 +367,36 @@ namespace Unity.MLAgents.Tests
             var sensors = ObservableAttribute.CreateObservableSensors(c, false);
             var sensor = sensors[0];
             Assert.AreEqual(typeof(StackingSensor), sensor.GetType());
-            SensorTestHelper.CompareObservation(sensor, new[] { 0.0f, 1.0f });
+            SensorTestHelper.CompareObservation(sensor, new[]
+            {
+                0.0f, 1.0f
+            });
 
             sensor.Update();
             c.FloatVal = 3.0f;
-            SensorTestHelper.CompareObservation(sensor, new[] { 1.0f, 3.0f });
+            SensorTestHelper.CompareObservation(sensor, new[]
+            {
+                1.0f, 3.0f
+            });
 
             var errors = new List<string>();
             Assert.AreEqual(2, ObservableAttribute.GetTotalObservationSize(c, false, errors));
             Assert.AreEqual(0, errors.Count);
         }
 
-        class BaseClass
+        private class BaseClass
         {
             [Observable("base")]
             public float m_BaseField;
 
-            [Observable("private")]
-            float m_PrivateField;
+           // [Observable("private")]
+          //  private float m_PrivateField;
         }
 
-        class DerivedClass : BaseClass
+        private class DerivedClass : BaseClass
         {
-            [Observable("derived")]
-            float m_DerivedField;
+           // [Observable("derived")]
+            //private float m_DerivedField;
         }
 
         [Test]

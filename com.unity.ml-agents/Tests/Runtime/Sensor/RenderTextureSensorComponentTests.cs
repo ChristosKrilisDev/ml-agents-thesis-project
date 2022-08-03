@@ -11,7 +11,10 @@ namespace Unity.MLAgents.Tests
         [Test]
         public void TestRenderTextureSensorComponent()
         {
-            foreach (var grayscale in new[] { true, false })
+            foreach (var grayscale in new[]
+                {
+                    true, false
+                })
             {
                 foreach (SensorCompressionType compression in Enum.GetValues(typeof(SensorCompressionType)))
                 {

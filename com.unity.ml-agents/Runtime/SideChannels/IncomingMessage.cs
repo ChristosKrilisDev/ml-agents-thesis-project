@@ -11,9 +11,9 @@ namespace Unity.MLAgents.SideChannels
     /// </summary>
     public class IncomingMessage : IDisposable
     {
-        byte[] m_Data;
-        Stream m_Stream;
-        BinaryReader m_Reader;
+        private byte[] m_Data;
+        private Stream m_Stream;
+        private BinaryReader m_Reader;
 
         /// <summary>
         /// Construct an IncomingMessage from the byte array.
@@ -61,7 +61,7 @@ namespace Unity.MLAgents.SideChannels
         /// </summary>
         /// <param name="defaultValue">Default value to use if the end of the message is reached.</param>
         /// <returns></returns>
-        public string ReadString(string defaultValue = default)
+        public string ReadString(string defaultValue = default(string))
         {
             if (!CanReadMore())
             {
@@ -70,6 +70,7 @@ namespace Unity.MLAgents.SideChannels
 
             var strLength = ReadInt32();
             var str = Encoding.ASCII.GetString(m_Reader.ReadBytes(strLength));
+
             return str;
         }
 
@@ -78,7 +79,7 @@ namespace Unity.MLAgents.SideChannels
         /// </summary>
         /// <param name="defaultValue">Default value to use if the end of the message is reached.</param>
         /// <returns></returns>
-        public IList<float> ReadFloatList(IList<float> defaultValue = default)
+        public IList<float> ReadFloatList(IList<float> defaultValue = default(IList<float>))
         {
             if (!CanReadMore())
             {
@@ -87,6 +88,7 @@ namespace Unity.MLAgents.SideChannels
 
             var len = ReadInt32();
             var output = new float[len];
+
             for (var i = 0; i < len; i++)
             {
                 output[i] = ReadFloat32();
@@ -119,7 +121,7 @@ namespace Unity.MLAgents.SideChannels
         /// </summary>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        bool CanReadMore()
+        private bool CanReadMore()
         {
             return m_Stream.Position < m_Stream.Length;
         }

@@ -10,16 +10,16 @@ namespace Unity.MLAgents.Actuators
     {
         /// When using discrete control, is the starting indices of the actions
         /// when all the branches are concatenated with each other.
-        int[] m_StartingActionIndices;
+        private int[] m_StartingActionIndices;
 
-        int[] m_BranchSizes;
+        private int[] m_BranchSizes;
 
-        bool[] m_CurrentMask;
+        private bool[] m_CurrentMask;
 
-        IList<IActuator> m_Actuators;
+        private IList<IActuator> m_Actuators;
 
-        readonly int m_SumOfDiscreteBranchSizes;
-        readonly int m_NumBranches;
+        private readonly int m_SumOfDiscreteBranchSizes;
+        private readonly int m_NumBranches;
 
         /// <summary>
         /// The offset into the branches array that is used when actuators are writing to the action mask.
@@ -48,12 +48,13 @@ namespace Unity.MLAgents.Actuators
             m_CurrentMask[actionIndex + m_StartingActionIndices[CurrentBranchOffset + branch]] = !isEnabled;
         }
 
-        void LazyInitialize()
+        private void LazyInitialize()
         {
             if (m_BranchSizes == null)
             {
                 m_BranchSizes = new int[m_NumBranches];
                 var start = 0;
+
                 for (var i = 0; i < m_Actuators.Count; i++)
                 {
                     var actuator = m_Actuators[i];
@@ -97,7 +98,7 @@ namespace Unity.MLAgents.Actuators
         /// <summary>
         /// Makes sure that the current mask is usable.
         /// </summary>
-        void AssertMask()
+        private void AssertMask()
         {
 #if DEBUG
             for (var branchIndex = 0; branchIndex < m_NumBranches; branchIndex++)
@@ -128,7 +129,7 @@ namespace Unity.MLAgents.Actuators
         /// </summary>
         /// <param name="branch"> The index of the branch to check.</param>
         /// <returns> True if all the actions of the branch are masked.</returns>
-        bool AreAllActionsMasked(int branch)
+        private bool AreAllActionsMasked(int branch)
         {
             if (m_CurrentMask == null)
             {
@@ -136,6 +137,7 @@ namespace Unity.MLAgents.Actuators
             }
             var start = m_StartingActionIndices[branch];
             var end = m_StartingActionIndices[branch + 1];
+
             for (var i = start; i < end; i++)
             {
                 if (!m_CurrentMask[i])
@@ -143,6 +145,7 @@ namespace Unity.MLAgents.Actuators
                     return false;
                 }
             }
+
             return true;
         }
     }

@@ -10,22 +10,26 @@ namespace Unity.MLAgents.Sensors
     [AddComponentMenu("ML Agents/Camera Sensor", (int)MenuGroup.Sensors)]
     public class CameraSensorComponent : SensorComponent, IDisposable
     {
-        [HideInInspector, SerializeField, FormerlySerializedAs("camera")]
-        Camera m_Camera;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("camera")]
+        private Camera m_Camera;
 
-        CameraSensor m_Sensor;
+        private CameraSensor m_Sensor;
 
         /// <summary>
         /// Camera object that provides the data to the sensor.
         /// </summary>
         public Camera Camera
         {
-            get { return m_Camera; }
-            set { m_Camera = value; UpdateSensor(); }
+            get => m_Camera;
+            set
+            {
+                m_Camera = value;
+                UpdateSensor();
+            }
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("sensorName")]
-        string m_SensorName = "CameraSensor";
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("sensorName")]
+        private string m_SensorName = "CameraSensor";
 
         /// <summary>
         /// Name of the generated <see cref="CameraSensor"/> object.
@@ -33,12 +37,12 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public string SensorName
         {
-            get { return m_SensorName; }
-            set { m_SensorName = value; }
+            get => m_SensorName;
+            set => m_SensorName = value;
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("width")]
-        int m_Width = 84;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("width")]
+        private int m_Width = 84;
 
         /// <summary>
         /// Width of the generated observation.
@@ -46,12 +50,12 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int Width
         {
-            get { return m_Width; }
-            set { m_Width = value; }
+            get => m_Width;
+            set => m_Width = value;
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("height")]
-        int m_Height = 84;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("height")]
+        private int m_Height = 84;
 
         /// <summary>
         /// Height of the generated observation.
@@ -59,12 +63,12 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int Height
         {
-            get { return m_Height; }
-            set { m_Height = value; }
+            get => m_Height;
+            set => m_Height = value;
         }
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("grayscale")]
-        bool m_Grayscale;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("grayscale")]
+        private bool m_Grayscale;
 
         /// <summary>
         /// Whether to generate grayscale images or color.
@@ -72,37 +76,45 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public bool Grayscale
         {
-            get { return m_Grayscale; }
-            set { m_Grayscale = value; }
+            get => m_Grayscale;
+            set => m_Grayscale = value;
         }
 
-        [HideInInspector, SerializeField]
-        ObservationType m_ObservationType;
+        [HideInInspector] [SerializeField]
+        private ObservationType m_ObservationType;
 
         /// <summary>
         /// The type of the observation.
         /// </summary>
         public ObservationType ObservationType
         {
-            get { return m_ObservationType; }
-            set { m_ObservationType = value; UpdateSensor(); }
+            get => m_ObservationType;
+            set
+            {
+                m_ObservationType = value;
+                UpdateSensor();
+            }
         }
 
-        [HideInInspector, SerializeField]
+        [HideInInspector] [SerializeField]
         [Range(1, 50)]
         [Tooltip("Number of camera frames that will be stacked before being fed to the neural network.")]
-        int m_ObservationStacks = 1;
+        private int m_ObservationStacks = 1;
 
-        [HideInInspector, SerializeField, FormerlySerializedAs("compression")]
-        SensorCompressionType m_Compression = SensorCompressionType.PNG;
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("compression")]
+        private SensorCompressionType m_Compression = SensorCompressionType.PNG;
 
         /// <summary>
         /// The compression type to use for the sensor.
         /// </summary>
         public SensorCompressionType CompressionType
         {
-            get { return m_Compression; }
-            set { m_Compression = value; UpdateSensor(); }
+            get => m_Compression;
+            set
+            {
+                m_Compression = value;
+                UpdateSensor();
+            }
         }
 
         /// <summary>
@@ -111,8 +123,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int ObservationStacks
         {
-            get { return m_ObservationStacks; }
-            set { m_ObservationStacks = value; }
+            get => m_ObservationStacks;
+            set => m_ObservationStacks = value;
         }
 
         /// <summary>
@@ -126,9 +138,16 @@ namespace Unity.MLAgents.Sensors
 
             if (ObservationStacks != 1)
             {
-                return new ISensor[] { new StackingSensor(m_Sensor, ObservationStacks) };
+                return new ISensor[]
+                {
+                    new StackingSensor(m_Sensor, ObservationStacks)
+                };
             }
-            return new ISensor[] { m_Sensor };
+
+            return new ISensor[]
+            {
+                m_Sensor
+            };
         }
 
         /// <summary>

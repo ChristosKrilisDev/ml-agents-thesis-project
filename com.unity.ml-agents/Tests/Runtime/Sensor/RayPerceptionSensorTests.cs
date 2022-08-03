@@ -12,8 +12,12 @@ namespace Unity.MLAgents.Tests
         public void TestGetRayAngles()
         {
             var angles = RayPerceptionSensorComponentBase.GetRayAngles(3, 90f);
-            var expectedAngles = new[] { 90f, 60f, 120f, 30f, 150f, 0f, 180f };
+            var expectedAngles = new[]
+            {
+                90f, 60f, 120f, 30f, 150f, 0f, 180f
+            };
             Assert.AreEqual(expectedAngles.Length, angles.Length);
+
             for (var i = 0; i < angles.Length; i++)
             {
                 Assert.AreEqual(expectedAngles[i], angles[i], .01);
@@ -36,20 +40,21 @@ namespace Unity.MLAgents.Tests
 
 #if MLA_UNITY_PHYSICS_MODULE
         // Use built-in tags
-        const string k_CubeTag = "Player";
-        const string k_SphereTag = "Respawn";
+        private const string k_CubeTag = "Player";
+        private const string k_SphereTag = "Respawn";
 
         [TearDown]
         public void RemoveGameObjects()
         {
-            var objects = GameObject.FindObjectsOfType<GameObject>();
+            var objects = Object.FindObjectsOfType<GameObject>();
+
             foreach (var o in objects)
             {
-                UnityEngine.Object.DestroyImmediate(o);
+                Object.DestroyImmediate(o);
             }
         }
 
-        void SetupScene()
+        private void SetupScene()
         {
             /* Creates game objects in the world for testing.
              *   C is a cube
@@ -83,7 +88,6 @@ namespace Unity.MLAgents.Tests
             sphere3.tag = k_SphereTag;
             sphere3.name = "sphere3";
 
-
             Physics.SyncTransforms();
         }
 
@@ -101,7 +105,11 @@ namespace Unity.MLAgents.Tests
             perception.DetectableTags.Add(k_CubeTag);
             perception.DetectableTags.Add(k_SphereTag);
 
-            var radii = new[] { 0f, .5f };
+            var radii = new[]
+            {
+                0f, .5f
+            };
+
             foreach (var castRadius in radii)
             {
                 perception.SphereCastRadius = castRadius;
@@ -112,7 +120,7 @@ namespace Unity.MLAgents.Tests
                 Assert.AreEqual(sensor.GetObservationSpec().Shape[0], expectedObs);
                 var outputBuffer = new float[expectedObs];
 
-                ObservationWriter writer = new ObservationWriter();
+                var writer = new ObservationWriter();
                 writer.SetTarget(outputBuffer, sensor.GetObservationSpec(), 0);
 
                 var numWritten = sensor.Write(writer);
@@ -171,14 +179,17 @@ namespace Unity.MLAgents.Tests
             Assert.AreEqual(sensor.GetObservationSpec().Shape[0], expectedObs);
             var outputBuffer = new float[expectedObs];
 
-            ObservationWriter writer = new ObservationWriter();
+            var writer = new ObservationWriter();
             writer.SetTarget(outputBuffer, sensor.GetObservationSpec(), 0);
 
             var numWritten = sensor.Write(writer);
             Assert.AreEqual(numWritten, expectedObs);
 
             // Everything missed
-            Assert.AreEqual(new float[] { 0, 0, 1, 1 }, outputBuffer);
+            Assert.AreEqual(new float[]
+            {
+                0, 0, 1, 1
+            }, outputBuffer);
         }
 
         [Test]
@@ -203,11 +214,16 @@ namespace Unity.MLAgents.Tests
             perception.RayLength = 20;
             perception.DetectableTags = new List<string>();
 
-            var filterCubeLayers = new[] { false, true };
+            var filterCubeLayers = new[]
+            {
+                false, true
+            };
+
             foreach (var filterCubeLayer in filterCubeLayers)
             {
                 // Set the layer mask to either the default, or one that ignores the close cube's layer
                 var layerMask = Physics.DefaultRaycastLayers;
+
                 if (filterCubeLayer)
                 {
                     layerMask &= ~(1 << cubeFiltered.layer);
@@ -220,7 +236,7 @@ namespace Unity.MLAgents.Tests
                 Assert.AreEqual(sensor.GetObservationSpec().Shape[0], expectedObs);
                 var outputBuffer = new float[expectedObs];
 
-                ObservationWriter writer = new ObservationWriter();
+                var writer = new ObservationWriter();
                 writer.SetTarget(outputBuffer, sensor.GetObservationSpec(), 0);
 
                 var numWritten = sensor.Write(writer);
@@ -257,7 +273,11 @@ namespace Unity.MLAgents.Tests
             perception.DetectableTags = new List<string>();
             perception.DetectableTags.Add(k_CubeTag);
 
-            var radii = new[] { 0f, .5f };
+            var radii = new[]
+            {
+                0f, .5f
+            };
+
             foreach (var castRadius in radii)
             {
                 perception.SphereCastRadius = castRadius;
@@ -268,7 +288,7 @@ namespace Unity.MLAgents.Tests
                 Assert.AreEqual(sensor.GetObservationSpec().Shape[0], expectedObs);
                 var outputBuffer = new float[expectedObs];
 
-                ObservationWriter writer = new ObservationWriter();
+                var writer = new ObservationWriter();
                 writer.SetTarget(outputBuffer, sensor.GetObservationSpec(), 0);
 
                 var numWritten = sensor.Write(writer);
@@ -317,7 +337,7 @@ namespace Unity.MLAgents.Tests
                 Assert.AreEqual(sensor.GetObservationSpec().Shape[0], expectedObs);
                 var outputBuffer = new float[expectedObs];
 
-                ObservationWriter writer = new ObservationWriter();
+                var writer = new ObservationWriter();
                 writer.SetTarget(outputBuffer, sensor.GetObservationSpec(), 0);
 
                 var numWritten = sensor.Write(writer);
@@ -343,7 +363,11 @@ namespace Unity.MLAgents.Tests
             perception.DetectableTags.Add(k_CubeTag);
             perception.DetectableTags.Add(k_SphereTag);
 
-            var radii = new[] { 0f, .5f };
+            var radii = new[]
+            {
+                0f, .5f
+            };
+
             foreach (var castRadius in radii)
             {
                 perception.SphereCastRadius = castRadius;
@@ -374,7 +398,11 @@ namespace Unity.MLAgents.Tests
             perception.DetectableTags.Add("");
             perception.DetectableTags.Add(k_CubeTag);
 
-            var radii = new[] { 0f, .5f };
+            var radii = new[]
+            {
+                0f, .5f
+            };
+
             foreach (var castRadius in radii)
             {
                 perception.SphereCastRadius = castRadius;
@@ -405,7 +433,11 @@ namespace Unity.MLAgents.Tests
             perception.RayLength = 20;
             perception.DetectableTags = null;
 
-            var radii = new[] { 0f, .5f };
+            var radii = new[]
+            {
+                0f, .5f
+            };
+
             foreach (var castRadius in radii)
             {
                 perception.SphereCastRadius = castRadius;

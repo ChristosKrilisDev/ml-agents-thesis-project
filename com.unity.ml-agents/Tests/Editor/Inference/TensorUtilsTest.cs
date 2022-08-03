@@ -20,6 +20,7 @@ namespace Unity.MLAgents.Tests
             // Set shape to {1, ..., height, width, channels}
             // For 8D, the ... are all 1's
             var shape = new long[dimension];
+
             for (var i = 0; i < dimension; i++)
             {
                 shape[i] = 1;
@@ -30,6 +31,7 @@ namespace Unity.MLAgents.Tests
             shape[dimension - 1] = channels;
 
             var intShape = new int[dimension];
+
             for (var i = 0; i < dimension; i++)
             {
                 intShape[i] = (int)shape[i];
@@ -39,7 +41,7 @@ namespace Unity.MLAgents.Tests
             {
                 valueType = TensorProxy.TensorType.Integer,
                 data = new Tensor(intShape),
-                shape = shape,
+                shape = shape
             };
 
             // These should be invariant after the resize.
@@ -100,30 +102,7 @@ namespace Unity.MLAgents.Tests
 
             var reference = new[]
             {
-                -0.4315872f,
-                -1.11074f,
-                0.3414804f,
-                -1.130287f,
-                0.1413168f,
-                -0.5105762f,
-                -0.3027347f,
-                -0.2645015f,
-                1.225356f,
-                -0.02921959f,
-                0.3716498f,
-                -1.092338f,
-                0.9561074f,
-                -0.5018106f,
-                1.167787f,
-                -0.7763879f,
-                -0.07491868f,
-                0.5396146f,
-                -0.1377991f,
-                0.3331701f,
-                0.06144788f,
-                0.9520947f,
-                1.088157f,
-                -1.177194f,
+                -0.4315872f, -1.11074f, 0.3414804f, -1.130287f, 0.1413168f, -0.5105762f, -0.3027347f, -0.2645015f, 1.225356f, -0.02921959f, 0.3716498f, -1.092338f, 0.9561074f, -0.5018106f, 1.167787f, -0.7763879f, -0.07491868f, 0.5396146f, -0.1377991f, 0.3331701f, 0.06144788f, 0.9520947f, 1.088157f, -1.177194f
             };
 
             for (var i = 0; i < t.data.length; i++)

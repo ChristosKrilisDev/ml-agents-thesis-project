@@ -1026,7 +1026,10 @@ MonoBehaviour:
   - {fileID: 114174054373109668}
   - {fileID: 114174056181434809}
   m_Start: {fileID: 0}
+  m_CheckPoint: {fileID: 0}
   m_End: {fileID: 0}
+  d_distances: []
+  p_distnaces: []
 --- !u!1 &1009802342325412
 GameObject:
   m_ObjectHideFlags: 0
@@ -1041,7 +1044,7 @@ GameObject:
   - component: {fileID: 65784713172989966}
   m_Layer: 0
   m_Name: Spawn 7
-  m_TagString: Untagged
+  m_TagString: spawnArea
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1087,7 +1090,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: f731be6866ce749fd8349e67ae81f76a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1118,7 +1121,7 @@ BoxCollider:
   m_GameObject: {fileID: 1009802342325412}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 1, z: 0.99999994}
   m_Center: {x: 0, y: 0, z: 0}
@@ -1312,7 +1315,7 @@ GameObject:
   - component: {fileID: 65812495567844776}
   m_Layer: 0
   m_Name: Spawn 3
-  m_TagString: Untagged
+  m_TagString: spawnArea
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1358,7 +1361,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: f731be6866ce749fd8349e67ae81f76a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1389,7 +1392,7 @@ BoxCollider:
   m_GameObject: {fileID: 1099372098397784}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 1, z: 0.99999994}
   m_Center: {x: 0, y: 0, z: 0}
@@ -1678,7 +1681,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 1
-  m_BehaviorType: 0
+  m_BehaviorType: 1
   m_BehaviorName: PF
   TeamId: 0
   m_UseChildSensors: 1
@@ -1701,10 +1704,10 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 3500
-  useVectorObs: 1
-  area: {fileID: 1464170487903594}
-  areaSwitch: {fileID: 1432086782037750}
-  m_Graph: {fileID: 1761445699}
+  _useVectorObs: 1
+  _area: {fileID: 6972023362410834850}
+  _checkPoint: {fileID: 114882773008046678}
+  _graph: {fileID: 1761445699}
 --- !u!65 &65345930959735878
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1730,7 +1733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
+  DecisionPeriod: 2
   TakeActionsBetweenDecisions: 1
 --- !u!114 &5712624269609438939
 MonoBehaviour:
@@ -1853,7 +1856,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39d9414501bf0d04fb5e6b194992bdd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  record: 1
 --- !u!1 &1148882946833254
 GameObject:
   m_ObjectHideFlags: 0
@@ -1995,7 +1997,7 @@ GameObject:
   - component: {fileID: 65492622455568822}
   m_Layer: 0
   m_Name: Spawn 2
-  m_TagString: Untagged
+  m_TagString: spawnArea
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2041,7 +2043,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: f731be6866ce749fd8349e67ae81f76a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2072,7 +2074,7 @@ BoxCollider:
   m_GameObject: {fileID: 1211192434636830}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 1, z: 0.99999994}
   m_Center: {x: 0, y: 0, z: 0}
@@ -2856,10 +2858,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abd01d977612744528db278c446e9a11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onMaterial: {fileID: 2100000, guid: c67450f290f3e4897bc40276a619e78d, type: 2}
-  offMaterial: {fileID: 2100000, guid: 5c59bd36def9a4684be49a21cf201a2d, type: 2}
-  myButton: {fileID: 1311237735163698}
-  goalObj: {fileID: 0}
 --- !u!1 &1464170487903594
 GameObject:
   m_ObjectHideFlags: 0
@@ -2869,7 +2867,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4603070702628152}
-  - component: {fileID: 114038595653051694}
+  - component: {fileID: 6972023362410834850}
   m_Layer: 0
   m_Name: AreaPF
   m_TagString: Untagged
@@ -2903,7 +2901,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114038595653051694
+--- !u!114 &6972023362410834850
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2915,9 +2913,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e048de15d0b8a4643a75c2b09981792e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goalPref: {fileID: 1891363201150404, guid: 8be2b3870e2cd4ad8bbf080059b2a132, type: 3}
-  blockPref: {fileID: 1703380733698014, guid: 41512dd84b60643ceb3855fcf9d7d318, type: 3}
-  spawnAreas:
+  _spawnAreas:
   - {fileID: 1772811252886996}
   - {fileID: 1499222802311382}
   - {fileID: 1211192434636830}
@@ -2927,8 +2923,6 @@ MonoBehaviour:
   - {fileID: 1589824565497876}
   - {fileID: 1009802342325412}
   - {fileID: 1589816231338102}
-  numPyra: 1
-  range: 45
 --- !u!1 &1487796829611838
 GameObject:
   m_ObjectHideFlags: 0
@@ -2943,7 +2937,7 @@ GameObject:
   - component: {fileID: 65271180279773774}
   m_Layer: 0
   m_Name: Spawn 4
-  m_TagString: Untagged
+  m_TagString: spawnArea
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2989,7 +2983,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: f731be6866ce749fd8349e67ae81f76a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3020,7 +3014,7 @@ BoxCollider:
   m_GameObject: {fileID: 1487796829611838}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 1, z: 0.99999994}
   m_Center: {x: 0, y: 0, z: 0}
@@ -3038,7 +3032,7 @@ GameObject:
   - component: {fileID: 65572453242984008}
   m_Layer: 0
   m_Name: Spawn 1
-  m_TagString: Untagged
+  m_TagString: spawnArea
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3084,7 +3078,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: f731be6866ce749fd8349e67ae81f76a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3115,7 +3109,7 @@ BoxCollider:
   m_GameObject: {fileID: 1499222802311382}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 1, z: 0.99999994}
   m_Center: {x: 0, y: 0, z: 0}
@@ -3133,7 +3127,7 @@ GameObject:
   - component: {fileID: 65623479026562200}
   m_Layer: 0
   m_Name: Spawn 8
-  m_TagString: Untagged
+  m_TagString: spawnArea
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3179,7 +3173,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: f731be6866ce749fd8349e67ae81f76a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3210,7 +3204,7 @@ BoxCollider:
   m_GameObject: {fileID: 1589816231338102}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 1, z: 0.99999994}
   m_Center: {x: 0, y: 0, z: 0}
@@ -3228,7 +3222,7 @@ GameObject:
   - component: {fileID: 65372154031324488}
   m_Layer: 0
   m_Name: Spawn 6
-  m_TagString: Untagged
+  m_TagString: spawnArea
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3274,7 +3268,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: f731be6866ce749fd8349e67ae81f76a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3305,7 +3299,7 @@ BoxCollider:
   m_GameObject: {fileID: 1589824565497876}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 1, z: 0.99999994}
   m_Center: {x: 0, y: 0, z: 0}
@@ -3527,7 +3521,7 @@ GameObject:
   - component: {fileID: 65609161081089734}
   m_Layer: 0
   m_Name: Spawn 5
-  m_TagString: Untagged
+  m_TagString: spawnArea
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3573,7 +3567,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: f731be6866ce749fd8349e67ae81f76a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3604,7 +3598,7 @@ BoxCollider:
   m_GameObject: {fileID: 1628005379594380}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 1, z: 0.99999994}
   m_Center: {x: 0, y: 0, z: 0}
@@ -4130,7 +4124,7 @@ GameObject:
   - component: {fileID: 65131381260429142}
   m_Layer: 0
   m_Name: Spawn 0
-  m_TagString: Untagged
+  m_TagString: spawnArea
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4176,7 +4170,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: f731be6866ce749fd8349e67ae81f76a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4207,7 +4201,7 @@ BoxCollider:
   m_GameObject: {fileID: 1772811252886996}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 1, z: 0.99999994}
   m_Center: {x: 0, y: 0, z: 0}
@@ -4753,7 +4747,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1136463822123074, guid: b2545609c1247ad41901a37ae5bd2802, type: 3}
       propertyPath: m_Name
-      value: Node
+      value: Node (0)
       objectReference: {fileID: 0}
     - target: {fileID: 4306761885902856, guid: b2545609c1247ad41901a37ae5bd2802, type: 3}
       propertyPath: m_RootOrder

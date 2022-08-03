@@ -7,8 +7,8 @@ namespace Unity.MLAgents
 {
     public class StandaloneBuildTest
     {
-        const string k_OutputCommandLineFlag = "--mlagents-build-output-path";
-        const string k_SceneCommandLineFlag = "--mlagents-build-scene-path";
+        private const string k_OutputCommandLineFlag = "--mlagents-build-output-path";
+        private const string k_SceneCommandLineFlag = "--mlagents-build-scene-path";
         private const string k_BuildTargetFlag = "--mlagents-build-target";
 
         public static void BuildStandalonePlayerOSX()
@@ -19,6 +19,7 @@ namespace Unity.MLAgents
             var buildTarget = BuildTarget.StandaloneOSX;
 
             var args = Environment.GetCommandLineArgs();
+
             for (var i = 0; i < args.Length - 1; i++)
             {
                 if (args[i] == k_OutputCommandLineFlag)
@@ -32,11 +33,14 @@ namespace Unity.MLAgents
                 }
                 else if (args[i] == k_BuildTargetFlag)
                 {
-                    buildTarget = (BuildTarget)Enum.Parse(typeof(BuildTarget), args[i + 1], ignoreCase: true);
+                    buildTarget = (BuildTarget)Enum.Parse(typeof(BuildTarget), args[i + 1], true);
                 }
             }
 
-            string[] scenes = { scenePath };
+            string[] scenes =
+            {
+                scenePath
+            };
             var buildResult = BuildPipeline.BuildPlayer(
                 scenes,
                 outputPath,
@@ -45,6 +49,7 @@ namespace Unity.MLAgents
             );
             var isOk = buildResult.summary.result == BuildResult.Succeeded;
             var error = "";
+
             foreach (var stepInfo in buildResult.steps)
             {
                 foreach (var msg in stepInfo.messages)
@@ -55,6 +60,7 @@ namespace Unity.MLAgents
                     }
                 }
             }
+
             if (isOk)
             {
                 EditorApplication.Exit(0);

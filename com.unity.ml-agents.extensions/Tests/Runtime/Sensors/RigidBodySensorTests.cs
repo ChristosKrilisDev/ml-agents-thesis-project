@@ -11,14 +11,14 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
         public static void CompareObservation(ISensor sensor, float[] expected)
         {
             string errorMessage;
-            bool isOk = SensorHelper.CompareObservation(sensor, expected, out errorMessage);
+            var isOk = SensorHelper.CompareObservation(sensor, expected, out errorMessage);
             Assert.IsTrue(isOk, errorMessage);
         }
 
         public static void CompareObservation(ISensor sensor, float[,,] expected)
         {
             string errorMessage;
-            bool isOk = SensorHelper.CompareObservation(sensor, expected, out errorMessage);
+            var isOk = SensorHelper.CompareObservation(sensor, expected, out errorMessage);
             Assert.IsTrue(isOk, errorMessage);
         }
     }
@@ -124,7 +124,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             sensorComponent.Settings = new PhysicsSensorSettings
             {
                 UseJointPositionsAndAngles = true,
-                UseJointForces = true,
+                UseJointForces = true
             };
 
             sensor = sensorComponent.CreateSensors()[0];
@@ -135,7 +135,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
                 0f, 0f, 0f, // joint1.force
                 0f, 0f, 0f, // joint1.torque
                 0f, 0f, 0f, // joint2.force
-                0f, 0f, 0f, // joint2.torque
+                0f, 0f, 0f // joint2.torque
             };
             SensorTestHelper.CompareObservation(sensor, expected);
             Assert.AreEqual(expected.Length, sensor.GetObservationSpec().Shape[0]);

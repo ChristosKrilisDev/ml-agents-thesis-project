@@ -41,7 +41,8 @@ namespace Unity.MLAgents.Tests
             gridSize,
             detectableTags,
             compression)
-        { }
+        {
+        }
 
         protected override int GetCellObservationSize()
         {
@@ -69,13 +70,14 @@ namespace Unity.MLAgents.Tests
 
     public class SimpleTestGridSensorComponent : GridSensorComponent
     {
-        bool m_UseOneHotTag;
-        bool m_UseTestingGridSensor;
-        bool m_UseGridSensorBase;
+        private bool m_UseOneHotTag;
+        private bool m_UseTestingGridSensor;
+        private bool m_UseGridSensorBase;
 
         protected override GridSensorBase[] GetGridSensors()
         {
-            List<GridSensorBase> sensorList = new List<GridSensorBase>();
+            var sensorList = new List<GridSensorBase>();
+
             if (m_UseOneHotTag)
             {
                 var testSensor = new OneHotGridSensor(
@@ -87,6 +89,7 @@ namespace Unity.MLAgents.Tests
                 );
                 sensorList.Add(testSensor);
             }
+
             if (m_UseGridSensorBase)
             {
                 var testSensor = new GridSensorBase(
@@ -98,6 +101,7 @@ namespace Unity.MLAgents.Tests
                 );
                 sensorList.Add(testSensor);
             }
+
             if (m_UseTestingGridSensor)
             {
                 var testSensor = new SimpleTestGridSensor(
@@ -109,6 +113,7 @@ namespace Unity.MLAgents.Tests
                 );
                 sensorList.Add(testSensor);
             }
+
             return sensorList.ToArray();
         }
 

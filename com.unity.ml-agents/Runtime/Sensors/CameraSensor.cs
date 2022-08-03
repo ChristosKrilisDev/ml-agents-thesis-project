@@ -9,22 +9,22 @@ namespace Unity.MLAgents.Sensors
     /// </summary>
     public class CameraSensor : ISensor, IBuiltInSensor, IDisposable
     {
-        Camera m_Camera;
-        int m_Width;
-        int m_Height;
-        bool m_Grayscale;
-        string m_Name;
+        private Camera m_Camera;
+        private int m_Width;
+        private int m_Height;
+        private bool m_Grayscale;
+        private string m_Name;
         private ObservationSpec m_ObservationSpec;
-        SensorCompressionType m_CompressionType;
-        Texture2D m_Texture;
+        private SensorCompressionType m_CompressionType;
+        private Texture2D m_Texture;
 
         /// <summary>
         /// The Camera used for rendering the sensor observations.
         /// </summary>
         public Camera Camera
         {
-            get { return m_Camera; }
-            set { m_Camera = value; }
+            get => m_Camera;
+            set => m_Camera = value;
         }
 
         /// <summary>
@@ -32,8 +32,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public SensorCompressionType CompressionType
         {
-            get { return m_CompressionType; }
-            set { m_CompressionType = value; }
+            get => m_CompressionType;
+            set => m_CompressionType = value;
         }
 
         /// <summary>
@@ -92,6 +92,7 @@ namespace Unity.MLAgents.Sensors
                 ObservationToTexture(m_Camera, m_Texture, m_Width, m_Height);
                 // TODO support more types here, e.g. JPG
                 var compressed = m_Texture.EncodeToPNG();
+
                 return compressed;
             }
         }
@@ -107,6 +108,7 @@ namespace Unity.MLAgents.Sensors
             {
                 ObservationToTexture(m_Camera, m_Texture, m_Width, m_Height);
                 var numWritten = writer.WriteTexture(m_Texture, m_Grayscale);
+
                 return numWritten;
             }
         }

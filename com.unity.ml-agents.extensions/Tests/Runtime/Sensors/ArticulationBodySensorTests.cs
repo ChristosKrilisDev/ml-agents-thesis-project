@@ -3,7 +3,6 @@ using UnityEngine;
 using NUnit.Framework;
 using Unity.MLAgents.Extensions.Sensors;
 
-
 namespace Unity.MLAgents.Extensions.Tests.Sensors
 {
 
@@ -70,7 +69,6 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
                 upperLimit = 1
             };
 
-
 #if UNITY_2020_2_OR_NEWER
             // ArticulationBody.velocity is read-only in 2020.1
             rootArticBody.velocity = new Vector3(1f, 0f, 0f);
@@ -116,7 +114,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
             sensorComponent.Settings = new PhysicsSensorSettings
             {
                 UseJointForces = true,
-                UseJointPositionsAndAngles = true,
+                UseJointPositionsAndAngles = true
             };
 
             sensor = sensorComponent.CreateSensors()[0];
@@ -130,7 +128,7 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
 
                 // prismatic
                 0.5f, // joint2.position (interpolate between limits)
-                0f, // joint2.force
+                0f // joint2.force
             };
             SensorTestHelper.CompareObservation(sensor, expected);
             Assert.AreEqual(expected.Length, sensor.GetObservationSpec().Shape[0]);

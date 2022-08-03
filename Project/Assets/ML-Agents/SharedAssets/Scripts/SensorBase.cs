@@ -30,7 +30,7 @@ namespace Unity.MLAgentsExamples
         {
             // TODO reuse buffer for similar agents
             var numFloats = this.ObservationSize();
-            float[] buffer = new float[numFloats];
+            var buffer = new float[numFloats];
             WriteObservation(buffer);
 
             writer.AddList(buffer);

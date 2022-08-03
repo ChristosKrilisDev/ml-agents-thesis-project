@@ -14,10 +14,7 @@ namespace Unity.MLAgents.Sensors
         /// For example, a sensor that observes the velocity of a rigid body (in 3D) would use [3].
         /// A sensor that returns an RGB image would use [Height, Width, 3].
         /// </summary>
-        public InplaceArray<int> Shape
-        {
-            get => m_Shape;
-        }
+        public InplaceArray<int> Shape => m_Shape;
 
         internal readonly InplaceArray<DimensionProperty> m_DimensionProperties;
 
@@ -29,10 +26,7 @@ namespace Unity.MLAgents.Sensors
         /// It is generally recommended to use default values provided by helper functions,
         /// as not all combinations of DimensionProperty may be supported by the trainer.
         /// </remarks>
-        public InplaceArray<DimensionProperty> DimensionProperties
-        {
-            get => m_DimensionProperties;
-        }
+        public InplaceArray<DimensionProperty> DimensionProperties => m_DimensionProperties;
 
         internal ObservationType m_ObservationType;
 
@@ -40,18 +34,12 @@ namespace Unity.MLAgents.Sensors
         /// The type of the observation, e.g. whether they are generic or
         /// help determine the goal for the Agent.
         /// </summary>
-        public ObservationType ObservationType
-        {
-            get => m_ObservationType;
-        }
+        public ObservationType ObservationType => m_ObservationType;
 
         /// <summary>
         /// The number of dimensions of the observation.
         /// </summary>
-        public int Rank
-        {
-            get { return Shape.Length; }
-        }
+        public int Rank => Shape.Length;
 
         /// <summary>
         /// Construct an ObservationSpec for 1-D observations of the requested length.
@@ -80,6 +68,7 @@ namespace Unity.MLAgents.Sensors
                 DimensionProperty.VariableSize,
                 DimensionProperty.None
             );
+
             return new ObservationSpec(
                 new InplaceArray<int>(obsSize, maxNumObs),
                 dimProps
@@ -102,6 +91,7 @@ namespace Unity.MLAgents.Sensors
                 DimensionProperty.TranslationalEquivariance,
                 DimensionProperty.None
             );
+
             return new ObservationSpec(
                 new InplaceArray<int>(height, width, channels),
                 dimProps,

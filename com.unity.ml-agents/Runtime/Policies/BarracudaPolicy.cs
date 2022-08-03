@@ -31,7 +31,7 @@ namespace Unity.MLAgents.Policies
         /// CPU inference. Corresponds to in WorkerFactory.Type.CSharp Barracuda.
         /// Burst is recommended instead; this is kept for legacy compatibility.
         /// </summary>
-        CPU = 3,
+        CPU = 3
     }
 
     /// <summary>
@@ -42,20 +42,20 @@ namespace Unity.MLAgents.Policies
     internal class BarracudaPolicy : IPolicy
     {
         protected ModelRunner m_ModelRunner;
-        ActionBuffers m_LastActionBuffer;
+        private ActionBuffers m_LastActionBuffer;
 
-        int m_AgentId;
+        private int m_AgentId;
         /// <summary>
         /// Inference only: set to true if the action selection from model should be
         /// deterministic.
         /// </summary>
-        bool m_DeterministicInference;
+        private bool m_DeterministicInference;
 
         /// <summary>
         /// Sensor shapes for the associated Agents. All Agents must have the same shapes for their Sensors.
         /// </summary>
-        List<int[]> m_SensorShapes;
-        ActionSpec m_ActionSpec;
+        private List<int[]> m_SensorShapes;
+        private ActionSpec m_ActionSpec;
 
         private string m_BehaviorName;
 
@@ -106,7 +106,7 @@ namespace Unity.MLAgents.Policies
         }
 
         [Conditional("MLA_UNITY_ANALYTICS_MODULE")]
-        void SendAnalytics(IList<ISensor> sensors)
+        private void SendAnalytics(IList<ISensor> sensors)
         {
             if (!m_AnalyticsSent)
             {
@@ -134,6 +134,7 @@ namespace Unity.MLAgents.Policies
                 m_ModelRunner?.DecideBatch();
                 m_LastActionBuffer = m_ModelRunner.GetAction(m_AgentId);
             }
+
             return ref m_LastActionBuffer;
         }
 

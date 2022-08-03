@@ -143,15 +143,19 @@ namespace Unity.MLAgents
                 {
                     case 0:
                         m_Elem0 = value;
+
                         break;
                     case 1:
                         m_Elem1 = value;
+
                         break;
                     case 2:
                         m_Elem2 = value;
+
                         break;
                     case 3:
                         m_Elem3 = value;
+
                         break;
                     default:
                         throw new IndexOutOfRangeException();
@@ -162,10 +166,7 @@ namespace Unity.MLAgents
         /// <summary>
         /// The length of the array.
         /// </summary>
-        public int Length
-        {
-            get => m_Length;
-        }
+        public int Length => m_Length;
 
         /// <summary>
         /// Returns a string representation of the array's elements.
@@ -206,14 +207,20 @@ namespace Unity.MLAgents
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
         /// <returns>Whether the arrays are not equivalent</returns>
-        public static bool operator !=(InplaceArray<T> lhs, InplaceArray<T> rhs) => !lhs.Equals(rhs);
+        public static bool operator !=(InplaceArray<T> lhs, InplaceArray<T> rhs)
+        {
+            return !lhs.Equals(rhs);
+        }
 
         /// <summary>
         /// Check that the arrays are equivalent.
         /// </summary>
         /// <param name="other"></param>
         /// <returns>Whether the arrays are not equivalent</returns>
-        public override bool Equals(object other) => other is InplaceArray<T> other1 && this.Equals(other1);
+        public override bool Equals(object other)
+        {
+            return other is InplaceArray<T> other1 && Equals(other1);
+        }
 
         /// <summary>
         /// Check that the arrays are equivalent.
@@ -225,6 +232,7 @@ namespace Unity.MLAgents
             // See https://montemagno.com/optimizing-c-struct-equality-with-iequatable/
             var thisTuple = (m_Elem0, m_Elem1, m_Elem2, m_Elem3, Length);
             var otherTuple = (other.m_Elem0, other.m_Elem1, other.m_Elem2, other.m_Elem3, other.Length);
+
             return thisTuple.Equals(otherTuple);
         }
 

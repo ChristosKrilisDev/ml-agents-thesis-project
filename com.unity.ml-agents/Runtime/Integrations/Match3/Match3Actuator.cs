@@ -1,7 +1,6 @@
 using Unity.MLAgents.Actuators;
 using Debug = UnityEngine.Debug;
 
-
 namespace Unity.MLAgents.Integrations.Match3
 {
     /// <summary>
@@ -10,11 +9,11 @@ namespace Unity.MLAgents.Integrations.Match3
     /// </summary>
     public class Match3Actuator : IActuator, IBuiltInActuator
     {
-        AbstractBoard m_Board;
-        System.Random m_Random;
-        ActionSpec m_ActionSpec;
-        bool m_ForceHeuristic;
-        BoardSize m_MaxBoardSize;
+        private AbstractBoard m_Board;
+        private System.Random m_Random;
+        private ActionSpec m_ActionSpec;
+        private bool m_ForceHeuristic;
+        private BoardSize m_MaxBoardSize;
 
         /// <summary>
         /// Create a Match3Actuator.
@@ -47,13 +46,14 @@ namespace Unity.MLAgents.Integrations.Match3
         public void OnActionReceived(ActionBuffers actions)
         {
             m_Board.CheckBoardSizes(m_MaxBoardSize);
+
             if (m_ForceHeuristic)
             {
                 Heuristic(actions);
             }
             var moveIndex = actions.DiscreteActions[0];
 
-            Move move = Move.FromMoveIndex(moveIndex, m_MaxBoardSize);
+            var move = Move.FromMoveIndex(moveIndex, m_MaxBoardSize);
             m_Board.MakeMove(move);
         }
 
@@ -63,12 +63,14 @@ namespace Unity.MLAgents.Integrations.Match3
             var currentBoardSize = m_Board.GetCurrentBoardSize();
             m_Board.CheckBoardSizes(m_MaxBoardSize);
             const int branch = 0;
-            bool foundValidMove = false;
+            var foundValidMove = false;
+
             using (TimerStack.Instance.Scoped("WriteDiscreteActionMask"))
             {
                 var numMoves = m_Board.NumMoves();
 
                 var currentMove = Move.FromMoveIndex(0, m_MaxBoardSize);
+
                 for (var i = 0; i < numMoves; i++)
                 {
                     // Check that the move is allowed for the current boardSize (e.g. it won't move a piece out of
@@ -145,6 +147,7 @@ namespace Unity.MLAgents.Integrations.Match3
             foreach (var move in m_Board.ValidMoves())
             {
                 var movePoints = EvalMovePoints(move);
+
                 if (movePoints < bestMovePoints)
                 {
                     // Worse, skip
@@ -164,6 +167,7 @@ namespace Unity.MLAgents.Integrations.Match3
                     // See https://en.wikipedia.org/wiki/Reservoir_sampling#Simple_algorithm
                     numMovesAtCurrentScore++;
                     var randVal = m_Random.Next(0, numMovesAtCurrentScore);
+
                     if (randVal == 0)
                     {
                         // Keep the new one

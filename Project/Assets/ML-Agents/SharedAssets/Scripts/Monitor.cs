@@ -31,19 +31,19 @@ namespace Unity.MLAgents
         /// </summary>
         public static float verticalOffset = 3f;
 
-        static bool s_IsInstantiated;
-        static GameObject s_Canvas;
-        static Dictionary<Transform, Dictionary<string, DisplayValue>> s_DisplayTransformValues;
+        private static bool s_IsInstantiated;
+        private static GameObject s_Canvas;
+        private static Dictionary<Transform, Dictionary<string, DisplayValue>> s_DisplayTransformValues;
 
         /// <summary>
         /// Camera used to calculate GUI screen position relative to the target
         /// transform.
         /// </summary>
-        static Dictionary<Transform, Camera> s_TransformCamera;
+        private static Dictionary<Transform, Camera> s_TransformCamera;
 
-        static Color[] s_BarColors;
+        private static Color[] s_BarColors;
 
-        struct DisplayValue
+        private struct DisplayValue
         {
             public float time;
             public string stringValue;
@@ -61,12 +61,12 @@ namespace Unity.MLAgents
             public ValueType valueType;
         }
 
-        static GUIStyle s_KeyStyle;
-        static GUIStyle s_ValueStyle;
-        static GUIStyle s_GreenStyle;
-        static GUIStyle s_RedStyle;
-        static GUIStyle[] s_ColorStyle;
-        static bool s_Initialized;
+        private static GUIStyle s_KeyStyle;
+        private static GUIStyle s_ValueStyle;
+        private static GUIStyle s_GreenStyle;
+        private static GUIStyle s_RedStyle;
+        private static GUIStyle[] s_ColorStyle;
+        private static bool s_Initialized;
 
         /// <summary>
         /// Use the Monitor.Log static function to attach information to a transform.
@@ -89,6 +89,7 @@ namespace Unity.MLAgents
                 InstantiateCanvas();
                 s_IsInstantiated = true;
             }
+
             if (s_Canvas == null)
             {
                 return;
@@ -113,6 +114,7 @@ namespace Unity.MLAgents
             if (value == null)
             {
                 RemoveValue(target, key);
+
                 return;
             }
 
@@ -123,13 +125,12 @@ namespace Unity.MLAgents
                 dv.stringValue = value;
                 dv.valueType = DisplayValue.ValueType.String;
                 displayValues[key] = dv;
+
                 while (displayValues.Count > 20)
                 {
-                    var max = (
-                        displayValues
-                            .Aggregate((l, r) => l.Value.time < r.Value.time ? l : r)
-                            .Key
-                    );
+                    var max = displayValues
+                              .Aggregate((l, r) => l.Value.time < r.Value.time ? l : r)
+                              .Key;
                     RemoveValue(target, max);
                 }
             }
@@ -185,10 +186,10 @@ namespace Unity.MLAgents
                 dv.floatValue = value;
                 dv.valueType = DisplayValue.ValueType.Float;
                 displayValues[key] = dv;
+
                 while (displayValues.Count > 20)
                 {
-                    var max = (
-                        displayValues.Aggregate((l, r) => l.Value.time < r.Value.time ? l : r).Key);
+                    var max = displayValues.Aggregate((l, r) => l.Value.time < r.Value.time ? l : r).Key;
                     RemoveValue(target, max);
                 }
             }
@@ -245,6 +246,7 @@ namespace Unity.MLAgents
                 var dv = new DisplayValue();
                 dv.time = Time.timeSinceLevelLoad;
                 dv.floatArrayValues = value;
+
                 if (displayType == DisplayType.Independent)
                 {
                     dv.valueType = DisplayValue.ValueType.FloatarrayIndependent;
@@ -255,10 +257,10 @@ namespace Unity.MLAgents
                 }
 
                 displayValues[key] = dv;
+
                 while (displayValues.Count > 20)
                 {
-                    var max = (
-                        displayValues.Aggregate((l, r) => l.Value.time < r.Value.time ? l : r).Key);
+                    var max = displayValues.Aggregate((l, r) => l.Value.time < r.Value.time ? l : r).Key;
                     RemoveValue(target, max);
                 }
             }
@@ -266,6 +268,7 @@ namespace Unity.MLAgents
             {
                 var dv = displayValues[key];
                 dv.floatArrayValues = value;
+
                 if (displayType == DisplayType.Independent)
                 {
                     dv.valueType = DisplayValue.ValueType.FloatarrayIndependent;
@@ -298,6 +301,7 @@ namespace Unity.MLAgents
                 if (s_DisplayTransformValues[target].ContainsKey(key))
                 {
                     s_DisplayTransformValues[target].Remove(key);
+
                     if (s_DisplayTransformValues[target].Keys.Count == 0)
                     {
                         s_DisplayTransformValues.Remove(target);
@@ -344,9 +348,10 @@ namespace Unity.MLAgents
         }
 
         /// Initializes the canvas.
-        static void InstantiateCanvas()
+        private static void InstantiateCanvas()
         {
             s_Canvas = GameObject.Find("AgentMonitorCanvas");
+
             if (s_Canvas == null)
             {
                 s_Canvas = new GameObject();
@@ -355,12 +360,12 @@ namespace Unity.MLAgents
             }
 
             s_DisplayTransformValues = new Dictionary<Transform,
-                                                      Dictionary<string, DisplayValue>>();
+                Dictionary<string, DisplayValue>>();
 
             s_TransformCamera = new Dictionary<Transform, Camera>();
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             if (!s_Initialized)
             {
@@ -369,22 +374,25 @@ namespace Unity.MLAgents
             }
 
             var toIterate = s_DisplayTransformValues.Keys.ToList();
+
             foreach (var target in toIterate)
             {
                 if (target == null)
                 {
                     s_DisplayTransformValues.Remove(target);
+
                     continue;
                 }
 
                 // get camera
                 var cam = s_TransformCamera[target];
+
                 if (cam == null)
                 {
                     cam = Camera.main;
                 }
 
-                var widthScaler = (Screen.width / 1000f);
+                var widthScaler = Screen.width / 1000f;
                 var keyPixelWidth = 100 * widthScaler;
                 var keyPixelHeight = 20 * widthScaler;
                 var paddingWidth = 10 * widthScaler;
@@ -392,6 +400,7 @@ namespace Unity.MLAgents
                 var scale = 1f;
                 var origin = new Vector3(
                     Screen.width / 2.0f - keyPixelWidth, Screen.height);
+
                 if (!(target == s_Canvas.transform))
                 {
                     var camTransform = cam.transform;
@@ -399,7 +408,7 @@ namespace Unity.MLAgents
                     var cam2Obj = position - camTransform.position;
                     scale = Mathf.Min(
                         1,
-                        20f / (Vector3.Dot(cam2Obj, camTransform.forward)));
+                        20f / Vector3.Dot(cam2Obj, camTransform.forward));
                     var worldPosition = cam.WorldToScreenPoint(
                         position + new Vector3(0, verticalOffset, 0));
                     origin = new Vector3(
@@ -410,16 +419,17 @@ namespace Unity.MLAgents
                 keyPixelHeight *= scale;
                 paddingWidth *= scale;
                 s_KeyStyle.fontSize = (int)(keyPixelHeight * 0.8f);
+
                 if (s_KeyStyle.fontSize < 2)
                 {
                     continue;
                 }
 
-
                 var displayValues = s_DisplayTransformValues[target];
 
                 var index = 0;
                 var orderedKeys = displayValues.Keys.OrderBy(x => -displayValues[x].time);
+
                 foreach (var key in orderedKeys)
                 {
                     s_KeyStyle.alignment = TextAnchor.MiddleRight;
@@ -431,6 +441,7 @@ namespace Unity.MLAgents
                         s_KeyStyle);
                     float[] vals;
                     GUIStyle s;
+
                     switch (displayValues[key].valueType)
                     {
                         case DisplayValue.ValueType.String:
@@ -442,11 +453,13 @@ namespace Unity.MLAgents
                                     keyPixelWidth, keyPixelHeight),
                                 displayValues[key].stringValue,
                                 s_ValueStyle);
+
                             break;
                         case DisplayValue.ValueType.Float:
                             var sliderValue = displayValues[key].floatValue;
                             sliderValue = Mathf.Min(1f, sliderValue);
                             s = s_GreenStyle;
+
                             if (sliderValue < 0)
                             {
                                 sliderValue = Mathf.Min(1f, -sliderValue);
@@ -460,15 +473,18 @@ namespace Unity.MLAgents
                                     keyPixelWidth * sliderValue, keyPixelHeight * 0.8f),
                                 GUIContent.none,
                                 s);
+
                             break;
 
                         case DisplayValue.ValueType.FloatarrayIndependent:
                             const float histWidth = 0.15f;
                             vals = displayValues[key].floatArrayValues;
+
                             for (var i = 0; i < vals.Length; i++)
                             {
                                 var value = Mathf.Min(vals[i], 1);
                                 s = s_GreenStyle;
+
                                 if (value < 0)
                                 {
                                     value = Mathf.Min(1f, -value);
@@ -491,6 +507,7 @@ namespace Unity.MLAgents
                             var valsSum = 0f;
                             var valsCum = 0f;
                             vals = displayValues[key].floatArrayValues;
+
                             foreach (var f in vals)
                             {
                                 valsSum += Mathf.Max(f, 0);
@@ -530,7 +547,7 @@ namespace Unity.MLAgents
         }
 
         /// Helper method used to initialize the GUI. Called once.
-        void Initialize()
+        private void Initialize()
         {
             s_KeyStyle = GUI.skin.label;
             s_ValueStyle = GUI.skin.label;
@@ -538,14 +555,10 @@ namespace Unity.MLAgents
             s_ValueStyle.wordWrap = false;
             s_BarColors = new[]
             {
-                Color.magenta,
-                Color.blue,
-                Color.cyan,
-                Color.green,
-                Color.yellow,
-                Color.red
+                Color.magenta, Color.blue, Color.cyan, Color.green, Color.yellow, Color.red
             };
             s_ColorStyle = new GUIStyle[s_BarColors.Length];
+
             for (var i = 0; i < s_BarColors.Length; i++)
             {
                 var texture = new Texture2D(1, 1, TextureFormat.ARGB32, false);

@@ -29,7 +29,7 @@ namespace Unity.MLAgents.Sensors
         /// Means that there can be a variable number of observations in this dimension.
         /// The observations are unordered.
         /// </summary>
-        VariableSize = 4,
+        VariableSize = 4
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ namespace Unity.MLAgents.Sensors
         /// <summary>
         /// Collected observations contain goal information.
         /// </summary>
-        GoalSignal = 1,
+        GoalSignal = 1
     }
 
     /// <summary>
@@ -103,7 +103,6 @@ namespace Unity.MLAgents.Sensors
         string GetName();
     }
 
-
     /// <summary>
     /// Helper methods to be shared by all classes that implement <see cref="ISensor"/>.
     /// </summary>
@@ -119,6 +118,7 @@ namespace Unity.MLAgents.Sensors
         {
             var obsSpec = sensor.GetObservationSpec();
             var count = 1;
+
             for (var i = 0; i < obsSpec.Rank; i++)
             {
                 count *= obsSpec.Shape[i];

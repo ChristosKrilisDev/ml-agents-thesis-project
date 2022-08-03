@@ -12,13 +12,13 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
 {
     public class CountingGridSensorTests
     {
-        GameObject testGo;
-        GameObject boxGo;
-        TestCountingGridSensorComponent gridSensorComponent;
+        private GameObject testGo;
+        private GameObject boxGo;
+        private TestCountingGridSensorComponent gridSensorComponent;
 
         // Use built-in tags
-        const string k_Tag1 = "Player";
-        const string k_Tag2 = "Respawn";
+        private const string k_Tag1 = "Player";
+        private const string k_Tag2 = "Respawn";
 
         [UnitySetUp]
         public IEnumerator SetupScene()
@@ -56,42 +56,48 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
 
             protected override GridSensorBase[] GetGridSensors()
             {
-                return new GridSensorBase[] {
+                return new GridSensorBase[]
+                {
                     new CountingGridSensor(
                         "TestSensor",
                         CellScale,
                         GridSize,
                         DetectableTags,
-                        CompressionType) };
+                        CompressionType)
+                };
             }
         }
 
         // Copied from GridSensorTests in main package
         public static float[][] DuplicateArray(float[] array, int numCopies)
         {
-            float[][] duplicated = new float[numCopies][];
-            for (int i = 0; i < numCopies; i++)
+            var duplicated = new float[numCopies][];
+
+            for (var i = 0; i < numCopies; i++)
             {
                 duplicated[i] = array;
             }
+
             return duplicated;
         }
 
         // Copied from GridSensorTests in main package
         public static void AssertSubarraysAtIndex(float[] total, int[] indicies, float[][] expectedArrays, float[] expectedDefaultArray)
         {
-            int totalIndex = 0;
-            int subIndex = 0;
-            int subarrayIndex = 0;
-            int lenOfData = expectedDefaultArray.Length;
-            int numArrays = total.Length / lenOfData;
-            for (int i = 0; i < numArrays; i++)
+            var totalIndex = 0;
+            var subIndex = 0;
+            var subarrayIndex = 0;
+            var lenOfData = expectedDefaultArray.Length;
+            var numArrays = total.Length / lenOfData;
+
+            for (var i = 0; i < numArrays; i++)
             {
                 totalIndex = i * lenOfData;
 
                 if (indicies.Contains(i))
                 {
                     subarrayIndex = Array.IndexOf(indicies, i);
+
                     for (subIndex = 0; subIndex < lenOfData; subIndex++)
                     {
                         Assert.AreEqual(expectedArrays[subarrayIndex][subIndex], total[totalIndex],
@@ -114,16 +120,28 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
         [Test]
         public void TestCountingSensor()
         {
-            string[] tags = { k_Tag1, k_Tag2 };
+            string[] tags =
+            {
+                k_Tag1, k_Tag2
+            };
             gridSensorComponent.SetParameters(tags);
             var gridSensor = (CountingGridSensor)gridSensorComponent.CreateSensors()[0];
             Assert.AreEqual(gridSensor.PerceptionBuffer.Length, 10 * 10 * 2);
 
             gridSensor.Update();
 
-            int[] subarrayIndicies = new int[] { 77, 78, 87, 88 };
-            float[][] expectedSubarrays = DuplicateArray(new float[] { 1, 0 }, 4);
-            float[] expectedDefault = new float[] { 0, 0 };
+            var subarrayIndicies = new int[]
+            {
+                77, 78, 87, 88
+            };
+            var expectedSubarrays = DuplicateArray(new float[]
+            {
+                1, 0
+            }, 4);
+            var expectedDefault = new float[]
+            {
+                0, 0
+            };
             AssertSubarraysAtIndex(gridSensor.PerceptionBuffer, subarrayIndicies, expectedSubarrays, expectedDefault);
 
             var boxGo2 = new GameObject("block");
@@ -133,9 +151,18 @@ namespace Unity.MLAgents.Extensions.Tests.Sensors
 
             gridSensor.Update();
 
-            subarrayIndicies = new[] { 77, 78, 87, 88 };
-            expectedSubarrays = DuplicateArray(new float[] { 2, 0 }, 4);
-            expectedDefault = new float[] { 0, 0 };
+            subarrayIndicies = new[]
+            {
+                77, 78, 87, 88
+            };
+            expectedSubarrays = DuplicateArray(new float[]
+            {
+                2, 0
+            }, 4);
+            expectedDefault = new float[]
+            {
+                0, 0
+            };
             AssertSubarraysAtIndex(gridSensor.PerceptionBuffer, subarrayIndicies, expectedSubarrays, expectedDefault);
             Object.DestroyImmediate(boxGo2);
         }

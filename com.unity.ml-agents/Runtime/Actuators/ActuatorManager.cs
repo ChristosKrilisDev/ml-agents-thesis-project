@@ -12,18 +12,18 @@ namespace Unity.MLAgents.Actuators
     internal class ActuatorManager : IList<IActuator>
     {
         // IActuators managed by this object.
-        List<IActuator> m_Actuators;
+        private List<IActuator> m_Actuators;
 
         // An implementation of IDiscreteActionMask that allows for writing to it based on an offset.
-        ActuatorDiscreteActionMask m_DiscreteActionMask;
+        private ActuatorDiscreteActionMask m_DiscreteActionMask;
 
-        ActionSpec m_CombinedActionSpec;
+        private ActionSpec m_CombinedActionSpec;
 
         /// <summary>
         /// Flag used to check if our IActuators are ready for execution.
         /// </summary>
         /// <seealso cref="ReadyActuatorsForExecution(IList{IActuator}, int, int, int)"/>
-        bool m_ReadyForExecution;
+        private bool m_ReadyForExecution;
 
         /// <summary>
         /// The sum of all of the discrete branches for all of the <see cref="IActuator"/>s in this manager.
@@ -67,7 +67,7 @@ namespace Unity.MLAgents.Actuators
         /// <summary>
         /// <see cref="ReadyActuatorsForExecution(IList{IActuator}, int, int, int)"/>
         /// </summary>
-        void ReadyActuatorsForExecution()
+        private void ReadyActuatorsForExecution()
         {
             ReadyActuatorsForExecution(m_Actuators, NumContinuousActions, SumOfDiscreteBranchSizes,
                 NumDiscreteActions);
@@ -108,8 +108,8 @@ namespace Unity.MLAgents.Actuators
 
         internal static ActionSpec CombineActionSpecs(IList<IActuator> actuators)
         {
-            int numContinuousActions = 0;
-            int numDiscreteActions = 0;
+            var numContinuousActions = 0;
+            var numDiscreteActions = 0;
 
             foreach (var actuator in actuators)
             {
@@ -118,6 +118,7 @@ namespace Unity.MLAgents.Actuators
             }
 
             int[] combinedBranchSizes;
+
             if (numDiscreteActions == 0)
             {
                 combinedBranchSizes = Array.Empty<int>();
@@ -126,9 +127,11 @@ namespace Unity.MLAgents.Actuators
             {
                 combinedBranchSizes = new int[numDiscreteActions];
                 var start = 0;
+
                 for (var i = 0; i < actuators.Count; i++)
                 {
                     var branchSizes = actuators[i].ActionSpec.BranchSizes;
+
                     if (branchSizes != null)
                     {
                         Array.Copy(branchSizes, 0, combinedBranchSizes, start, branchSizes.Length);
@@ -147,6 +150,7 @@ namespace Unity.MLAgents.Actuators
         public ActionSpec GetCombinedActionSpec()
         {
             ReadyActuatorsForExecution();
+
             return m_CombinedActionSpec;
         }
 
@@ -165,7 +169,7 @@ namespace Unity.MLAgents.Actuators
             Profiler.EndSample();
         }
 
-        static void UpdateActionArray<T>(ActionSegment<T> sourceActionBuffer, ActionSegment<T> destination)
+        private static void UpdateActionArray<T>(ActionSegment<T> sourceActionBuffer, ActionSegment<T> destination)
             where T : struct
         {
             if (sourceActionBuffer.Length <= 0)
@@ -199,9 +203,11 @@ namespace Unity.MLAgents.Actuators
             ReadyActuatorsForExecution();
             m_DiscreteActionMask.ResetMask();
             var offset = 0;
+
             for (var i = 0; i < m_Actuators.Count; i++)
             {
                 var actuator = m_Actuators[i];
+
                 if (actuator.ActionSpec.NumDiscreteActions > 0)
                 {
                     m_DiscreteActionMask.CurrentBranchOffset = offset;
@@ -221,6 +227,7 @@ namespace Unity.MLAgents.Actuators
             Profiler.BeginSample("ActuatorManager.ApplyHeuristic");
             var continuousStart = 0;
             var discreteStart = 0;
+
             for (var i = 0; i < m_Actuators.Count; i++)
             {
                 var actuator = m_Actuators[i];
@@ -233,6 +240,7 @@ namespace Unity.MLAgents.Actuators
                 }
 
                 var continuousActions = ActionSegment<float>.Empty;
+
                 if (numContinuousActions > 0)
                 {
                     continuousActions = new ActionSegment<float>(actionBuffersOut.ContinuousActions.Array,
@@ -241,6 +249,7 @@ namespace Unity.MLAgents.Actuators
                 }
 
                 var discreteActions = ActionSegment<int>.Empty;
+
                 if (numDiscreteActions > 0)
                 {
                     discreteActions = new ActionSegment<int>(actionBuffersOut.DiscreteActions.Array,
@@ -265,6 +274,7 @@ namespace Unity.MLAgents.Actuators
             ReadyActuatorsForExecution();
             var continuousStart = 0;
             var discreteStart = 0;
+
             for (var i = 0; i < m_Actuators.Count; i++)
             {
                 var actuator = m_Actuators[i];
@@ -277,6 +287,7 @@ namespace Unity.MLAgents.Actuators
                 }
 
                 var continuousActions = ActionSegment<float>.Empty;
+
                 if (numContinuousActions > 0)
                 {
                     continuousActions = new ActionSegment<float>(StoredActions.ContinuousActions.Array,
@@ -285,6 +296,7 @@ namespace Unity.MLAgents.Actuators
                 }
 
                 var discreteActions = ActionSegment<int>.Empty;
+
                 if (numDiscreteActions > 0)
                 {
                     discreteActions = new ActionSegment<int>(StoredActions.DiscreteActions.Array,
@@ -310,6 +322,7 @@ namespace Unity.MLAgents.Actuators
                 return;
             }
             StoredActions.Clear();
+
             for (var i = 0; i < m_Actuators.Count; i++)
             {
                 m_Actuators[i].ResetData();
@@ -330,7 +343,7 @@ namespace Unity.MLAgents.Actuators
         /// Each Actuator needs to have a unique name in order for this object to ensure that the storage of action
         /// buffers, and execution of Actuators remains deterministic across different sessions of running.
         /// </summary>
-        void ValidateActuators()
+        private void ValidateActuators()
         {
             for (var i = 0; i < m_Actuators.Count - 1; i++)
             {
@@ -344,7 +357,7 @@ namespace Unity.MLAgents.Actuators
         /// Helper method to update bookkeeping items around buffer management for actuators added to this object.
         /// </summary>
         /// <param name="actuatorItem">The IActuator to keep bookkeeping for.</param>
-        void AddToBufferSizes(IActuator actuatorItem)
+        private void AddToBufferSizes(IActuator actuatorItem)
         {
             if (actuatorItem == null)
             {
@@ -360,7 +373,7 @@ namespace Unity.MLAgents.Actuators
         /// Helper method to update bookkeeping items around buffer management for actuators removed from this object.
         /// </summary>
         /// <param name="actuatorItem">The IActuator to keep bookkeeping for.</param>
-        void SubtractFromBufferSize(IActuator actuatorItem)
+        private void SubtractFromBufferSize(IActuator actuatorItem)
         {
             if (actuatorItem == null)
             {
@@ -375,7 +388,7 @@ namespace Unity.MLAgents.Actuators
         /// <summary>
         /// Sets all of the bookkeeping items back to 0.
         /// </summary>
-        void ClearBufferSizes()
+        private void ClearBufferSizes()
         {
             NumContinuousActions = NumDiscreteActions = SumOfDiscreteBranchSizes = 0;
         }
@@ -443,11 +456,14 @@ namespace Unity.MLAgents.Actuators
         {
             Debug.Assert(m_ReadyForExecution == false,
                 "Cannot remove from the ActuatorManager after its buffers have been initialized");
+
             if (m_Actuators.Remove(item))
             {
                 SubtractFromBufferSize(item);
+
                 return true;
             }
+
             return false;
         }
 

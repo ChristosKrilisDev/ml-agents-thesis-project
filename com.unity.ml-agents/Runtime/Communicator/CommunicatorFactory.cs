@@ -8,7 +8,7 @@ namespace Unity.MLAgents
     /// </summary>
     public static class CommunicatorFactory
     {
-        static bool s_Enabled = true;
+        private static bool s_Enabled = true;
 
         /// <summary>
         /// Whether or not an ICommunicator instance will be created when the <see cref="Academy"/> is initialized.

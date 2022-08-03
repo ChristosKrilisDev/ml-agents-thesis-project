@@ -13,7 +13,10 @@ namespace Unity.MLAgents.Tests
         [Test]
         public void TestCameraSensorComponent()
         {
-            foreach (var grayscale in new[] { true, false })
+            foreach (var grayscale in new[]
+                {
+                    true, false
+                })
             {
                 foreach (SensorCompressionType compression in Enum.GetValues(typeof(SensorCompressionType)))
                 {

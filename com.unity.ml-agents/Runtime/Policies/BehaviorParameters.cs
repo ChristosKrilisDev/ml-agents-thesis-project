@@ -71,8 +71,8 @@ namespace Unity.MLAgents.Policies
     [AddComponentMenu("ML Agents/Behavior Parameters", (int)MenuGroup.Default)]
     public class BehaviorParameters : MonoBehaviour
     {
-        [HideInInspector, SerializeField]
-        BrainParameters m_BrainParameters = new BrainParameters();
+        [HideInInspector] [SerializeField]
+        private BrainParameters m_BrainParameters = new BrainParameters();
 
         /// <summary>
         /// Delegate for receiving events about Policy Updates.
@@ -90,12 +90,12 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public BrainParameters BrainParameters
         {
-            get { return m_BrainParameters; }
-            internal set { m_BrainParameters = value; }
+            get => m_BrainParameters;
+            internal set => m_BrainParameters = value;
         }
 
-        [HideInInspector, SerializeField]
-        NNModel m_Model;
+        [HideInInspector] [SerializeField]
+        private NNModel m_Model;
 
         /// <summary>
         /// The neural network model used when in inference mode.
@@ -104,12 +104,16 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public NNModel Model
         {
-            get { return m_Model; }
-            set { m_Model = value; UpdateAgentPolicy(); }
+            get => m_Model;
+            set
+            {
+                m_Model = value;
+                UpdateAgentPolicy();
+            }
         }
 
-        [HideInInspector, SerializeField]
-        InferenceDevice m_InferenceDevice = InferenceDevice.Default;
+        [HideInInspector] [SerializeField]
+        private InferenceDevice m_InferenceDevice = InferenceDevice.Default;
 
         /// <summary>
         /// How inference is performed for this Agent's model.
@@ -118,24 +122,32 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public InferenceDevice InferenceDevice
         {
-            get { return m_InferenceDevice; }
-            set { m_InferenceDevice = value; UpdateAgentPolicy(); }
+            get => m_InferenceDevice;
+            set
+            {
+                m_InferenceDevice = value;
+                UpdateAgentPolicy();
+            }
         }
 
-        [HideInInspector, SerializeField]
-        BehaviorType m_BehaviorType;
+        [HideInInspector] [SerializeField]
+        private BehaviorType m_BehaviorType;
 
         /// <summary>
         /// The BehaviorType for the Agent.
         /// </summary>
         public BehaviorType BehaviorType
         {
-            get { return m_BehaviorType; }
-            set { m_BehaviorType = value; UpdateAgentPolicy(); }
+            get => m_BehaviorType;
+            set
+            {
+                m_BehaviorType = value;
+                UpdateAgentPolicy();
+            }
         }
 
-        [HideInInspector, SerializeField]
-        string m_BehaviorName = "My Behavior";
+        [HideInInspector] [SerializeField]
+        private string m_BehaviorName = "My Behavior";
 
         /// <summary>
         /// The name of this behavior, which is used as a base name. See
@@ -145,14 +157,18 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public string BehaviorName
         {
-            get { return m_BehaviorName; }
-            set { m_BehaviorName = value; UpdateAgentPolicy(); }
+            get => m_BehaviorName;
+            set
+            {
+                m_BehaviorName = value;
+                UpdateAgentPolicy();
+            }
         }
 
         /// <summary>
         /// The team ID for this behavior.
         /// </summary>
-        [HideInInspector, SerializeField, FormerlySerializedAs("m_TeamID")]
+        [HideInInspector] [SerializeField] [FormerlySerializedAs("m_TeamID")]
         public int TeamId;
         // TODO properties here instead of Agent
 
@@ -160,12 +176,12 @@ namespace Unity.MLAgents.Policies
         [HideInInspector]
         [SerializeField]
         [Tooltip("Use all Sensor components attached to child GameObjects of this Agent.")]
-        bool m_UseChildSensors = true;
+        private bool m_UseChildSensors = true;
 
         [HideInInspector]
         [SerializeField]
         [Tooltip("Use all Actuator components attached to child GameObjects of this Agent.")]
-        bool m_UseChildActuators = true;
+        private bool m_UseChildActuators = true;
 
         /// <summary>
         /// Whether or not to use all the sensor components attached to child GameObjects of the agent.
@@ -173,8 +189,8 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public bool UseChildSensors
         {
-            get { return m_UseChildSensors; }
-            set { m_UseChildSensors = value; }
+            get => m_UseChildSensors;
+            set => m_UseChildSensors = value;
         }
 
         [HideInInspector]
@@ -187,8 +203,8 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public bool DeterministicInference
         {
-            get { return m_DeterministicInference; }
-            set { m_DeterministicInference = value; }
+            get => m_DeterministicInference;
+            set => m_DeterministicInference = value;
         }
 
         /// <summary>
@@ -197,31 +213,28 @@ namespace Unity.MLAgents.Policies
         /// </summary>
         public bool UseChildActuators
         {
-            get { return m_UseChildActuators; }
-            set { m_UseChildActuators = value; }
+            get => m_UseChildActuators;
+            set => m_UseChildActuators = value;
         }
 
-        [HideInInspector, SerializeField]
-        ObservableAttributeOptions m_ObservableAttributeHandling = ObservableAttributeOptions.Ignore;
+        [HideInInspector] [SerializeField]
+        private ObservableAttributeOptions m_ObservableAttributeHandling = ObservableAttributeOptions.Ignore;
 
         /// <summary>
         /// Determines how the Agent class is searched for <see cref="ObservableAttribute"/>s.
         /// </summary>
         public ObservableAttributeOptions ObservableAttributeHandling
         {
-            get { return m_ObservableAttributeHandling; }
-            set { m_ObservableAttributeHandling = value; }
+            get => m_ObservableAttributeHandling;
+            set => m_ObservableAttributeHandling = value;
         }
 
         /// <summary>
         /// Returns the behavior name, concatenated with any other metadata (i.e. team id).
         /// </summary>
-        public string FullyQualifiedBehaviorName
-        {
-            get { return m_BehaviorName + "?team=" + TeamId; }
-        }
+        public string FullyQualifiedBehaviorName => m_BehaviorName + "?team=" + TeamId;
 
-        void Awake()
+        private void Awake()
         {
             OnPolicyUpdated += mode => { };
         }
@@ -237,11 +250,13 @@ namespace Unity.MLAgents.Policies
                         if (m_Model == null)
                         {
                             var behaviorType = BehaviorType.InferenceOnly.ToString();
+
                             throw new UnityAgentsException(
                                 $"Can't use Behavior Type {behaviorType} without a model. " +
                                 "Either assign a model, or change to a different Behavior Type."
                             );
                         }
+
                         return new BarracudaPolicy(actionSpec, actuatorManager, m_Model, m_InferenceDevice, m_BehaviorName, m_DeterministicInference);
                     }
                 case BehaviorType.Default:
@@ -249,6 +264,7 @@ namespace Unity.MLAgents.Policies
                     {
                         return new RemotePolicy(actionSpec, actuatorManager, FullyQualifiedBehaviorName);
                     }
+
                     if (m_Model != null)
                     {
                         return new BarracudaPolicy(actionSpec, actuatorManager, m_Model, m_InferenceDevice, m_BehaviorName, m_DeterministicInference);
@@ -283,6 +299,7 @@ namespace Unity.MLAgents.Policies
         internal void UpdateAgentPolicy()
         {
             var agent = GetComponent<Agent>();
+
             if (agent == null)
             {
                 return;

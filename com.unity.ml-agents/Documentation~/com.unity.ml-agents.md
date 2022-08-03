@@ -55,7 +55,9 @@ To install the companion Python package to enable training behaviors, follow the
 [installation instructions] on our [GitHub repository].
 
 ### Advanced Installation
-With the changes to Unity Package Manager in 2021, experimental packages will not show up in the package list and have to be installed manually. There are two recommended ways to install the package manually:
+
+With the changes to Unity Package Manager in 2021, experimental packages will not show up in the package list and have
+to be installed manually. There are two recommended ways to install the package manually:
 
 #### Github via Package Manager
 
@@ -64,21 +66,25 @@ In Unity 2019.4 or later, open the Package Manager, hit the "+" button, and sele
 ![Package Manager git URL](https://github.com/Unity-Technologies/ml-agents/blob/release_19_docs/docs/images/unity_package_manager_git_url.png)
 
 In the dialog that appears, enter
+
  ```
 git+https://github.com/Unity-Technologies/ml-agents.git?path=com.unity.ml-agents#release_19
 ```
 
 You can also edit your project's `manifest.json` directly and add the following line to the `dependencies`
 section:
+
 ```
 "com.unity.ml-agents": "git+https://github.com/Unity-Technologies/ml-agents.git?path=com.unity.ml-agents#release_19",
 ```
+
 See [Git dependencies](https://docs.unity3d.com/Manual/upm-git.html#subfolder) for more information. Note that this
 may take several minutes to resolve the packages the first time that you add it.
 
 #### Local Installation for Development
 
-[Clone the repository](https://github.com/Unity-Technologies/ml-agents/tree/release_19_docs/docs/Installation.md#clone-the-ml-agents-toolkit-repository-optional) and follow the
+[Clone the repository](https://github.com/Unity-Technologies/ml-agents/tree/release_19_docs/docs/Installation.md#clone-the-ml-agents-toolkit-repository-optional)
+and follow the
 [Local Installation for Development](https://github.com/Unity-Technologies/ml-agents/tree/release_19_docs/docs/Installation.md#advanced-local-installation-for-development-1)
 directions.
 
@@ -150,12 +156,21 @@ Please refer to "Information that is passively collected by Unity" in the
 [Unity Privacy Policy](https://unity3d.com/legal/privacy-policy).
 
 [unity ML-Agents Toolkit]: https://github.com/Unity-Technologies/ml-agents
+
 [unity inference engine]: https://docs.unity3d.com/Packages/com.unity.barracuda@latest/index.html
+
 [package manager documentation]: https://docs.unity3d.com/Manual/upm-ui-install.html
+
 [installation instructions]: https://github.com/Unity-Technologies/ml-agents/blob/release_19_docs/docs/Installation.md
+
 [github repository]: https://github.com/Unity-Technologies/ml-agents
+
 [python package]: https://github.com/Unity-Technologies/ml-agents
+
 [execution order of event functions]: https://docs.unity3d.com/Manual/ExecutionOrder.html
+
 [connect with us]: https://github.com/Unity-Technologies/ml-agents#community-and-feedback
+
 [ml-agents forum]: https://forum.unity.com/forums/ml-agents.453/
+
 [ML-Agents GitHub repo]: https://github.com/Unity-Technologies/ml-agents/blob/release_19_docs/com.unity.ml-agents.extensions

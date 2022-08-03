@@ -7,7 +7,7 @@ namespace Unity.MLAgents.Tests
     {
         public int Width { get; }
         public int Height { get; }
-        string m_Name;
+        private string m_Name;
         private ObservationSpec m_ObservationSpec;
         public float[,] floatData;
 
@@ -57,6 +57,7 @@ namespace Unity.MLAgents.Tests
                     }
                 }
                 var numWritten = Height * Width;
+
                 return numWritten;
             }
         }
@@ -76,6 +77,7 @@ namespace Unity.MLAgents.Tests
         public void TestFloat2DSensorWrite()
         {
             var sensor = new Float2DSensor(3, 4, "floatsensor");
+
             for (var h = 0; h < 4; h++)
             {
                 for (var w = 0; w < 3; w++)
@@ -88,6 +90,7 @@ namespace Unity.MLAgents.Tests
             var writer = new ObservationWriter();
             writer.SetTarget(output, sensor.GetObservationSpec(), 0);
             sensor.Write(writer);
+
             for (var i = 0; i < 9; i++)
             {
                 Assert.AreEqual(i, output[i]);

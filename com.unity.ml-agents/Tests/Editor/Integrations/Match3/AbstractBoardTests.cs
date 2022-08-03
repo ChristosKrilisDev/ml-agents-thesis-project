@@ -53,6 +53,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
             CurrentRows = MaxRows;
             CurrentColumns = MaxColumns;
             NumCellTypes = 0;
+
             for (var r = 0; r < MaxRows; r++)
             {
                 for (var c = 0; c < MaxColumns; c++)
@@ -68,6 +69,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
             Debug.Assert(MaxRows == m_Special.Length);
             Debug.Assert(MaxColumns == m_Special[0].Length);
             NumSpecialTypes = 0;
+
             for (var r = 0; r < MaxRows; r++)
             {
                 for (var c = 0; c < MaxColumns; c++)
@@ -96,7 +98,8 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
             }
 
             var character = m_Board[m_Board.Length - 1 - row][col];
-            return (character - '0');
+
+            return character - '0';
         }
 
         public override int GetSpecialType(int row, int col)
@@ -107,7 +110,8 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
             }
 
             var character = m_Special[m_Board.Length - 1 - row][col];
-            return (character - '0');
+
+            return character - '0';
         }
 
     }
@@ -130,11 +134,12 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
             Assert.AreEqual(3, boardSize.Rows);
             Assert.AreEqual(3, boardSize.Columns);
             Assert.AreEqual(2, boardSize.NumCellTypes);
+
             for (var r = 0; r < 3; r++)
             {
                 for (var c = 0; c < 3; c++)
                 {
-                    var expected = (r == 0 && c == 1) ? 1 : 0;
+                    var expected = r == 0 && c == 1 ? 1 : 0;
                     Assert.AreEqual(expected, board.GetCellType(r, c));
                 }
             }
@@ -148,7 +153,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
                 Move.FromPositionAndDirection(1, 1, Direction.Down, boardSize),
                 Move.FromPositionAndDirection(1, 1, Direction.Left, boardSize),
                 Move.FromPositionAndDirection(1, 1, Direction.Right, boardSize),
-                Move.FromPositionAndDirection(0, 1, Direction.Left, boardSize),
+                Move.FromPositionAndDirection(0, 1, Direction.Left, boardSize)
             };
 
             if (fullBoard)
@@ -180,6 +185,7 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
                   2022";
             board.SetBoard(boardString);
             var boardSize = board.GetMaxBoardSize();
+
             if (!fullBoard)
             {
                 board.CurrentRows -= 1;
@@ -193,7 +199,8 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
             }
 
             // Run through all moves and make sure those are the only valid ones
-            HashSet<int> validIndices = new HashSet<int>();
+            var validIndices = new HashSet<int>();
+
             foreach (var m in validMoves)
             {
                 validIndices.Add(m.MoveIndex);
@@ -206,7 +213,8 @@ namespace Unity.MLAgents.Tests.Integrations.Match3
                 Assert.AreEqual(expected, board.IsMoveValid(move), $"({move.Row}, {move.Column}, {move.Direction})");
             }
 
-            HashSet<int> validIndicesFromIterator = new HashSet<int>();
+            var validIndicesFromIterator = new HashSet<int>();
+
             foreach (var move in board.ValidMoves())
             {
                 validIndicesFromIterator.Add(move.MoveIndex);
