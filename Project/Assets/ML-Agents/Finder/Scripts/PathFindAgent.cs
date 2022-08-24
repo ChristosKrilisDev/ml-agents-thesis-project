@@ -16,19 +16,18 @@ namespace ML_Agents.Finder.Scripts
     #region Vars
 
         [Header("Agent behavior Vars")] [Space]
-        [SerializeField]
-        private bool _useVectorObs;
+        [SerializeField] private bool _useVectorObs;
 
-        [Header("Area Vars")]
+        [Header("Area Vars")] [Space]
         [SerializeField] private PathFindArea _area;
         [SerializeField] private CheckPoint _checkPoint;
         [SerializeField] private Graph _graph;
-        private Path _path = new Path();
+        
+        // private Path _path = new Path();
         private float _pathTotalLength;
+        private float _traveledDistance;
 
         private Rigidbody _agentRb;
-
-        private float _traveledDistance;
 
         private bool _hasTouchedTheWall;
         private bool _hasFoundGoal;
@@ -39,9 +38,7 @@ namespace ML_Agents.Finder.Scripts
         private readonly float[] _nodesDistances = new float[2];
         private GameObject _targetObjectToFind;
         private int _findTargetNodeIndex;
-
-        private static PathFindAgent _masterInit;
-
+        
         private enum Indexof
         {
             Agent = 0,
@@ -62,9 +59,6 @@ namespace ML_Agents.Finder.Scripts
         public override void Initialize()
         {
             _agentRb = GetComponent<Rigidbody>();
-
-            if (_masterInit) return;
-            _masterInit = this;
             RewardFunction.MaxStep = MaxStep;
         }
 
@@ -166,8 +160,7 @@ namespace ML_Agents.Finder.Scripts
             if (other.gameObject.CompareTag("spawnArea"))
             {
                 _traveledDistance++;
-
-                Debug.Log("Agent Traveled Distance : " + _traveledDistance + " | passed to =>" + other.gameObject.name);
+                Debug.Log($"Agent Distance : {_traveledDistance} | Current node =>{other.gameObject.name}");
             }
         }
         
@@ -185,7 +178,7 @@ namespace ML_Agents.Finder.Scripts
                 _findTargetNodeIndex++;
                 _hasFoundCheckpoint = true;
                 GiveRewardInternal(Use.Add_Reward, 2);
-                SwitchTargetToFinalNode();
+                SwitchTargetNode();
             }
 
             if (collision.gameObject.CompareTag("goal"))
@@ -203,7 +196,7 @@ namespace ML_Agents.Finder.Scripts
             var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
             var items = enumerable.ToArray();
 
-            var toNodeTransformList = _graph.nodes.Select(item => item.transform);
+            var toNodeTransformList = _graph.Nodes.Select(item => item.transform);
             var nodesTransforms = toNodeTransformList as Transform[] ?? toNodeTransformList.ToArray();
 
             _area.SetNodesPosition(ref nodesTransforms);
@@ -252,6 +245,7 @@ namespace ML_Agents.Finder.Scripts
 
         private void ResetTmpVars(IReadOnlyList<int> items)
         {
+            // _pathTotalLength = 0;
             _stepFactor = 0;
             _findTargetNodeIndex = 0;
             _traveledDistance = 0;
@@ -260,40 +254,37 @@ namespace ML_Agents.Finder.Scripts
             _targetObjectToFind = null;
             _nodesToFind[(int)Indexof.Agent] = null;
             _nodesToFind[(int)Indexof.Check_Point] = null;
-            _targetObjectToFind = _nodesToFind[(int)Indexof.Agent] = _graph.nodes[items[(int)Indexof.Check_Point]].gameObject; //on init target CP
-            _nodesToFind[(int)Indexof.Check_Point] = _graph.nodes[items[(int)Indexof.Final_Node]].gameObject; //set final node as second target
+            _targetObjectToFind = _nodesToFind[(int)Indexof.Agent] = _graph.Nodes[items[(int)Indexof.Check_Point]].gameObject; //on init target CP
+            _nodesToFind[(int)Indexof.Check_Point] = _graph.Nodes[items[(int)Indexof.Final_Node]].gameObject; //set final node as second target
         }
 
-        private void SetUpPath(int nAgent, int nCheckPoint, int nFinalGoal)
+        private void SetUpPath(int agentIndex, int checkPointIndex, int finalGoalIndex)
         {
             //calculate the distance player - Checkpoint - goal
             {
                 //visual tool
-                _graph.m_Start = _graph.nodes[nAgent];
-                _graph.m_CheckPoint = _graph.nodes[nCheckPoint];
-                _graph.m_End = _graph.nodes[nFinalGoal];
+                _graph.StartNode = _graph.Nodes[agentIndex];
+                _graph.CheckPointNode = _graph.Nodes[checkPointIndex];
+                _graph.EndNode = _graph.Nodes[finalGoalIndex];
+                
+                var pathLen1 = GetShortestPathLength(_graph.Nodes[agentIndex], _graph.Nodes[checkPointIndex]);
+                var pathLen2 = GetShortestPathLength(_graph.Nodes[checkPointIndex], _graph.Nodes[finalGoalIndex]);
+                var tmp = pathLen1 + pathLen2;
+                _pathTotalLength = tmp;
 
-                var pLen1 = AddShortestPathLength(_graph.nodes[nAgent], _graph.nodes[nCheckPoint]);
-                var pLen2 = AddShortestPathLength(_graph.nodes[nCheckPoint], _graph.nodes[nFinalGoal]);
-                pLen1 += pLen2;
-                _pathTotalLength = pLen1;
-                //TODO Reset Total Length
-                //TODO Error with Total lenghth
-
-                Debug.Log(" Total Length : " + _pathTotalLength);
+                Debug.Log($" Min Length : {_pathTotalLength} = {pathLen1} + {pathLen2}");
             }
         }
 
-        private float AddShortestPathLength(Node from, Node to)
+        private float GetShortestPathLength(Node from, Node to)
         {
-            _path = _graph.GetShortestPath(from, to);
-
-            if (_path.length <= 0) return -1;
-
-            return _path.length;
+            var path = _graph.GetShortestPath(from, to);
+            if (path.Length <= 0) return -1;
+            
+            return path.Length;
         }
 
-        private void SwitchTargetToFinalNode()
+        private void SwitchTargetNode()
         {
             _targetObjectToFind = _nodesToFind[_findTargetNodeIndex];
         }
@@ -302,9 +293,9 @@ namespace ML_Agents.Finder.Scripts
         {
             //use for the sharped RF , distance/reward for each target
             //get the distance from agent to cp
-            _nodesDistances[0] = EpisodeHandler.GetDistanceDifference(gameObject, _graph.nodes[nCheckPoint].gameObject);
-            //get the distance from agent to final goal
-            _nodesDistances[1] = EpisodeHandler.GetDistanceDifference(_graph.nodes[nCheckPoint].gameObject, _graph.nodes[nFinalGoal].gameObject);
+            _nodesDistances[0] = EpisodeHandler.GetDistanceDifference(gameObject, _graph.Nodes[nCheckPoint].gameObject);
+            //get the distance from cp to final goal
+            _nodesDistances[1] = EpisodeHandler.GetDistanceDifference(_graph.Nodes[nCheckPoint].gameObject, _graph.Nodes[nFinalGoal].gameObject);
         }
 
     #endregion

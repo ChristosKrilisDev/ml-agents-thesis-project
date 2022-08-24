@@ -54,7 +54,6 @@ namespace ML_Agents.Finder.Scripts
 
             _renderer.material = isInitState ? _offMaterial : _onMaterial;
             tag = isInitState ? SWITCH_OFF_TAG : SWITCH_ON_TAG;
-
         }
     }
 }
