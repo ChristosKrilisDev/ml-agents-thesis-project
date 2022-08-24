@@ -76,11 +76,11 @@ namespace Dijstra.path
             {
                 VisualizeBakedPath();
                 SceneView.RepaintAll();
-
-                if (_hasValue) DrawNodeFields();
                 _graph.IsAbleToVisualizePath = false;
             }
-
+            
+            if (_hasValue) DrawNodeFields();
+            
             if (GUILayout.Button("Clear"))
             {
                 _startPath = new Path();
