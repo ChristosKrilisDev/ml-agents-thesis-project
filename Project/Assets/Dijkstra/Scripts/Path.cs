@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-
+using UnityEngine;
 
 namespace Dijstra.path
 {
@@ -10,38 +10,46 @@ namespace Dijstra.path
         private List<Node> _pathNodes = new List<Node>();
 
         public float Length => _length;
-        private float _length = 0f;
+        private float _length = 1f;
 
         public Path()
         {
             _pathNodes.Clear();
-            _length = 0;
+            _length = 1;
         }
 
         public void Bake()
         {
-            _length = 0f;
             var calculated = new List<Node>();
+            var flagCounter = 0;
+            
+            _length = 1f;
 
             foreach (var node in _pathNodes)
             {
+                flagCounter++;
                 foreach (var connection in node.connections)
                 {
-                    if (_pathNodes.Contains(connection) && !calculated.Contains(connection))
+                    //last node dosnt need to be calculated, add in the path and break
+                    if (flagCounter == _pathNodes.Count)
                     {
-                        //Bug : Length dosnt reset
-                        _length += 1;
+                        calculated.Add(node);
+                        break;
                     }
+
+                    if (!_pathNodes.Contains(connection) && calculated.Contains(connection)) break;
+
+                    _length += 1;
+                    calculated.Add(node);
+                    break;
                 }
-                calculated.Add(node);
             }
+            Debug.Log(ToString());
         }
 
         public override string ToString()
         {
-            return string.Format("Nodes: {0} Path Length: {1}",
-                string.Join(", ", PathNodes.Select(node => node.name).ToArray()),
-                Length);
+            return $"Nodes: {string.Join(", ", PathNodes.Select(node => node.name).ToArray())} Path Length: {Length}";
         }
 
     }

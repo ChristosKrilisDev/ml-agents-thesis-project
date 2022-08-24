@@ -267,8 +267,8 @@ namespace ML_Agents.Finder.Scripts
                 _graph.CheckPointNode = _graph.Nodes[checkPointIndex];
                 _graph.EndNode = _graph.Nodes[finalGoalIndex];
                 
-                var pathLen1 = GetShortestPathLength(_graph.Nodes[agentIndex], _graph.Nodes[checkPointIndex]);
-                var pathLen2 = GetShortestPathLength(_graph.Nodes[checkPointIndex], _graph.Nodes[finalGoalIndex]);
+                var pathLen1 = GetShortestPathLength(_graph.StartNode, _graph.CheckPointNode);
+                var pathLen2 = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
                 var tmp = pathLen1 + pathLen2;
                 _pathTotalLength = tmp;
 

@@ -20,7 +20,6 @@ namespace Dijstra.path
         {
             _graph = target as Graph;
         }
-        
 
         private void OnSceneGUI()
         {
@@ -35,15 +34,11 @@ namespace Dijstra.path
                 {
                     var connection = node.connections[j];
 
-                    if (connection == null)
-                    {
-                        continue;
-                    }
+                    if (connection == null) continue;
+
                     var distance = Vector3.Distance(node.transform.position, connection.transform.position);
-                    //var distance = 1;
                     var centeredTextDiff = connection.transform.position - node.transform.position;
 
-                    // Handles.Label(node.transform.position + diff / 2, distance.ToString("f2"), EditorStyles.whiteBoldLabel);
                     //TODO : Get the distance from path values
                     Handles.Label(node.transform.position + centeredTextDiff / 2, distance.ToString("f2"), EditorStyles.whiteBoldLabel);
 
@@ -72,30 +67,19 @@ namespace Dijstra.path
             Handles.DrawLine(nodeTransform.position, connection.transform.position, lineThickness);
             Handles.color = tempColor;
         }
-        
+
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
 
-            if (_graph.VisualizePath)
+            if (_graph.IsAbleToVisualizePath)
             {
                 VisualizeBakedPath();
                 SceneView.RepaintAll();
+
+                if (_hasValue) DrawNodeFields();
+                _graph.IsAbleToVisualizePath = false;
             }
-            
-            if (_hasValue)
-            {
-                EditorGUILayout.Separator();
-                EditorGUILayout.ObjectField("Start Node", _graph.StartNode, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
-                EditorGUILayout.ObjectField("Check point Node", _graph.CheckPointNode, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
-                EditorGUILayout.ObjectField("End Node ", _graph.EndNode, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
-                EditorGUILayout.Space(10);
-                EditorGUILayout.IntField("Start-Check Length", (int)_startPath.Length, GUILayout.Width(_inputFieldWidth));
-                EditorGUILayout.IntField("Check-End Length", (int)_endPath.Length, GUILayout.Width(_inputFieldWidth));
-                EditorGUILayout.IntField("Total Length", (int)_length, GUILayout.Width(_inputFieldWidth));
-                EditorGUILayout.Space(10);
-            }
-            
 
             if (GUILayout.Button("Clear"))
             {
@@ -106,12 +90,26 @@ namespace Dijstra.path
             }
         }
 
+        private void DrawNodeFields()
+        {
+            EditorGUILayout.Separator();
+            EditorGUILayout.ObjectField("Start Node", _graph.StartNode, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
+            EditorGUILayout.ObjectField("Check point Node", _graph.CheckPointNode, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
+            EditorGUILayout.ObjectField("End Node ", _graph.EndNode, typeof(Node), false, GUILayout.Width(_inputFieldWidth * 1.2f));
+            EditorGUILayout.Space(10);
+            EditorGUILayout.IntField("Start-Check Length", (int)_startPath.Length, GUILayout.Width(_inputFieldWidth));
+            EditorGUILayout.IntField("Check-End Length", (int)_endPath.Length, GUILayout.Width(_inputFieldWidth));
+            EditorGUILayout.IntField("Total Length", (int)_length, GUILayout.Width(_inputFieldWidth));
+            EditorGUILayout.Space(10);
+        }
+
         public void VisualizeBakedPath()
         {
             if (_graph.StartNode == null || _graph.EndNode == null)
             {
                 Debug.LogError("From/To nodes are null");
                 _hasValue = false;
+
                 return;
             }
 
@@ -122,7 +120,6 @@ namespace Dijstra.path
             // Debug.Log($" Lengths => Start - Check point : {_startPath.Length} | Check point - End : {_endPath.Length} | total : {_length}");
         }
 
-        
         private void CreateIndentedLabel(string label, string value)
         {
             EditorGUILayout.BeginHorizontal();

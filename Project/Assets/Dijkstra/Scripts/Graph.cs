@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Dijstra.path
         [HideInInspector] public Node EndNode;
 
         
-        public bool VisualizePath = false;
+        [HideInInspector] public bool IsAbleToVisualizePath = true;
 
         private void Awake()
         {
@@ -77,8 +78,6 @@ namespace Dijstra.path
         /// <param name="end">End Node.</param>
         public virtual Path GetShortestPath(Node start, Node end)
         {
-            VisualizePath = false;
-            
             if (start == null || end == null)
             {
                 throw new ArgumentNullException();
@@ -143,7 +142,7 @@ namespace Dijstra.path
                 }
             }
             path.Bake();
-            VisualizePath = true;
+            IsAbleToVisualizePath = true;
             return path;
         }
 
