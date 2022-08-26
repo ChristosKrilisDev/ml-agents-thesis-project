@@ -1,18 +1,17 @@
 using System;
 using System.Globalization;
-using System.Collections;
-using System.Collections.Generic;
 using ML_Agents.Finder.Scripts;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance; //singleton
-
     [SerializeField] private bool _canWriteData = false;
+    
     private TextFileHandler _fileHandler;
     private DateTime _localDate = DateTime.Now;
-    private int _index = 0;
+    private int _index;
+    
+    public static GameManager Instance;
 
     private void Awake()
     {
@@ -39,7 +38,6 @@ public class GameManager : MonoBehaviour
     public void WriteData(float episodeCounter, float agentDistance, float dijkstraDistance, bool hasFindTarget, float avrRewards)
     {
         if (_canWriteData)
-            _fileHandler.WriteString(episodeCounter, agentDistance, dijkstraDistance, hasFindTarget, avrRewards);
+            TextFileHandler.WriteString(episodeCounter, agentDistance, dijkstraDistance, hasFindTarget, avrRewards);
     }
-
 }

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 using System.Linq;
-using Dijstra.path;
+using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
-using UnityEngine;
-using Random = UnityEngine.Random;
+using Dijkstra.Scripts;
 
 namespace ML_Agents.Finder.Scripts
 {
@@ -22,8 +22,7 @@ namespace ML_Agents.Finder.Scripts
         [SerializeField] private PathFindArea _area;
         [SerializeField] private CheckPoint _checkPoint;
         [SerializeField] private Graph _graph;
-        
-        // private Path _path = new Path();
+
         private float _pathTotalLength;
         private float _traveledDistance;
 
@@ -38,7 +37,7 @@ namespace ML_Agents.Finder.Scripts
         private readonly float[] _nodesDistances = new float[2];
         private GameObject _targetObjectToFind;
         private int _findTargetNodeIndex;
-        
+
         private enum Indexof
         {
             Agent = 0,
@@ -160,11 +159,10 @@ namespace ML_Agents.Finder.Scripts
             if (other.gameObject.CompareTag("spawnArea"))
             {
                 _traveledDistance++;
-                Debug.Log($"- Agent Distance : {_traveledDistance} | Current node =>{other.gameObject.name}");
+                // Debug.Log($"- Agent Distance : {_traveledDistance} | Current node =>{other.gameObject.name}");
             }
         }
-        
-        
+
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.CompareTag("wall"))
@@ -266,21 +264,22 @@ namespace ML_Agents.Finder.Scripts
                 _graph.StartNode = _graph.Nodes[agentIndex];
                 _graph.CheckPointNode = _graph.Nodes[checkPointIndex];
                 _graph.EndNode = _graph.Nodes[finalGoalIndex];
-                
+
                 var pathLen1 = GetShortestPathLength(_graph.StartNode, _graph.CheckPointNode);
                 var pathLen2 = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
                 var tmp = pathLen1 + pathLen2;
                 _pathTotalLength = tmp;
 
-                Debug.Log($" Min Length : {_pathTotalLength} = {pathLen1} + {pathLen2}");
+                // Debug.Log($" Min Length : {_pathTotalLength} = {pathLen1} + {pathLen2}");
             }
         }
 
         private float GetShortestPathLength(Node from, Node to)
         {
             var path = _graph.GetShortestPath(from, to);
+
             if (path.Length <= 0) return -1;
-            
+
             return path.Length;
         }
 

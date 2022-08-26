@@ -142,7 +142,6 @@ namespace Unity.MLAgents.Tests
 
             [Observable("enumMember")]
             //public TestEnum m_EnumMember = TestEnum.ValueA;
-
             private TestEnum m_EnumProperty = TestEnum.ValueC;
 
             [Observable("enumProperty")]
@@ -389,13 +388,13 @@ namespace Unity.MLAgents.Tests
             [Observable("base")]
             public float m_BaseField;
 
-           // [Observable("private")]
-          //  private float m_PrivateField;
+            // [Observable("private")]
+            //  private float m_PrivateField;
         }
 
         private class DerivedClass : BaseClass
         {
-           // [Observable("derived")]
+            // [Observable("derived")]
             //private float m_DerivedField;
         }
 

@@ -1,19 +1,17 @@
-using System;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
-namespace Dijstra.path
+namespace Dijkstra.Scripts.Editor
 {
     [CustomEditor(typeof(Graph))]
-    public class GraphEditor : Editor
+    public class GraphEditor : UnityEditor.Editor
     {
-
         private Graph _graph;
         private Path _startPath = new Path();
         private Path _endPath = new Path();
-        private int _length = 0;
+        private int _length;
 
-        private int _inputFieldWidth = 260;
+        private readonly int _inputFieldWidth = 260;
         private bool _hasValue = false;
 
         private void OnEnable()
@@ -30,9 +28,9 @@ namespace Dijstra.path
             {
                 var node = _graph.Nodes[i];
 
-                for (var j = 0; j < node.connections.Count; j++)
+                for (var j = 0; j < node.Connections.Count; j++)
                 {
-                    var connection = node.connections[j];
+                    var connection = node.Connections[j];
 
                     if (connection == null) continue;
 
@@ -59,12 +57,14 @@ namespace Dijstra.path
 
             var tempColor = Handles.color;
             Handles.color = circleColor;
-            Handles.DrawWireArc(nodeTransform.position, nodeTransform.up * 5f, -nodeTransform.right, 360, radius, 2.5f);
+            var nTransform = nodeTransform.position;
+
+            Handles.DrawWireArc(nTransform, nodeTransform.up * 5f, -nodeTransform.right, 360, radius, 2.5f);
             Handles.color = tempColor;
 
             tempColor = Handles.color;
             Handles.color = lineColor;
-            Handles.DrawLine(nodeTransform.position, connection.transform.position, lineThickness);
+            Handles.DrawLine(nTransform, connection.transform.position, lineThickness);
             Handles.color = tempColor;
         }
 
@@ -78,9 +78,9 @@ namespace Dijstra.path
                 SceneView.RepaintAll();
                 _graph.IsAbleToVisualizePath = false;
             }
-            
+
             if (_hasValue) DrawNodeFields();
-            
+
             if (GUILayout.Button("Clear"))
             {
                 _startPath = new Path();
@@ -99,7 +99,7 @@ namespace Dijstra.path
             EditorGUILayout.Space(10);
             EditorGUILayout.IntField("Start-Check Length", (int)_startPath.Length, GUILayout.Width(_inputFieldWidth));
             EditorGUILayout.IntField("Check-End Length", (int)_endPath.Length, GUILayout.Width(_inputFieldWidth));
-            EditorGUILayout.IntField("Total Length", (int)_length, GUILayout.Width(_inputFieldWidth));
+            EditorGUILayout.IntField("Total Length", _length, GUILayout.Width(_inputFieldWidth));
             EditorGUILayout.Space(10);
         }
 
@@ -109,7 +109,6 @@ namespace Dijstra.path
             {
                 Debug.LogError("From/To nodes are null");
                 _hasValue = false;
-
                 return;
             }
 
@@ -118,40 +117,6 @@ namespace Dijstra.path
             _length = (int)_startPath.Length + (int)_endPath.Length;
             _hasValue = true;
             // Debug.Log($" Lengths => Start - Check point : {_startPath.Length} | Check point - End : {_endPath.Length} | total : {_length}");
-        }
-
-        private void CreateIndentedLabel(string label, string value)
-        {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.TextField(label, value, EditorStyles.boldLabel, GUILayout.Width(_inputFieldWidth + 48));
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private bool CreateIntField(string label, int value, out int newValue)
-        {
-            EditorGUILayout.BeginHorizontal();
-
-            EditorGUI.BeginChangeCheck();
-            newValue = EditorGUILayout.IntField(label, value, GUILayout.Width(_inputFieldWidth));
-            var hasChanged = EditorGUI.EndChangeCheck();
-
-            GUILayout.Space(4);
-
-            if (GUILayout.Button("-", GUILayout.Width(20)))
-            {
-                newValue -= 1;
-                hasChanged = true;
-            }
-
-            if (GUILayout.Button("+", GUILayout.Width(20)))
-            {
-                newValue += 1;
-                hasChanged = true;
-            }
-
-            EditorGUILayout.EndHorizontal();
-
-            return hasChanged;
         }
     }
 }

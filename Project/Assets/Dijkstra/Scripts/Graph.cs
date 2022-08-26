@@ -1,31 +1,26 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace Dijstra.path
+namespace Dijkstra.Scripts
 {
-    public class Graph : MonoBehaviour
+    public sealed class Graph : MonoBehaviour
     {
-        public List<Node> Nodes => m_Nodes;
-        [SerializeField] protected List<Node> m_Nodes = new List<Node>();
+        public List<Node> Nodes => _nodes;
+        [SerializeField] private List<Node> _nodes = new List<Node>();
 
         [HideInInspector] public Node StartNode;
         [HideInInspector] public Node CheckPointNode;
         [HideInInspector] public Node EndNode;
-
-        
         [HideInInspector] public bool IsAbleToVisualizePath = true;
 
         private void Awake()
         {
-            m_Nodes.Clear();
+            _nodes.Clear();
 
             var childrenNodes = transform.GetComponentsInChildren<Node>();
-            foreach (var node in childrenNodes) m_Nodes.Add(node);
-            
+            foreach (var node in childrenNodes) _nodes.Add(node);
         }
 
     #region ConnectNodes
@@ -34,7 +29,6 @@ namespace Dijstra.path
         /// auto connect nodes of a 1D list
         /// in a 2D grid, connect the nodes based on the "connectionRange" var
         /// </summary>
-        
         [Tooltip("Step : the incresment the pointer should take to connect above/below nodes")]
         private const int GRID_STEP = 3; // for up/down connections
         private const int CONNECTION_RANGE = 1; // for left/right connections
@@ -42,27 +36,30 @@ namespace Dijstra.path
         {
             var cp = 0; //check point, 2 == right edge, 0 == right edge
 
-            for (var i = 0; i < m_Nodes.Count; i++)
+            for (var i = 0; i < _nodes.Count; i++)
             {
-                if (cp >= GRID_STEP) //reset checkpoint when reach step value
-                    cp = 0;
+                //reset checkpoint when reach step value
+                if (cp >= GRID_STEP) cp = 0;
 
                 //right
-                if (i + CONNECTION_RANGE < m_Nodes.Count)
-                    if (cp < GRID_STEP - 1)
-                        m_Nodes[i].connections.Add(m_Nodes[i + CONNECTION_RANGE]);
+                if (i + CONNECTION_RANGE < _nodes.Count)
+                {
+                    if (cp < GRID_STEP - 1) _nodes[i].Connections.Add(_nodes[i + CONNECTION_RANGE]);
+                }
+ 
                 //left
                 if (i - CONNECTION_RANGE >= 0)
-                    if (cp != 0)
-                        m_Nodes[i].connections.Add(m_Nodes[i - CONNECTION_RANGE]);
+                {
+                    if (cp != 0) _nodes[i].Connections.Add(_nodes[i - CONNECTION_RANGE]);
+                }
+                
                 //up
-                if (i + GRID_STEP < m_Nodes.Count) m_Nodes[i].connections.Add(m_Nodes[i + GRID_STEP]);
+                if (i + GRID_STEP < _nodes.Count) _nodes[i].Connections.Add(_nodes[i + GRID_STEP]);
                 //down
-                if (i - GRID_STEP >= 0) m_Nodes[i].connections.Add(m_Nodes[i - GRID_STEP]);
+                if (i - GRID_STEP >= 0) _nodes[i].Connections.Add(_nodes[i - GRID_STEP]);
 
                 cp++;
             }
-
         }
 
     #endregion
@@ -76,32 +73,33 @@ namespace Dijstra.path
         /// <returns>The shortest path.</returns>
         /// <param name="start">Start Node.</param>
         /// <param name="end">End Node.</param>
-        public virtual Path GetShortestPath(Node start, Node end)
+        public Path GetShortestPath(Node start, Node end)
         {
             if (start == null || end == null)
             {
                 throw new ArgumentNullException();
             }
-            
+
             var path = new Path();
-            
+
             if (start == end)
             {
                 path.PathNodes.Add(start);
+
                 return path;
             }
-            
+
             var unvisited = new List<Node>();
             var previous = new Dictionary<Node, Node>();
             var distances = new Dictionary<Node, float>();
 
-            for (var i = 0; i < m_Nodes.Count; i++)
+            for (var i = 0; i < _nodes.Count; i++)
             {
-                var node = m_Nodes[i];
+                var node = _nodes[i];
                 unvisited.Add(node);
                 distances.Add(node, float.MaxValue);
             }
-            
+
             distances[start] = 0f;
 
             while (unvisited.Count != 0)
@@ -122,14 +120,15 @@ namespace Dijstra.path
                         path.PathNodes.Insert(0, current);
                         current = previous[current];
                     }
-                    
+
                     path.PathNodes.Insert(0, current);
+
                     break;
                 }
-                
-                for (var i = 0; i < current.connections.Count; i++)
+
+                for (var i = 0; i < current.Connections.Count; i++)
                 {
-                    var neighbor = current.connections[i];
+                    var neighbor = current.Connections[i];
                     var length = Vector3.Distance(current.transform.position, neighbor.transform.position);
                     var alt = distances[current] + length;
 
@@ -143,9 +142,9 @@ namespace Dijstra.path
             }
             path.Bake();
             IsAbleToVisualizePath = true;
+
             return path;
         }
-
 
     #endregion
 

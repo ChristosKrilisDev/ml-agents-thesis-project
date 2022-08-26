@@ -79,15 +79,5 @@ namespace ML_Agents.Finder.Scripts
 
             return Vector3.Distance(pA, pB);
         }
-
-        // private void SendData() //dont use
-        // {
-        //     if (_isFirstTake) return;
-        //
-        //     _isFirstTake = false;
-        //     GameManager.instance.WriteData(_episodeCounter, _distanceRecorder.GetTraveledDistance, _pathTotalLength,
-        //         _hasFindGoal, 0);
-        // }
-
     }
 }

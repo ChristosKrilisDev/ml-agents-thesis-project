@@ -1,18 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Dijstra.path
+namespace Dijkstra.Scripts
 {
-    public class Node : MonoBehaviour
+    public sealed class Node : MonoBehaviour
     {
-        [SerializeField]
-        protected List<Node> m_Connections = new List<Node>();
-        public Node this[int index] => m_Connections[index];
+        [SerializeField] private List<Node> _connections = new List<Node>();
 
-        public virtual List<Node> connections
+        public List<Node> Connections
         {
-            get => m_Connections;
-            set => m_Connections = value;
+            get => _connections;
+            set => _connections = value;
         }
     }
 }

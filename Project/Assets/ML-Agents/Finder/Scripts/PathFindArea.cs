@@ -6,13 +6,13 @@ namespace ML_Agents.Finder.Scripts
     {
         [SerializeField] private GameObject[] _spawnAreas;
 
-        private Transform[] _nodes;
-        private const string OBJECT_TAG = "pfobj";
-
         private static GameObject GoalNodePref => EpisodeHandler.FinalNode;
         private static GameObject BlockPref => EpisodeHandler.SimpleNode;
+        private const string OBJECT_TAG = "pfobj";
 
+        private Transform[] _nodes;
         private GameObject GoalNode { get; set; }
+        
         public void SetNodesPosition(ref Transform[] nodes)
         {
             _nodes = nodes;
@@ -21,14 +21,12 @@ namespace ML_Agents.Finder.Scripts
         public GameObject CreateGoalNode(int spawnAreaIndex)
         {
             GoalNode = CreateNode(GoalNodePref, spawnAreaIndex);
-
             return GoalNode;
         }
 
         public PathFindArea CreateBlockNode(int spawnAreaIndex)
         {
             CreateNode(BlockPref, spawnAreaIndex);
-
             return this;
         }
 
@@ -36,7 +34,6 @@ namespace ML_Agents.Finder.Scripts
         {
             var newObject = Instantiate(desiredObject, Vector3.zero, Quaternion.Euler(0f, 0f, 0f), transform);
             PlaceNode(newObject, spawnAreaIndex);
-
             return newObject;
         }
 
@@ -62,15 +59,9 @@ namespace ML_Agents.Finder.Scripts
         public void CleanArea()
         {
             foreach (Transform child in transform)
-                if (child.CompareTag(OBJECT_TAG))
-                    Destroy(child.gameObject);
-        }
-
-        public PathFindArea HideCallBack(int nodeIndex)
-        {
-            //_nodes[nodeIndex].gameObject.SetActive(false);
-            return this;
+            {
+                if (child.CompareTag(OBJECT_TAG)) Destroy(child.gameObject);
+            }
         }
     }
-
 }
