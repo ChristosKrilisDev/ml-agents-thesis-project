@@ -23,7 +23,7 @@ namespace Dijstra.path
             var calculated = new List<Node>();
             var flagCounter = 0;
             
-            _length = 1f;
+            _length = 0f;
 
             foreach (var node in _pathNodes)
             {

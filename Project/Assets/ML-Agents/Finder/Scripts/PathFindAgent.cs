@@ -160,7 +160,7 @@ namespace ML_Agents.Finder.Scripts
             if (other.gameObject.CompareTag("spawnArea"))
             {
                 _traveledDistance++;
-                Debug.Log($"Agent Distance : {_traveledDistance} | Current node =>{other.gameObject.name}");
+                Debug.Log($"- Agent Distance : {_traveledDistance} | Current node =>{other.gameObject.name}");
             }
         }
         
@@ -248,7 +248,7 @@ namespace ML_Agents.Finder.Scripts
             // _pathTotalLength = 0;
             _stepFactor = 0;
             _findTargetNodeIndex = 0;
-            _traveledDistance = 0;
+            _traveledDistance = -1;
             _hasFoundGoal = _hasFoundCheckpoint = _hasTouchedTheWall = false;
 
             _targetObjectToFind = null;
