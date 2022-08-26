@@ -29,7 +29,7 @@ namespace Dijkstra.Scripts
         /// auto connect nodes of a 1D list
         /// in a 2D grid, connect the nodes based on the "connectionRange" var
         /// </summary>
-        [Tooltip("Step : the incresment the pointer should take to connect above/below nodes")]
+        [Tooltip("Step : the increment the pointer should take to connect above/below nodes")]
         private const int GRID_STEP = 3; // for up/down connections
         private const int CONNECTION_RANGE = 1; // for left/right connections
         public void ConnectNodes()
