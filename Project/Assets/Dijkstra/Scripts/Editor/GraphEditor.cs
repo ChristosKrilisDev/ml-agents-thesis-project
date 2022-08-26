@@ -105,6 +105,8 @@ namespace Dijkstra.Scripts.Editor
 
         public void VisualizeBakedPath()
         {
+            if(!Application.isPlaying) return;
+            
             if (_graph.StartNode == null || _graph.EndNode == null)
             {
                 Debug.LogError("From/To nodes are null");
