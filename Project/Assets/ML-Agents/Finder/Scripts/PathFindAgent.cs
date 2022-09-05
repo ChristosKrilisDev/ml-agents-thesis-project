@@ -23,7 +23,8 @@ namespace ML_Agents.Finder.Scripts
         [SerializeField] private CheckPoint _checkPoint;
         [SerializeField] private Graph _graph;
 
-        private float _pathTotalLength;
+        private int _checkPointLength;
+        private int _pathTotalLength;
         private float _traveledDistance;
 
         private Rigidbody _agentRb;
@@ -46,9 +47,8 @@ namespace ML_Agents.Finder.Scripts
         }
         private enum Use
         {
-            None,
-            Add_Reward,
-            Set_Reward
+            Add_Reward = 0,
+            Set_Reward = 1
         }
 
     #endregion
@@ -60,7 +60,6 @@ namespace ML_Agents.Finder.Scripts
             _agentRb = GetComponent<Rigidbody>();
             RewardFunction.MaxStep = MaxStep;
         }
-
         /// <summary>
         /// what data the ai needs in order to solve the problem
         /// A reasonable approach for determining what information
@@ -99,6 +98,21 @@ namespace ML_Agents.Finder.Scripts
             sensor.AddObservation(_stepFactor); //1
         }
 
+        public override void Heuristic(in ActionBuffers actionsOut)
+        {
+            var discreteActionsOut = actionsOut.DiscreteActions;
+            if (Input.GetKey(KeyCode.D))
+                discreteActionsOut[0] = 3;
+            else if (Input.GetKey(KeyCode.W))
+                discreteActionsOut[0] = 1;
+            else if (Input.GetKey(KeyCode.A))
+                discreteActionsOut[0] = 4;
+            else if (Input.GetKey(KeyCode.S))
+                discreteActionsOut[0] = 2;
+            else
+                discreteActionsOut[0] = 0;
+        }
+
         private void MoveAgent(ActionSegment<int> act)
         {
             var dirToGo = Vector3.zero;
@@ -130,61 +144,16 @@ namespace ML_Agents.Finder.Scripts
             _agentRb.AddForce(dirToGo * 2f, ForceMode.VelocityChange);
         }
 
+
+
         public override void OnActionReceived(ActionBuffers actionBuffers)
         {
-            _stepFactor = Math.Abs(StepCount - MaxStep) / (float)MaxStep;
-            GiveRewardInternal(Use.Set_Reward, CalculateReward());
+            // _stepFactor = Math.Abs(StepCount - MaxStep) / (float)MaxStep;
+            // GiveRewardInternal(Use.Set_Reward, CalculateReward());
+            var stepReward = (float)StepCount / MaxStep;
+            AddReward(-0.0001f); //max -0.5
 
             MoveAgent(actionBuffers.DiscreteActions);
-        }
-
-        public override void Heuristic(in ActionBuffers actionsOut)
-        {
-            var discreteActionsOut = actionsOut.DiscreteActions;
-            if (Input.GetKey(KeyCode.D))
-                discreteActionsOut[0] = 3;
-            else if (Input.GetKey(KeyCode.W))
-                discreteActionsOut[0] = 1;
-            else if (Input.GetKey(KeyCode.A))
-                discreteActionsOut[0] = 4;
-            else if (Input.GetKey(KeyCode.S))
-                discreteActionsOut[0] = 2;
-            else
-                discreteActionsOut[0] = 0;
-
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("spawnArea"))
-            {
-                _traveledDistance++;
-                // Debug.Log($"- Agent Distance : {_traveledDistance} | Current node =>{other.gameObject.name}");
-            }
-        }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.CompareTag("wall"))
-            {
-                _hasTouchedTheWall = true;
-                OnTerminalCondition(Use.Set_Reward, true, -0.25f);
-            }
-
-            if (collision.gameObject.CompareTag("switchOff"))
-            {
-                _findTargetNodeIndex++;
-                _hasFoundCheckpoint = true;
-                GiveRewardInternal(Use.Add_Reward, 2);
-                SwitchTargetNode();
-            }
-
-            if (collision.gameObject.CompareTag("goal"))
-            {
-                _hasFoundGoal = true;
-                GiveRewardInternal(Use.Add_Reward, 2);
-                OnTerminalCondition(Use.Set_Reward);
-            }
         }
 
         public override void OnEpisodeBegin()
@@ -268,7 +237,8 @@ namespace ML_Agents.Finder.Scripts
                 var pathLen1 = GetShortestPathLength(_graph.StartNode, _graph.CheckPointNode);
                 var pathLen2 = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
                 var tmp = pathLen1 + pathLen2;
-                _pathTotalLength = tmp;
+                _checkPointLength = (int)pathLen1; //TODO : make them int
+                _pathTotalLength = (int)tmp;
 
                 // Debug.Log($" Min Length : {_pathTotalLength} = {pathLen1} + {pathLen2}");
             }
@@ -299,31 +269,92 @@ namespace ML_Agents.Finder.Scripts
 
     #endregion
 
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("spawnArea"))
+            {
+                _traveledDistance++;
+                // Debug.Log($"- Agent Distance : {_traveledDistance} | Current node =>{other.gameObject.name}");
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("wall")) { OnDeadlyCollision(); }
+            if (collision.gameObject.CompareTag("switchOff")) { OnCheckPointAchieved(); }
+            if (collision.gameObject.CompareTag("goal")) { OnFinalGoalAchieved(); }
+        }
+
+
     #region RewardMethods
+
+        private void OnDeadlyCollision()
+        {
+            _hasTouchedTheWall = true;
+            GiveRewardInternal(Use.Set_Reward, -0.5f);
+            EndEpisode();
+        }
+
+        private void OnCheckPointAchieved()
+        {
+            _hasFoundCheckpoint = true;
+            _findTargetNodeIndex++;
+
+            //if founds CP, override the any previous rewards
+            GiveRewardInternal(Use.Add_Reward, 0.2f);
+
+            var sr = DijkstraRewards(_checkPointLength) ? 1 : 0;
+            Academy.Instance.StatsRecorder.Add("Agent/Check Point Dijkstra Success Rate", sr, StatAggregationMethod.Histogram);
+            if(sr ==1) GiveRewardInternal(Use.Add_Reward, 0.5f);
+
+            SwitchTargetNode();
+        }
+
+        private void OnFinalGoalAchieved()
+        {
+            _hasFoundGoal = true;
+            GiveRewardInternal(Use.Add_Reward, 0.5f);
+
+            var sr = DijkstraRewards(_pathTotalLength) ? 1 : 0;
+            Academy.Instance.StatsRecorder.Add("Agent/Full Dijkstra Success Rate", sr, StatAggregationMethod.Histogram);
+            if(sr ==1) GiveRewardInternal(Use.Set_Reward, 1f); //best case scenario
+
+            // GiveRewardInternal(Use.Set_Reward, 1);
+            // OnTerminalCondition(Use.Set_Reward);
+            Academy.Instance.StatsRecorder.Add("Distance/Distance Traveled", _traveledDistance, StatAggregationMethod.Histogram);
+            Academy.Instance.StatsRecorder.Add("Distance/Shortest Path", _pathTotalLength, StatAggregationMethod.Histogram);
+
+            EndEpisode();
+        }
+
+        private bool DijkstraRewards(int length)
+        {
+            return _traveledDistance <= length;
+        }
 
         //Use AddReward() to accumulate rewards between decisions.
         //Use SetReward() to overwrite any previous rewards accumulate between decisions.
-        private void GiveRewardInternal(Use useRewardType = Use.None, float extraRewardValue = 0)
+        private void GiveRewardInternal(Use useRewardType, float extraRewardValue)
         {
             switch (useRewardType)
             {
-                case Use.None: //Don't Give reward
-                default:
-                    break;
                 case Use.Add_Reward:
                     AddReward(extraRewardValue);
 
                     break;
+
                 case Use.Set_Reward:
                     SetReward(extraRewardValue);
 
                     break;
             }
         }
-        private void OnTerminalCondition(Use useTypeReward = Use.None, bool useExtraReward = false, float extraRewardValue = 0)
+
+        private void OnTerminalCondition(Use useTypeReward, bool useExtraReward = false, float extraRewardValue = 0)
         {
             //give a reward for the last action the agent did
-            if (useExtraReward) GiveRewardInternal(useTypeReward, extraRewardValue);
+            // if (useExtraReward) GiveRewardInternal(useTypeReward, extraRewardValue);
 
             //get the calculate reward on terminal condition
             GiveRewardInternal(useTypeReward, CalculateReward());
@@ -340,7 +371,7 @@ namespace ML_Agents.Finder.Scripts
                 HasEpisodeEnded(),
                 _hasFoundCheckpoint,
                 _hasFoundGoal,
-                EpisodeHandler.CompareCurrentDistance(_traveledDistance, _pathTotalLength, 2)
+                EpisodeHandler.CompareCurrentDistance(_traveledDistance, _pathTotalLength)
             );
         }
 

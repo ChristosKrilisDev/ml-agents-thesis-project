@@ -9,7 +9,7 @@ namespace ML_Agents.Finder.Scripts
         [Header("Reward Function Vars")]
         public static int MaxStep;
 
-        private const float EPSILON = 0.4f;
+        private const float EPSILON = 0.7f;
         private const float BOOST_REWARD = 1;
 
         //TODO : Avoiding Reward Hacking | Avoiding Side Effects | Scalable Oversight | Safe Exploration | Robustness to Distributional Shift
@@ -26,49 +26,44 @@ namespace ML_Agents.Finder.Scripts
         /// <hasEpisodeEnded> Whenever the episodes ends, calculate terminal reward </hasEpisodeEnded>
         ///
         /// <calculateReward> The reward agent will take for that state based based on the reward state</calculateReward>
-        public static float GetComplexReward(float currDistance, float currentGoalDistance, int stepCount, bool hasEpisodeEnded, bool hasFoundCheckPoint, bool hasFoundGoal, bool hasFollowedDijkstra)
+        public static float GetComplexReward(float currDistance, float currentGoalDistance, int stepCount, bool hasEpisodeEnded, bool hasFoundCheckPoint, bool hasFoundGoal, bool hasFoundShortestPath)
         {
             //TODO : Make this with less params
             float calculateReward;
 
             // Additionally, the magnitude of the reward should not exceed 1.0
-            var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep; //TODO : remove this, get it from agent
+
 
         #region TerminalRewards
 
-            // bool[] x = new bool[3];
-            // float r = 0;
-            // for (var i = x.Length; i > 0; i++)
-            // {
-            //     if (x[x.Length - 1] == true) //max
-            //         r = BOOST_REWARD + stepCount;
-            //
-            //     else
-            //     {
-            //         r += 0.333f;
-            //     }
-            // }
-            // r *= -BOOST_REWARD; //min -1.999
-
             if (hasEpisodeEnded) //TC1 when it ends? : max step reached or completed task
             {
+                var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep; //TODO : remove this, get it from agent
+                Debug.Log("Step "+ stepFactor);
+
                 if (hasFoundCheckPoint)
                 {
-                    if (hasFoundGoal)
-                    {
-                        if (hasFollowedDijkstra)
-                            calculateReward = Math.Abs(BOOST_REWARD + stepFactor); //1 + SF
-                        else
-                            calculateReward = -BOOST_REWARD / 4; //-0.25f
-                    }
-                    else
-                        calculateReward = -BOOST_REWARD * 3; //-0.5f
+                    calculateReward = Math.Abs(BOOST_REWARD * stepFactor); //1 + SF
+                    Debug.Log(calculateReward);
+                    // if (hasFoundGoal)
+                    // {
+                    //     if (hasFoundShortestPath)
+                    //         calculateReward = Math.Abs(BOOST_REWARD + stepFactor); //1 + SF
+                    //     else
+                    //         calculateReward = -BOOST_REWARD / 4; //-0.25f
+                    // }
+                    // else
+                    // {
+                    //     calculateReward = -BOOST_REWARD * 3; //-0.5f
+                    // }
                 }
                 else
                 {
-                    calculateReward = -BOOST_REWARD * 4; // -1 worst scenario
-                }
+                    calculateReward = -BOOST_REWARD; // -1 worst scenario
+                    Debug.Log("failed "+calculateReward);
 
+                }
+                //if episode endded and hasne find goal, ban -1
             }
 
         #endregion
@@ -80,6 +75,7 @@ namespace ML_Agents.Finder.Scripts
                 //50% less //reward a very small amount, to guide the agent but not big enough to create a looped reward(circle).
                 //Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward, goalDistances[goalIndex]);
             }
+
 
             return calculateReward;
         }

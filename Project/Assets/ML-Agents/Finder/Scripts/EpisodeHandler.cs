@@ -58,7 +58,7 @@ namespace ML_Agents.Finder.Scripts
         /// <returns>true if the distance that agent did is less than dijstras shortest path length</returns>
         public static bool CompareCurrentDistance(float currentDistanceTraveled, float pathLength, float multiplier = 1)
         {
-            return currentDistanceTraveled <= pathLength * multiplier;
+            return currentDistanceTraveled <= pathLength;
         }
 
         /// <summary>
