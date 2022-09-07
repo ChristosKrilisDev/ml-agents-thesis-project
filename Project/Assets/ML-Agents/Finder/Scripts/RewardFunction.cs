@@ -77,13 +77,13 @@ namespace ML_Agents.Finder.Scripts
             if(!hasFoundCheckPoint) calculateReward = -BOOST_REWARD; // -1 worst scenario
             if(!hasFoundShortestPath) calculateReward = -BOOST_REWARD / 4; //-0.25f
 
-            var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep; //TODO : remove this, get it from agent
+            var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep;
             calculateReward = Math.Abs(BOOST_REWARD + stepFactor); //1 + SF
 
         #endregion
 
             return calculateReward;
         }
-
     }
+
 }
