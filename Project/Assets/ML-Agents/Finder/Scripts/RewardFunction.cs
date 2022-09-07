@@ -28,122 +28,62 @@ namespace ML_Agents.Finder.Scripts
         /// <calculateReward> The reward agent will take for that state based based on the reward state</calculateReward>
         public static float GetComplexReward(float currDistance, float currentGoalDistance, int stepCount, bool endEpisode, bool hasFoundCheckPoint, bool hasFoundGoal, bool hasFoundShortestPath)
         {
+            // Additionally, the magnitude of the reward should not exceed 1.0
             //TODO : Make this with less params
             float calculateReward;
 
-            // Additionally, the magnitude of the reward should not exceed 1.0
-
-            if (!endEpisode)
+            if (!endEpisode)//TC1 when it ends? : max step reached or completed task
             {
+                //encourage agent to keep searching, distance based
                 var distanceReward = 1 - Mathf.Pow(currDistance / currentGoalDistance, EPSILON);
                 calculateReward = distanceReward;
 
+                //50% less //reward a very small amount, to guide the agent but not big enough to create a looped reward(circle).
                 return calculateReward;
             }
 
 
-
         #region TerminalRewards
 
-            if (endEpisode) //TC1 when it ends? : max step reached or completed task
-            {
-                var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep; //TODO : remove this, get it from agent
-                Debug.Log("Step " + stepFactor);
+            if(!hasFoundCheckPoint) calculateReward = -BOOST_REWARD; // -1 worst scenario
+            if(!hasFoundGoal) calculateReward = -BOOST_REWARD * 3; //-0.5f
+            if(!hasFoundShortestPath) calculateReward = -BOOST_REWARD / 4; //-0.25f
 
-                if (hasFoundCheckPoint)
-                {
-                    calculateReward = Math.Abs(BOOST_REWARD * stepFactor); //1 + SF
-                    if (hasFoundGoal)
-                    {
-                        if (hasFoundShortestPath)
-                            calculateReward = Math.Abs(BOOST_REWARD + stepFactor); //1 + SF
-                        else
-                            calculateReward = -BOOST_REWARD / 4; //-0.25f
-                    }
-                    else
-                    {
-                        calculateReward = -BOOST_REWARD * 3; //-0.5f
-                    }
-                }
-                else
-                {
-                    calculateReward = -BOOST_REWARD; // -1 worst scenario
-                    Debug.Log("failed " + calculateReward);
 
-                }
-                //if episode endded and hasne find goal, ban -1
-            }
+            var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep; //TODO : remove this, get it from agent
+            calculateReward = Math.Abs(BOOST_REWARD + stepFactor); //1 + SF
 
         #endregion
-            else //encourage agent to keep searching
-            {
-                var distanceReward = 1 - Mathf.Pow(currDistance / currentGoalDistance, EPSILON);
-
-                calculateReward = distanceReward;
-                //50% less //reward a very small amount, to guide the agent but not big enough to create a looped reward(circle).
-                //Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward, goalDistances[goalIndex]);
-            }
 
             return calculateReward;
         }
 
         public static float GetComplexReward(float currDistance, float currentGoalDistance, int stepCount, bool endEpisode, bool hasFoundCheckPoint, bool hasFoundShortestPath)
         {
-            //TODO : Make this with less params
             float calculateReward;
 
-            // Additionally, the magnitude of the reward should not exceed 1.0
+            if (!endEpisode)//TC1 when it ends? : max step reached or completed task
+            {
+                //encourage agent to keep searching, distance based
+                var distanceReward = 1 - Mathf.Pow(currDistance / currentGoalDistance, EPSILON);
+                calculateReward = distanceReward;
+
+                //50% less //reward a very small amount, to guide the agent but not big enough to create a looped reward(circle).
+                return calculateReward;
+            }
 
         #region TerminalRewards
 
-            if (endEpisode) //TC1 when it ends? : max step reached or completed task
-            {
-                var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep; //TODO : remove this, get it from agent
+            if(!hasFoundCheckPoint) calculateReward = -BOOST_REWARD; // -1 worst scenario
+            if(!hasFoundShortestPath) calculateReward = -BOOST_REWARD / 4; //-0.25f
 
-                if (hasFoundCheckPoint)
-                {
-                    calculateReward = Math.Abs(BOOST_REWARD * stepFactor); //1 + SF
-
-                    if (hasFoundShortestPath)
-                    {
-                        calculateReward = Math.Abs(BOOST_REWARD + stepFactor); //1 + SF
-                    }
-                    else
-                    {
-                        calculateReward = -BOOST_REWARD / 4; //-0.25f
-                    }
-                }
-                else
-                {
-                    calculateReward = -BOOST_REWARD; // -1 worst scenario
-                    Debug.Log("failed " + calculateReward);
-
-                }
-                //if episode endded and hasne find goal, ban -1
-            }
+            var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep; //TODO : remove this, get it from agent
+            calculateReward = Math.Abs(BOOST_REWARD + stepFactor); //1 + SF
 
         #endregion
-            else //encourage agent to keep searching
-            {
-                var distanceReward = 1 - Mathf.Pow(currDistance / currentGoalDistance, EPSILON);
-
-                calculateReward = distanceReward;
-                //50% less //reward a very small amount, to guide the agent but not big enough to create a looped reward(circle).
-                //Debug.LogFormat("Phase : Encourage \t reward : {0}  | target {1}", calculateReward, goalDistances[goalIndex]);
-            }
 
             return calculateReward;
         }
 
-    }
-
-    public class RewardWrapper
-    {
-        public float CurrDistance;
-        public float CurrentGoalDistance;
-        public int StepCount;
-        public bool HasEpisodeEnded;
-        public bool HasFoundCheckPoint;
-        public bool HasFoundShortestPath;
     }
 }
