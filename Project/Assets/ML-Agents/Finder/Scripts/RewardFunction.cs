@@ -10,7 +10,7 @@ namespace ML_Agents.Finder.Scripts
         public static int MaxStep;
 
         private const float EPSILON = 0.7f;
-        private const float BOOST_REWARD = 1;
+        private const float BOOST_REWARD = 10;
 
         //TODO : Avoiding Reward Hacking | Avoiding Side Effects | Scalable Oversight | Safe Exploration | Robustness to Distributional Shift
         //TODO : Sharped RF
