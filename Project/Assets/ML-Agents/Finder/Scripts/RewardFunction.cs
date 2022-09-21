@@ -9,8 +9,8 @@ namespace ML_Agents.Finder.Scripts
         [Header("Reward Function Vars")]
         public static int MaxStep;
 
-        private const float EPSILON = 0.7f;
-        private const float BOOST_REWARD = 10;
+        private const float EPSILON = 0.3f;
+        private const float BOOST_REWARD = 1;
 
         //TODO : Avoiding Reward Hacking | Avoiding Side Effects | Scalable Oversight | Safe Exploration | Robustness to Distributional Shift
         //TODO : Sharped RF
@@ -32,7 +32,7 @@ namespace ML_Agents.Finder.Scripts
             //TODO : Make this with less params
             float calculateReward;
 
-            if (!endEpisode)//TC1 when it ends? : max step reached or completed task
+            if (!endEpisode) //TC1 when it ends? : max step reached or completed task
             {
                 //encourage agent to keep searching, distance based
                 var distanceReward = 1 - Mathf.Pow(currDistance / currentGoalDistance, EPSILON);
@@ -42,16 +42,16 @@ namespace ML_Agents.Finder.Scripts
                 return calculateReward;
             }
 
-
         #region TerminalRewards
 
-            if(!hasFoundCheckPoint) calculateReward = -BOOST_REWARD; // -1 worst scenario
-            if(!hasFoundGoal) calculateReward = -BOOST_REWARD * 3; //-0.5f
-            if(!hasFoundShortestPath) calculateReward = -BOOST_REWARD / 4; //-0.25f
-
-
-            var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep; //TODO : remove this, get it from agent
-            calculateReward = Math.Abs(BOOST_REWARD + stepFactor); //1 + SF
+            if (!hasFoundCheckPoint) calculateReward = -BOOST_REWARD; // -1 worst scenario
+            else if (!hasFoundGoal) calculateReward = -BOOST_REWARD * 3; //-0.5f
+            else if (!hasFoundShortestPath) calculateReward = -BOOST_REWARD / 4; //-0.25f
+            else
+            {
+                var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep; //TODO : remove this, get it from agent
+                calculateReward = BOOST_REWARD * stepFactor; // > 1
+            }
 
         #endregion
 
@@ -62,7 +62,8 @@ namespace ML_Agents.Finder.Scripts
         {
             float calculateReward;
 
-            if (!endEpisode)//TC1 when it ends? : max step reached or completed task
+            //error here
+            if (!endEpisode) //TC1 when it ends? : max step reached or completed task
             {
                 //encourage agent to keep searching, distance based
                 var distanceReward = 1 - Mathf.Pow(currDistance / currentGoalDistance, EPSILON);
@@ -74,11 +75,17 @@ namespace ML_Agents.Finder.Scripts
 
         #region TerminalRewards
 
-            if(!hasFoundCheckPoint) calculateReward = -BOOST_REWARD; // -1 worst scenario
-            if(!hasFoundShortestPath) calculateReward = -BOOST_REWARD / 4; //-0.25f
+            var extraReward = 0;
 
+            if (!hasFoundCheckPoint) extraReward = -10; // -1 worst scenario
+            else if (!hasFoundShortestPath) extraReward = 5; //-0.5f
+            else
+            {
+                //has found cp, has found sp
+                extraReward = 10;
+            }
             var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep;
-            calculateReward = Math.Abs(BOOST_REWARD + stepFactor); //1 + SF
+            calculateReward = (BOOST_REWARD * stepFactor) + extraReward; // > 1
 
         #endregion
 

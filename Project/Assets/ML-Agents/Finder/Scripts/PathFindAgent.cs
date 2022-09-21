@@ -34,7 +34,7 @@ namespace ML_Agents.Finder.Scripts
         private bool _hasFoundCheckpoint;
         private bool _blockStepReward;
         private float _stepFactor;
-        private float _lastStepReward;
+        private float _previousStepReward;
 
         private readonly GameObject[] _nodesToFind = new GameObject[2];
         private readonly float[] _nodesDistances = new float[2];
@@ -209,7 +209,7 @@ namespace ML_Agents.Finder.Scripts
         private void ResetTmpVars(IReadOnlyList<int> items)
         {
             // _pathTotalLength = 0;
-            _lastStepReward = 0;
+            _previousStepReward = 0;
             _blockStepReward = false;
             _stepFactor = 0;
             _findTargetNodeIndex = 0;
@@ -293,6 +293,7 @@ namespace ML_Agents.Finder.Scripts
             {
                 _hasTouchedTheWall = true;
                 GiveRewardInternal(Use.Add_Reward, -0.5f);
+
                 return;
             }
 
@@ -309,16 +310,16 @@ namespace ML_Agents.Finder.Scripts
 
             if (stateMachine.TrainingType == GameManager.TrainingType.Simple)
             {
-                if (stateMachine.PhaseType != GameManager.PhaseType.Phase_C || stateMachine.PhaseType != GameManager.PhaseType.Phase_D)
+                if ((int)stateMachine.PhaseType == 1)
                 {
-                    if (stateMachine.PhaseType == GameManager.PhaseType.Phase_A)
-                    {
-                        //if founds CP, override the any previous rewards
-                        GiveRewardInternal(Use.Set_Reward, 1f);
-                        EndEpisode();
-                        return;
-                    }
-                    //else is Phase B
+                    //if founds CP, override the any previous rewards
+                    GiveRewardInternal(Use.Set_Reward, 1f);
+                    EndEpisode();
+
+                    return;
+                }
+                if ((int)stateMachine.PhaseType == 2)
+                {
                     GiveRewardInternal(Use.Add_Reward, 0.5f);
 
                     if (DijkstraValidation(_checkPointLength, "Agent/Check Point Dijkstra Success Rate"))
@@ -326,55 +327,59 @@ namespace ML_Agents.Finder.Scripts
                         GiveRewardInternal(Use.Set_Reward, 1f);
                     }
                     EndEpisode();
+
                     return;
                 }
-
-                //else is C or D
-                GiveRewardInternal(Use.Add_Reward, 0.15f);
-
-                if (DijkstraValidation(_checkPointLength, "Agent/Check Point Dijkstra Success Rate"))
+                if ((int)stateMachine.PhaseType >= 3)
                 {
-                    GiveRewardInternal(Use.Add_Reward, 0.35f);
+                    GiveRewardInternal(Use.Add_Reward, 0.15f);
+
+                    if (DijkstraValidation(_checkPointLength, "Agent/Check Point Dijkstra Success Rate"))
+                    {
+                        GiveRewardInternal(Use.Add_Reward, 0.35f);
+                    }
+
+                    return;
                 }
-                return;
             }
 
             //is advanced
-            if (stateMachine.PhaseType != GameManager.PhaseType.Phase_C || stateMachine.PhaseType != GameManager.PhaseType.Phase_D)
+            if ((int)stateMachine.PhaseType == 1)
             {
-                //TODO : cehck max
-                if (stateMachine.PhaseType == GameManager.PhaseType.Phase_A)
-                {
-                    OnTerminalCondition(Use.Set_Reward);
-                    return;
-                }
-                //is B
-                DijkstraValidation(_checkPointLength, "Agent/Check Point Dijkstra Success Rate");
                 OnTerminalCondition(Use.Set_Reward);
+
                 return;
             }
+            if ((int)stateMachine.PhaseType == 2)
+            {
+                DijkstraValidation(_checkPointLength, "Agent/Check Point Dijkstra Success Rate");
+                OnTerminalCondition(Use.Set_Reward);
 
-            //is C or D
-            DijkstraValidation(_checkPointLength, "Agent/Check Point Dijkstra Success Rate");
-            GiveRewardInternal(Use.Add_Reward, 1);
+                return;
+            }
+            if ((int)stateMachine.PhaseType >= 3)
+            {
+                DijkstraValidation(_checkPointLength, "Agent/Check Point Dijkstra Success Rate");
+                GiveRewardInternal(Use.Add_Reward, 1);
 
-            SwitchTargetNode();
+                SwitchTargetNode();
+            }
         }
 
         private void OnFinalGoalAchieved()
         {
             _hasFoundGoal = true;
-
             var stateMachine = GameManager.Instance._stateMachine;
 
             if (stateMachine.TrainingType == GameManager.TrainingType.Simple)
             {
-                if (stateMachine.PhaseType == GameManager.PhaseType.Phase_C)
+                if ((int)stateMachine.PhaseType == 3)
                 {
                     GiveRewardInternal(Use.Set_Reward, 1f);
                     EndEpisode();
+                    return;
                 }
-                else if (stateMachine.PhaseType == GameManager.PhaseType.Phase_D)
+                if ((int)stateMachine.PhaseType == 4)
                 {
                     GiveRewardInternal(Use.Add_Reward, 0.5f);
 
@@ -383,27 +388,24 @@ namespace ML_Agents.Finder.Scripts
                         GiveRewardInternal(Use.Set_Reward, 1f);
                     }
                     EndEpisode();
+                    return;
                 }
-
-                return;
             }
-
             //is advanced
             GiveRewardInternal(Use.Add_Reward, 1);
             Academy.Instance.StatsRecorder.Add("Distance/Distance Traveled", _traveledDistance, StatAggregationMethod.Histogram);
             Academy.Instance.StatsRecorder.Add("Distance/Shortest Path", _pathTotalLength, StatAggregationMethod.Histogram);
 
-            if (stateMachine.PhaseType == GameManager.PhaseType.Phase_C)
+            if ((int)stateMachine.PhaseType == 3)
             {
                 OnTerminalCondition(Use.Set_Reward);
             }
-            else if (stateMachine.PhaseType == GameManager.PhaseType.Phase_D)
+            else if ((int)stateMachine.PhaseType == 4)
             {
                 DijkstraValidation(_pathTotalLength, "Agent/Full Dijkstra Success Rate");
                 OnTerminalCondition(Use.Set_Reward);
             }
         }
-
 
         private void StepReward()
         {
@@ -413,21 +415,23 @@ namespace ML_Agents.Finder.Scripts
 
             if (stateMachine.TrainingType == GameManager.TrainingType.Advanced)
             {
-                var reward = CalculateReward();
-                if (!EpisodeHandler.NearlyEqual(_lastStepReward, reward , 0.001f))
-                {
-                    _lastStepReward = reward;
-                    GiveRewardInternal(Use.Add_Reward, reward);
-                }
+                var newStepReward = CalculateReward();
+
+                if (EpisodeHandler.NearlyEqual(_previousStepReward, newStepReward, 0.001f)) return;
+                if (_previousStepReward > newStepReward) return;
+
+                _previousStepReward = newStepReward;
+                GiveRewardInternal(Use.Add_Reward, newStepReward);
+                // Debug.Log("Step R " + newStepReward);
 
                 return;
             }
 
             if (stateMachine.TrainingType == GameManager.TrainingType.Simple)
             {
-                if (stateMachine.PhaseType == GameManager.PhaseType.Phase_A) return;
-                if(stateMachine.PhaseType == GameManager.PhaseType.Phase_D) GiveRewardInternal(Use.Add_Reward, -0.0001f / 0.35f);
-                else GiveRewardInternal(Use.Add_Reward, -0.001f / 3.5f ); //3.5
+                if ((int)stateMachine.PhaseType == 1) return;
+                if ((int)stateMachine.PhaseType == 4) GiveRewardInternal(Use.Add_Reward, -0.001f / ((float)MaxStep/1000)); //3.5
+                else GiveRewardInternal(Use.Add_Reward, -0.0001f / ((float)MaxStep/10000)); //0.35f
             }
         }
 

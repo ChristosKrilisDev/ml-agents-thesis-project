@@ -1692,7 +1692,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 3500
+  MaxStep: 1500
   _useVectorObs: 1
   _area: {fileID: 6972023362410834850}
   _checkPoint: {fileID: 114882773008046678}

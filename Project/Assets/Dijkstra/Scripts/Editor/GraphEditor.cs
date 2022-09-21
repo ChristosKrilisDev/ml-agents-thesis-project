@@ -103,10 +103,10 @@ namespace Dijkstra.Scripts.Editor
             EditorGUILayout.Space(10);
         }
 
-        public void VisualizeBakedPath()
+        private void VisualizeBakedPath()
         {
             if(!Application.isPlaying) return;
-            
+
             if (_graph.StartNode == null || _graph.EndNode == null)
             {
                 Debug.LogError("From/To nodes are null");

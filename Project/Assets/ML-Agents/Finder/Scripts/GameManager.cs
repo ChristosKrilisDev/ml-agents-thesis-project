@@ -22,12 +22,6 @@ namespace ML_Agents.Finder.Scripts
         public PhaseType phaseType;
         public TrainingType trainingType;
 
-
-        // [SerializeField] private bool _canWriteData = false;
-        // private TextFileHandler _fileHandler;
-        // private DateTime _localDate = DateTime.Now;
-        // private int _index;
-
         public StateMachine _stateMachine { get; private set; }
 
         public static GameManager Instance;
