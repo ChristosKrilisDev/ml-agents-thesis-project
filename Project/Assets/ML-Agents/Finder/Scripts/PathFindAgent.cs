@@ -318,6 +318,7 @@ namespace ML_Agents.Finder.Scripts
 
                     return;
                 }
+
                 if ((int)stateMachine.PhaseType == 2)
                 {
                     GiveRewardInternal(Use.Add_Reward, 0.5f);
@@ -330,6 +331,7 @@ namespace ML_Agents.Finder.Scripts
 
                     return;
                 }
+
                 if ((int)stateMachine.PhaseType >= 3)
                 {
                     GiveRewardInternal(Use.Add_Reward, 0.15f);
@@ -350,6 +352,7 @@ namespace ML_Agents.Finder.Scripts
 
                 return;
             }
+
             if ((int)stateMachine.PhaseType == 2)
             {
                 DijkstraValidation(_checkPointLength, "Agent/Check Point Dijkstra Success Rate");
@@ -357,6 +360,7 @@ namespace ML_Agents.Finder.Scripts
 
                 return;
             }
+
             if ((int)stateMachine.PhaseType >= 3)
             {
                 DijkstraValidation(_checkPointLength, "Agent/Check Point Dijkstra Success Rate");
@@ -377,8 +381,10 @@ namespace ML_Agents.Finder.Scripts
                 {
                     GiveRewardInternal(Use.Set_Reward, 1f);
                     EndEpisode();
+
                     return;
                 }
+
                 if ((int)stateMachine.PhaseType == 4)
                 {
                     GiveRewardInternal(Use.Add_Reward, 0.5f);
@@ -388,6 +394,7 @@ namespace ML_Agents.Finder.Scripts
                         GiveRewardInternal(Use.Set_Reward, 1f);
                     }
                     EndEpisode();
+
                     return;
                 }
             }
@@ -411,10 +418,18 @@ namespace ML_Agents.Finder.Scripts
         {
             if (_blockStepReward) return;
 
+            if (HasEpisodeEnded())
+            {
+                // Debug.Log("test");
+                CalculateReward();
+                EndEpisode();
+            }
+
             var stateMachine = GameManager.Instance._stateMachine;
 
             if (stateMachine.TrainingType == GameManager.TrainingType.Advanced)
             {
+                GiveRewardInternal(Use.Add_Reward, -GameManager.Instance.RewardData.StepReward / MaxStep); //give a negative reward
                 var newStepReward = CalculateReward();
 
                 if (EpisodeHandler.NearlyEqual(_previousStepReward, newStepReward, 0.001f)) return;
@@ -430,8 +445,8 @@ namespace ML_Agents.Finder.Scripts
             if (stateMachine.TrainingType == GameManager.TrainingType.Simple)
             {
                 if ((int)stateMachine.PhaseType == 1) return;
-                if ((int)stateMachine.PhaseType == 4) GiveRewardInternal(Use.Add_Reward, -0.001f / ((float)MaxStep/1000)); //3.5
-                else GiveRewardInternal(Use.Add_Reward, -0.0001f / ((float)MaxStep/10000)); //0.35f
+                if ((int)stateMachine.PhaseType == 4) GiveRewardInternal(Use.Add_Reward, -0.001f / ((float)MaxStep / 1000)); //3.5
+                else GiveRewardInternal(Use.Add_Reward, -0.0001f / ((float)MaxStep / 10000)); //0.35f
             }
         }
 
@@ -469,6 +484,7 @@ namespace ML_Agents.Finder.Scripts
             //get the calculate reward on terminal condition
             _blockStepReward = true;
             GiveRewardInternal(useTypeReward, CalculateReward());
+            Debug.Log(CalculateReward());
             EndEpisode();
         }
 
@@ -514,14 +530,28 @@ namespace ML_Agents.Finder.Scripts
                     _hasTouchedTheWall
                 };
             }
-            else
+            else if (GameManager.Instance._stateMachine.TrainingType == GameManager.TrainingType.Advanced)
             {
-                conditions = new List<bool>
+                if ((int)GameManager.Instance._stateMachine.PhaseType <= 2)
                 {
-                    _hasFoundGoal,
-                    StepCount == MaxStep,
-                    _hasTouchedTheWall
-                };
+                    conditions = new List<bool>
+                    {
+                        _hasFoundCheckpoint,
+                        StepCount == MaxStep,
+                        _hasTouchedTheWall,
+                        _traveledDistance >= _checkPointLength + GameManager.Instance.RewardData.ExtraDistance
+                    };
+                }
+                else
+                {
+                    conditions = new List<bool>
+                    {
+                        _hasFoundGoal,
+                        StepCount == MaxStep,
+                        _hasTouchedTheWall,
+                        _traveledDistance >= _pathTotalLength + _checkPointLength + GameManager.Instance.RewardData.ExtraDistance
+                    };
+                }
             }
 
             return EpisodeHandler.HasEpisodeEnded(conditions);

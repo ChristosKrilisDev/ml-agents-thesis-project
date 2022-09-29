@@ -70,22 +70,24 @@ namespace ML_Agents.Finder.Scripts
                 calculateReward = distanceReward;
 
                 //50% less //reward a very small amount, to guide the agent but not big enough to create a looped reward(circle).
+                // calculateReward = Mathf.Clamp(calculateReward, 0, 1);
                 return calculateReward;
             }
 
         #region TerminalRewards
 
-            var extraReward = 0;
+            float extraReward = 0;
 
-            if (!hasFoundCheckPoint) extraReward = -10; // -1 worst scenario
-            else if (!hasFoundShortestPath) extraReward = 5; //-0.5f
+            if (!hasFoundCheckPoint) extraReward = GameManager.Instance.RewardData.FailedEpisode; // -1 worst scenario
+            else if (!hasFoundShortestPath) extraReward =  GameManager.Instance.RewardData.FailedEpisode/2; //-0.5f
             else
             {
                 //has found cp, has found sp
-                extraReward = 10;
+                extraReward =  GameManager.Instance.RewardData.SuccessEpisode;
             }
             var stepFactor = Math.Abs(stepCount - MaxStep) / (float)MaxStep;
-            calculateReward = (BOOST_REWARD * stepFactor) + extraReward; // > 1
+            // extraReward = Mathf.Clamp(extraReward, 0, 1);
+            calculateReward = (BOOST_REWARD * stepFactor) + extraReward;
 
         #endregion
 

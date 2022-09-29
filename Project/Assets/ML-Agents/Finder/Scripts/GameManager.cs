@@ -22,6 +22,8 @@ namespace ML_Agents.Finder.Scripts
         public PhaseType phaseType;
         public TrainingType trainingType;
 
+        public RewardData RewardData;
+
         public StateMachine _stateMachine { get; private set; }
 
         public static GameManager Instance;

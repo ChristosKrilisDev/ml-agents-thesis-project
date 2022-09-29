@@ -50,7 +50,12 @@ namespace ML_Agents.Finder.Scripts
         /// <returns>on any true condition</returns>
         public static bool HasEpisodeEnded(IEnumerable<bool> conditions)
         {
-            return conditions.Any(condition => condition);
+            foreach (var condition in conditions)
+            {
+                if (condition) return true;
+            }
+
+            return false;
         }
 
         /// <summary>
