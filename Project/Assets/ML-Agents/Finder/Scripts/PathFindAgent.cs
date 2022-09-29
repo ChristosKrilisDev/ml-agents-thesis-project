@@ -433,7 +433,12 @@ namespace ML_Agents.Finder.Scripts
                 var newStepReward = CalculateReward();
 
                 if (EpisodeHandler.NearlyEqual(_previousStepReward, newStepReward, 0.001f)) return;
-                if (_previousStepReward > newStepReward) return;
+
+                if (_previousStepReward > newStepReward)
+                {
+                  //agent moved away from the goal
+                  GiveRewardInternal(Use.Add_Reward, -0.1f);
+                }
 
                 _previousStepReward = newStepReward;
                 GiveRewardInternal(Use.Add_Reward, newStepReward);
