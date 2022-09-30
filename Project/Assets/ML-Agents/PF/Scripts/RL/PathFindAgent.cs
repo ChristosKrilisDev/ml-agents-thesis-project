@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dijkstra.Scripts;
+using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.Structs;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
@@ -9,48 +10,42 @@ using Unity.MLAgents.Sensors;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+
 namespace ML_Agents.PF.Scripts.RL
 {
-
-
-
     public class PathFindAgent : Agent
     {
-
     #region Vars
 
         [Header("Agent behavior Vars")] [Space]
-        [SerializeField] private bool _useVectorObs;
+        [SerializeField] private bool _useVectorObservations;
 
         [Header("Area Vars")] [Space]
         [SerializeField] private PathFindArea _area;
         [SerializeField] private CheckPoint _checkPoint;
         [SerializeField] private Graph _graph;
 
-        private TrainingStateMachine _trainingStateMachine;
+        private TrainingStateMachine.TrainingStateMachine _trainingStateMachine;
         private int _checkPointLength;
         private int _pathTotalLength;
         private float _traveledDistance;
 
-        private Rigidbody _agentRb;
+        private float _stepFactor;
+        // private float _previousStepReward; //factor this
 
         private RewardDataWrapper _rewardDataWrapper;
         private bool _hasTouchedWall;
         private bool _hasFoundCheckpoint;
         private bool _hasFoundGoal;
 
-        private float _stepFactor;
-        private float _previousStepReward;
-
         private readonly GameObject[] _nodesToFind = new GameObject[2];
         private readonly float[] _nodesDistances = new float[2];
-        private GameObject _targetObjectToFind;
-        private int _findTargetNodeIndex;
+        private GameObject _target;
+        private int _targetNodeIndex;
 
+        private Rigidbody _agentRb;
 
         //move theses
-        private const string FULL_D_KEY = "Agent/Full Dijkstra Success Rate";
-        private const string CP_D_KEY = "Agent/Check Point Dijkstra Success Rate";
 
     #endregion
 
@@ -59,7 +54,8 @@ namespace ML_Agents.PF.Scripts.RL
         public override void Initialize()
         {
             _agentRb = GetComponent<Rigidbody>();
-            _trainingStateMachine = new TrainingStateMachine();//get it from the game manager
+
+            _trainingStateMachine = new TrainingStateMachine.TrainingStateMachine(); //get it from the game manager
         }
         /// <summary>
         /// what data the ai needs in order to solve the problem
@@ -71,7 +67,7 @@ namespace ML_Agents.PF.Scripts.RL
         /// <param name="sensor"></param>
         public override void CollectObservations(VectorSensor sensor)
         {
-            if (!_useVectorObs) return;
+            if (!_useVectorObservations) return;
 
             sensor.AddObservation(transform.InverseTransformDirection(_agentRb.velocity)); //3
             //cp
@@ -169,15 +165,15 @@ namespace ML_Agents.PF.Scripts.RL
             //item[0] => player | item[1] => checkPoint | item[2] => final node
             SetUpPath
             (
-                items[(int)Indexof.Agent],
-                items[(int)Indexof.Check_Point],
-                items[(int)Indexof.Final_Node]
+                items[(int)IndexofTargetType.Agent],
+                items[(int)IndexofTargetType.Check_Point],
+                items[(int)IndexofTargetType.Final_Node]
             );
 
             SetUpDistanceDifferences
             (
-                items[(int)Indexof.Check_Point],
-                items[(int)Indexof.Final_Node]
+                items[(int)IndexofTargetType.Check_Point],
+                items[(int)IndexofTargetType.Final_Node]
             );
 
             ResetTmpVars(items);
@@ -212,18 +208,18 @@ namespace ML_Agents.PF.Scripts.RL
         private void ResetTmpVars(IReadOnlyList<int> items)
         {
             // _pathTotalLength = 0;
-            _previousStepReward = 0;
-            _findTargetNodeIndex = 0;
+            // _previousStepReward = 0;
+            _targetNodeIndex = 0;
             _stepFactor = 0;
             _traveledDistance = -1;
             // _blockStepReward = false;
             _hasFoundGoal = _hasFoundCheckpoint = _hasTouchedWall = false;
 
-            _targetObjectToFind = null;
-            _nodesToFind[(int)Indexof.Agent] = null;
-            _nodesToFind[(int)Indexof.Check_Point] = null;
-            _targetObjectToFind = _nodesToFind[(int)Indexof.Agent] = _graph.Nodes[items[(int)Indexof.Check_Point]].gameObject; //on init target CP
-            _nodesToFind[(int)Indexof.Check_Point] = _graph.Nodes[items[(int)Indexof.Final_Node]].gameObject; //set final node as second target
+            _target = null;
+            _nodesToFind[(int)IndexofTargetType.Agent] = null;
+            _nodesToFind[(int)IndexofTargetType.Check_Point] = null;
+            _target = _nodesToFind[(int)IndexofTargetType.Agent] = _graph.Nodes[items[(int)IndexofTargetType.Check_Point]].gameObject; //on init target CP
+            _nodesToFind[(int)IndexofTargetType.Check_Point] = _graph.Nodes[items[(int)IndexofTargetType.Final_Node]].gameObject; //set final node as second target
         }
 
         private void SetUpPath(int agentIndex, int checkPointIndex, int finalGoalIndex)
@@ -256,7 +252,7 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void SwitchTargetNode()
         {
-            _targetObjectToFind = _nodesToFind[_findTargetNodeIndex];
+            _target = _nodesToFind[_targetNodeIndex];
         }
 
         private void SetUpDistanceDifferences(int nCheckPoint, int nFinalGoal)
@@ -299,7 +295,7 @@ namespace ML_Agents.PF.Scripts.RL
         private void OnCheckPointAchieved()
         {
             _hasFoundCheckpoint = true;
-            _findTargetNodeIndex++;
+            _targetNodeIndex++;
 
             _trainingStateMachine.RunCheckPointReward();
         }
@@ -316,29 +312,24 @@ namespace ML_Agents.PF.Scripts.RL
         }
 
 
-        private void WriteDijkstraData(int length, string key)
-        {
-            Utils.Utils.WriteDijkstraData(_traveledDistance, length, key);
-        }
-
-        //Use AddReward() to accumulate rewards between decisions.
-        //Use SetReward() to overwrite any previous rewards accumulate between decisions.
-        private void GiveRewardInternal(Use useRewardType, float extraRewardValue)
+        private void GiveRewardInternal(RewardUseType useRewardType, float extraRewardValue)
         {
             switch (useRewardType)
             {
-                case Use.Add_Reward:
+                //Use AddReward() to accumulate rewards between decisions.
+                case RewardUseType.Add_Reward:
                     AddReward(extraRewardValue);
 
                     break;
-                case Use.Set_Reward:
+                //Use SetReward() to overwrite any previous rewards accumulate between decisions.
+                case RewardUseType.Set_Reward:
                     SetReward(extraRewardValue);
 
                     break;
             }
         }
 
-        private void OnTerminalCondition(Use useTypeReward)
+        private void OnTerminalCondition(RewardUseType useTypeReward)
         {
             GiveRewardInternal(useTypeReward, CalculateReward());
             Debug.Log("Terminal Condition");
@@ -346,11 +337,12 @@ namespace ML_Agents.PF.Scripts.RL
             EndEpisode();
         }
 
+        //remove that?
         private float CalculateReward()
         {
             _trainingStateMachine.RunCalculateReward();
 
-            UpdateRewardDataWrapper(conditions.ToArray());
+            // UpdateRewardDataWrapper(conditions.ToArray());
 
             return RewardFunction.GetComplexReward
             (
@@ -362,8 +354,8 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void UpdateRewardDataWrapper(bool[] conditions)
         {
-            _rewardDataWrapper.CurrentDistance = Utils.Utils.GetDistanceDifference(gameObject, _targetObjectToFind);
-            _rewardDataWrapper.CurrentTargetDistance = _nodesDistances[_findTargetNodeIndex];
+            _rewardDataWrapper.CurrentDistance = Utils.Utils.GetDistanceDifference(gameObject, _target);
+            _rewardDataWrapper.CurrentTargetDistance = _nodesDistances[_targetNodeIndex];
             _rewardDataWrapper.HasEpisodeEnd = HasEpisodeEnded();
             _rewardDataWrapper.Conditions = conditions;
         }
@@ -372,6 +364,13 @@ namespace ML_Agents.PF.Scripts.RL
         {
 
             IEnumerable<bool> conditions = null;
+
+            conditions = new List<bool>
+            {
+                _hasFoundCheckpoint,
+                StepCount == MaxStep,
+                _hasTouchedWall
+            };
 
             _trainingStateMachine.RunHasEpisodeEnded();
 

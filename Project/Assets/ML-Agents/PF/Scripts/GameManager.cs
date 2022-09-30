@@ -1,17 +1,21 @@
 using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
+using ML_Agents.PF.Scripts.TrainingStateMachine;
 using UnityEngine;
+
+
 namespace ML_Agents.PF.Scripts
 {
     public class GameManager : MonoBehaviour
     {
 
-        public PhaseType phaseType;
-        public TrainingType trainingType;
+        public PhaseType PhaseType;
+        public TrainingType TrainingType;
 
+        [Space]
         public RewardData RewardData;
 
-        public StateMachine _stateMachine { get; private set; }
+        public TrainingStateMachine.TrainingStateMachine TrainingStateMachine{ get; private set; }
 
         public static GameManager Instance;
 
@@ -20,22 +24,29 @@ namespace ML_Agents.PF.Scripts
             if (Instance == null)
                 Instance = this;
 
-            _stateMachine = new StateMachine(phaseType, trainingType); //TODO : create state machince
+
             Utils.Utils.GatherAssets();
+
+            TrainingStateMachine = CreateStateMachine();
+
+            if (TrainingStateMachine == null)
+            {
+                Debug.LogError("State Machine => null");
+            }
         }
 
 
-        //move this
-        public class StateMachine
+        public TrainingStateMachine.TrainingStateMachine CreateStateMachine()
         {
-            public PhaseType PhaseType;
-            public TrainingType TrainingType;
-
-            public StateMachine(PhaseType phaseType, TrainingType trainingType)
+            if (TrainingType == TrainingType.Advanced)
             {
-                PhaseType = phaseType;
-                TrainingType = trainingType;
+                return new AdvancedTraining();
             }
+            else
+            {
+                return new SimpleTraining();
+            }
+
         }
     }
 }

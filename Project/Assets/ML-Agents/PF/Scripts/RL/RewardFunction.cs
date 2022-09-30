@@ -2,6 +2,7 @@
 using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Structs;
 using UnityEngine;
+
 namespace ML_Agents.PF.Scripts.RL
 {
     public static class RewardFunction

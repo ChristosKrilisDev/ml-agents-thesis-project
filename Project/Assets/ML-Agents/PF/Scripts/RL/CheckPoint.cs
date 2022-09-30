@@ -41,7 +41,7 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void OnCollisionEnter(Collision other)
         {
-            if((int)GameManager.Instance._stateMachine.PhaseType <= 2) return;
+            if((int)GameManager.Instance.PhaseType <= 2) return;
 
             if (other.gameObject.CompareTag("agent") && !GetState)
                 ToggleState(false);
