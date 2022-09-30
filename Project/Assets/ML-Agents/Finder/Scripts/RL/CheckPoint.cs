@@ -1,6 +1,5 @@
 using UnityEngine;
-
-namespace ML_Agents.Finder.Scripts
+namespace ML_Agents.Finder.Scripts.RL
 {
     public class CheckPoint : MonoBehaviour
     {
@@ -26,8 +25,8 @@ namespace ML_Agents.Finder.Scripts
             _myButton = transform.GetChild(0).gameObject;
             _renderer = _myButton.GetComponent<Renderer>();
 
-            _onMaterial = EpisodeHandler.OnButtonMaterial;
-            _offMaterial = EpisodeHandler.OffButtonMaterial;
+            _onMaterial = Utils.Utils.OnButtonMaterial;
+            _offMaterial = Utils.Utils.OffButtonMaterial;
         }
 
         public void Init(int cpSpawnIndex, int goalSpawnIndex)

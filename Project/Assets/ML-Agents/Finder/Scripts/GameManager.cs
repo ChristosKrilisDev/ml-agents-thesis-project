@@ -1,3 +1,4 @@
+using ML_Agents.Finder.Scripts.Enums;
 using UnityEngine;
 
 
@@ -5,19 +6,6 @@ namespace ML_Agents.Finder.Scripts
 {
     public class GameManager : MonoBehaviour
     {
-
-        public enum TrainingType
-        {
-            Simple = 1,
-            Advanced = 2,
-        }
-        public enum PhaseType
-        {
-            Phase_A = 1,
-            Phase_B = 2,
-            Phase_C = 3,
-            Phase_D = 4,
-        }
 
         public PhaseType phaseType;
         public TrainingType trainingType;
@@ -33,10 +21,12 @@ namespace ML_Agents.Finder.Scripts
             if (Instance == null)
                 Instance = this;
 
-            _stateMachine = new StateMachine(phaseType, trainingType);
-            EpisodeHandler.Init();
+            _stateMachine = new StateMachine(phaseType, trainingType); //TODO : create state machince
+            Utils.Utils.GatherAssets();
         }
 
+
+        //move this
         public class StateMachine
         {
             public PhaseType PhaseType;

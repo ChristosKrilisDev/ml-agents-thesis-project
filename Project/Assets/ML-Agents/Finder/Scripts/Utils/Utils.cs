@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Unity.MLAgents;
 using UnityEditor;
 using UnityEngine;
 
-namespace ML_Agents.Finder.Scripts
+namespace ML_Agents.Finder.Scripts.Utils
 {
-    public static class EpisodeHandler
+    public static class Utils
     {
 
-        public static void Init()
+        public static void GatherAssets()
         {
             GetButtonMaterials();
             GetPrefabsNodesMaterials();
@@ -43,6 +43,8 @@ namespace ML_Agents.Finder.Scripts
 
     #endregion
 
+    #region In-Game Useful methods
+
         /// <summary>
         /// if any condition is true then the episode is done and return true
         /// </summary>
@@ -62,9 +64,9 @@ namespace ML_Agents.Finder.Scripts
         /// Check the distance ~ Dijkstra
         /// </summary>
         /// <returns>true if the distance that agent did is less than dijstras shortest path length</returns>
-        public static bool CompareCurrentDistance(float currentDistanceTraveled, float pathLength, float multiplier = 1)
+        public static bool CompareCurrentDistanceWithMaxLengthPath(float currentDistanceTraveled, float pathLength)
         {
-            return currentDistanceTraveled <= pathLength;
+            return currentDistanceTraveled <= pathLength + GameManager.Instance.RewardData.ExtraDistance;
         }
 
         /// <summary>
@@ -110,5 +112,19 @@ namespace ML_Agents.Finder.Scripts
             return diff / (absA + absB) < epsilon;
 
         }
+
+    #endregion
+
+    #region TENSOR BOARD DATA
+
+        public static void WriteDijkstraData(float traveledDistance, float length, string key)
+        {
+            var followedDijkstra = Utils.CompareCurrentDistanceWithMaxLengthPath(traveledDistance, length) ? 1 : 0;
+            Academy.Instance.StatsRecorder.Add(key, followedDijkstra, StatAggregationMethod.Histogram);
+        }
+
+    #endregion
+
+
     }
 }

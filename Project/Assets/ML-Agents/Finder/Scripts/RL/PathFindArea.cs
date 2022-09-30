@@ -1,13 +1,12 @@
 using UnityEngine;
-
-namespace ML_Agents.Finder.Scripts
+namespace ML_Agents.Finder.Scripts.RL
 {
     public class PathFindArea : MonoBehaviour
     {
         [SerializeField] private GameObject[] _spawnAreas;
 
-        private static GameObject GoalNodePref => EpisodeHandler.FinalNode;
-        private static GameObject BlockPref => EpisodeHandler.SimpleNode;
+        private static GameObject GoalNodePref => Utils.Utils.FinalNode;
+        private static GameObject BlockPref => Utils.Utils.SimpleNode;
         private const string OBJECT_TAG = "pfobj";
 
         private Transform[] _nodes;

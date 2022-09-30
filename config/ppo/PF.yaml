@@ -13,7 +13,7 @@ behaviors:
     network_settings:
       normalize: false
       hidden_units: 512 #128        #how many units / layer
-      num_layers: 2                 #how many layers inbetween input-output layers , more complex problem could be easier with CNN
+      num_layers: 4                 #how many layers inbetween input-output layers , more complex problem could be easier with CNN
       vis_encode_type: simple
     reward_signals:
       extrinsic:
