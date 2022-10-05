@@ -1,125 +1,164 @@
 ﻿using System.Collections.Generic;
+using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
+using ML_Agents.PF.Scripts.RL;
+using ML_Agents.PF.Scripts.Structs;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
 
 namespace ML_Agents.PF.Scripts.TrainingStateMachine
 {
-    public class TrainingStateMachine
+    public abstract class TrainingStateMachine
     {
-        // private readonly List<UnityEvent> _actions;
 
-        public PhaseType PhaseType;
-        public TrainingType TrainingType;
+    #region Vars
 
-        public float MaxStep;
+        protected static RewardData RewardData => GameManager.Instance.RewardData;
 
-        protected int _traveledDistance;
-        protected int _checkPointLength;
-        protected int _pathTotalLength;
+        protected readonly PhaseType PhaseType;
+        protected readonly TrainingType TrainingType;
+        public readonly ConditionsData ConditionsData;
 
-        public const string CP_D_KEY = "Agent/Check Point Dijkstra Success Rate";
-        public const string FULL_D_KEY = "Agent/Full Dijkstra Success Rate";
+        protected const string CHECK_POINT_KEY = "Agent/Check Point Dijkstra Success Rate";
+        protected const string FINAL_GOAL_KEY = "Agent/Full Dijkstra Success Rate";
 
 
+        protected abstract List<bool> CreateEndConditionsList();
+        protected List<bool> HasEndConditions = new List<bool>();
 
-        public TrainingStateMachine(PhaseType phaseType, TrainingType trainingType)
+
+
+
+        public readonly List<bool> RewardConditions;
+        public RewardDataStruct RewardDataStruct;
+
+        public UnityAction EndEpisodeCallBack;
+        public UnityAction<RewardUseType, float> GiveInternalRewardCallBack;
+        public UnityAction SwitchTargetNodeCallBack;
+        public UnityAction UpdateRewardDataWrapperCallBack;
+
+
+    #endregion
+
+    #region Constractors
+
+        protected TrainingStateMachine(PhaseType phaseType, TrainingType trainingType)
         {
             PhaseType = phaseType;
             TrainingType = trainingType;
+            ConditionsData = new ConditionsData();
+
+            Debug.Log("State Machine");
+            RewardConditions = CreateRewardConditionsList();
         }
 
-        public TrainingStateMachine()
+        private List<bool> CreateRewardConditionsList()
         {
-            //List<UnityEvent> actions
-            // _actions = actions;
-        }
-
-
-
-        public virtual void RunStepReward()
-        {
-
-            if (RunHasEpisodeEnded())
+            if (PhaseType == PhaseType.Phase_D)
             {
-                CalculateReward();
-                // Debug.Log("Episode Ended | Calculated reward : " + CalculateReward());
-                GiveRewardInternal(RewardUseType.Add_Reward, CalculateReward());
-                EndEpisode();
+                return new List<bool>()
+                {
+                    Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.PathTotalLength) && ConditionsData.HasFoundGoal && ConditionsData.HasFoundCheckpoint,
+                    ConditionsData.HasFoundGoal,
+                    ConditionsData.HasFoundCheckpoint,
+                };
             }
 
-            // foreach (var action in _actions)
-            // {
-            //     action?.Invoke();
-            // }
+            return new List<bool>()
+            {
+                Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.PathTotalLength) && ConditionsData.HasFoundCheckpoint,
+                ConditionsData.HasFoundCheckpoint,
+            };
         }
 
-        public virtual void RunCheckPointReward()
+    #endregion
+
+    #region Virtual Methods
+
+        //class specific
+        public virtual void RunOnStepReward()
+        {
+            if (PhaseType == PhaseType.Phase_C) //valideate this
+            {
+                //give a negative reward each time agent makes an action
+                ConditionsData.StepFactor = (ConditionsData.StepFactor - ConditionsData.MaxStep) / ConditionsData.MaxStep; //current step?
+                RunGiveRewardInternal(RewardUseType.Add_Reward, - ConditionsData.StepFactor);
+            }
+
+            if (!HasEpisodeEnded()) return;
+
+            RunCalculateComplexReward();
+            RunEndEpisode();
+        }
+
+        public virtual void RunOnCheckPointReward()
+        {
+            Debug.Log("Check point done");
+
+            if ((int)PhaseType >= 3)
+            {
+                SwitchTargetNodeCallBack?.Invoke();
+            }
+        }
+
+        public virtual void RunOnFinalGoalReward()
+        {
+            Debug.Log("Check point done");
+
+        }
+
+        public void RunOnHarmfulCollision()
+        {
+            if (PhaseType != PhaseType.Phase_A)
+            {
+                RunGiveRewardInternal(RewardUseType.Add_Reward, GameManager.Instance.RewardData.WallPenalty / 2);
+            }
+            else
+            {
+                RunGiveRewardInternal(RewardUseType.Set_Reward, GameManager.Instance.RewardData.WallPenalty);
+                HasEpisodeEnded();
+            }
+        }
+
+        protected virtual void RunOnTerminalCondition(RewardUseType rType)
         {
 
         }
 
-        public virtual void RunFinalGoalReward()
-        {
 
+
+    #endregion
+
+    #region Protected Methods CallBacks
+
+        protected float RunCalculateComplexReward()
+        {
+            UpdateRewardDataWrapperCallBack?.Invoke();
+            return RewardFunction.GetComplexReward(RewardDataStruct);
         }
 
-
-
-        public virtual void RunHarmfulCollision()
+        protected void RunGiveRewardInternal(RewardUseType rewardUseType, float reward)
         {
-            // if (GameManager.Instance._stateMachine.PhaseType != GameManager.PhaseType.Phase_A)
-            // {
-            //     GiveRewardInternal(UxmlAttributeDescription.Use.Add_Reward, GameManager.Instance.RewardData.WallPenalty / 2);
-            //
-            //     return;
-            // }
-            // GiveRewardInternal(UxmlAttributeDescription.Use.Set_Reward, GameManager.Instance.RewardData.WallPenalty);
+            GiveInternalRewardCallBack?.Invoke(rewardUseType, reward);
         }
 
-        public virtual bool RunHasEpisodeEnded()
+        protected void RunEndEpisode()
         {
-
-            return true;
+            EndEpisodeCallBack?.Invoke();
         }
 
-        public float CalculateReward()
+        protected void RunDijkstraDataWriter(int length, string key)
         {
-            return 1;
+            Utils.Utils.WriteDijkstraData(ConditionsData.TraveledDistance, length, key);
         }
 
-        public void RunCalculateReward()
+    #endregion
+
+
+        public bool HasEpisodeEnded()
         {
-            // var conditions = GameManager.Instance._stateMachine.PhaseType == GameManager.PhaseType.Phase_D ?
-            //     new List<bool>()
-            //     {
-            //         Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(_traveledDistance, _pathTotalLength) && _hasFoundGoal && _hasFoundCheckpoint,
-            //         _hasFoundGoal,
-            //         _hasFoundCheckpoint,
-            //     }
-            //     : new List<bool>()
-            //     {
-            //         Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(_traveledDistance, _pathTotalLength) && _hasFoundCheckpoint,
-            //         _hasFoundCheckpoint,
-            //     };
+            return Utils.Utils.HasEpisodeEnded(RewardConditions);
         }
 
-
-
-        public void DijkstraDataParsh(int length, string key)
-        {
-            Utils.Utils.WriteDijkstraData(_traveledDistance, length, key);
-        }
-
-        public void GiveRewardInternal(RewardUseType rewardUseType , float reward)
-        {
-
-        }
-
-        public void EndEpisode()
-        {
-
-        }
     }
 }

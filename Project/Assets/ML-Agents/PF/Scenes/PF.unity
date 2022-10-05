@@ -2893,8 +2893,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0d2cfd998b8eb49b560f4cc301fc5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  phaseType: 1
-  trainingType: 2
+  PhaseType: 0
+  TrainingType: 0
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
 --- !u!4 &686440863
 Transform:
@@ -8507,8 +8507,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7de34eebf779ace43b282ff5aa0d7034,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 114399412043818042, guid: bd804431e808a492bb5658bcd296e58e,
         type: 3}
       propertyPath: m_BehaviorType

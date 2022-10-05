@@ -23,27 +23,27 @@ namespace ML_Agents.PF.Scripts.RL
         /// <hasEpisodeEnded> Whenever the episodes ends, calculate terminal reward </hasEpisodeEnded>
         ///
         /// <calculateReward> The reward agent will take for that state based based on the reward state</calculateReward>
-        public static float GetComplexReward(RewardDataWrapper rewardDataWrapper)
+        public static float GetComplexReward(RewardDataStruct rewardDataStruct)
         {
             float calculateReward;
 
-            if (!rewardDataWrapper.HasEpisodeEnd)
+            if (!rewardDataStruct.HasEpisodeEnd)
             {
-                calculateReward = GetStepRewardReward(rewardDataWrapper.CurrentDistance, rewardDataWrapper.CurrentTargetDistance);
+                calculateReward = GetStepRewardReward(rewardDataStruct.CurrentDistance, rewardDataStruct.CurrentTargetDistance);
                 return calculateReward;
             }
 
-            CreateConditionsList(rewardDataWrapper, out var conditions);
+            CreateConditionsList(rewardDataStruct, out var conditions);
             calculateReward = GetTerminalConditionReward(conditions);
 
             return calculateReward;
         }
 
 
-        private static void CreateConditionsList(RewardDataWrapper rewardDataWrapper, out List<bool> conditions)
+        private static void CreateConditionsList(RewardDataStruct rewardDataStruct, out List<bool> conditions)
         {
             conditions = new List<bool>();
-            foreach (var condition in rewardDataWrapper.Conditions)
+            foreach (var condition in rewardDataStruct.Conditions)
             {
                 conditions.Add(condition);
             }

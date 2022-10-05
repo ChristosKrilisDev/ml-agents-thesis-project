@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dijkstra.Scripts;
+using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.Structs;
 using Unity.MLAgents;
@@ -10,11 +11,11 @@ using Unity.MLAgents.Sensors;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-
 namespace ML_Agents.PF.Scripts.RL
 {
     public class PathFindAgent : Agent
     {
+
     #region Vars
 
         [Header("Agent behavior Vars")] [Space]
@@ -26,17 +27,6 @@ namespace ML_Agents.PF.Scripts.RL
         [SerializeField] private Graph _graph;
 
         private TrainingStateMachine.TrainingStateMachine _trainingStateMachine;
-        private int _checkPointLength;
-        private int _pathTotalLength;
-        private float _traveledDistance;
-
-        private float _stepFactor;
-        // private float _previousStepReward; //factor this
-
-        private RewardDataWrapper _rewardDataWrapper;
-        private bool _hasTouchedWall;
-        private bool _hasFoundCheckpoint;
-        private bool _hasFoundGoal;
 
         private readonly GameObject[] _nodesToFind = new GameObject[2];
         private readonly float[] _nodesDistances = new float[2];
@@ -45,18 +35,42 @@ namespace ML_Agents.PF.Scripts.RL
 
         private Rigidbody _agentRb;
 
-        //move theses
+        private RewardDataStruct _rewardDataStruct; //move this
 
     #endregion
 
-    #region Agent
+    #region Inits
 
         public override void Initialize()
         {
             _agentRb = GetComponent<Rigidbody>();
 
-            _trainingStateMachine = new TrainingStateMachine.TrainingStateMachine(); //get it from the game manager
+            _trainingStateMachine = GameManager.Instance.TrainingStateMachine; //get it from the game manager
+
+            if (_trainingStateMachine is null)
+            {
+                throw new NullReferenceException("State Machine is null");
+            }
+            if (_trainingStateMachine.ConditionsData is null)
+            {
+                throw new NullReferenceException("Conditions data are null");
+            }
+
+            SetCallBacks();
         }
+
+        private void SetCallBacks()
+        {
+            _trainingStateMachine.EndEpisodeCallBack += EndEpisode;
+            _trainingStateMachine.GiveInternalRewardCallBack += GiveRewardInternal;
+            _trainingStateMachine.SwitchTargetNodeCallBack += SwitchTargetNode;
+            _trainingStateMachine.UpdateRewardDataWrapperCallBack += UpdateRewardDataWrapper;
+        }
+
+    #endregion
+
+    #region Agent
+
         /// <summary>
         /// what data the ai needs in order to solve the problem
         /// A reasonable approach for determining what information
@@ -92,7 +106,7 @@ namespace ML_Agents.PF.Scripts.RL
             }
 
             //note : maybe add the Nodes dijkstra
-            sensor.AddObservation(_stepFactor); //1
+            sensor.AddObservation(_trainingStateMachine.ConditionsData.StepFactor); //1
         }
 
         public override void Heuristic(in ActionBuffers actionsOut)
@@ -202,20 +216,16 @@ namespace ML_Agents.PF.Scripts.RL
             //nodes transform has updated through the PFArea.cs above(ref nodeTransforms);
 
             //collect all the data
-            _rewardDataWrapper = new RewardDataWrapper();
+            _rewardDataStruct = new RewardDataStruct();
         }
 
         private void ResetTmpVars(IReadOnlyList<int> items)
         {
-            // _pathTotalLength = 0;
-            // _previousStepReward = 0;
-            _targetNodeIndex = 0;
-            _stepFactor = 0;
-            _traveledDistance = -1;
-            // _blockStepReward = false;
-            _hasFoundGoal = _hasFoundCheckpoint = _hasTouchedWall = false;
+            _trainingStateMachine.ConditionsData.Reset();
 
             _target = null;
+            _targetNodeIndex = 0;
+
             _nodesToFind[(int)IndexofTargetType.Agent] = null;
             _nodesToFind[(int)IndexofTargetType.Check_Point] = null;
             _target = _nodesToFind[(int)IndexofTargetType.Agent] = _graph.Nodes[items[(int)IndexofTargetType.Check_Point]].gameObject; //on init target CP
@@ -225,29 +235,24 @@ namespace ML_Agents.PF.Scripts.RL
         private void SetUpPath(int agentIndex, int checkPointIndex, int finalGoalIndex)
         {
             //calculate the distance player - Checkpoint - goal
-            {
-                //visual tool
-                _graph.StartNode = _graph.Nodes[agentIndex];
-                _graph.CheckPointNode = _graph.Nodes[checkPointIndex];
-                _graph.EndNode = _graph.Nodes[finalGoalIndex];
+            _graph.StartNode = _graph.Nodes[agentIndex];
+            _graph.CheckPointNode = _graph.Nodes[checkPointIndex];
+            _graph.EndNode = _graph.Nodes[finalGoalIndex];
 
-                var pathLen1 = GetShortestPathLength(_graph.StartNode, _graph.CheckPointNode);
-                var pathLen2 = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
-                var tmp = pathLen1 + pathLen2;
-                _checkPointLength = (int)pathLen1; //TODO : make them int
-                _pathTotalLength = (int)tmp;
-
-                // Debug.Log($" Min Length : {_pathTotalLength} = {pathLen1} + {pathLen2}");
-            }
+            var pathLen1 = GetShortestPathLength(_graph.StartNode, _graph.CheckPointNode);
+            var pathLen2 = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
+            var tmp = pathLen1 + pathLen2;
+            _trainingStateMachine.ConditionsData.CheckPointLength = pathLen1;
+            _trainingStateMachine.ConditionsData.PathTotalLength = tmp;
         }
 
-        private float GetShortestPathLength(Node from, Node to)
+        private int GetShortestPathLength(Node from, Node to)
         {
             var path = _graph.GetShortestPath(from, to);
 
             if (path.Length <= 0) return -1;
 
-            return path.Length;
+            return (int)path.Length;
         }
 
         private void SwitchTargetNode()
@@ -266,11 +271,13 @@ namespace ML_Agents.PF.Scripts.RL
 
     #endregion
 
+    #region Collition Methods
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("spawnArea"))
             {
-                _traveledDistance++;
+                _trainingStateMachine.ConditionsData.TraveledDistance++;
                 // Debug.Log($"- Agent Distance : {_traveledDistance} | Current node =>{other.gameObject.name}");
             }
         }
@@ -284,33 +291,35 @@ namespace ML_Agents.PF.Scripts.RL
             if (collision.gameObject.CompareTag("goal")) { OnFinalGoalAchieved(); }
         }
 
-    #region RewardMethods
+    #endregion
+
+    #region Reward State Methods
 
         private void OnHarmfulCollision()
         {
-            _hasTouchedWall = true;
-            _trainingStateMachine.RunHarmfulCollision();
+            _trainingStateMachine.ConditionsData.HasTouchedWall = true;
+            _trainingStateMachine.RunOnHarmfulCollision();
         }
 
         private void OnCheckPointAchieved()
         {
-            _hasFoundCheckpoint = true;
+            _trainingStateMachine.ConditionsData.HasFoundCheckpoint = true;
             _targetNodeIndex++;
 
-            _trainingStateMachine.RunCheckPointReward();
+            _trainingStateMachine.RunOnCheckPointReward();
         }
 
         private void OnFinalGoalAchieved()
         {
-            _hasFoundGoal = true;
-            _trainingStateMachine.RunFinalGoalReward();
+            _trainingStateMachine.ConditionsData.HasFoundGoal = true;
+            _trainingStateMachine.RunOnFinalGoalReward();
         }
 
         private void StepReward()
         {
-            _trainingStateMachine.RunStepReward();
+            _trainingStateMachine.ConditionsData.StepCount = StepCount;
+            _trainingStateMachine.RunOnStepReward();
         }
-
 
         private void GiveRewardInternal(RewardUseType useRewardType, float extraRewardValue)
         {
@@ -329,53 +338,22 @@ namespace ML_Agents.PF.Scripts.RL
             }
         }
 
-        private void OnTerminalCondition(RewardUseType useTypeReward)
-        {
-            GiveRewardInternal(useTypeReward, CalculateReward());
-            Debug.Log("Terminal Condition");
-            Debug.Log(CalculateReward());
-            EndEpisode();
-        }
-
-        //remove that?
-        private float CalculateReward()
-        {
-            _trainingStateMachine.RunCalculateReward();
-
-            // UpdateRewardDataWrapper(conditions.ToArray());
-
-            return RewardFunction.GetComplexReward
-            (
-                _rewardDataWrapper
-            );
-        }
-
     #endregion
 
-        private void UpdateRewardDataWrapper(bool[] conditions)
+    #region UpdateData
+
+        private void UpdateRewardDataWrapper()
         {
-            _rewardDataWrapper.CurrentDistance = Utils.Utils.GetDistanceDifference(gameObject, _target);
-            _rewardDataWrapper.CurrentTargetDistance = _nodesDistances[_targetNodeIndex];
-            _rewardDataWrapper.HasEpisodeEnd = HasEpisodeEnded();
-            _rewardDataWrapper.Conditions = conditions;
+            _rewardDataStruct.CurrentDistance = Utils.Utils.GetDistanceDifference(gameObject, _target);
+            _rewardDataStruct.CurrentTargetDistance = _nodesDistances[_targetNodeIndex];
+            _rewardDataStruct.HasEpisodeEnd = _trainingStateMachine.HasEpisodeEnded();
+            _rewardDataStruct.Conditions = _trainingStateMachine.RewardConditions.ToArray();
+
+            _trainingStateMachine.RewardDataStruct = _rewardDataStruct;
         }
 
-        private bool HasEpisodeEnded()
-        {
 
-            IEnumerable<bool> conditions = null;
-
-            conditions = new List<bool>
-            {
-                _hasFoundCheckpoint,
-                StepCount == MaxStep,
-                _hasTouchedWall
-            };
-
-            _trainingStateMachine.RunHasEpisodeEnded();
-
-            return Utils.Utils.HasEpisodeEnded(conditions);
-        }
+    #endregion
     }
 
 }
