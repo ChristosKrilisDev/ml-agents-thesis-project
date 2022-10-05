@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
 using Unity.MLAgents;
 using UnityEngine;

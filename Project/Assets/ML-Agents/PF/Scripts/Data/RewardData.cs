@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+
 namespace ML_Agents.PF.Scripts.Data
 {
     [CreateAssetMenu(fileName = "RewardData", menuName = "Data/RewardData", order = 0)]

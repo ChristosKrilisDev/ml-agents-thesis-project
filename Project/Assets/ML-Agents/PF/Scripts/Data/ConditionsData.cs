@@ -1,5 +1,5 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+
 namespace ML_Agents.PF.Scripts.Data
 {
     public class ConditionsData

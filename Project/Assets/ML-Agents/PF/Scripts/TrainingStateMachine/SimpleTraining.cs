@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
 
 namespace ML_Agents.PF.Scripts.TrainingStateMachine

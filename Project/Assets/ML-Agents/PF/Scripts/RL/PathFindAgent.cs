@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dijkstra.Scripts;
-using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.Structs;
 using Unity.MLAgents;
