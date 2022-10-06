@@ -18,7 +18,7 @@ namespace ML_Agents.PF.Scripts.RL
     #region Vars
 
         [Header("Agent behavior Vars")] [Space]
-        [SerializeField] private bool _useVectorObservations;
+        [SerializeField] private bool _useVectorObservations = true;
 
         [Header("Area Vars")] [Space]
         [SerializeField] private PathFindArea _area;
@@ -44,6 +44,7 @@ namespace ML_Agents.PF.Scripts.RL
         {
             _agentRb = GetComponent<Rigidbody>();
 
+            //TODO : error , each agent should have its own state machine?
             _trainingStateMachine = GameManager.Instance.TrainingStateMachine; //get it from the game manager
 
             if (_trainingStateMachine is null)
@@ -215,7 +216,9 @@ namespace ML_Agents.PF.Scripts.RL
             //nodes transform has updated through the PFArea.cs above(ref nodeTransforms);
 
             //collect all the data
+
             _rewardDataStruct = new RewardDataStruct();
+            _trainingStateMachine.ConditionsData.MaxStep = MaxStep;
         }
 
         private void ResetTmpVars(IReadOnlyList<int> items)

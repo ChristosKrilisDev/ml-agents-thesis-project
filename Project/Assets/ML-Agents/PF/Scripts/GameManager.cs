@@ -40,9 +40,10 @@ namespace ML_Agents.PF.Scripts
         {
             if (TrainingType == TrainingType.Advanced)
             {
+                Debug.Log("Advaced Trainig");
                 return new AdvancedTraining(PhaseType, TrainingType);
             }
-
+            Debug.Log("Simple Trainig");
             return new SimpleTraining(PhaseType, TrainingType);
         }
     }

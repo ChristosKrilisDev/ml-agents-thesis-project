@@ -12,8 +12,13 @@ Project/Assets/Resources/*
 #Models
 Project/Assets/ML-Agents/Finder/TFModels/*
 
+#debug tool
+Project/Assets/ConsolePro/*
+Project/Assets/ConsolePro.meta
+
 # Training environments
 /envs
+
 
 # Environemnt logfile
 *Project.log

@@ -39,7 +39,6 @@ namespace ML_Agents.PF.Scripts.RL
             return calculateReward;
         }
 
-
         private static void CreateConditionsList(RewardDataStruct rewardDataStruct, out List<bool> conditions)
         {
             conditions = new List<bool>();

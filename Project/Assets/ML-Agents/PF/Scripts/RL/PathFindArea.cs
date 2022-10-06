@@ -1,4 +1,5 @@
 using UnityEngine;
+
 namespace ML_Agents.PF.Scripts.RL
 {
     public class PathFindArea : MonoBehaviour

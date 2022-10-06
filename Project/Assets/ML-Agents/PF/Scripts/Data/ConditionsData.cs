@@ -9,7 +9,7 @@ namespace ML_Agents.PF.Scripts.Data
         /// Contains the data condition related data
         /// </summary>
 
-        public int MaxStep;
+        public int MaxStep = 1500;
         public int StepCount;
         public float StepFactor;
 
@@ -29,7 +29,7 @@ namespace ML_Agents.PF.Scripts.Data
 
         public void Reset()
         {
-            MaxStep= 0;
+            MaxStep= 1500;
             StepCount= 0;
             StepFactor= 0;
             TraveledDistance= -1;

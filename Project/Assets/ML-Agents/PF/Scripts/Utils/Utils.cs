@@ -30,7 +30,7 @@ namespace ML_Agents.PF.Scripts.Utils
 
     #region GetPrefabs
 
-        private const string PREFABS_ROOT_PATH = "Assets/ML-Agents/Finder/Prefabs";
+        private const string PREFABS_ROOT_PATH = "Assets/ML-Agents/PF/Prefabs";
         public static GameObject FinalNode;
         public static GameObject SimpleNode;
 
@@ -118,7 +118,7 @@ namespace ML_Agents.PF.Scripts.Utils
 
         public static void WriteDijkstraData(float traveledDistance, float length, string key)
         {
-            var followedDijkstra = Utils.CompareCurrentDistanceWithMaxLengthPath(traveledDistance, length) ? 1 : 0;
+            var followedDijkstra = CompareCurrentDistanceWithMaxLengthPath(traveledDistance, length) ? 1 : 0;
             Academy.Instance.StatsRecorder.Add(key, followedDijkstra, StatAggregationMethod.Histogram);
         }
 

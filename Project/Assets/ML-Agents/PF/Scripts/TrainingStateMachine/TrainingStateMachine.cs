@@ -27,8 +27,6 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
         protected List<bool> HasEndConditions = new List<bool>();
 
 
-
-
         public readonly List<bool> RewardConditions;
         public RewardDataStruct RewardDataStruct;
 
@@ -78,22 +76,23 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
         //class specific
         public virtual void RunOnStepReward()
         {
-            if (PhaseType == PhaseType.Phase_C) //valideate this
+            // if (PhaseType == PhaseType.Phase_C)
+            // {
+            //     //give a negative reward each time agent makes an action
+            //     ConditionsData.StepFactor = (ConditionsData.StepFactor - ConditionsData.MaxStep) / ConditionsData.MaxStep; //current step?
+            //     RunGiveRewardInternal(RewardUseType.Add_Reward, - ConditionsData.StepFactor);
+            // }
+
+            if (HasEpisodeEnded())
             {
-                //give a negative reward each time agent makes an action
-                ConditionsData.StepFactor = (ConditionsData.StepFactor - ConditionsData.MaxStep) / ConditionsData.MaxStep; //current step?
-                RunGiveRewardInternal(RewardUseType.Add_Reward, - ConditionsData.StepFactor);
+                RunCalculateComplexReward();
+                RunEndEpisodeCallBack();
             }
-
-            if (!HasEpisodeEnded()) return;
-
-            RunCalculateComplexReward();
-            RunEndEpisode();
         }
 
         public virtual void RunOnCheckPointReward()
         {
-            Debug.Log("Check point done");
+            Debug.Log("Check point => done");
 
             if ((int)PhaseType >= 3)
             {
@@ -103,20 +102,22 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
         public virtual void RunOnFinalGoalReward()
         {
-            Debug.Log("Check point done");
+            Debug.Log("Final point => done");
 
         }
 
         public void RunOnHarmfulCollision()
         {
-            if (PhaseType != PhaseType.Phase_A)
+            if (PhaseType == PhaseType.Phase_A)
             {
-                RunGiveRewardInternal(RewardUseType.Add_Reward, GameManager.Instance.RewardData.WallPenalty / 2);
+                Debug.Log("touched wall => dead");
+                RunGiveRewardInternal(RewardUseType.Set_Reward, GameManager.Instance.RewardData.WallPenalty);
+                RunEndEpisodeCallBack();
             }
             else
             {
-                RunGiveRewardInternal(RewardUseType.Set_Reward, GameManager.Instance.RewardData.WallPenalty);
-                HasEpisodeEnded();
+                Debug.Log("Touched wall");
+                RunGiveRewardInternal(RewardUseType.Add_Reward, GameManager.Instance.RewardData.WallPenalty / 2);
             }
         }
 
@@ -142,8 +143,9 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             GiveInternalRewardCallBack?.Invoke(rewardUseType, reward);
         }
 
-        protected void RunEndEpisode()
+        protected void RunEndEpisodeCallBack()
         {
+            Debug.Log("Episode ended");
             EndEpisodeCallBack?.Invoke();
         }
 

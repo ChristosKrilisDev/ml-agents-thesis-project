@@ -2893,8 +2893,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0d2cfd998b8eb49b560f4cc301fc5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PhaseType: 0
-  TrainingType: 0
+  PhaseType: 1
+  TrainingType: 1
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
 --- !u!4 &686440863
 Transform:
@@ -6902,7 +6902,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1633286455
 Transform:
   m_ObjectHideFlags: 0
@@ -6910,13 +6910,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1633286454}
-  m_LocalRotation: {x: -0, y: 0.95307505, z: -0.30273414, w: 0}
-  m_LocalPosition: {x: 1.11, y: 6.82, z: -0.54}
+  m_LocalRotation: {x: -0, y: 0.98308843, z: -0.1831314, w: 0}
+  m_LocalPosition: {x: 1.11, y: 3.6, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 35.244, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 21.104, y: 180, z: 0}
 --- !u!114 &1633286456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6931,7 +6931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1534969848}
   smoothingTime: 0.055
-  m_Offset: {x: 0, y: 4, z: 6}
+  m_Offset: {x: 0.36, y: 11.4, z: 7.14}
 --- !u!20 &1633286457
 Camera:
   m_ObjectHideFlags: 0
@@ -8459,6 +8459,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4518417139497368, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.549
+      objectReference: {fileID: 0}
     - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -8516,6 +8520,11 @@ PrefabInstance:
     - target: {fileID: 114399412043818042, guid: bd804431e808a492bb5658bcd296e58e,
         type: 3}
       propertyPath: m_InferenceDevice
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114937736047215868, guid: bd804431e808a492bb5658bcd296e58e,
+        type: 3}
+      propertyPath: _useVectorObservations
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
