@@ -23,11 +23,11 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
             if ((PhaseType is PhaseType.Phase_B) || PhaseType is PhaseType.Phase_C)
             {
-                RunGiveRewardInternal(RewardUseType.Add_Reward, reward * 10f);  //0.1f
+                GiveRewardInternalCallBack(RewardUseType.Add_Reward, reward / 1000f);  //0.1f
             }
             else if (PhaseType == PhaseType.Phase_D)
             {
-                RunGiveRewardInternal(RewardUseType.Add_Reward, reward * 100f); //0.01f
+                GiveRewardInternalCallBack(RewardUseType.Add_Reward, reward / 100f); //0.01f
             }
 
         } //done
@@ -38,26 +38,27 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
             if (PhaseType == PhaseType.Phase_A)
             {
-                RunGiveRewardInternal(RewardUseType.Set_Reward, RewardData.Reward);
-                RunEndEpisodeCallBack();
+                GiveRewardInternalCallBack(RewardUseType.Set_Reward, RewardData.Reward);
+                EpisodeEndCallBack();
             }
             else
             {
                 if (PhaseType == PhaseType.Phase_B)
                 {
-                    RunGiveRewardInternal(RewardUseType.Add_Reward, RewardData.Reward / 2);
-                    RunEndEpisodeCallBack();
+                    GiveRewardInternalCallBack(RewardUseType.Add_Reward, RewardData.Reward / 2);
+                    EpisodeEndCallBack();
                 }
                 else if (PhaseType == PhaseType.Phase_C || PhaseType == PhaseType.Phase_D)
                 {
-                    RunGiveRewardInternal(RewardUseType.Add_Reward, RewardData.Reward / 3);
-
+                    GiveRewardInternalCallBack(RewardUseType.Add_Reward, RewardData.Reward / 3);
                 }
 
-                RunDijkstraDataWriter(ConditionsData.CheckPointLength, CHECK_POINT_KEY);
-                if (Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointLength))
+                DijkstraDataWriter(ConditionsData.CheckPointPathLength, CHECK_POINT_KEY);
+                if (Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength))
                 {
-                    RunGiveRewardInternal(RewardUseType.Set_Reward, RewardData.Reward);
+                    Debug.Log($"Current Length : {ConditionsData.TraveledDistance} / {ConditionsData.CheckPointPathLength}" );
+                    Debug.Log($"#Simple Machine# -> Half dijkstra success ");
+                    GiveRewardInternalCallBack(RewardUseType.Set_Reward, RewardData.Reward);
                 }
             }
         }
@@ -68,20 +69,22 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
             if (PhaseType == PhaseType.Phase_C)
             {
-                RunGiveRewardInternal(RewardUseType.Set_Reward, RewardData.Reward);
+                GiveRewardInternalCallBack(RewardUseType.Set_Reward, RewardData.Reward);
             }
             else if (PhaseType == PhaseType.Phase_D)
             {
-                RunGiveRewardInternal(RewardUseType.Add_Reward, RewardData.Reward/2);
+                GiveRewardInternalCallBack(RewardUseType.Add_Reward, RewardData.Reward/2);
 
-                RunDijkstraDataWriter(ConditionsData.PathTotalLength, FINAL_GOAL_KEY);
-                if (Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointLength + ConditionsData.PathTotalLength))
+                DijkstraDataWriter(ConditionsData.FullPathLength, FINAL_GOAL_KEY);
+                Debug.Log($"Current Length : {ConditionsData.TraveledDistance} / {ConditionsData.CheckPointPathLength} + {ConditionsData.FullPathLength}" );
+                if (Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength + ConditionsData.FullPathLength))
                 {
-                    RunGiveRewardInternal(RewardUseType.Set_Reward, 1f);
+                    Debug.Log($"#Simple Machine# -> Full dijkstra success ");
+                    GiveRewardInternalCallBack(RewardUseType.Set_Reward, 1f);
                 }
             }
 
-            RunEndEpisodeCallBack();
+            EpisodeEndCallBack();
         }
 
         protected override List<bool> CreateEndConditionsList() // done

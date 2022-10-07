@@ -7,15 +7,12 @@ namespace ML_Agents.PF.Scripts
 {
     public class GameManager : MonoBehaviour
     {
-
         [Header("Training Vars")]
         public PhaseType PhaseType;
         public TrainingType TrainingType;
 
         [Space]
         public RewardData RewardData;
-
-        public TrainingStateMachine.TrainingStateMachine TrainingStateMachine { get; private set; }
 
         public static GameManager Instance;
 
@@ -27,24 +24,13 @@ namespace ML_Agents.PF.Scripts
             }
 
             Utils.Utils.GatherAssets();
-
-            TrainingStateMachine = CreateStateMachine();
-
-            if (TrainingStateMachine == null)
-            {
-                Debug.LogError("State Machine => null");
-            }
         }
 
-        private TrainingStateMachine.TrainingStateMachine CreateStateMachine()
+        public TrainingStateMachine.TrainingStateMachine CreateStateMachine()
         {
-            if (TrainingType == TrainingType.Advanced)
-            {
-                Debug.Log("Advaced Trainig");
-                return new AdvancedTraining(PhaseType, TrainingType);
-            }
-            Debug.Log("Simple Trainig");
-            return new SimpleTraining(PhaseType, TrainingType);
+            return TrainingType == TrainingType.Advanced ?(TrainingStateMachine.TrainingStateMachine)
+                new AdvancedTraining(PhaseType, TrainingType) : //else
+                new SimpleTraining(PhaseType, TrainingType);
         }
     }
 }

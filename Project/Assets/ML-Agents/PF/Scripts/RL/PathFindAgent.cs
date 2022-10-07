@@ -44,13 +44,16 @@ namespace ML_Agents.PF.Scripts.RL
         {
             _agentRb = GetComponent<Rigidbody>();
 
-            //TODO : error , each agent should have its own state machine?
-            _trainingStateMachine = GameManager.Instance.TrainingStateMachine; //get it from the game manager
+            //Create a state machine for each agent
+            _trainingStateMachine = GameManager.Instance.CreateStateMachine();
+
+            Debug.Log("#Player# State machine assigned..." + _trainingStateMachine);
 
             if (_trainingStateMachine is null)
             {
                 throw new NullReferenceException("State Machine is null");
             }
+
             if (_trainingStateMachine.ConditionsData is null)
             {
                 throw new NullReferenceException("Conditions data are null");
@@ -61,6 +64,7 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void SetCallBacks()
         {
+            // Debug.Log("#Player# Set Callbacks...");
             _trainingStateMachine.EndEpisodeCallBack += EndEpisode;
             _trainingStateMachine.GiveInternalRewardCallBack += GiveRewardInternal;
             _trainingStateMachine.SwitchTargetNodeCallBack += SwitchTargetNode;
@@ -107,6 +111,12 @@ namespace ML_Agents.PF.Scripts.RL
 
             //note : maybe add the Nodes dijkstra
             sensor.AddObservation(_trainingStateMachine.ConditionsData.StepFactor); //1
+
+            //TODO : HERE
+            sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance); //1
+
+            //track Conditions List
+            //track dijkstra nodes path
         }
 
         public override void Heuristic(in ActionBuffers actionsOut)
@@ -164,6 +174,7 @@ namespace ML_Agents.PF.Scripts.RL
         public override void OnEpisodeBegin()
         {
             _area.CleanArea();
+            _trainingStateMachine.ConditionsData.Reset();
 
             var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
             var items = enumerable.ToArray();
@@ -199,6 +210,7 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void Spawn(IReadOnlyList<int> items)
         {
+            // Debug.Log("#Player# Spawn process...");
             var next = 0;
             //replace agent transform
             _agentRb.velocity = Vector3.zero;
@@ -223,8 +235,6 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void ResetTmpVars(IReadOnlyList<int> items)
         {
-            _trainingStateMachine.ConditionsData.Reset();
-
             _target = null;
             _targetNodeIndex = 0;
 
@@ -243,9 +253,11 @@ namespace ML_Agents.PF.Scripts.RL
 
             var pathLen1 = GetShortestPathLength(_graph.StartNode, _graph.CheckPointNode);
             var pathLen2 = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
-            var tmp = pathLen1 + pathLen2;
-            _trainingStateMachine.ConditionsData.CheckPointLength = pathLen1;
-            _trainingStateMachine.ConditionsData.PathTotalLength = tmp;
+            var fullLength = pathLen1 + pathLen2;
+
+            _trainingStateMachine.ConditionsData.CheckPointPathLength = pathLen1;
+            _trainingStateMachine.ConditionsData.FullPathLength = fullLength;
+            Debug.Log($"#Player#{pathLen1} + {pathLen2} = {fullLength}");
         }
 
         private int GetShortestPathLength(Node from, Node to)
@@ -353,7 +365,6 @@ namespace ML_Agents.PF.Scripts.RL
 
             _trainingStateMachine.RewardDataStruct = _rewardDataStruct;
         }
-
 
     #endregion
     }

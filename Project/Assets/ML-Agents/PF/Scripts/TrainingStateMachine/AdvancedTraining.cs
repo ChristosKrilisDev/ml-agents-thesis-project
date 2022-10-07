@@ -7,57 +7,77 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 {
     public class AdvancedTraining : TrainingStateMachine
     {
-
         private float _previousStepReward;
+        // private float _prevPenaltyReward;
+
 
         public AdvancedTraining(PhaseType phaseType, TrainingType trainingType) : base(phaseType, trainingType)
         {
             HasEndConditions = CreateEndConditionsList();
         }
 
+
+        protected override void EpisodeEndCallBack()
+        {
+            _previousStepReward = 0;
+            // _prevPenaltyReward = 0;
+            base.EpisodeEndCallBack();
+        }
+
+
         public override void RunOnStepReward()
         {
             base.RunOnStepReward();
 
-
-            // _stepFactor = (_stepFactor - MaxStep) / MaxStep;
+            ConditionsData.StepFactor = (ConditionsData.StepCount - ConditionsData.MaxStep) / (float)ConditionsData.MaxStep;
+            // Debug.Log(ConditionsData.StepFactor);
             // RunGiveRewardInternal(RewardUseType.Add_Reward, -_stepFactor);
 
-            var newStepReward = RunCalculateComplexReward();
-            if (Utils.Utils.NearlyEqual(_previousStepReward, newStepReward, 0.001f)) return;
+            var newStepReward = CalculateComplexRewardCallBack() / RewardData.DivRewardValue;
 
-            if (_previousStepReward > newStepReward)
+            if (Utils.Utils.NearlyEqual(_previousStepReward, newStepReward, 0.01f)) return; //increase epsilon
+
+
+            if (_previousStepReward > newStepReward) //fix here
             {
-                RunGiveRewardInternal(RewardUseType.Add_Reward, -GameManager.Instance.RewardData.StepReward / 10);
+                GiveRewardInternalCallBack(RewardUseType.Add_Reward, -RewardData.StepPenaltyPerSec / (100f * RewardData.DivRewardValue));
+
+                // var newPenaltyReward = -1f * Mathf.Abs(RewardData.StepPenaltyPerSec / (100f * RewardData.DivRewardValue) + newStepReward);
+                // if (Utils.Utils.NearlyEqual(_prevPenaltyReward, newPenaltyReward, 0.001f)) return;
+                // // Debug.Log("-----d "+newPenaltyReward);
+                //
+                // if (_prevPenaltyReward > newPenaltyReward)
+                // {
+                //     _prevPenaltyReward = newPenaltyReward;
+                //     GiveRewardInternalCallBack(RewardUseType.Add_Reward, _prevPenaltyReward);
+                // }
+
                 return;
             }
 
             _previousStepReward = newStepReward;
-            RunGiveRewardInternal(RewardUseType.Add_Reward, newStepReward);
-
-            Debug.Log("Step Reward : " + newStepReward);
+            GiveRewardInternalCallBack(RewardUseType.Add_Reward, newStepReward);
         }
 
         public override void RunOnCheckPointReward()
         {
             base.RunOnCheckPointReward();
 
-            RunGiveRewardInternal(RewardUseType.Add_Reward, GameManager.Instance.RewardData.Reward);
+            GiveRewardInternalCallBack(RewardUseType.Add_Reward, RewardData.Reward);
 
-            if ((int)PhaseType == 1)
+            if (PhaseType == PhaseType.Phase_A)
             {
-                RunOnTerminalCondition(RewardUseType.Set_Reward);
+                OnTerminalConditionCallBack(RewardUseType.Set_Reward);
             }
-            else if ((int)PhaseType == 2)
+            else if (PhaseType == PhaseType.Phase_B)
             {
-                RunDijkstraDataWriter(ConditionsData.CheckPointLength, CHECK_POINT_KEY);
-                RunOnTerminalCondition(RewardUseType.Set_Reward);
+                DijkstraDataWriter(ConditionsData.CheckPointPathLength, CHECK_POINT_KEY);
+                OnTerminalConditionCallBack(RewardUseType.Set_Reward);
             }
             else if ((int)PhaseType >= 3)
             {
-                RunDijkstraDataWriter(ConditionsData.CheckPointLength, CHECK_POINT_KEY);
-                RunGiveRewardInternal(RewardUseType.Add_Reward, GameManager.Instance.RewardData.Reward);
-                // SwitchTargetNodeCallBack?.Invoke();
+                DijkstraDataWriter(ConditionsData.CheckPointPathLength, CHECK_POINT_KEY);
+                GiveRewardInternalCallBack(RewardUseType.Add_Reward, RewardData.Reward);
             }
         }
 
@@ -66,21 +86,23 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             base.RunOnFinalGoalReward();
 
             Academy.Instance.StatsRecorder.Add("Distance/Distance Traveled", ConditionsData.TraveledDistance, StatAggregationMethod.Histogram);
-            Academy.Instance.StatsRecorder.Add("Distance/Shortest Path", ConditionsData.PathTotalLength, StatAggregationMethod.Histogram);
+            Academy.Instance.StatsRecorder.Add("Distance/Shortest Path", ConditionsData.FullPathLength, StatAggregationMethod.Histogram);
 
-            RunGiveRewardInternal(RewardUseType.Add_Reward, RewardData.Reward);
+            GiveRewardInternalCallBack(RewardUseType.Add_Reward, RewardData.Reward);
 
-            if ((int)PhaseType == 3)
+            if (PhaseType == PhaseType.Phase_C)
             {
-                RunOnTerminalCondition(RewardUseType.Set_Reward);
-            }
-            else if ((int)PhaseType == 4)
-            {
-                RunDijkstraDataWriter(ConditionsData.CheckPointLength + ConditionsData.PathTotalLength, FINAL_GOAL_KEY);
-                RunOnTerminalCondition(RewardUseType.Set_Reward);
+                OnTerminalConditionCallBack(RewardUseType.Set_Reward);
             }
 
+            if (PhaseType == PhaseType.Phase_D)
+            {
+                DijkstraDataWriter(ConditionsData.CheckPointPathLength + ConditionsData.FullPathLength, FINAL_GOAL_KEY);
+                OnTerminalConditionCallBack(RewardUseType.Set_Reward);
+            }
         }
+
+
 
         protected override List<bool> CreateEndConditionsList()
         {
@@ -91,7 +113,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
                     ConditionsData.HasFoundCheckpoint,
                     ConditionsData.StepCount == ConditionsData.MaxStep,
                     ConditionsData.HasTouchedWall,
-                    Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointLength)
+                    Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength)
                 };
 
             }
@@ -101,7 +123,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
                 ConditionsData.HasFoundGoal,
                 ConditionsData.StepCount == ConditionsData.MaxStep,
                 ConditionsData.HasTouchedWall,
-                Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.PathTotalLength + ConditionsData.CheckPointLength)
+                Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength + ConditionsData.CheckPointPathLength)
             };
         }
 

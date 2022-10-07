@@ -45,8 +45,8 @@ namespace ML_Agents.PF.Scripts.RL
 
             var spawnTransform = _spawnAreas[spawnAreaIndex].transform;
             var localScale = spawnTransform.localScale;
-            var xRange = localScale.x / 2.1f;
-            var zRange = localScale.z / 2.1f;
+            var xRange = localScale.x / 2.5f;
+            var zRange = localScale.z / 2.5f;
 
             objectToPlace.transform.position =
                 new Vector3(Random.Range(-xRange, xRange), 2f, Random.Range(-zRange, zRange)) + spawnTransform.position;

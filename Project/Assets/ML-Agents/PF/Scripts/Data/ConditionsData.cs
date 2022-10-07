@@ -14,8 +14,8 @@ namespace ML_Agents.PF.Scripts.Data
         public float StepFactor;
 
         public int TraveledDistance;
-        public int CheckPointLength;
-        public int PathTotalLength;
+        public int CheckPointPathLength;
+        public int FullPathLength;
 
         public bool HasTouchedWall;
         public bool HasFoundGoal;
@@ -33,8 +33,8 @@ namespace ML_Agents.PF.Scripts.Data
             StepCount= 0;
             StepFactor= 0;
             TraveledDistance= -1;
-            CheckPointLength= 0;
-            PathTotalLength= 0;
+            CheckPointPathLength= 0;
+            FullPathLength= 0;
 
             HasTouchedWall= false;
             HasFoundGoal= false;

@@ -22,16 +22,14 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
         protected const string CHECK_POINT_KEY = "Agent/Check Point Dijkstra Success Rate";
         protected const string FINAL_GOAL_KEY = "Agent/Full Dijkstra Success Rate";
 
-
         protected abstract List<bool> CreateEndConditionsList();
         protected List<bool> HasEndConditions = new List<bool>();
-
 
         public readonly List<bool> RewardConditions;
         public RewardDataStruct RewardDataStruct;
 
-        public UnityAction EndEpisodeCallBack;
         public UnityAction<RewardUseType, float> GiveInternalRewardCallBack;
+        public UnityAction EndEpisodeCallBack;
         public UnityAction SwitchTargetNodeCallBack;
         public UnityAction UpdateRewardDataWrapperCallBack;
 
@@ -46,7 +44,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             TrainingType = trainingType;
             ConditionsData = new ConditionsData();
 
-            Debug.Log("State Machine");
+            // Debug.Log("State Machine created");
             RewardConditions = CreateRewardConditionsList();
         }
 
@@ -56,7 +54,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             {
                 return new List<bool>()
                 {
-                    Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.PathTotalLength) && ConditionsData.HasFoundGoal && ConditionsData.HasFoundCheckpoint,
+                    Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundGoal && ConditionsData.HasFoundCheckpoint,
                     ConditionsData.HasFoundGoal,
                     ConditionsData.HasFoundCheckpoint,
                 };
@@ -64,7 +62,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
             return new List<bool>()
             {
-                Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.PathTotalLength) && ConditionsData.HasFoundCheckpoint,
+                Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundCheckpoint,
                 ConditionsData.HasFoundCheckpoint,
             };
         }
@@ -73,9 +71,9 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
     #region Virtual Methods
 
-        //class specific
         public virtual void RunOnStepReward()
         {
+            //TODO : error -> infinite reward value
             // if (PhaseType == PhaseType.Phase_C)
             // {
             //     //give a negative reward each time agent makes an action
@@ -85,14 +83,14 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
             if (HasEpisodeEnded())
             {
-                RunCalculateComplexReward();
-                RunEndEpisodeCallBack();
+                CalculateComplexRewardCallBack();
+                EpisodeEndCallBack();
             }
         }
 
         public virtual void RunOnCheckPointReward()
         {
-            Debug.Log("Check point => done");
+            // Debug.Log("#State Machine# Check Point Found...");
 
             if ((int)PhaseType >= 3)
             {
@@ -102,57 +100,61 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
         public virtual void RunOnFinalGoalReward()
         {
-            Debug.Log("Final point => done");
+            // Debug.Log("#State Machine# Final Point Found...");
 
         }
 
-        public void RunOnHarmfulCollision()
+        public virtual void RunOnHarmfulCollision()
         {
             if (PhaseType == PhaseType.Phase_A)
             {
-                Debug.Log("touched wall => dead");
-                RunGiveRewardInternal(RewardUseType.Set_Reward, GameManager.Instance.RewardData.WallPenalty);
-                RunEndEpisodeCallBack();
+                // Debug.Log("#State Machine# Hit Wall <dead>...");
+                GiveRewardInternalCallBack(RewardUseType.Set_Reward, RewardData.Penalty);
+                EpisodeEndCallBack();
             }
             else
             {
-                Debug.Log("Touched wall");
-                RunGiveRewardInternal(RewardUseType.Add_Reward, GameManager.Instance.RewardData.WallPenalty / 2);
+                // Debug.Log("#State Machine# Hit Wall...");
+                GiveRewardInternalCallBack(RewardUseType.Add_Reward, RewardData.Penalty / 2);
             }
         }
 
-        protected virtual void RunOnTerminalCondition(RewardUseType rType)
+        protected virtual void EpisodeEndCallBack()
         {
-
+            Debug.Log("#State Machine# Episode ended");
+            EndEpisodeCallBack?.Invoke();
         }
-
-
 
     #endregion
 
     #region Protected Methods CallBacks
 
-        protected float RunCalculateComplexReward()
+        protected float CalculateComplexRewardCallBack()
         {
             UpdateRewardDataWrapperCallBack?.Invoke();
+            Debug.Log("#State Machine# Complex Reward :" + RewardFunction.GetComplexReward(RewardDataStruct));
             return RewardFunction.GetComplexReward(RewardDataStruct);
         }
 
-        protected void RunGiveRewardInternal(RewardUseType rewardUseType, float reward)
+        protected void OnTerminalConditionCallBack(RewardUseType rType)
         {
+            EpisodeEndCallBack();
+        }
+
+        protected void GiveRewardInternalCallBack(RewardUseType rewardUseType, float reward)
+        {
+            // Debug.Log($"#State Machine# -> {rewardUseType} reward internal : {reward} ");
+
             GiveInternalRewardCallBack?.Invoke(rewardUseType, reward);
         }
 
-        protected void RunEndEpisodeCallBack()
-        {
-            Debug.Log("Episode ended");
-            EndEpisodeCallBack?.Invoke();
-        }
 
-        protected void RunDijkstraDataWriter(int length, string key)
+
+        protected void DijkstraDataWriter(int length, string key)
         {
             Utils.Utils.WriteDijkstraData(ConditionsData.TraveledDistance, length, key);
         }
+
 
     #endregion
 
