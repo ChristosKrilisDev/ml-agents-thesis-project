@@ -33,14 +33,16 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             // Debug.Log(ConditionsData.StepFactor);
             // RunGiveRewardInternal(RewardUseType.Add_Reward, -_stepFactor);
 
-            var newStepReward = CalculateComplexRewardCallBack() / RewardData.DivRewardValue;
+            var newStepReward = CalculateComplexReward() / RewardData.DivRewardValue;
 
             if (Utils.Utils.NearlyEqual(_previousStepReward, newStepReward, 0.01f)) return; //increase epsilon
 
-
             if (_previousStepReward > newStepReward) //fix here
             {
-                GiveRewardInternalCallBack(RewardUseType.Add_Reward, -RewardData.StepPenaltyPerSec / (100f * RewardData.DivRewardValue));
+                // Debug.Log("#Reward#"+newStepReward);
+                //TODO : give -reward based on the distance from the previous +reward?
+
+                GiveInternalReward(RewardUseType.Add_Reward, -RewardData.StepPenaltyPerSec / (100f * RewardData.DivRewardValue));
 
                 // var newPenaltyReward = -1f * Mathf.Abs(RewardData.StepPenaltyPerSec / (100f * RewardData.DivRewardValue) + newStepReward);
                 // if (Utils.Utils.NearlyEqual(_prevPenaltyReward, newPenaltyReward, 0.001f)) return;
@@ -56,28 +58,28 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             }
 
             _previousStepReward = newStepReward;
-            GiveRewardInternalCallBack(RewardUseType.Add_Reward, newStepReward);
+            GiveInternalReward(RewardUseType.Add_Reward, newStepReward);
         }
 
         public override void RunOnCheckPointReward()
         {
             base.RunOnCheckPointReward();
 
-            GiveRewardInternalCallBack(RewardUseType.Add_Reward, RewardData.Reward);
+            GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward);
 
             if (PhaseType == PhaseType.Phase_A)
             {
-                OnTerminalConditionCallBack(RewardUseType.Set_Reward);
+                OnTerminalCondition(RewardUseType.Set_Reward);
             }
             else if (PhaseType == PhaseType.Phase_B)
             {
                 DijkstraDataWriter(ConditionsData.CheckPointPathLength, CHECK_POINT_KEY);
-                OnTerminalConditionCallBack(RewardUseType.Set_Reward);
+                OnTerminalCondition(RewardUseType.Set_Reward);
             }
             else if ((int)PhaseType >= 3)
             {
                 DijkstraDataWriter(ConditionsData.CheckPointPathLength, CHECK_POINT_KEY);
-                GiveRewardInternalCallBack(RewardUseType.Add_Reward, RewardData.Reward);
+                GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward);
             }
         }
 
@@ -88,21 +90,19 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             Academy.Instance.StatsRecorder.Add("Distance/Distance Traveled", ConditionsData.TraveledDistance, StatAggregationMethod.Histogram);
             Academy.Instance.StatsRecorder.Add("Distance/Shortest Path", ConditionsData.FullPathLength, StatAggregationMethod.Histogram);
 
-            GiveRewardInternalCallBack(RewardUseType.Add_Reward, RewardData.Reward);
+            GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward);
 
             if (PhaseType == PhaseType.Phase_C)
             {
-                OnTerminalConditionCallBack(RewardUseType.Set_Reward);
+                OnTerminalCondition(RewardUseType.Set_Reward);
             }
 
             if (PhaseType == PhaseType.Phase_D)
             {
                 DijkstraDataWriter(ConditionsData.CheckPointPathLength + ConditionsData.FullPathLength, FINAL_GOAL_KEY);
-                OnTerminalConditionCallBack(RewardUseType.Set_Reward);
+                OnTerminalCondition(RewardUseType.Set_Reward);
             }
         }
-
-
 
         protected override List<bool> CreateEndConditionsList()
         {

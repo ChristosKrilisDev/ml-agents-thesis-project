@@ -44,7 +44,6 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             TrainingType = trainingType;
             ConditionsData = new ConditionsData();
 
-            // Debug.Log("State Machine created");
             RewardConditions = CreateRewardConditionsList();
         }
 
@@ -78,12 +77,12 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             // {
             //     //give a negative reward each time agent makes an action
             //     ConditionsData.StepFactor = (ConditionsData.StepFactor - ConditionsData.MaxStep) / ConditionsData.MaxStep; //current step?
-            //     RunGiveRewardInternal(RewardUseType.Add_Reward, - ConditionsData.StepFactor);
+            //     GiveInternalReward(RewardUseType.Add_Reward, - ConditionsData.StepFactor);
             // }
 
             if (HasEpisodeEnded())
             {
-                CalculateComplexRewardCallBack();
+                CalculateComplexReward();
                 EpisodeEndCallBack();
             }
         }
@@ -104,51 +103,49 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
         }
 
-        public virtual void RunOnHarmfulCollision()
+        protected virtual void EpisodeEndCallBack()
+        {
+            EndEpisodeCallBack?.Invoke();
+        }
+
+        public void RunOnHarmfulCollision()
         {
             if (PhaseType == PhaseType.Phase_A)
             {
-                // Debug.Log("#State Machine# Hit Wall <dead>...");
-                GiveRewardInternalCallBack(RewardUseType.Set_Reward, RewardData.Penalty);
+                GiveInternalReward(RewardUseType.Set_Reward, RewardData.Penalty);
                 EpisodeEndCallBack();
             }
             else
             {
-                // Debug.Log("#State Machine# Hit Wall...");
-                GiveRewardInternalCallBack(RewardUseType.Add_Reward, RewardData.Penalty / 2);
+                GiveInternalReward(RewardUseType.Add_Reward, RewardData.Penalty / 2);
             }
         }
 
-        protected virtual void EpisodeEndCallBack()
-        {
-            Debug.Log("#State Machine# Episode ended");
-            EndEpisodeCallBack?.Invoke();
-        }
+
 
     #endregion
 
     #region Protected Methods CallBacks
 
-        protected float CalculateComplexRewardCallBack()
+        protected float CalculateComplexReward()
         {
             UpdateRewardDataWrapperCallBack?.Invoke();
             Debug.Log("#State Machine# Complex Reward :" + RewardFunction.GetComplexReward(RewardDataStruct));
             return RewardFunction.GetComplexReward(RewardDataStruct);
         }
 
-        protected void OnTerminalConditionCallBack(RewardUseType rType)
+        protected void OnTerminalCondition(RewardUseType rType)
         {
+            UpdateRewardDataWrapperCallBack?.Invoke();
+            var reward = RewardFunction.GetComplexReward(RewardDataStruct);
+            GiveInternalReward(rType, reward);
             EpisodeEndCallBack();
         }
 
-        protected void GiveRewardInternalCallBack(RewardUseType rewardUseType, float reward)
+        protected void GiveInternalReward(RewardUseType rewardUseType, float reward)
         {
-            // Debug.Log($"#State Machine# -> {rewardUseType} reward internal : {reward} ");
-
             GiveInternalRewardCallBack?.Invoke(rewardUseType, reward);
         }
-
-
 
         protected void DijkstraDataWriter(int length, string key)
         {

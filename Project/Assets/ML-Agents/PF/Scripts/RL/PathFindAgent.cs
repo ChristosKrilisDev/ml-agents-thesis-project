@@ -112,7 +112,7 @@ namespace ML_Agents.PF.Scripts.RL
             //note : maybe add the Nodes dijkstra
             sensor.AddObservation(_trainingStateMachine.ConditionsData.StepFactor); //1
 
-            //TODO : HERE
+            //TODO : Add observesions
             sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance); //1
 
             //track Conditions List
