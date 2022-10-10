@@ -44,16 +44,12 @@ namespace ML_Agents.PF.Scripts.RL
         {
             _agentRb = GetComponent<Rigidbody>();
 
-            //Create a state machine for each agent
             _trainingStateMachine = GameManager.Instance.CreateStateMachine();
-
-            Debug.Log("#Player# State machine assigned..." + _trainingStateMachine);
 
             if (_trainingStateMachine is null)
             {
                 throw new NullReferenceException("State Machine is null");
             }
-
             if (_trainingStateMachine.ConditionsData is null)
             {
                 throw new NullReferenceException("Conditions data are null");
@@ -64,7 +60,6 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void SetCallBacks()
         {
-            // Debug.Log("#Player# Set Callbacks...");
             _trainingStateMachine.EndEpisodeCallBack += EndEpisode;
             _trainingStateMachine.GiveInternalRewardCallBack += GiveRewardInternal;
             _trainingStateMachine.SwitchTargetNodeCallBack += SwitchTargetNode;
@@ -257,7 +252,7 @@ namespace ML_Agents.PF.Scripts.RL
 
             _trainingStateMachine.ConditionsData.CheckPointPathLength = pathLen1;
             _trainingStateMachine.ConditionsData.FullPathLength = fullLength;
-            Debug.Log($"#Player#{pathLen1} + {pathLen2} = {fullLength}");
+            // Debug.Log($"#Player#{pathLen1} + {pathLen2} = {fullLength}");
         }
 
         private int GetShortestPathLength(Node from, Node to)

@@ -23,7 +23,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
         protected const string FINAL_GOAL_KEY = "Agent/Full Dijkstra Success Rate";
 
         protected abstract List<bool> CreateEndConditionsList();
-        protected List<bool> HasEndConditions = new List<bool>();
+        protected List<bool> HasEndConditions = new List<bool>(); //?
 
         public readonly List<bool> RewardConditions;
         public RewardDataStruct RewardDataStruct;
@@ -53,7 +53,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             {
                 return new List<bool>()
                 {
-                    Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundGoal && ConditionsData.HasFoundCheckpoint,
+                    Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundGoal,
                     ConditionsData.HasFoundGoal,
                     ConditionsData.HasFoundCheckpoint,
                 };
@@ -72,25 +72,23 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
         public virtual void RunOnStepReward()
         {
-            //TODO : error -> infinite reward value
-            // if (PhaseType == PhaseType.Phase_C)
-            // {
-            //     //give a negative reward each time agent makes an action
-            //     ConditionsData.StepFactor = (ConditionsData.StepFactor - ConditionsData.MaxStep) / ConditionsData.MaxStep; //current step?
-            //     GiveInternalReward(RewardUseType.Add_Reward, - ConditionsData.StepFactor);
-            // }
+            ConditionsData.StepFactor = (ConditionsData.StepCount - ConditionsData.MaxStep) / (float)ConditionsData.MaxStep;
+
+            if (PhaseType == PhaseType.Phase_C)
+            {
+                //give a negative reward each time agent makes an action
+                GiveInternalReward(RewardUseType.Add_Reward, - ConditionsData.StepFactor);
+            }
 
             if (HasEpisodeEnded())
             {
                 CalculateComplexReward();
-                EpisodeEndCallBack();
+                EndEpisode();
             }
         }
 
         public virtual void RunOnCheckPointReward()
         {
-            // Debug.Log("#State Machine# Check Point Found...");
-
             if ((int)PhaseType >= 3)
             {
                 SwitchTargetNodeCallBack?.Invoke();
@@ -99,13 +97,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
         public virtual void RunOnFinalGoalReward()
         {
-            // Debug.Log("#State Machine# Final Point Found...");
 
-        }
-
-        protected virtual void EpisodeEndCallBack()
-        {
-            EndEpisodeCallBack?.Invoke();
         }
 
         public void RunOnHarmfulCollision()
@@ -113,13 +105,20 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             if (PhaseType == PhaseType.Phase_A)
             {
                 GiveInternalReward(RewardUseType.Set_Reward, RewardData.Penalty);
-                EpisodeEndCallBack();
+                EndEpisode();
             }
             else
             {
                 GiveInternalReward(RewardUseType.Add_Reward, RewardData.Penalty / 2);
             }
         }
+
+        protected virtual void EndEpisode()
+        {
+            EndEpisodeCallBack?.Invoke();
+        }
+
+
 
 
 
@@ -130,7 +129,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
         protected float CalculateComplexReward()
         {
             UpdateRewardDataWrapperCallBack?.Invoke();
-            Debug.Log("#State Machine# Complex Reward :" + RewardFunction.GetComplexReward(RewardDataStruct));
+            // Debug.Log("#State Machine# Complex Reward :" + RewardFunction.GetComplexReward(RewardDataStruct));
             return RewardFunction.GetComplexReward(RewardDataStruct);
         }
 
@@ -139,11 +138,12 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             UpdateRewardDataWrapperCallBack?.Invoke();
             var reward = RewardFunction.GetComplexReward(RewardDataStruct);
             GiveInternalReward(rType, reward);
-            EpisodeEndCallBack();
+            EndEpisode();
         }
 
         protected void GiveInternalReward(RewardUseType rewardUseType, float reward)
         {
+            // Debug.Log(reward);
             GiveInternalRewardCallBack?.Invoke(rewardUseType, reward);
         }
 

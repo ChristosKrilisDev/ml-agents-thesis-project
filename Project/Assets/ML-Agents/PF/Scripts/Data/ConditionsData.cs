@@ -9,7 +9,7 @@ namespace ML_Agents.PF.Scripts.Data
         /// Contains the data condition related data
         /// </summary>
 
-        public int MaxStep = 1500;
+        public int MaxStep = 1500; //TODO : set this based on the agent
         public int StepCount;
         public float StepFactor;
 
@@ -23,7 +23,6 @@ namespace ML_Agents.PF.Scripts.Data
 
         public ConditionsData()
         {
-            Debug.Log("New Condition data created");
             Reset();
         }
 
