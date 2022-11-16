@@ -83,14 +83,16 @@ namespace ML_Agents.PF.Scripts.RL
             if (!_useVectorObservations) return;
 
             sensor.AddObservation(transform.InverseTransformDirection(_agentRb.velocity)); //3
+
             //cp
-            sensor.AddObservation(_checkPoint.GetState); //1
+            sensor.AddObservation(_checkPoint.State); //1   bool
             var dir = (_nodesToFind[0].transform.localPosition - transform.localPosition).normalized;
-            sensor.AddObservation(dir.x); //1
-            sensor.AddObservation(dir.z); //1
+            sensor.AddObservation(new Vector2(dir.x, dir.z)); //2
+            // sensor.AddObservation(dir.x); //1   float
+            // sensor.AddObservation(dir.z); //1   float
 
             //if goal is active in scene :
-            sensor.AddObservation(_nodesToFind[1].activeInHierarchy ? 1 : 0); //1
+            sensor.AddObservation(_nodesToFind[1].activeInHierarchy ? 1 : 0); //1   bool
 
             if (_nodesToFind[1].activeInHierarchy)
             {
@@ -104,11 +106,9 @@ namespace ML_Agents.PF.Scripts.RL
                 sensor.AddObservation(0); //z
             }
 
-            //note : maybe add the Nodes dijkstra
-            sensor.AddObservation(_trainingStateMachine.ConditionsData.StepFactor); //1
 
-            //TODO : Add observesions
-            sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance); //1
+            sensor.AddObservation(_trainingStateMachine.ConditionsData.StepFactor); //1     float
+            sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance); //1   float
 
             //track Conditions List
             //track dijkstra nodes path
