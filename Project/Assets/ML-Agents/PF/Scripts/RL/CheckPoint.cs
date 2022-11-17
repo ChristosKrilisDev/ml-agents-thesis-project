@@ -16,7 +16,7 @@ namespace ML_Agents.PF.Scripts.RL
         private Material _offMaterial;
 
         private GameObject Area => transform.parent.gameObject;
-        public bool State { get; private set; }
+        public bool HasPressed { get; private set; }
 
         private void Awake()
         {
@@ -44,14 +44,14 @@ namespace ML_Agents.PF.Scripts.RL
         {
             if((int)GameManager.Instance.PhaseType <= 2) return;
 
-            if (other.gameObject.CompareTag("agent") && !State)
+            if (other.gameObject.CompareTag("agent") && !HasPressed)
                 ToggleState(false);
         }
 
         private void ToggleState(bool isInitState)
         {
             _boxCollider.enabled = isInitState;
-            State = !isInitState;
+            HasPressed = !isInitState;
             _goalNode.SetActive(!isInitState);
 
             _renderer.material = isInitState ? _offMaterial : _onMaterial;

@@ -84,34 +84,29 @@ namespace ML_Agents.PF.Scripts.RL
 
             sensor.AddObservation(transform.InverseTransformDirection(_agentRb.velocity)); //3
 
-            //cp
-            sensor.AddObservation(_checkPoint.State); //1   bool
-            var dir = (_nodesToFind[0].transform.localPosition - transform.localPosition).normalized;
-            sensor.AddObservation(new Vector2(dir.x, dir.z)); //2
-            // sensor.AddObservation(dir.x); //1   float
-            // sensor.AddObservation(dir.z); //1   float
+            //direction to target
+            sensor.AddObservation(_checkPoint.HasPressed); //1   bool
 
-            //if goal is active in scene :
-            sensor.AddObservation(_nodesToFind[1].activeInHierarchy ? 1 : 0); //1   bool
-
-            if (_nodesToFind[1].activeInHierarchy)
+            if (!_checkPoint.HasPressed)//check point
             {
-                var dirToGoal = (_nodesToFind[1].transform.localPosition - transform.localPosition).normalized;
-                sensor.AddObservation(dirToGoal.x); //1
-                sensor.AddObservation(dirToGoal.z); //1
+                var dir = (_nodesToFind[0].transform.localPosition - transform.localPosition).normalized;
+                sensor.AddObservation(new Vector2(dir.x, dir.z)); //2
             }
-            else
+            else if(_nodesToFind[1].activeInHierarchy)//final goal
             {
-                sensor.AddObservation(0); //x
-                sensor.AddObservation(0); //z
+                var dir = (_nodesToFind[1].transform.localPosition - transform.localPosition).normalized;
+                sensor.AddObservation(new Vector2(dir.x, dir.z)); //2
             }
 
-
+            //the higher the number, the higher the reward
             sensor.AddObservation(_trainingStateMachine.ConditionsData.StepFactor); //1     float
+
+            //less distance bigger reward
             sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance); //1   float
 
-            //track Conditions List
-            //track dijkstra nodes path
+            //shortest path
+            // sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance <= _trainingStateMachine.ConditionsData.FullPathLength); //1   float
+
         }
 
         public override void Heuristic(in ActionBuffers actionsOut)
