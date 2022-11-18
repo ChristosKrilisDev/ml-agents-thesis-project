@@ -9,7 +9,6 @@ namespace ML_Agents.PF.Scripts.RL
     {
         private static RewardData RewardData => GameManager.Instance.RewardData;
 
-
         //TODO : Avoiding Reward Hacking | Avoiding Side Effects | Scalable Oversight | Safe Exploration | Robustness to Distributional Shift
 
         /// <SharpedRewardFunction> distanceReward = 1 - ( Dx/DijDχ )^(epsilon) </SharpedRewardFunction>
@@ -29,7 +28,8 @@ namespace ML_Agents.PF.Scripts.RL
 
             if (!rewardDataStruct.HasEpisodeEnd)
             {
-                calculateReward = GetStepRewardReward(rewardDataStruct.CurrentDistance, rewardDataStruct.CurrentTargetDistance);
+                calculateReward = GetStepRewardReward(rewardDataStruct.CurrentDistance, rewardDataStruct.InitialDistanceFromTarget);
+
                 return calculateReward;
             }
 
@@ -42,6 +42,7 @@ namespace ML_Agents.PF.Scripts.RL
         private static void CreateConditionsList(RewardDataStruct rewardDataStruct, out List<bool> conditions)
         {
             conditions = new List<bool>();
+
             foreach (var condition in rewardDataStruct.Conditions)
             {
                 conditions.Add(condition);
@@ -49,10 +50,10 @@ namespace ML_Agents.PF.Scripts.RL
             conditions.Add(true);
         }
 
-        private static float GetStepRewardReward(float cDistance , float cTargetDistance)
+        private static float GetStepRewardReward(float currentDistance, float distanceFromTarget)
         {
             //encourage agent to keep searching, distance based
-            var distanceReward = 1 - Mathf.Pow(cDistance / cTargetDistance, RewardData.Epsilon);
+            var distanceReward = 1 - Mathf.Pow(currentDistance / distanceFromTarget, RewardData.Epsilon);
 
             return distanceReward;
         }
@@ -61,11 +62,12 @@ namespace ML_Agents.PF.Scripts.RL
         {
             float reward = 0;
 
-            for (var i = 0; i < conditions.Count; i++)
+            for (var i = 0; i < conditions.Count; i++) //todo fix : 0 cant divided
             {
-                if (conditions[i]) continue;
+                if (conditions[i]) continue; //conditions are reversed ordered, 1st on is the best scenario
 
-                reward = RewardData.Reward/i; //1st => 1, 2nd => 0.5, 3rd => 0.25f
+                reward = RewardData.Reward / i+1; //1st => 1, 2nd => 0.5, 3rd => 0.25f
+
                 break;
             }
 

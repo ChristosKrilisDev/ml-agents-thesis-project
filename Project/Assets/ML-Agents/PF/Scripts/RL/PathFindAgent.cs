@@ -349,7 +349,7 @@ namespace ML_Agents.PF.Scripts.RL
         private void UpdateRewardDataWrapper()
         {
             _rewardDataStruct.CurrentDistance = Utils.Utils.GetDistanceDifference(gameObject, _target);
-            _rewardDataStruct.CurrentTargetDistance = _nodesDistances[_targetNodeIndex];
+            _rewardDataStruct.InitialDistanceFromTarget = _nodesDistances[_targetNodeIndex];
             _rewardDataStruct.HasEpisodeEnd = _trainingStateMachine.HasEpisodeEnded();
             _rewardDataStruct.Conditions = _trainingStateMachine.RewardConditions.ToArray();
 

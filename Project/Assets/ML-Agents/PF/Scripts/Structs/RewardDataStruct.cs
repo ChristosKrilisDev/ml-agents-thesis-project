@@ -8,6 +8,6 @@
         public bool HasEpisodeEnd;
         public bool[] Conditions;
         public float CurrentDistance;
-        public float CurrentTargetDistance;
+        public float InitialDistanceFromTarget;
     }
 }
