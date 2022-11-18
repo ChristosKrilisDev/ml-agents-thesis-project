@@ -62,12 +62,13 @@ namespace ML_Agents.PF.Scripts.RL
         {
             float reward = 0;
 
-            for (var i = 0; i < conditions.Count; i++) //todo fix : 0 cant divided
+            for (var i = 0; i < conditions.Count; i++) //todo: test it
             {
-                if (conditions[i]) continue; //conditions are reversed ordered, 1st on is the best scenario
+                if (!conditions[i]) continue; //conditions are reversed ordered, 1st on is the best scenario
 
-                reward = RewardData.Reward / i+1; //1st => 1, 2nd => 0.5, 3rd => 0.25f
+                reward = RewardData.Reward / i+1; //1st => r/1, 2nd => r/2, 3rd => r/3
 
+                Debug.Log("Terminal reward = " + reward + " takes  : " +i);
                 break;
             }
 
