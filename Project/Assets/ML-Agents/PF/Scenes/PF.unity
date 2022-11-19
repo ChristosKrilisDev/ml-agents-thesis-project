@@ -2955,7 +2955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PhaseType: 1
-  TrainingType: 1
+  TrainingType: 2
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
 --- !u!4 &686440863
 Transform:
@@ -8564,6 +8564,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BehaviorType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114399412043818042, guid: bd804431e808a492bb5658bcd296e58e,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4435154092645278328, guid: bd804431e808a492bb5658bcd296e58e,
         type: 3}

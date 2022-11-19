@@ -31,8 +31,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
         public UnityAction<RewardUseType, float> GiveInternalRewardCallBack;
         public UnityAction EndEpisodeCallBack;
         public UnityAction SwitchTargetNodeCallBack;
-        public UnityAction UpdateRewardDataWrapperCallBack;
-
+        public UnityAction UpdateRewardDataStructCallBack;
 
     #endregion
 
@@ -77,12 +76,17 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             if (PhaseType == PhaseType.Phase_C)
             {
                 //give a negative reward each time agent makes an action
-                GiveInternalReward(RewardUseType.Add_Reward, - ConditionsData.StepFactor);
+                GiveInternalReward(RewardUseType.Add_Reward, -ConditionsData.StepFactor);
             }
 
+
+            //bug: HasEpisodeEnded is never true ??
+            //the episode ends on the same frame ? blocking the rest of the code running?
+            Debug.Log($"Episode State {HasEpisodeEnded()}");
             if (HasEpisodeEnded())
             {
-                CalculateComplexReward();
+                //bug : the code block is never called
+                CalculateComplexReward(); //todo: CalculateComplexReward is called but not used ? maybe use terminal reward?
                 EndEpisode();
             }
         }
@@ -118,24 +122,21 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             EndEpisodeCallBack?.Invoke();
         }
 
-
-
-
-
     #endregion
 
     #region Protected Methods CallBacks
 
         protected float CalculateComplexReward()
         {
-            UpdateRewardDataWrapperCallBack?.Invoke();
+            UpdateRewardDataStructCallBack?.Invoke();
+
             // Debug.Log("#State Machine# Complex Reward :" + RewardFunction.GetComplexReward(RewardDataStruct));
             return RewardFunction.GetComplexReward(RewardDataStruct);
         }
 
         protected void OnTerminalCondition(RewardUseType rType)
         {
-            UpdateRewardDataWrapperCallBack?.Invoke();
+            UpdateRewardDataStructCallBack?.Invoke();
             var reward = RewardFunction.GetComplexReward(RewardDataStruct);
             GiveInternalReward(rType, reward);
             EndEpisode();
@@ -152,9 +153,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             Utils.Utils.WriteDijkstraData(ConditionsData.TraveledDistance, length, key);
         }
 
-
     #endregion
-
 
         public bool HasEpisodeEnded()
         {

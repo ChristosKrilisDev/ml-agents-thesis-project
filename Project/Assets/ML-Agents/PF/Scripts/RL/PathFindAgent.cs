@@ -50,6 +50,7 @@ namespace ML_Agents.PF.Scripts.RL
             {
                 throw new NullReferenceException("State Machine is null");
             }
+
             if (_trainingStateMachine.ConditionsData is null)
             {
                 throw new NullReferenceException("Conditions data are null");
@@ -63,7 +64,7 @@ namespace ML_Agents.PF.Scripts.RL
             _trainingStateMachine.EndEpisodeCallBack += EndEpisode;
             _trainingStateMachine.GiveInternalRewardCallBack += GiveRewardInternal;
             _trainingStateMachine.SwitchTargetNodeCallBack += SwitchTargetNode;
-            _trainingStateMachine.UpdateRewardDataWrapperCallBack += UpdateRewardDataWrapper;
+            _trainingStateMachine.UpdateRewardDataStructCallBack += UpdateRewardDataStruct;
         }
 
     #endregion
@@ -87,12 +88,12 @@ namespace ML_Agents.PF.Scripts.RL
             //direction to target
             sensor.AddObservation(_checkPoint.HasPressed); //1   bool
 
-            if (!_checkPoint.HasPressed)//check point
+            if (!_checkPoint.HasPressed) //check point
             {
                 var dir = (_nodesToFind[0].transform.localPosition - transform.localPosition).normalized;
                 sensor.AddObservation(new Vector2(dir.x, dir.z)); //2
             }
-            else if(_nodesToFind[1].activeInHierarchy)//final goal
+            else if (_nodesToFind[1].activeInHierarchy) //final goal
             {
                 var dir = (_nodesToFind[1].transform.localPosition - transform.localPosition).normalized;
                 sensor.AddObservation(new Vector2(dir.x, dir.z)); //2
@@ -157,8 +158,8 @@ namespace ML_Agents.PF.Scripts.RL
 
         public override void OnActionReceived(ActionBuffers actionBuffers)
         {
-            MoveAgent(actionBuffers.DiscreteActions);
             StepReward();
+            MoveAgent(actionBuffers.DiscreteActions);
         }
 
         public override void OnEpisodeBegin()
@@ -346,7 +347,7 @@ namespace ML_Agents.PF.Scripts.RL
 
     #region UpdateData
 
-        private void UpdateRewardDataWrapper()
+        private void UpdateRewardDataStruct()
         {
             _rewardDataStruct.CurrentDistance = Utils.Utils.GetDistanceDifference(gameObject, _target);
             _rewardDataStruct.InitialDistanceFromTarget = _nodesDistances[_targetNodeIndex];
