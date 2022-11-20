@@ -942,7 +942,7 @@ namespace Unity.MLAgents.Inference
         private static FailedCheck CheckDiscreteActionOutputShapeLegacy(
             BrainParameters brainParameters, ActuatorComponent[] actuatorComponents, int modelSumDiscreteBranchSizes)
         {
-            // TODO: check each branch size instead of sum of branch sizes
+            // ->: check each branch size instead of sum of branch sizes
             var sumOfDiscreteBranchSizes = brainParameters.ActionSpec.SumOfDiscreteBranchSizes;
 
             foreach (var actuatorComponent in actuatorComponents)

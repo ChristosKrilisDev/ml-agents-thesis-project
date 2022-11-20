@@ -183,7 +183,7 @@ namespace Unity.MLAgents
         /// <returns></returns>
         public string DebugGetTimerString(string parentName = "", int level = 0)
         {
-            var indent = new string(' ', 2 * level); // TODO generalize
+            var indent = new string(' ', 2 * level); // -> generalize
             var shortName = level == 0 ? m_FullName : m_FullName.Replace(parentName + s_Separator, "");
             string timerString;
 
@@ -196,7 +196,7 @@ namespace Unity.MLAgents
                 timerString = $"{indent}{shortName}\t\traw={TotalSeconds}  rawCount={m_NumCalls}\n";
             }
 
-            // TODO use StringBuilder? might be overkill since this is only debugging code?
+            // -> use StringBuilder? might be overkill since this is only debugging code?
             if (m_Children != null)
             {
                 foreach (var c in m_Children.Values)

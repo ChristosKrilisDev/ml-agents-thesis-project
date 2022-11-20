@@ -13,7 +13,7 @@ namespace Unity.MLAgents.Extensions.Input
     public class ButtonInputActionAdaptor : IRLActionInputAdaptor
     {
         /// <summary>
-        /// TODO this method needs to be more nuanced depending the types of controls that can back it.  i.e. TriggerControls
+        /// -> this method needs to be more nuanced depending the types of controls that can back it.  i.e. TriggerControls
         /// are continuous buttons, etc.
         /// Currently returns an <see cref="ActionSpec"/> with 1 branch of size 2.  One value for not pressed, and one
         /// for pressed.
@@ -25,7 +25,7 @@ namespace Unity.MLAgents.Extensions.Input
             return ActionSpec.MakeDiscrete(2);
         }
 
-        /// TODO again this might need to be more nuanced for things like continuous buttons.
+        /// -> again this might need to be more nuanced for things like continuous buttons.
         /// <inheritdoc cref="IRLActionInputAdaptor.WriteToInputEventForAction"/>
         public void WriteToInputEventForAction(InputEventPtr eventPtr, InputAction action, InputControl control, ActionSpec actionSpec, in ActionBuffers actionBuffers)
         {

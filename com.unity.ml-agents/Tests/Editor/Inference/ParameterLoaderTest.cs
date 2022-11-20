@@ -224,7 +224,7 @@ namespace Unity.MLAgents.Tests
             // Model should contain 2 inputs : recurrent and visual 1
 
             Assert.Contains(TensorNames.VisualObservationPlaceholderPrefix + "0", inputNames);
-            // TODO :There are some memory tensors as well
+            // -> :There are some memory tensors as well
         }
 
         [Test]
@@ -257,7 +257,7 @@ namespace Unity.MLAgents.Tests
             var outputNames = model.GetOutputNames();
             var actionOutputName = useDeprecatedNNModel ? TensorNames.ActionOutputDeprecated : TensorNames.DiscreteActionOutput;
             Assert.Contains(actionOutputName, outputNames);
-            // TODO : There are some memory tensors as well
+            // -> : There are some memory tensors as well
         }
 
         [Test]

@@ -10,7 +10,7 @@ namespace Unity.MLAgents.Extensions.Input
     /// </summary>
     public class IntegerInputActionAdaptor : IRLActionInputAdaptor
     {
-        // TODO need to figure out how we can infer the branch size from here.
+        // -> need to figure out how we can infer the branch size from here.
         /// <inheritdoc cref="IRLActionInputAdaptor.GetActionSpecForInputAction"/>
         public ActionSpec GetActionSpecForInputAction(InputAction action)
         {

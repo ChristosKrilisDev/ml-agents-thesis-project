@@ -103,7 +103,7 @@ namespace Unity.MLAgents.Sensors.Reflection
         /// <returns></returns>
         private static IEnumerable<(FieldInfo, ObservableAttribute)> GetObservableFields(object o, bool excludeInherited)
         {
-            // TODO cache these (and properties) by type, so that we only have to reflect once.
+            // -> cache these (and properties) by type, so that we only have to reflect once.
             var bindingFlags = k_BindingFlags | (excludeInherited ? BindingFlags.DeclaredOnly : 0);
             var fields = o.GetType().GetFields(bindingFlags);
 

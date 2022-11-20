@@ -353,7 +353,7 @@ namespace Unity.MLAgents.Inference
         ///<param name="deterministicInference"> Inference only: set to true if the action selection from model should be
         /// deterministic. </param>
         /// <returns>True if the model contains all the expected tensors.</returns>
-        /// TODO: add checks for deterministic actions
+        /// ->: add checks for deterministic actions
         public static bool CheckExpectedTensors(this Model model, List<FailedCheck> failedModelChecks, bool deterministicInference = false)
         {
             // Check the presence of model version

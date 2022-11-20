@@ -6,7 +6,7 @@ namespace Unity.MLAgents.Inference.Utils
     /// RandomNormal - A random number generator that produces normally distributed random
     /// numbers using the Marsaglia polar method:
     /// https://en.wikipedia.org/wiki/Marsaglia_polar_method
-    /// TODO: worth overriding System.Random instead of aggregating?
+    /// ->: worth overriding System.Random instead of aggregating?
     /// </summary>
     internal class RandomNormal
     {

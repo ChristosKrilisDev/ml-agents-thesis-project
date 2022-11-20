@@ -475,6 +475,6 @@ namespace Unity.MLAgents.Extensions.Sensors
             return pose.rotation * rhs + pose.position;
         }
 
-        // TODO optimize inv(A)*B?
+        // -> optimize inv(A)*B?
     }
 }

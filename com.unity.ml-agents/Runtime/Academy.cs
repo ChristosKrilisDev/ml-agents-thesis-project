@@ -648,7 +648,7 @@ namespace Unity.MLAgents
             // Clear out the actions so we're not keeping references to any old objects
             ResetActions();
 
-            // TODO - Pass worker ID or some other identifier,
+            // -> - Pass worker ID or some other identifier,
             // so that multiple envs won't overwrite each others stats.
             TimerStack.Instance.SaveJsonTimers();
             m_Initialized = false;

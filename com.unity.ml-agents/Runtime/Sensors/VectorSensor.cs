@@ -9,8 +9,8 @@ namespace Unity.MLAgents.Sensors
     /// </summary>
     public class VectorSensor : ISensor, IBuiltInSensor
     {
-        // TODO use float[] instead
-        // TODO allow setting float[]
+        // -> use float[] instead
+        // -> allow setting float[]
         private List<float> m_Observations;
         private ObservationSpec m_ObservationSpec;
         private string m_Name;

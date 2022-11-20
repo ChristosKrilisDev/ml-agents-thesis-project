@@ -90,7 +90,7 @@ namespace Unity.MLAgents.Sensors
             using (TimerStack.Instance.Scoped("CameraSensor.GetCompressedObservation"))
             {
                 ObservationToTexture(m_Camera, m_Texture, m_Width, m_Height);
-                // TODO support more types here, e.g. JPG
+                // -> support more types here, e.g. JPG
                 var compressed = m_Texture.EncodeToPNG();
 
                 return compressed;

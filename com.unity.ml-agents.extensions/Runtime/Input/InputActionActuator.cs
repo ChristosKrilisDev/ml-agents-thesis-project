@@ -69,7 +69,7 @@ namespace Unity.MLAgents.Extensions.Input
         /// <inheritdoc cref="IActionReceiver.WriteDiscreteActionMask"/>
         public void WriteDiscreteActionMask(IDiscreteActionMask actionMask)
         {
-            // TODO configure mask from editor UI?
+            // -> configure mask from editor UI?
         }
 
         /// <inheritdoc cref="IActuator.ActionSpec"/>

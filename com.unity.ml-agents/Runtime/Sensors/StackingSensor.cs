@@ -53,7 +53,7 @@ namespace Unity.MLAgents.Sensors
         /// <param name="numStackedObservations">Number of stacked observations to keep.</param>
         public StackingSensor(ISensor wrapped, int numStackedObservations)
         {
-            // TODO ensure numStackedObservations > 1
+            // -> ensure numStackedObservations > 1
             m_WrappedSensor = wrapped;
             m_NumStackedObservations = numStackedObservations;
 
@@ -65,7 +65,7 @@ namespace Unity.MLAgents.Sensors
 
             // Set up the cached observation spec for the StackingSensor
             var newShape = m_WrappedSpec.Shape;
-            // TODO support arbitrary stacking dimension
+            // -> support arbitrary stacking dimension
             newShape[newShape.Length - 1] *= numStackedObservations;
             m_ObservationSpec = new ObservationSpec(
                 newShape, m_WrappedSpec.DimensionProperties, m_WrappedSpec.ObservationType

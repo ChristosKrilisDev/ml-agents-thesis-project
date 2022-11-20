@@ -187,7 +187,7 @@ namespace Unity.MLAgents
                 }
             }
 
-            // TODO handle ActionDescriptions?
+            // -> handle ActionDescriptions?
             return brainParametersProto;
         }
 
@@ -418,7 +418,7 @@ namespace Unity.MLAgents
                 var floatDataProto = new ObservationProto.Types.FloatData();
 
                 // Resize the float array
-                // TODO upgrade protobuf versions so that we can set the Capacity directly - see https://github.com/protocolbuffers/protobuf/pull/6530
+                // -> upgrade protobuf versions so that we can set the Capacity directly - see https://github.com/protocolbuffers/protobuf/pull/6530
                 for (var i = 0; i < numFloats; i++)
                 {
                     floatDataProto.Data.Add(0.0f);

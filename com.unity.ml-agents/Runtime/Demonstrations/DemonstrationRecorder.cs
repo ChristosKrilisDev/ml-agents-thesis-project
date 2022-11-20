@@ -171,7 +171,7 @@ namespace Unity.MLAgents.Demonstrations
 
             while (fileSystem.File.Exists(filePath))
             {
-                // TODO should we use a timestamp instead of a counter here? This loops an increasing number of times
+                // -> should we use a timestamp instead of a counter here? This loops an increasing number of times
                 // as the number of demos increases.
                 literalName = demonstrationName + "_" + uniqueNameCounter;
                 filePath = Path.Combine(demonstrationDirectory, literalName + k_ExtensionType);

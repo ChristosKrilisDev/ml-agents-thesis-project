@@ -287,7 +287,7 @@ namespace Unity.MLAgents.Extensions.Input
             {
                 InputSystem.RegisterLayoutBuilder(() =>
                 {
-                    // TODO does this need to change based on the action map we use?
+                    // ->  does this need to change based on the action map we use?
                     var builder = new InputControlLayout.Builder()
                                   .WithName(layoutName)
                                   .WithFormat(mlAgentsLayoutFormat);

@@ -1043,7 +1043,7 @@ namespace Unity.MLAgents
             }
 
             // Support legacy OnActionReceived
-            // TODO don't set this up if the sizes are 0?
+            // -> don't set this up if the sizes are 0?
             var param = m_PolicyFactory.BrainParameters;
             m_VectorActuator = new AgentVectorActuator(this, this, param.ActionSpec);
             m_ActuatorManager = new ActuatorManager(attachedActuators.Length + 1);

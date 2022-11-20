@@ -117,7 +117,7 @@ namespace Unity.MLAgents.Editor
             var behaviorParameters = (BehaviorParameters)target;
 
             // Grab the sensor components, since we need them to determine the observation sizes.
-            // TODO make these methods of BehaviorParameters
+            // -> make these methods of BehaviorParameters
             var agent = behaviorParameters.gameObject.GetComponent<Agent>();
 
             if (agent == null)

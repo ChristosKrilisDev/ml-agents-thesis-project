@@ -558,7 +558,7 @@ namespace Unity.MLAgents
                 return;
             }
 
-            // TODO We should check that if m_unsentBrainKeys has brainKey, it equals actionSpec
+            // -> We should check that if m_unsentBrainKeys has brainKey, it equals actionSpec
             m_UnsentBrainKeys[behaviorName] = actionSpec;
         }
 
