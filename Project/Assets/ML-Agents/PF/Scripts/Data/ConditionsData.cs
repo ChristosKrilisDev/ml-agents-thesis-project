@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace ML_Agents.PF.Scripts.Data
+﻿namespace ML_Agents.PF.Scripts.Data
 {
     public class ConditionsData
     {
@@ -9,7 +7,7 @@ namespace ML_Agents.PF.Scripts.Data
         /// Contains the data condition related data
         /// </summary>
 
-        public int MaxStep = 1500; //TODO : set this based on the agent
+        public int MaxStep = 1500;
         public int StepCount;
         public float StepFactor;
 

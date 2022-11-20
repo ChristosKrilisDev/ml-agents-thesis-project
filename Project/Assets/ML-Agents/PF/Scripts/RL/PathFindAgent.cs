@@ -46,15 +46,11 @@ namespace ML_Agents.PF.Scripts.RL
 
             _trainingStateMachine = GameManager.Instance.CreateStateMachine();
 
-            if (_trainingStateMachine is null)
-            {
-                throw new NullReferenceException("State Machine is null");
-            }
-
             if (_trainingStateMachine.ConditionsData is null)
             {
                 throw new NullReferenceException("Conditions data are null");
             }
+            _trainingStateMachine.ConditionsData.MaxStep = MaxStep;
 
             SetCallBacks();
         }
@@ -158,8 +154,8 @@ namespace ML_Agents.PF.Scripts.RL
 
         public override void OnActionReceived(ActionBuffers actionBuffers)
         {
-            StepReward();
             MoveAgent(actionBuffers.DiscreteActions);
+            StepReward();
         }
 
         public override void OnEpisodeBegin()
@@ -283,7 +279,10 @@ namespace ML_Agents.PF.Scripts.RL
             if (other.gameObject.CompareTag("spawnArea"))
             {
                 _trainingStateMachine.ConditionsData.TraveledDistance++;
-                // Debug.Log($"- Agent Distance : {_traveledDistance} | Current node =>{other.gameObject.name}");
+
+                // Debug.Log($"-- Agent --\n" +
+                //     $" {_trainingStateMachine.ConditionsData.TraveledDistance}/{_trainingStateMachine.ConditionsData.FullPathLength} " +
+                //     $"| Current node : {other.gameObject.name}");
             }
         }
 
@@ -323,7 +322,7 @@ namespace ML_Agents.PF.Scripts.RL
         private void StepReward()
         {
             _trainingStateMachine.ConditionsData.StepCount = StepCount;
-            _trainingStateMachine.RunOnStepReward();
+            _trainingStateMachine.RunOnStepReward(); //bug : runs the parent method and not the childs
         }
 
         private void GiveRewardInternal(RewardUseType useRewardType, float extraRewardValue)

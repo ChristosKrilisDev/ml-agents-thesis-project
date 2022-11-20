@@ -6,7 +6,6 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 {
     public class SimpleTraining : TrainingStateMachine
     {
-
         public SimpleTraining(PhaseType phaseType, TrainingType trainingType) : base(phaseType, trainingType)
         {
             HasEndConditions = CreateEndConditionsList();
@@ -14,13 +13,13 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
         public override void RunOnStepReward()
         {
-            base.RunOnStepReward(); //remove this?
+            base.RunOnStepReward(); //todo remove this?
 
             if (PhaseType == PhaseType.Phase_A) return;
 
             var reward = -RewardData.StepPenaltyPerSec / (ConditionsData.MaxStep / (ConditionsData.MaxStep * 1f));
 
-            if ((PhaseType is PhaseType.Phase_B) || PhaseType is PhaseType.Phase_C)
+            if (PhaseType is PhaseType.Phase_B || PhaseType is PhaseType.Phase_C)
             {
                 GiveInternalReward(RewardUseType.Add_Reward, reward / 1000f); //0.01f
             }
@@ -29,11 +28,15 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
                 GiveInternalReward(RewardUseType.Add_Reward, reward / 100f); //0.1f
             }
 
+            Debug.Log($"Episode State {HasEpisodeEnded()}");
+            Debug.Log($"simple step reward =>");
         }
 
         public override void RunOnCheckPointReward()
         {
             base.RunOnCheckPointReward();
+
+            Debug.Log($"simple cp reward =>");
 
             if (PhaseType == PhaseType.Phase_A)
             {
@@ -66,6 +69,8 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
         {
             base.RunOnFinalGoalReward();
 
+            Debug.Log($"simple fg reward =>");
+
             if (PhaseType == PhaseType.Phase_C)
             {
                 GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward);
@@ -86,6 +91,11 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
         protected override List<bool> CreateEndConditionsList()
         {
+            Debug.Log($"Creating End Conditions : " +
+                $"{ConditionsData.HasFoundCheckpoint}-" +
+                $"{ConditionsData.StepCount == ConditionsData.MaxStep}-" +
+                $"{ConditionsData.HasTouchedWall}");
+
             return new List<bool>
             {
                 ConditionsData.HasFoundCheckpoint,

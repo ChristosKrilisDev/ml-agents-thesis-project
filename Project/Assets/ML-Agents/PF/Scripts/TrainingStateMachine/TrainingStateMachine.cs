@@ -71,24 +71,27 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
         public virtual void RunOnStepReward()
         {
-            ConditionsData.StepFactor = (ConditionsData.StepCount - ConditionsData.MaxStep) / (float)ConditionsData.MaxStep;
+            //step factor multiplies the final reward
+            ConditionsData.StepFactor = (ConditionsData.MaxStep - ConditionsData.StepCount) / (float)ConditionsData.MaxStep;
 
-            if (PhaseType == PhaseType.Phase_C)
-            {
-                //give a negative reward each time agent makes an action
-                GiveInternalReward(RewardUseType.Add_Reward, -ConditionsData.StepFactor);
-            }
-
+            // if (PhaseType == PhaseType.Phase_C) //todo remove?
+            // {
+            //     //give a negative reward each time agent makes an action
+            //     GiveInternalReward(RewardUseType.Add_Reward, -ConditionsData.StepFactor);
+            // }
 
             //bug: HasEpisodeEnded is never true ??
-            //the episode ends on the same frame ? blocking the rest of the code running?
-            Debug.Log($"Episode State {HasEpisodeEnded()}");
-            if (HasEpisodeEnded())
-            {
-                //bug : the code block is never called
-                CalculateComplexReward(); //todo: CalculateComplexReward is called but not used ? maybe use terminal reward?
-                EndEpisode();
-            }
+
+            Debug.Log($"RunOnStepReward from Parent Class");
+
+            //agent calls the base method, but the sub method doesnt run <----
+
+            // if (HasEpisodeEnded())
+            // {
+            //     //bug : the code block is never called
+            //     CalculateComplexReward(); //todo: CalculateComplexReward is called but not used ? maybe use terminal reward?
+            //     EndEpisode();
+            // }
         }
 
         public virtual void RunOnCheckPointReward()
@@ -144,7 +147,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
         protected void GiveInternalReward(RewardUseType rewardUseType, float reward)
         {
-            // Debug.Log(reward);
+            Debug.Log(reward);
             GiveInternalRewardCallBack?.Invoke(rewardUseType, reward);
         }
 

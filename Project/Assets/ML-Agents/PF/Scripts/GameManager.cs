@@ -24,12 +24,13 @@ namespace ML_Agents.PF.Scripts
             }
 
             Utils.Utils.GatherAssets();
+
         }
 
         public TrainingStateMachine.TrainingStateMachine CreateStateMachine()
         {
             return TrainingType == TrainingType.Advanced ?(TrainingStateMachine.TrainingStateMachine)
-                new AdvancedTraining(PhaseType, TrainingType) : //else
+                new AdvancedTraining(PhaseType, TrainingType) :
                 new SimpleTraining(PhaseType, TrainingType);
         }
     }
