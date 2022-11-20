@@ -37,7 +37,6 @@ namespace Dijkstra.Scripts.Editor
                     var distance = Vector3.Distance(node.transform.position, connection.transform.position);
                     var centeredTextDiff = connection.transform.position - node.transform.position;
 
-                    //TODO : Get the distance from path values
                     Handles.Label(node.transform.position + centeredTextDiff / 2, distance.ToString("f2"), EditorStyles.whiteBoldLabel);
 
                     if (_startPath.PathNodes.Contains(node) && _startPath.PathNodes.Contains(connection))

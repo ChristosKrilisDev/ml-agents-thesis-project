@@ -26,7 +26,6 @@
 
         public void Reset()
         {
-            MaxStep= 1500;
             StepCount= 0;
             StepFactor= 0;
             TraveledDistance= -1;

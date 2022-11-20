@@ -4,6 +4,7 @@ using System.Linq;
 using Dijkstra.Scripts;
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.Structs;
+using ML_Agents.PF.Scripts.TrainingStateMachine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -322,7 +323,8 @@ namespace ML_Agents.PF.Scripts.RL
         private void StepReward()
         {
             _trainingStateMachine.ConditionsData.StepCount = StepCount;
-            _trainingStateMachine.RunOnStepReward(); //bug : runs the parent method and not the childs
+            _trainingStateMachine.RunOnStepReward();
+            //oop parent class cast to child error? explicit casting
         }
 
         private void GiveRewardInternal(RewardUseType useRewardType, float extraRewardValue)
