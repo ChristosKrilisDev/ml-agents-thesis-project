@@ -29,7 +29,7 @@ developer communities.
 - Solves sssp in video games
 - Use Dijkstra algorithm to validate the distance
 
-## Releases & Documentation
+## Documentation
 
   documentation that corresponds to the release version you're using.
 - The `com.unity.ml-agents` package is [verified](https://docs.unity3d.com/2020.1/Documentation/Manual/pack-safe.html)
@@ -43,7 +43,7 @@ developer communities.
   | **Phase D**|| **ds ** || **ad ** |
 
 
-
+** SEE
 If you use Unity or the ML-Agents Toolkit to conduct research, we ask that you
 cite the following paper as a reference:
 
