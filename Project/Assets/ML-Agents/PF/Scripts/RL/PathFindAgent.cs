@@ -13,7 +13,7 @@ using Random = UnityEngine.Random;
 
 namespace ML_Agents.PF.Scripts.RL
 {
-    public class PathFindAgent : Agent
+    public partial class PathFindAgent : Agent
     {
 
     #region Vars
