@@ -2,8 +2,7 @@
 using ML_Agents.PF.Scripts.Enums;
 using Unity.MLAgents;
 using UnityEngine;
-
-namespace ML_Agents.PF.Scripts.TrainingStateMachine
+namespace ML_Agents.PF.Scripts.StateMachine
 {
     public class AdvancedTraining : TrainingStateMachine
     {

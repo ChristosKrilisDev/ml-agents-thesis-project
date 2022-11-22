@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Dijkstra.Scripts;
 using ML_Agents.PF.Scripts.Enums;
+using ML_Agents.PF.Scripts.StateMachine;
 using ML_Agents.PF.Scripts.Structs;
-using ML_Agents.PF.Scripts.TrainingStateMachine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -26,7 +26,7 @@ namespace ML_Agents.PF.Scripts.RL
         [SerializeField] private CheckPoint _checkPoint;
         [SerializeField] private Graph _graph;
 
-        private TrainingStateMachine.TrainingStateMachine _trainingStateMachine;
+        private TrainingStateMachine _trainingStateMachine;
 
         private readonly GameObject[] _nodesToFind = new GameObject[2];
         private readonly float[] _nodesDistances = new float[2];

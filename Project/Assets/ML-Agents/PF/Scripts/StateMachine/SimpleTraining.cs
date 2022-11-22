@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using ML_Agents.PF.Scripts.Enums;
 using UnityEngine;
-
-namespace ML_Agents.PF.Scripts.TrainingStateMachine
+namespace ML_Agents.PF.Scripts.StateMachine
 {
     public class SimpleTraining : TrainingStateMachine
     {

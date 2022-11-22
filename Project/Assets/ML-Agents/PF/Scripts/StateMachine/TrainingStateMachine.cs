@@ -5,8 +5,7 @@ using ML_Agents.PF.Scripts.RL;
 using ML_Agents.PF.Scripts.Structs;
 using UnityEngine;
 using UnityEngine.Events;
-
-namespace ML_Agents.PF.Scripts.TrainingStateMachine
+namespace ML_Agents.PF.Scripts.StateMachine
 {
     public abstract class TrainingStateMachine
     {

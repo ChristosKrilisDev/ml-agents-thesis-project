@@ -1,6 +1,6 @@
 using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
-using ML_Agents.PF.Scripts.TrainingStateMachine;
+using ML_Agents.PF.Scripts.StateMachine;
 using UnityEngine;
 
 namespace ML_Agents.PF.Scripts
@@ -27,9 +27,9 @@ namespace ML_Agents.PF.Scripts
 
         }
 
-        public TrainingStateMachine.TrainingStateMachine CreateStateMachine()
+        public TrainingStateMachine CreateStateMachine()
         {
-            return TrainingType == TrainingType.Advanced ?(TrainingStateMachine.TrainingStateMachine)
+            return TrainingType == TrainingType.Advanced ?(TrainingStateMachine)
                 new AdvancedTraining(PhaseType, TrainingType) :
                 new SimpleTraining(PhaseType, TrainingType);
         }
