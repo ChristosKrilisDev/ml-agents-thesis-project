@@ -25,6 +25,11 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
         {
             base.RunOnStepReward();
 
+            if (HasEpisodeEnded())
+            {
+                Debug.Log("ended--->");
+            }
+
             var newStepReward = CalculateComplexReward() / RewardData.DivRewardValue;
 
             if (Utils.Utils.NearlyEqual(_previousStepReward, newStepReward, 0.005f)) return; //increase epsilon
@@ -37,11 +42,6 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             }
             _previousStepReward = newStepReward;
             GiveInternalReward(RewardUseType.Add_Reward, newStepReward);
-
-            if (HasEpisodeEnded())
-            {
-                Debug.Log("ended--->");
-            }
         }
 
         public override void RunOnCheckPointReward()

@@ -323,8 +323,15 @@ namespace ML_Agents.PF.Scripts.RL
         private void StepReward()
         {
             _trainingStateMachine.ConditionsData.StepCount = StepCount;
-            _trainingStateMachine.RunOnStepReward();
-            //oop parent class cast to child error? explicit casting
+
+            if (_trainingStateMachine.GetType() == typeof(SimpleTraining))
+            {
+                ((SimpleTraining)_trainingStateMachine).RunOnStepReward();
+            }
+            else if(_trainingStateMachine.GetType() == typeof(AdvancedTraining))
+            {
+                ((AdvancedTraining)_trainingStateMachine).RunOnStepReward();
+            }
         }
 
         private void GiveRewardInternal(RewardUseType useRewardType, float extraRewardValue)

@@ -15,6 +15,9 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
         {
             base.RunOnStepReward(); //todo remove this?
 
+            Debug.Log($"Episode State {HasEpisodeEnded()}");
+            Debug.Log($"simple step reward =>");
+
             if (PhaseType == PhaseType.Phase_A) return;
 
             var reward = -RewardData.StepPenaltyPerSec / (ConditionsData.MaxStep / (ConditionsData.MaxStep * 1f));
@@ -27,9 +30,6 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             {
                 GiveInternalReward(RewardUseType.Add_Reward, reward / 100f); //0.1f
             }
-
-            Debug.Log($"Episode State {HasEpisodeEnded()}");
-            Debug.Log($"simple step reward =>");
         }
 
         public override void RunOnCheckPointReward()
@@ -91,11 +91,6 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
         protected override List<bool> CreateEndConditionsList()
         {
-            Debug.Log($"Creating End Conditions : " +
-                $"{ConditionsData.HasFoundCheckpoint}-" +
-                $"{ConditionsData.StepCount == ConditionsData.MaxStep}-" +
-                $"{ConditionsData.HasTouchedWall}");
-
             return new List<bool>
             {
                 ConditionsData.HasFoundCheckpoint,

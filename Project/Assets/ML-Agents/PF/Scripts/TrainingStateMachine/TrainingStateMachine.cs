@@ -74,24 +74,7 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
             //step factor multiplies the final reward
             ConditionsData.StepFactor = (ConditionsData.MaxStep - ConditionsData.StepCount) / (float)ConditionsData.MaxStep;
 
-            // if (PhaseType == PhaseType.Phase_C) //todo remove?
-            // {
-            //     //give a negative reward each time agent makes an action
-            //     GiveInternalReward(RewardUseType.Add_Reward, -ConditionsData.StepFactor);
-            // }
-
-            //bug: HasEpisodeEnded is never true ??
-
             Debug.Log($"RunOnStepReward from Parent Class");
-
-            //agent calls the base method, but the sub method doesnt run <----
-
-            // if (HasEpisodeEnded())
-            // {
-            //     //bug : the code block is never called
-            //     CalculateComplexReward(); //todo: CalculateComplexReward is called but not used ? maybe use terminal reward?
-            //     EndEpisode();
-            // }
         }
 
         public virtual void RunOnCheckPointReward()
@@ -147,7 +130,6 @@ namespace ML_Agents.PF.Scripts.TrainingStateMachine
 
         protected void GiveInternalReward(RewardUseType rewardUseType, float reward)
         {
-            Debug.Log(reward);
             GiveInternalRewardCallBack?.Invoke(rewardUseType, reward);
         }
 
