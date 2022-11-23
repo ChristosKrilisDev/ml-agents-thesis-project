@@ -1,6 +1,10 @@
-﻿using ML_Agents.PF.Scripts.Enums;
+﻿using System;
+using System.IO;
+using ML_Agents.PF.Scripts.Enums;
+using ML_Agents.PF.Scripts.StateMachine;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace ML_Agents.PF.Scripts.RL.Editor
 {
@@ -137,14 +141,10 @@ namespace ML_Agents.PF.Scripts.RL.Editor
 
             EditorGUILayout.Space();
             Title();
-            EditorGUILayout.Space();
             TrainingInfo();
-            EditorGUILayout.Space();
-            NodesInfo();
-            EditorGUILayout.Space();
-            ConditionsData();
-            EditorGUILayout.Space();
-            // RewardInfo();
+            GraphInfo();
+            ConditionsDataInfo();
+            RewardInfo();
 
             EditorGUIUtility.labelWidth = labelWidth;
         }
@@ -173,38 +173,64 @@ namespace ML_Agents.PF.Scripts.RL.Editor
 
                 CreateIndentedLabel("Phase : ", _agentExpose.PhaseType.ToString());
                 CreateIndentedLabel("Training : ", _agentExpose.TrainingType.ToString());
-                CreateIndentedLabel("State Machine Type : ", _agentExpose.TrainingStateMachine.GetType().ToString());
+
+                if (_agentExpose.TrainingStateMachine.GetType() == typeof(SimpleTraining))
+                {
+                    CreateIndentedLabel("State Machine Type : ", "Simple");
+                }
+                else if(_agentExpose.TrainingStateMachine.GetType() == typeof(AdvancedTraining))
+                {
+                    CreateIndentedLabel("State Machine Type : ", "Advanced");
+
+                }
+
                 EditorGUILayout.Space();
                 EditorGUI.indentLevel = index;
             }
             EndVerticalBoxArea();
         }
 
-        private void NodesInfo()
+        private void GraphInfo()
         {
             BeginVerticalBoxArea();
 
-            _nodesFoldoutValue = EditorGUILayout.Foldout(_nodesFoldoutValue, "-Nodes Info-");
+            _nodesFoldoutValue = EditorGUILayout.Foldout(_nodesFoldoutValue, "-Graph Info-");
 
             if (_nodesFoldoutValue)
             {
                 var index = EditorGUI.indentLevel;
                 EditorGUI.indentLevel++;
-
-                CreateIndentedLabel("Target Index : ", _agentExpose.TargetIndex.ToString());
-                CreateIndentedLabel("Target Name : ", _agentExpose.CurrentTarget.ToString());
+                CreateObjectFieldWithLabel("Graph ",_agentExpose.Graph);
                 EditorGUILayout.Space();
 
-                foreach (var node in _agentExpose.NodesToFind)
+                CreateIndentedLabel("Target Index : ", _agentExpose.TargetIndex.ToString());
+                CreateObjectFieldWithLabel("Current Target ",_agentExpose.CurrentTarget);
+                EditorGUILayout.Space();
+
+                for (var i = 0; i < _agentExpose.NodesToFind.Length; i++)
                 {
-                    EditorGUILayout.ObjectField(node, typeof(GameObject), false);
+                    var node = _agentExpose.NodesToFind[i];
+                    CreateObjectFieldWithLabel($"Target-{i+1}", node);
                 }
+
+                EditorGUILayout.Space();
+
+                CreateObjectFieldWithLabel("StartNode ",_agentExpose.Graph.StartNode);
+                CreateObjectFieldWithLabel("CheckPointNode ",_agentExpose.Graph.CheckPointNode);
+                CreateObjectFieldWithLabel("EndNode ",_agentExpose.Graph.EndNode);
+                EditorGUILayout.Space();
+
+                var halfPath = _agentExpose.Graph.GetShortestPath(_agentExpose.Graph.StartNode,_agentExpose.Graph.CheckPointNode);
+                var fullPath = _agentExpose.Graph.GetShortestPath(_agentExpose.Graph.CheckPointNode,_agentExpose.Graph.EndNode);
+                CreateIntendedBigTextField("Half Path", halfPath.ToString());
+                CreateIntendedBigTextField("Full Path", fullPath.ToString());
+
                 EditorGUI.indentLevel = index;
             }
             EndVerticalBoxArea();
         }
 
-        private void ConditionsData()
+        private void ConditionsDataInfo()
         {
             BeginVerticalBoxArea();
 
@@ -216,19 +242,17 @@ namespace ML_Agents.PF.Scripts.RL.Editor
                 var index = EditorGUI.indentLevel;
                 EditorGUI.indentLevel++;
 
-                EditorGUILayout.ObjectField(_agentExpose.Graph, typeof(GameObject), false);
-
                 EditorGUILayout.Space();
                 CreateIndentedLabel("Max Step : ", conditionsData.MaxStep.ToString());
                 CreateIndentedLabel($"Step Count ", $"{conditionsData.StepCount.ToString()}/{conditionsData.MaxStep.ToString()}");
                 CreateIndentedLabel("Step Factor : ", conditionsData.StepFactor.ToString("f2"));
 
                 EditorGUILayout.Space();
-                CreateIndentedLabel("Path Length : ", conditionsData.FullPathLength.ToString());
-                CreateIndentedLabel("CP Length : ", conditionsData.CheckPointPathLength.ToString());
+                CreateIndentedLabel("Half Length : ", conditionsData.CheckPointPathLength.ToString());
+                CreateIndentedLabel("Total Length : ", conditionsData.FullPathLength.ToString());
 
-                var tmp = (int)_agentExpose.PhaseType >= 3 ? conditionsData.FullPathLength.ToString() : conditionsData.StepCount.ToString();
-                CreateIndentedLabel($"Traveled Distance :", "{conditionsData.TraveledDistance.ToString()}/{tmp}");
+                var tmp = (int)_agentExpose.PhaseType >= 3 ? conditionsData.FullPathLength.ToString() : conditionsData.CheckPointPathLength.ToString();
+                CreateIndentedLabel($"Traveled Distance :", $"{conditionsData.TraveledDistance.ToString()}/{tmp}");
 
                 EditorGUILayout.Space();
                 CreateIndentedLabel("Found Check point : ", conditionsData.HasFoundCheckpoint.ToString());
@@ -239,9 +263,6 @@ namespace ML_Agents.PF.Scripts.RL.Editor
             }
             EndVerticalBoxArea();
         }
-
-//graph, path, nodes path
-
 
         private void RewardInfo()
         {
@@ -258,11 +279,18 @@ namespace ML_Agents.PF.Scripts.RL.Editor
 
                 EditorGUILayout.Space();
 
-                CreateIndentedLabel("Conditions Sizes : ", rewardCondition.Length.ToString());
-
-                for (int i = 0; i < rewardCondition.Length; i++)
+                if (rewardCondition == null)
                 {
-                    CreateIndentedLabel($"Conditions {i + 1}: ", rewardCondition[i].ToString());
+                    EditorGUILayout.LabelField("No reward conditions found", EditorStyles.boldLabel);
+                }
+                else
+                {
+                    CreateIndentedLabel("Conditions Sizes : ", rewardCondition.Length.ToString());
+
+                    for (int i = 0; i < rewardCondition.Length; i++)
+                    {
+                        CreateIndentedLabel($"Conditions {i + 1}: ", rewardCondition[i].ToString());
+                    }
                 }
 
                 EditorGUI.indentLevel = index;
@@ -275,6 +303,27 @@ namespace ML_Agents.PF.Scripts.RL.Editor
 
 
     #region GUI Methods
+
+        private void CreateObjectFieldWithLabel(string label, Object obj)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.TextField(label, EditorStyles.boldLabel);
+            EditorGUILayout.ObjectField(obj, typeof(GameObject), false);
+            EditorGUILayout.EndHorizontal();
+
+        }
+
+        private void CreateIntendedBigTextField(string label, string path)
+        {
+            CreateIndentedLabel($"{label} : ", "");
+            EditorGUI.indentLevel++;
+            var strList = path.Split(',');
+            foreach (var str in strList)
+            {
+                EditorGUILayout.TextField(str, EditorStyles.boldLabel);
+            }
+            EditorGUI.indentLevel--;
+        }
 
         private void CreateIndentedLabel(string label, string value)
         {

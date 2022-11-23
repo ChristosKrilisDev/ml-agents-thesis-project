@@ -48,7 +48,7 @@ namespace Dijkstra.Scripts
 
         public override string ToString()
         {
-            return $"Nodes: {string.Join(", ", PathNodes.Select(node => node.name).ToArray())} Path Length: {Length}";
+            return $"{string.Join(",", PathNodes.Select(node => node.name).ToArray())},Path Length: {Length}";
         }
 
     }
