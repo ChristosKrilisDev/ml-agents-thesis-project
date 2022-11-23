@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using ML_Agents.PF.Scripts.Enums;
-using ML_Agents.PF.Scripts.StateMachine;
+﻿using ML_Agents.PF.Scripts.StateMachine;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -39,7 +36,6 @@ namespace ML_Agents.PF.Scripts.RL.Editor
         private int _inputFieldWidth = 160;
 
     #endregion
-
 
     #region Control
 
@@ -300,7 +296,6 @@ namespace ML_Agents.PF.Scripts.RL.Editor
 
 
     #endregion
-
 
     #region GUI Methods
 

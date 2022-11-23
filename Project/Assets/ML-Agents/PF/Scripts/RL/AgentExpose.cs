@@ -4,7 +4,6 @@ using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.StateMachine;
 using ML_Agents.PF.Scripts.Structs;
-using Unity.MLAgents;
 using UnityEngine;
 
 namespace ML_Agents.PF.Scripts.RL
@@ -27,7 +26,7 @@ namespace ML_Agents.PF.Scripts.RL
                 _agent = agent;
 
             }
-            
+
             public PhaseType PhaseType => GameManager.Instance.PhaseType;
             public TrainingType TrainingType => GameManager.Instance.TrainingType;
 

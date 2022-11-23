@@ -4,7 +4,7 @@
     {
 
         /// <summary>
-        /// Contains the data condition related data
+        /// Contains the conditionσ related data
         /// </summary>
 
         public int MaxStep = 1500;
