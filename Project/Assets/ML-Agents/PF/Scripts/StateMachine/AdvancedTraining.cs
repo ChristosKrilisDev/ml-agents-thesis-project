@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ML_Agents.PF.Scripts.Enums;
+using ML_Agents.PF.Scripts.UtilsScripts;
 using Unity.MLAgents;
 using UnityEngine;
 
@@ -32,7 +33,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             var newStepReward = CalculateComplexReward() / RewardData.DivRewardValue;
 
-            if (Utils.Utils.NearlyEqual(_previousStepReward, newStepReward, 0.005f)) return; //increase epsilon
+            if (Utils.NearlyEqual(_previousStepReward, newStepReward, 0.005f)) return; //increase epsilon
 
             if (_previousStepReward > newStepReward) //todo fix here
             {
@@ -96,7 +97,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
                     ConditionsData.HasFoundCheckpoint,
                     ConditionsData.StepCount == ConditionsData.MaxStep,
                     ConditionsData.HasTouchedWall,
-                    Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength)
+                    Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength)
                 };
 
             }
@@ -106,7 +107,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
                 ConditionsData.HasFoundGoal,
                 ConditionsData.StepCount == ConditionsData.MaxStep,
                 ConditionsData.HasTouchedWall,
-                Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength + ConditionsData.CheckPointPathLength)
+                Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength + ConditionsData.CheckPointPathLength)
             };
         }
 

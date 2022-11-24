@@ -3,6 +3,7 @@ using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.RL;
 using ML_Agents.PF.Scripts.Structs;
+using ML_Agents.PF.Scripts.UtilsScripts;
 using UnityEngine.Events;
 
 namespace ML_Agents.PF.Scripts.StateMachine
@@ -51,7 +52,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
             {
                 return new List<bool>()
                 {
-                    Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundGoal,
+                    Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundGoal,
                     ConditionsData.HasFoundGoal,
                     ConditionsData.HasFoundCheckpoint,
                 };
@@ -59,7 +60,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             return new List<bool>()
             {
-                Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundCheckpoint,
+                Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundCheckpoint,
                 ConditionsData.HasFoundCheckpoint,
             };
         }
@@ -132,14 +133,14 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         protected void DijkstraDataWriter(int length, string key)
         {
-            Utils.Utils.WriteDijkstraData(ConditionsData.TraveledDistance, length, key);
+            Utils.WriteDijkstraData(ConditionsData.TraveledDistance, length, key);
         }
 
     #endregion
 
         public bool HasEpisodeEnded()
         {
-            return Utils.Utils.HasEpisodeEnded(RewardConditions);
+            return Utils.HasEpisodeEnded(RewardConditions);
         }
 
     }

@@ -1,6 +1,7 @@
 using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.StateMachine;
+using ML_Agents.PF.Scripts.UtilsScripts;
 using UnityEngine;
 
 namespace ML_Agents.PF.Scripts
@@ -23,7 +24,7 @@ namespace ML_Agents.PF.Scripts
                 Instance = this;
             }
 
-            Utils.Utils.GatherAssets();
+            Utils.GatherAssets();
 
         }
 

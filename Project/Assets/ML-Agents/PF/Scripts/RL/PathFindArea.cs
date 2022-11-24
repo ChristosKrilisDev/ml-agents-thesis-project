@@ -1,3 +1,4 @@
+using ML_Agents.PF.Scripts.UtilsScripts;
 using UnityEngine;
 
 namespace ML_Agents.PF.Scripts.RL
@@ -6,8 +7,8 @@ namespace ML_Agents.PF.Scripts.RL
     {
         [SerializeField] private GameObject[] _spawnAreas;
 
-        private static GameObject GoalNodePref => Utils.Utils.FinalNode;
-        private static GameObject BlockPref => Utils.Utils.SimpleNode;
+        private static GameObject GoalNodePref => Utils.FinalNode;
+        private static GameObject BlockPref => Utils.SimpleNode;
         private const string OBJECT_TAG = "pfobj";
 
         private Transform[] _nodes;

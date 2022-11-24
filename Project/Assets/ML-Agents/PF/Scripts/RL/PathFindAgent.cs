@@ -5,6 +5,7 @@ using Dijkstra.Scripts;
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.StateMachine;
 using ML_Agents.PF.Scripts.Structs;
+using ML_Agents.PF.Scripts.UtilsScripts;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -266,9 +267,9 @@ namespace ML_Agents.PF.Scripts.RL
         {
             //use for the sharped RF , distance/reward for each target
             //get the distance from agent to cp
-            _nodesDistances[0] = Utils.Utils.GetDistanceDifference(gameObject, _graph.Nodes[nCheckPoint].gameObject);
+            _nodesDistances[0] = Utils.GetDistanceDifference(gameObject, _graph.Nodes[nCheckPoint].gameObject);
             //get the distance from cp to final goal
-            _nodesDistances[1] = Utils.Utils.GetDistanceDifference(_graph.Nodes[nCheckPoint].gameObject, _graph.Nodes[nFinalGoal].gameObject);
+            _nodesDistances[1] = Utils.GetDistanceDifference(_graph.Nodes[nCheckPoint].gameObject, _graph.Nodes[nFinalGoal].gameObject);
         }
 
     #endregion
@@ -357,7 +358,7 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void UpdateRewardDataStruct()
         {
-            _rewardDataStruct.CurrentDistance = Utils.Utils.GetDistanceDifference(gameObject, _target);
+            _rewardDataStruct.CurrentDistance = Utils.GetDistanceDifference(gameObject, _target);
             _rewardDataStruct.InitialDistanceFromTarget = _nodesDistances[_targetNodeIndex];
             _rewardDataStruct.HasEpisodeEnd = _trainingStateMachine.HasEpisodeEnded();
             _rewardDataStruct.Conditions = _trainingStateMachine.RewardConditions.ToArray();

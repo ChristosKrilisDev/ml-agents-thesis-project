@@ -1,3 +1,4 @@
+using ML_Agents.PF.Scripts.UtilsScripts;
 using UnityEngine;
 
 namespace ML_Agents.PF.Scripts.RL
@@ -26,8 +27,8 @@ namespace ML_Agents.PF.Scripts.RL
             _myButton = transform.GetChild(0).gameObject;
             _renderer = _myButton.GetComponent<Renderer>();
 
-            _onMaterial = Utils.Utils.OnButtonMaterial;
-            _offMaterial = Utils.Utils.OffButtonMaterial;
+            _onMaterial = Utils.OnButtonMaterial;
+            _offMaterial = Utils.OffButtonMaterial;
         }
 
         public void Init(int cpSpawnIndex, int goalSpawnIndex)

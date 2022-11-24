@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ML_Agents.PF.Scripts.Enums;
+using ML_Agents.PF.Scripts.UtilsScripts;
 
 namespace ML_Agents.PF.Scripts.StateMachine
 {
@@ -50,7 +51,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
                     GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward / 3);
                 }
 
-                if (Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength))
+                if (Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength))
                 {
                     GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward);
                 }
@@ -72,7 +73,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
                 DijkstraDataWriter(ConditionsData.FullPathLength, FINAL_GOAL_KEY);
 
-                if (Utils.Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength))
+                if (Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength))
                 {
                     GiveInternalReward(RewardUseType.Set_Reward, 1f);
                 }

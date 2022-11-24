@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.MLAgents;
 using UnityEditor;
 using UnityEngine;
-namespace ML_Agents.PF.Scripts.Utils
+namespace ML_Agents.PF.Scripts.UtilsScripts
 {
     public static class Utils
     {
