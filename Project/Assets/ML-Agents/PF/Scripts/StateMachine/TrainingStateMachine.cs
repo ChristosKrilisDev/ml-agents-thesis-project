@@ -22,10 +22,12 @@ namespace ML_Agents.PF.Scripts.StateMachine
         protected const string CHECK_POINT_KEY = "Agent/Check Point Dijkstra Success Rate";
         protected const string FINAL_GOAL_KEY = "Agent/Full Dijkstra Success Rate";
 
-        protected abstract List<bool> CreateEndConditionsList();
-        protected List<bool> HasEndConditions = new List<bool>(); //?
+        //never used
+        protected abstract List<bool> CreateEndEpisodeConditionsList();
+        public List<bool> EndEpisodeConditions = new List<bool>();
 
         public readonly List<bool> RewardConditions;
+        //Reward conditions holds
         public RewardDataStruct RewardDataStruct;
 
         public UnityAction<RewardUseType, float> GiveInternalRewardCallBack;
@@ -140,7 +142,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         public bool HasEpisodeEnded()
         {
-            return Utils.HasEpisodeEnded(RewardConditions);
+            return Utils.HasEpisodeEnded(RewardConditions); //EndCondition
         }
 
     }

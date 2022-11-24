@@ -140,7 +140,7 @@ namespace ML_Agents.PF.Scripts.RL.Editor
             TrainingInfo();
             GraphInfo();
             ConditionsDataInfo();
-            RewardInfo();
+            RewardDataInfo();
 
             EditorGUIUtility.labelWidth = labelWidth;
         }
@@ -174,7 +174,7 @@ namespace ML_Agents.PF.Scripts.RL.Editor
                 {
                     CreateIndentedLabel("State Machine Type : ", "Simple");
                 }
-                else if(_agentExpose.TrainingStateMachine.GetType() == typeof(AdvancedTraining))
+                else if (_agentExpose.TrainingStateMachine.GetType() == typeof(AdvancedTraining))
                 {
                     CreateIndentedLabel("State Machine Type : ", "Advanced");
 
@@ -196,28 +196,28 @@ namespace ML_Agents.PF.Scripts.RL.Editor
             {
                 var index = EditorGUI.indentLevel;
                 EditorGUI.indentLevel++;
-                CreateObjectFieldWithLabel("Graph ",_agentExpose.Graph);
+                CreateObjectFieldWithLabel("Graph ", _agentExpose.Graph);
                 EditorGUILayout.Space();
 
                 CreateIndentedLabel("Target Index : ", _agentExpose.TargetIndex.ToString());
-                CreateObjectFieldWithLabel("Current Target ",_agentExpose.CurrentTarget);
+                CreateObjectFieldWithLabel("Current Target ", _agentExpose.CurrentTarget);
                 EditorGUILayout.Space();
 
                 for (var i = 0; i < _agentExpose.NodesToFind.Length; i++)
                 {
                     var node = _agentExpose.NodesToFind[i];
-                    CreateObjectFieldWithLabel($"Target-{i+1}", node);
+                    CreateObjectFieldWithLabel($"Target-{i + 1}", node);
                 }
 
                 EditorGUILayout.Space();
 
-                CreateObjectFieldWithLabel("StartNode ",_agentExpose.Graph.StartNode);
-                CreateObjectFieldWithLabel("CheckPointNode ",_agentExpose.Graph.CheckPointNode);
-                CreateObjectFieldWithLabel("EndNode ",_agentExpose.Graph.EndNode);
+                CreateObjectFieldWithLabel("StartNode ", _agentExpose.Graph.StartNode);
+                CreateObjectFieldWithLabel("CheckPointNode ", _agentExpose.Graph.CheckPointNode);
+                CreateObjectFieldWithLabel("EndNode ", _agentExpose.Graph.EndNode);
                 EditorGUILayout.Space();
 
-                var halfPath = _agentExpose.Graph.GetShortestPath(_agentExpose.Graph.StartNode,_agentExpose.Graph.CheckPointNode);
-                var fullPath = _agentExpose.Graph.GetShortestPath(_agentExpose.Graph.CheckPointNode,_agentExpose.Graph.EndNode);
+                var halfPath = _agentExpose.Graph.GetShortestPath(_agentExpose.Graph.StartNode, _agentExpose.Graph.CheckPointNode);
+                var fullPath = _agentExpose.Graph.GetShortestPath(_agentExpose.Graph.CheckPointNode, _agentExpose.Graph.EndNode);
                 CreateIntendedBigTextField("Half Path", halfPath.ToString());
                 CreateIntendedBigTextField("Full Path", fullPath.ToString());
 
@@ -260,40 +260,52 @@ namespace ML_Agents.PF.Scripts.RL.Editor
             EndVerticalBoxArea();
         }
 
-        private void RewardInfo()
+        private void RewardDataInfo()
         {
             BeginVerticalBoxArea();
 
             _rewardFoldoutValue = EditorGUILayout.Foldout(_rewardFoldoutValue, "-Reward Data Info-");
             var rewardCondition = _agentExpose.RewardDataStruct.Conditions;
+            var rewardData = _agentExpose.RewardDataStruct;
 
             if (_rewardFoldoutValue)
             {
                 var index = EditorGUI.indentLevel;
                 EditorGUI.indentLevel++;
 
-
                 EditorGUILayout.Space();
 
                 if (rewardCondition == null)
                 {
                     EditorGUILayout.LabelField("No reward conditions found", EditorStyles.boldLabel);
-                }
-                else
-                {
-                    CreateIndentedLabel("Conditions Sizes : ", rewardCondition.Length.ToString());
 
-                    for (int i = 0; i < rewardCondition.Length; i++)
-                    {
-                        CreateIndentedLabel($"Conditions {i + 1}: ", rewardCondition[i].ToString());
-                    }
+                    return;
                 }
+
+                CreateIndentedLabel("Conditions Sizes : ", rewardCondition.Length.ToString());
+                for (int i = 0; i < rewardCondition.Length; i++)
+                {
+                    CreateIndentedLabel($"Reward Conditions {i + 1}: ", rewardCondition[i].ToString());
+                }
+
+                EditorGUILayout.Space();
+
+                CreateIndentedLabel("Conditions Sizes : ", rewardCondition.Length.ToString());
+                for (int i = 0; i < _agentExpose.EndEpisodeConditions.Count; i++)
+                {
+                    CreateIndentedLabel($"End Conditions {i + 1}: ", _agentExpose.EndEpisodeConditions[i].ToString());
+                }
+
+                EditorGUILayout.Space();
+
+                CreateIndentedLabel($"Episode state: ", rewardData.HasEpisodeEnd.ToString());
+                CreateIndentedLabel($"Distance Diff: ", rewardData.CurrentDistance.ToString());
+                CreateIndentedLabel($"Init Distance: ", rewardData.InitialDistanceFromTarget.ToString());
 
                 EditorGUI.indentLevel = index;
             }
             EndVerticalBoxArea();
         }
-
 
     #endregion
 
@@ -313,6 +325,7 @@ namespace ML_Agents.PF.Scripts.RL.Editor
             CreateIndentedLabel($"{label} : ", "");
             EditorGUI.indentLevel++;
             var strList = path.Split(',');
+
             foreach (var str in strList)
             {
                 EditorGUILayout.TextField(str, EditorStyles.boldLabel);

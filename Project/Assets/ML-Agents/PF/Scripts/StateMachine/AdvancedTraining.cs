@@ -12,13 +12,12 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         public AdvancedTraining(PhaseType phaseType, TrainingType trainingType) : base(phaseType, trainingType)
         {
-            HasEndConditions = CreateEndConditionsList();
+            EndEpisodeConditions = CreateEndEpisodeConditionsList();
         }
 
         protected override void EndEpisode()
         {
             _previousStepReward = 0;
-            // _prevPenaltyReward = 0;
             base.EndEpisode();
         }
 
@@ -29,6 +28,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
             if (HasEpisodeEnded())
             {
                 Debug.Log("ended--->");
+                EndEpisode();
             }
 
             var newStepReward = CalculateComplexReward() / RewardData.DivRewardValue;
@@ -88,9 +88,9 @@ namespace ML_Agents.PF.Scripts.StateMachine
             }
         }
 
-        protected override List<bool> CreateEndConditionsList()
+        protected override List<bool> CreateEndEpisodeConditionsList()
         {
-            if (TrainingType == TrainingType.Advanced && (int)PhaseType <= 2)
+            if ((int)PhaseType <= 2)
             {
                 return new List<bool>
                 {

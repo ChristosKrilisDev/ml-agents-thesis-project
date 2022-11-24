@@ -8,7 +8,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
     {
         public SimpleTraining(PhaseType phaseType, TrainingType trainingType) : base(phaseType, trainingType)
         {
-            HasEndConditions = CreateEndConditionsList();
+            EndEpisodeConditions = CreateEndEpisodeConditionsList();
         }
 
         public override void RunOnStepReward()
@@ -81,7 +81,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
             EndEpisode();
         }
 
-        protected override List<bool> CreateEndConditionsList()
+        protected override List<bool> CreateEndEpisodeConditionsList()
         {
             return new List<bool>
             {

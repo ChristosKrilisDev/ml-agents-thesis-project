@@ -37,12 +37,9 @@ namespace ML_Agents.PF.Scripts.RL
             public GameObject CurrentTarget => _agent._target;
             public int TargetIndex => _agent._targetNodeIndex;
             public GameObject[] NodesToFind => _agent._nodesToFind;
-            public RewardDataStruct RewardDataStruct => _agent._rewardDataStruct;
-
-
+            public RewardDataStruct RewardDataStruct => _agent._trainingStateMachine.RewardDataStruct;
+            public List<bool> EndEpisodeConditions => _agent._trainingStateMachine.EndEpisodeConditions;
             public ConditionsData ConditionsData => TrainingStateMachine.ConditionsData;
-            public List<bool> RewardConditions => TrainingStateMachine.RewardConditions;
-            public RewardDataStruct RewardDataStructFromT => TrainingStateMachine.RewardDataStruct;
 
         }
     }

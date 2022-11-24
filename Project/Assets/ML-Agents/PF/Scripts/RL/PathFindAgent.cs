@@ -36,8 +36,6 @@ namespace ML_Agents.PF.Scripts.RL
 
         private Rigidbody _agentRb;
 
-        private RewardDataStruct _rewardDataStruct; //move this
-
     #endregion
 
     #region Inits
@@ -52,8 +50,8 @@ namespace ML_Agents.PF.Scripts.RL
             {
                 throw new NullReferenceException("Conditions data are null");
             }
-            _trainingStateMachine.ConditionsData.MaxStep = MaxStep;
 
+            _trainingStateMachine.ConditionsData.MaxStep = MaxStep;
             SetCallBacks();
         }
 
@@ -217,8 +215,6 @@ namespace ML_Agents.PF.Scripts.RL
             //nodes transform has updated through the PFArea.cs above(ref nodeTransforms);
 
             //collect all the data
-
-            _rewardDataStruct = new RewardDataStruct();
             _trainingStateMachine.ConditionsData.MaxStep = MaxStep;
         }
 
@@ -358,12 +354,14 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void UpdateRewardDataStruct()
         {
-            _rewardDataStruct.CurrentDistance = Utils.GetDistanceDifference(gameObject, _target);
-            _rewardDataStruct.InitialDistanceFromTarget = _nodesDistances[_targetNodeIndex];
-            _rewardDataStruct.HasEpisodeEnd = _trainingStateMachine.HasEpisodeEnded();
-            _rewardDataStruct.Conditions = _trainingStateMachine.RewardConditions.ToArray();
+            _trainingStateMachine.RewardDataStruct.SetData(
+                _trainingStateMachine.HasEpisodeEnded(),
+                _trainingStateMachine.RewardConditions.ToArray(),
+                Utils.GetDistanceDifference(gameObject, _target),
+                _nodesDistances[_targetNodeIndex]
+                );
 
-            _trainingStateMachine.RewardDataStruct = _rewardDataStruct;
+            Debug.Log("Updated Reward Data");
         }
 
     #endregion
