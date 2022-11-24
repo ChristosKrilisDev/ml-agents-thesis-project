@@ -3,7 +3,6 @@ using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.RL;
 using ML_Agents.PF.Scripts.Structs;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace ML_Agents.PF.Scripts.StateMachine
@@ -73,8 +72,6 @@ namespace ML_Agents.PF.Scripts.StateMachine
         {
             //step factor multiplies the final reward
             ConditionsData.StepFactor = (ConditionsData.MaxStep - ConditionsData.StepCount) / (float)ConditionsData.MaxStep;
-
-            Debug.Log($"RunOnStepReward from Parent Class");
         }
 
         public virtual void RunOnCheckPointReward()

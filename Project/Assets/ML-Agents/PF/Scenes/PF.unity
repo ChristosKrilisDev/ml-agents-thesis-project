@@ -2955,7 +2955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PhaseType: 1
-  TrainingType: 1
+  TrainingType: 2
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
 --- !u!4 &686440863
 Transform:
@@ -8507,6 +8507,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AreaPF
       objectReference: {fileID: 0}
+    - target: {fileID: 1464170487903594, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1953692164607720, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -8813,7 +8817,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4943717996348261
 Transform:
   m_ObjectHideFlags: 0
