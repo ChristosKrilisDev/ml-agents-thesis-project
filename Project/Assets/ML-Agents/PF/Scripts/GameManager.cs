@@ -12,6 +12,10 @@ namespace ML_Agents.PF.Scripts
         public PhaseType PhaseType;
         public TrainingType TrainingType;
 
+        [SerializeField] private bool _rlTraining = false;
+        [SerializeField, Range(1,15)] private int _areasCount;
+        [SerializeField] private GameObject _trainingAreasParent;
+
         [Space]
         public RewardData RewardData;
 
@@ -26,6 +30,21 @@ namespace ML_Agents.PF.Scripts
 
             Utils.GatherAssets();
 
+            AutoActivateTrainingAreas();
+        }
+
+        private void AutoActivateTrainingAreas()
+        {
+            if (!_rlTraining)
+                return;
+
+            _trainingAreasParent.SetActive(true);
+            var areas = _trainingAreasParent.GetComponentsInChildren<Transform>();
+
+            for (int i = 0; i < _areasCount; i++)
+            {
+                areas[i].gameObject.SetActive(true);
+            }
         }
 
         public TrainingStateMachine CreateStateMachine()
