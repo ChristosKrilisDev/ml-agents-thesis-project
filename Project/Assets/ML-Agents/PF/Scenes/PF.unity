@@ -134,7 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 403131}
   m_Layer: 0
-  m_Name: ' Second Floor (9)'
+  m_Name: 2-  Floor (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -969,67 +969,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &157564283
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1464170487903594, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_Name
-      value: AreaPF (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1464170487903594, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -121.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -3.4161835
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -8.232101
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
 --- !u!1001 &160528383
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1519,7 +1458,7 @@ GameObject:
   m_Component:
   - component: {fileID: 262324828}
   m_Layer: 0
-  m_Name: hird Floor (9)
+  m_Name: 4- Floor (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2582,7 +2521,7 @@ GameObject:
   m_Component:
   - component: {fileID: 572558770}
   m_Layer: 0
-  m_Name: Third Floor (9)
+  m_Name: 3- Floor (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2621,7 +2560,7 @@ GameObject:
   m_Component:
   - component: {fileID: 577364065}
   m_Layer: 0
-  m_Name: ' First Floor (10)'
+  m_Name: 6-  Floor (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2936,7 +2875,7 @@ GameObject:
   - component: {fileID: 686440863}
   - component: {fileID: 686440862}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: =====GameManager=====
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2956,10 +2895,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PhaseType: 4
   TrainingType: 2
-  _rlTraining: 0
-  x: 0
-  _trainingAreasParent: {fileID: 0}
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
+  _rlTraining: 1
+  _areasCount: 4
+  _trainingAreasParent: {fileID: 929064095}
+  _testArea: {fileID: 1289305690}
 --- !u!4 &686440863
 Transform:
   m_ObjectHideFlags: 0
@@ -3409,7 +3349,7 @@ GameObject:
   m_Component:
   - component: {fileID: 774691016}
   m_Layer: 0
-  m_Name: hird Floor (9)
+  m_Name: 5- Floor (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4901,7 +4841,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1068028026}
   m_Layer: 0
-  m_Name: ' First Floor (9)'
+  m_Name: 1-  Floor (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4940,7 +4880,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1070696407}
   m_Layer: 0
-  m_Name: ' Second Floor (10)'
+  m_Name: 7- Floor (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5794,6 +5734,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1286139785}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1289305690 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1464170487903594, guid: bd804431e808a492bb5658bcd296e58e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2127973662}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1297466096
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6464,7 +6410,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1493997813}
   m_Layer: 0
-  m_Name: Third Floor (10)
+  m_Name: 8- Floor (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

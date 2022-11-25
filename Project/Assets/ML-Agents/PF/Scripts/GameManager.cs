@@ -11,13 +11,14 @@ namespace ML_Agents.PF.Scripts
         [Header("Training Vars")]
         public PhaseType PhaseType;
         public TrainingType TrainingType;
+        [Space]
+        public RewardData RewardData;
 
+        [Space]
         [SerializeField] private bool _rlTraining = false;
         [SerializeField, Range(1,15)] private int _areasCount;
         [SerializeField] private GameObject _trainingAreasParent;
-
-        [Space]
-        public RewardData RewardData;
+        [SerializeField] private GameObject _testArea;
 
         public static GameManager Instance;
 
@@ -38,12 +39,13 @@ namespace ML_Agents.PF.Scripts
             if (!_rlTraining)
                 return;
 
+            _testArea.SetActive(false);
             _trainingAreasParent.SetActive(true);
-            var areas = _trainingAreasParent.GetComponentsInChildren<Transform>();
 
             for (int i = 0; i < _areasCount; i++)
             {
-                areas[i].gameObject.SetActive(true);
+                var area = _trainingAreasParent.transform.GetChild(i);
+                area.gameObject.SetActive(true);
             }
         }
 
