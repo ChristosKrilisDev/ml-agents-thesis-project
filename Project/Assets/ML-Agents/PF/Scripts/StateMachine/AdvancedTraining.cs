@@ -27,7 +27,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             if (HasEpisodeEnded())
             {
-                Debug.Log("Length or steps reached");
+                Debug.Log("Max Length or Max Steps reached");
                 GiveInternalReward(RewardUseType.Set_Reward, RewardData.Penalty);
                 EndEpisode();
                 return;

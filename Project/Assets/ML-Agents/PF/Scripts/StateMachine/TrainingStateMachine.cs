@@ -45,10 +45,10 @@ namespace ML_Agents.PF.Scripts.StateMachine
             TrainingType = trainingType;
             ConditionsData = new ConditionsData();
 
-            FinalRewardConditions = CreateRewardConditionsList();
+            FinalRewardConditions = UpdateRewardConditionsList();
         }
 
-        private List<bool> CreateRewardConditionsList()
+        private List<bool> UpdateRewardConditionsList()
         {
             if (PhaseType == PhaseType.Phase_D)
             {
@@ -123,6 +123,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         protected void OnTerminalCondition(RewardUseType rType)
         {
+            //this will update the Reward Data struct with the final reward condition
             UpdateRewardDataStructCallBack?.Invoke();
             var reward = RewardFunction.GetComplexReward(RewardDataStruct);
             GiveInternalReward(rType, reward);
