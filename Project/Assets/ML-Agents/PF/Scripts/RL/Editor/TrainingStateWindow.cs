@@ -281,19 +281,22 @@ namespace ML_Agents.PF.Scripts.RL.Editor
 
                     return;
                 }
-
-                CreateIndentedLabel("Conditions Sizes : ", rewardCondition.Length.ToString());
+                CreateIndentedLabel("FinalRewardConditions Sizes : ", (_agentExpose.FinalRewardConditions.Count).ToString());
+                for (int i = 0; i < _agentExpose.FinalRewardConditions.Count; i++)
+                {
+                    CreateIndentedLabel($"Final Condition-{i + 1}: ", _agentExpose.FinalRewardConditions[i].ToString());
+                }
+                EditorGUILayout.Space();
+                CreateIndentedLabel("End Conditions Sizes : ", (_agentExpose.EndEpisodeConditions.Count).ToString());
+                for (int i = 0; i < _agentExpose.EndEpisodeConditions.Count; i++)
+                {
+                    CreateIndentedLabel($"End Condition-{i + 1}: ", _agentExpose.EndEpisodeConditions[i].ToString());
+                }
+                EditorGUILayout.Space();
+                CreateIndentedLabel("Reward C' Size : ", rewardCondition.Length.ToString());
                 for (int i = 0; i < rewardCondition.Length; i++)
                 {
                     CreateIndentedLabel($"Reward Conditions {i + 1}: ", rewardCondition[i].ToString());
-                }
-
-                EditorGUILayout.Space();
-
-                CreateIndentedLabel("End Conditions Sizes : ", (rewardCondition.Length+1).ToString());
-                for (int i = 0; i < _agentExpose.EndEpisodeConditions.Count; i++)
-                {
-                    CreateIndentedLabel($"End Conditions {i + 1}: ", _agentExpose.EndEpisodeConditions[i].ToString());
                 }
 
                 EditorGUILayout.Space();

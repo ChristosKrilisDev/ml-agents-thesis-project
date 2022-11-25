@@ -27,7 +27,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
         public List<bool> EndEpisodeConditions = new List<bool>();
 
         //Reward conditions must ne used once the episode ends to calculate the final reward
-        public readonly List<bool> FinalRewardConditions;
+        public List<bool> FinalRewardConditions;
         public RewardDataStruct RewardDataStruct;
 
         public UnityAction<RewardUseType, float> GiveInternalRewardCallBack;
@@ -45,26 +45,48 @@ namespace ML_Agents.PF.Scripts.StateMachine
             TrainingType = trainingType;
             ConditionsData = new ConditionsData();
 
-            FinalRewardConditions = UpdateRewardConditionsList();
+            UpdateRewardConditionsList();
         }
 
-        private List<bool> UpdateRewardConditionsList()
+        private void UpdateRewardConditionsList()
         {
             if (PhaseType == PhaseType.Phase_D)
             {
-                return new List<bool>()
+                FinalRewardConditions = new List<bool>()
                 {
+                    /*full success*/
                     Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundGoal,
+                    /*success*/
                     ConditionsData.HasFoundGoal,
+                    /*partial success*/
+                    ConditionsData.HasFoundCheckpoint,
+                };
+            }
+            else if (PhaseType == PhaseType.Phase_C)
+            {
+                FinalRewardConditions = new List<bool>()
+                {
+                    ConditionsData.HasFoundGoal,
+                    Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength) && ConditionsData.HasFoundCheckpoint,
+                    ConditionsData.HasFoundCheckpoint,
+                };
+            }
+            else if (PhaseType == PhaseType.Phase_B)
+            {
+                FinalRewardConditions = new List<bool>()
+                {
+                    Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength) && ConditionsData.HasFoundCheckpoint,
+                    ConditionsData.HasFoundCheckpoint,
+                };
+            }
+            else if (PhaseType == PhaseType.Phase_A)
+            {
+                FinalRewardConditions = new List<bool>()
+                {
                     ConditionsData.HasFoundCheckpoint,
                 };
             }
 
-            return new List<bool>()
-            {
-                Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundCheckpoint,
-                ConditionsData.HasFoundCheckpoint,
-            };
         }
 
     #endregion
@@ -74,6 +96,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
         public virtual void RunOnStepReward()
         {
             UpdateEndEpisodeConditionsList();
+            UpdateRewardConditionsList();
             //step factor multiplies the final reward
             ConditionsData.StepFactor = (ConditionsData.MaxStep - ConditionsData.StepCount) / (float)ConditionsData.MaxStep;
         }
@@ -81,6 +104,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
         public virtual void RunOnCheckPointReward()
         {
             UpdateEndEpisodeConditionsList();
+            UpdateRewardConditionsList();
 
             if ((int)PhaseType >= 3)
             {
@@ -91,6 +115,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
         public virtual void RunOnFinalGoalReward()
         {
             UpdateEndEpisodeConditionsList();
+            UpdateRewardConditionsList();
         }
 
         public void RunOnHarmfulCollision()
@@ -118,6 +143,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
         protected float CalculateComplexReward()
         {
             UpdateRewardDataStructCallBack?.Invoke();
+
             return RewardFunction.GetComplexReward(RewardDataStruct);
         }
 
@@ -144,7 +170,8 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         public bool HasEpisodeEnded()
         {
-            RewardDataStruct.HasEpisodeEnd= Utils.HasEpisodeEnded(EndEpisodeConditions);
+            RewardDataStruct.HasEpisodeEnd = Utils.HasEpisodeEnded(EndEpisodeConditions);
+
             return RewardDataStruct.HasEpisodeEnd;
         }
 

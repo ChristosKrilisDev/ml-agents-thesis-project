@@ -61,13 +61,14 @@ namespace ML_Agents.PF.Scripts.RL
         private static float GetTerminalConditionReward(List<bool> conditions)
         {
             float reward = 0;
-
-            //has reach max distance but didnt find the goal
-            for (var i = 0; i < conditions.Count; i++) //todo: test it
+            for (var i = 0; i < conditions.Count; i++)
             {
-                if (!conditions[i]) continue; //conditions are reversed ordered, 1st on is the best scenario
+                //conditions are reversed ordered,
+                //C1 Full success, C2 Partial success, C3 Partial success
+                if (!conditions[i]) continue;
 
-                reward = RewardData.Reward / i+1; //1st => r/1, 2nd => r/2, 3rd => r/3
+                //C1 => r, C2 => r/2, C3 => r/3
+                reward = RewardData.Reward / (i+1);
 
                 Debug.Log("Terminal reward = " + reward + " takes  : " +i);
                 break;
