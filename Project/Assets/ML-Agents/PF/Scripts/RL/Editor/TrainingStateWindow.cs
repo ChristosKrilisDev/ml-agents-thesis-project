@@ -290,7 +290,7 @@ namespace ML_Agents.PF.Scripts.RL.Editor
 
                 EditorGUILayout.Space();
 
-                CreateIndentedLabel("Conditions Sizes : ", rewardCondition.Length.ToString());
+                CreateIndentedLabel("End Conditions Sizes : ", (rewardCondition.Length+1).ToString());
                 for (int i = 0; i < _agentExpose.EndEpisodeConditions.Count; i++)
                 {
                     CreateIndentedLabel($"End Conditions {i + 1}: ", _agentExpose.EndEpisodeConditions[i].ToString());

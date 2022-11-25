@@ -4,7 +4,6 @@ using System.Linq;
 using Dijkstra.Scripts;
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.StateMachine;
-using ML_Agents.PF.Scripts.Structs;
 using ML_Agents.PF.Scripts.UtilsScripts;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
@@ -356,12 +355,10 @@ namespace ML_Agents.PF.Scripts.RL
         {
             _trainingStateMachine.RewardDataStruct.SetData(
                 _trainingStateMachine.HasEpisodeEnded(),
-                _trainingStateMachine.RewardConditions.ToArray(),
+                _trainingStateMachine.FinalRewardConditions.ToArray(),
                 Utils.GetDistanceDifference(gameObject, _target),
                 _nodesDistances[_targetNodeIndex]
                 );
-
-            Debug.Log("Updated Reward Data");
         }
 
     #endregion

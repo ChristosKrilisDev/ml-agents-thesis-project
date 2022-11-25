@@ -22,12 +22,12 @@ namespace ML_Agents.PF.Scripts.StateMachine
         protected const string CHECK_POINT_KEY = "Agent/Check Point Dijkstra Success Rate";
         protected const string FINAL_GOAL_KEY = "Agent/Full Dijkstra Success Rate";
 
-        //never used
-        protected abstract List<bool> CreateEndEpisodeConditionsList();
+        // end conditions will be used for EndEpisode check
+        protected abstract void UpdateEndEpisodeConditionsList();
         public List<bool> EndEpisodeConditions = new List<bool>();
 
-        public readonly List<bool> RewardConditions;
-        //Reward conditions holds
+        //Reward conditions must ne used once the episode ends to calculate the final reward
+        public readonly List<bool> FinalRewardConditions;
         public RewardDataStruct RewardDataStruct;
 
         public UnityAction<RewardUseType, float> GiveInternalRewardCallBack;
@@ -45,7 +45,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
             TrainingType = trainingType;
             ConditionsData = new ConditionsData();
 
-            RewardConditions = CreateRewardConditionsList();
+            FinalRewardConditions = CreateRewardConditionsList();
         }
 
         private List<bool> CreateRewardConditionsList()
@@ -54,7 +54,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
             {
                 return new List<bool>()
                 {
-                    Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundGoal,
+                    Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundGoal,
                     ConditionsData.HasFoundGoal,
                     ConditionsData.HasFoundCheckpoint,
                 };
@@ -62,7 +62,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             return new List<bool>()
             {
-                Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundCheckpoint,
+                Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundCheckpoint,
                 ConditionsData.HasFoundCheckpoint,
             };
         }
@@ -73,12 +73,15 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         public virtual void RunOnStepReward()
         {
+            UpdateEndEpisodeConditionsList();
             //step factor multiplies the final reward
             ConditionsData.StepFactor = (ConditionsData.MaxStep - ConditionsData.StepCount) / (float)ConditionsData.MaxStep;
         }
 
         public virtual void RunOnCheckPointReward()
         {
+            UpdateEndEpisodeConditionsList();
+
             if ((int)PhaseType >= 3)
             {
                 SwitchTargetNodeCallBack?.Invoke();
@@ -87,7 +90,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         public virtual void RunOnFinalGoalReward()
         {
-
+            UpdateEndEpisodeConditionsList();
         }
 
         public void RunOnHarmfulCollision()
@@ -115,8 +118,6 @@ namespace ML_Agents.PF.Scripts.StateMachine
         protected float CalculateComplexReward()
         {
             UpdateRewardDataStructCallBack?.Invoke();
-
-            // Debug.Log("#State Machine# Complex Reward :" + RewardFunction.GetComplexReward(RewardDataStruct));
             return RewardFunction.GetComplexReward(RewardDataStruct);
         }
 
@@ -142,7 +143,8 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         public bool HasEpisodeEnded()
         {
-            return Utils.HasEpisodeEnded(RewardConditions); //EndCondition
+            RewardDataStruct.HasEpisodeEnd= Utils.HasEpisodeEnded(EndEpisodeConditions);
+            return RewardDataStruct.HasEpisodeEnd;
         }
 
     }

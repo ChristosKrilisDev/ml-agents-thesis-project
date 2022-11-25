@@ -63,7 +63,7 @@ namespace ML_Agents.PF.Scripts.UtilsScripts
         /// Check the distance ~ Dijkstra
         /// </summary>
         /// <returns>true if the distance that agent did is less than dijstras shortest path length</returns>
-        public static bool CompareCurrentDistanceWithMaxLengthPath(float currentDistanceTraveled, float pathLength)
+        public static bool IsCurrDistLessThanPathLength(float currentDistanceTraveled, float pathLength)
         {
             return currentDistanceTraveled <= pathLength + GameManager.Instance.RewardData.ExtraDistance;
         }
@@ -118,7 +118,7 @@ namespace ML_Agents.PF.Scripts.UtilsScripts
 
         public static void WriteDijkstraData(float traveledDistance, float length, string key)
         {
-            var followedDijkstra = CompareCurrentDistanceWithMaxLengthPath(traveledDistance, length) ? 1 : 0;
+            var followedDijkstra = IsCurrDistLessThanPathLength(traveledDistance, length) ? 1 : 0;
             Academy.Instance.StatsRecorder.Add(key, followedDijkstra, StatAggregationMethod.Histogram);
         }
 

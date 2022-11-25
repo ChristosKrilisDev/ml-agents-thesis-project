@@ -8,7 +8,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
     {
         public SimpleTraining(PhaseType phaseType, TrainingType trainingType) : base(phaseType, trainingType)
         {
-            EndEpisodeConditions = CreateEndEpisodeConditionsList();
+            UpdateEndEpisodeConditionsList();
         }
 
         public override void RunOnStepReward()
@@ -51,7 +51,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
                     GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward / 3);
                 }
 
-                if (Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength))
+                if (Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength))
                 {
                     GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward);
                 }
@@ -73,7 +73,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
                 DijkstraDataWriter(ConditionsData.FullPathLength, FINAL_GOAL_KEY);
 
-                if (Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength))
+                if (Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.FullPathLength))
                 {
                     GiveInternalReward(RewardUseType.Set_Reward, 1f);
                 }
@@ -81,13 +81,20 @@ namespace ML_Agents.PF.Scripts.StateMachine
             EndEpisode();
         }
 
-        protected override List<bool> CreateEndEpisodeConditionsList()
+        protected override void UpdateEndEpisodeConditionsList()
         {
-            return new List<bool>
+            if(TrainingType != TrainingType.Simple) return;
+
+            EndEpisodeConditions = new List<bool>()
             {
                 ConditionsData.HasFoundCheckpoint,
                 ConditionsData.StepCount == ConditionsData.MaxStep,
-                ConditionsData.HasTouchedWall
+            };
+
+            EndEpisodeConditions = new List<bool>()
+            {
+                ConditionsData.HasFoundGoal,
+                ConditionsData.StepCount == ConditionsData.MaxStep,
             };
         }
 

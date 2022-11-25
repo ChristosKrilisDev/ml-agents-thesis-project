@@ -29,7 +29,7 @@ namespace ML_Agents.PF.Scripts.RL
             if (!rewardDataStruct.HasEpisodeEnd)
             {
                 calculateReward = GetStepRewardReward(rewardDataStruct.CurrentDistance, rewardDataStruct.InitialDistanceFromTarget);
-
+                Debug.Log("Step reward ");
                 return calculateReward;
             }
 
@@ -62,6 +62,7 @@ namespace ML_Agents.PF.Scripts.RL
         {
             float reward = 0;
 
+            //has reach max distance but didnt find the goal
             for (var i = 0; i < conditions.Count; i++) //todo: test it
             {
                 if (!conditions[i]) continue; //conditions are reversed ordered, 1st on is the best scenario

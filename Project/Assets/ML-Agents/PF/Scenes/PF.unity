@@ -134,7 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 403131}
   m_Layer: 0
-  m_Name: 2-  Floor (9)
+  m_Name: 2-  Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1034,7 +1034,7 @@ GameObject:
   m_Component:
   - component: {fileID: 161812698}
   m_Layer: 0
-  m_Name: Third Floor (11)
+  m_Name: 13- Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1458,7 +1458,7 @@ GameObject:
   m_Component:
   - component: {fileID: 262324828}
   m_Layer: 0
-  m_Name: 4- Floor (9)
+  m_Name: 4- Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2047,7 +2047,7 @@ GameObject:
   m_Component:
   - component: {fileID: 407497545}
   m_Layer: 0
-  m_Name: ' First Floor (11)'
+  m_Name: ' 12- Floor'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2196,7 +2196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 499254202}
   m_Layer: 0
-  m_Name: hird Floor (11)
+  m_Name: 10- Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2521,7 +2521,7 @@ GameObject:
   m_Component:
   - component: {fileID: 572558770}
   m_Layer: 0
-  m_Name: 3- Floor (9)
+  m_Name: '3- Floor '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2560,7 +2560,7 @@ GameObject:
   m_Component:
   - component: {fileID: 577364065}
   m_Layer: 0
-  m_Name: 6-  Floor (10)
+  m_Name: 6-  Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2896,7 +2896,7 @@ MonoBehaviour:
   PhaseType: 4
   TrainingType: 2
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
-  _rlTraining: 1
+  _rlTraining: 0
   _areasCount: 4
   _trainingAreasParent: {fileID: 929064095}
   _testArea: {fileID: 1289305690}
@@ -3090,7 +3090,7 @@ GameObject:
   m_Component:
   - component: {fileID: 733443972}
   m_Layer: 0
-  m_Name: hird Floor (10)
+  m_Name: 9- Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3349,7 +3349,7 @@ GameObject:
   m_Component:
   - component: {fileID: 774691016}
   m_Layer: 0
-  m_Name: 5- Floor (9)
+  m_Name: 5- Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4178,7 +4178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 952558728}
   m_Layer: 0
-  m_Name: ' Second Floor (11)'
+  m_Name: 11- Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4802,7 +4802,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1044029217}
   m_Layer: 0
-  m_Name: hird Floor (13)
+  m_Name: 15- Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4841,7 +4841,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1068028026}
   m_Layer: 0
-  m_Name: 1-  Floor (9)
+  m_Name: 1-  Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4880,7 +4880,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1070696407}
   m_Layer: 0
-  m_Name: 7- Floor (10)
+  m_Name: '7- Floor '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6410,7 +6410,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1493997813}
   m_Layer: 0
-  m_Name: 8- Floor (10)
+  m_Name: 8- Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7976,7 +7976,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2006612929}
   m_Layer: 0
-  m_Name: hird Floor (12)
+  m_Name: 14- Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8532,6 +8532,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114937736047215868, guid: bd804431e808a492bb5658bcd296e58e,
+        type: 3}
+      propertyPath: MaxStep
+      value: 5000
       objectReference: {fileID: 0}
     - target: {fileID: 4435154092645278328, guid: bd804431e808a492bb5658bcd296e58e,
         type: 3}

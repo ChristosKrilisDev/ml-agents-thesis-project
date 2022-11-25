@@ -12,7 +12,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         public AdvancedTraining(PhaseType phaseType, TrainingType trainingType) : base(phaseType, trainingType)
         {
-            EndEpisodeConditions = CreateEndEpisodeConditionsList();
+            UpdateEndEpisodeConditionsList();
         }
 
         protected override void EndEpisode()
@@ -27,8 +27,10 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             if (HasEpisodeEnded())
             {
-                Debug.Log("ended--->");
+                Debug.Log("Length or steps reached");
+                GiveInternalReward(RewardUseType.Set_Reward, RewardData.Penalty);
                 EndEpisode();
+                return;
             }
 
             var newStepReward = CalculateComplexReward() / RewardData.DivRewardValue;
@@ -80,35 +82,36 @@ namespace ML_Agents.PF.Scripts.StateMachine
             {
                 OnTerminalCondition(RewardUseType.Set_Reward);
             }
-
-            if (PhaseType == PhaseType.Phase_D) //useless if
+            else if (PhaseType == PhaseType.Phase_D)
             {
                 DijkstraDataWriter(ConditionsData.CheckPointPathLength + ConditionsData.FullPathLength, FINAL_GOAL_KEY);
                 OnTerminalCondition(RewardUseType.Set_Reward);
             }
         }
 
-        protected override List<bool> CreateEndEpisodeConditionsList()
+        protected override void UpdateEndEpisodeConditionsList()
         {
+            if(TrainingType != TrainingType.Advanced) return; //fix
+
             if ((int)PhaseType <= 2)
             {
-                return new List<bool>
+                EndEpisodeConditions = new List<bool>()
                 {
-                    ConditionsData.HasFoundCheckpoint,
                     ConditionsData.StepCount == ConditionsData.MaxStep,
-                    ConditionsData.HasTouchedWall,
-                    Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength)
+                    ConditionsData.HasFoundCheckpoint,
+                    !Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength)
                 };
 
             }
-
-            return new List<bool>
+            else
             {
-                ConditionsData.HasFoundGoal,
-                ConditionsData.StepCount == ConditionsData.MaxStep,
-                ConditionsData.HasTouchedWall,
-                Utils.CompareCurrentDistanceWithMaxLengthPath(ConditionsData.TraveledDistance, ConditionsData.FullPathLength + ConditionsData.CheckPointPathLength)
-            };
+                EndEpisodeConditions = new List<bool>()
+                {
+                    ConditionsData.StepCount == ConditionsData.MaxStep,
+                    ConditionsData.HasFoundGoal,
+                    !Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.FullPathLength)
+                };
+            }
         }
 
     }
