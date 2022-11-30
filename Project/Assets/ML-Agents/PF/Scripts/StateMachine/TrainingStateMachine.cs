@@ -50,43 +50,31 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         private void UpdateRewardConditionsList()
         {
-            if (PhaseType == PhaseType.Phase_D)
+            var cndList = new List<bool>();
+
+            if (PhaseType == PhaseType.Phase_A)
             {
-                FinalRewardConditions = new List<bool>()
-                {
-                    /*full success*/
-                    Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.FullPathLength) && ConditionsData.HasFoundGoal,
-                    /*success*/
-                    ConditionsData.HasFoundGoal,
-                    /*partial success*/
-                    ConditionsData.HasFoundCheckpoint,
-                };
-            }
-            else if (PhaseType == PhaseType.Phase_C)
-            {
-                FinalRewardConditions = new List<bool>()
-                {
-                    ConditionsData.HasFoundGoal,
-                    Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength) && ConditionsData.HasFoundCheckpoint,
-                    ConditionsData.HasFoundCheckpoint,
-                };
+                cndList.Add(ConditionsData.HasFoundCheckpoint);
             }
             else if (PhaseType == PhaseType.Phase_B)
             {
-                FinalRewardConditions = new List<bool>()
-                {
-                    Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength) && ConditionsData.HasFoundCheckpoint,
-                    ConditionsData.HasFoundCheckpoint,
-                };
+                cndList.Add(Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength, false) && ConditionsData.HasFoundCheckpoint);
+                cndList.Add(ConditionsData.HasFoundCheckpoint);
             }
-            else if (PhaseType == PhaseType.Phase_A)
+            else if (PhaseType == PhaseType.Phase_C)
             {
-                FinalRewardConditions = new List<bool>()
-                {
-                    ConditionsData.HasFoundCheckpoint,
-                };
+                cndList.Add(ConditionsData.HasFoundGoal);
+                cndList.Add(Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength, false) && ConditionsData.HasFoundCheckpoint);
+                cndList.Add(ConditionsData.HasFoundGoal);
+            }
+            else if (PhaseType == PhaseType.Phase_D)
+            {
+                cndList.Add(Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.FullPathLength, false) && ConditionsData.HasFoundGoal);
+                cndList.Add(ConditionsData.HasFoundGoal);
+                cndList.Add(ConditionsData.HasFoundGoal);
             }
 
+            FinalRewardConditions = cndList;
         }
 
     #endregion
