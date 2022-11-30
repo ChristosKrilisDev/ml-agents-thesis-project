@@ -63,9 +63,14 @@ namespace ML_Agents.PF.Scripts.UtilsScripts
         /// Check the distance ~ Dijkstra
         /// </summary>
         /// <returns>true if the distance that agent did is less than dijstras shortest path length</returns>
-        public static bool IsCurrDistLessThanPathLength(float currentDistanceTraveled, float pathLength)
+        public static bool IsCurrDistLessThanPathLength(float currentDistanceTraveled, float pathLength, bool useExtraReward = true)
         {
-            return currentDistanceTraveled <= pathLength + GameManager.Instance.RewardData.ExtraDistance;
+            if (useExtraReward)
+            {
+                return currentDistanceTraveled <= pathLength + GameManager.Instance.RewardData.ExtraDistance;
+            }
+
+            return currentDistanceTraveled <= pathLength;
         }
 
         /// <summary>
