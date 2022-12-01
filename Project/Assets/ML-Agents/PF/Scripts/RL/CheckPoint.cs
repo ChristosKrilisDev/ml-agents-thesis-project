@@ -36,6 +36,9 @@ namespace ML_Agents.PF.Scripts.RL
             _areaComponent.PlaceNode(gameObject, cpSpawnIndex);
             _goalNode = _areaComponent.CreateGoalNode(goalSpawnIndex); //pre-create final node to get all nodes
 
+            var pos = transform.localPosition;
+            transform.localPosition = new Vector3(pos.x , 0 , pos.z);
+
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
             ToggleState(true);

@@ -74,34 +74,37 @@ namespace ML_Agents.PF.Scripts.RL
         /// you would expect a human to be able to use to solve the problem.
         /// </summary>
         /// <param name="sensor"></param>
-        public override void CollectObservations(VectorSensor sensor)
+        public override void CollectObservations(VectorSensor sensor) //12 total
         {
             if (!_useVectorObservations) return;
 
             sensor.AddObservation(transform.InverseTransformDirection(_agentRb.velocity)); //3
-
-            //direction to target
-            sensor.AddObservation(_checkPoint.HasPressed); //1   bool
+            sensor.AddObservation(_checkPoint.HasPressed); //1   bool //direction to target
 
             if (!_checkPoint.HasPressed) //check point
             {
                 var dir = (_nodesToFind[0].transform.localPosition - transform.localPosition).normalized;
                 sensor.AddObservation(new Vector2(dir.x, dir.z)); //2
+
+                if (_trainingStateMachine.ConditionsData.CheckPointPathLength > 0)
+                {
+                    sensor.AddObservation(_trainingStateMachine.ConditionsData.CheckPointPathLength); //1 float
+                }
+
             }
             else if (_nodesToFind[1].activeInHierarchy) //final goal
             {
                 var dir = (_nodesToFind[1].transform.localPosition - transform.localPosition).normalized;
                 sensor.AddObservation(new Vector2(dir.x, dir.z)); //2
+
+                if (_trainingStateMachine.ConditionsData.FullPathLength > 0)
+                {
+                    sensor.AddObservation(_trainingStateMachine.ConditionsData.FullPathLength); //1 float
+                }
             }
 
-            //the higher the number, the higher the reward
-            sensor.AddObservation(_trainingStateMachine.ConditionsData.StepFactor); //1     float
-
-            //less distance bigger reward
-            sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance); //1   float
-
-            //shortest path
-            // sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance <= _trainingStateMachine.ConditionsData.FullPathLength); //1   float
+            sensor.AddObservation(_trainingStateMachine.ConditionsData.StepFactor); //1     float   //the higher the number, the higher the reward
+            sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance); //1   float   //less distance bigger reward
 
         }
 
