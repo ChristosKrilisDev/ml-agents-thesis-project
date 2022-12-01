@@ -19,7 +19,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
         protected readonly TrainingType TrainingType;
         public readonly ConditionsData ConditionsData;
 
-        protected const string CHECK_POINT_KEY = "Agent/Check Point Dijkstra Success Rate";
+        protected const string CHECK_POINT_KEY = "Agent/Half Dijkstra Success Rate";
         protected const string FINAL_GOAL_KEY = "Agent/Full Dijkstra Success Rate";
 
         // end conditions will be used for EndEpisode check
