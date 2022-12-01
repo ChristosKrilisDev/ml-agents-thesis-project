@@ -34,10 +34,13 @@ namespace ML_Agents.PF.Scripts.StateMachine
             }
 
             var newStepReward = CalculateComplexReward() / RewardData.DivRewardValue;
+            
+            if (Utils.NearlyEqual(_previousStepReward, newStepReward, RewardData.StepRewardFrequency))
+            {
+                return;
+            }
 
-            if (Utils.NearlyEqual(_previousStepReward, newStepReward, 0.005f)) return; //increase epsilon
-
-            if (_previousStepReward > newStepReward) //todo fix here
+            if (_previousStepReward > newStepReward)
             {
                 var penalty = - RewardData.StepPenaltyPerSec / (100f * RewardData.DivRewardValue);
                 GiveInternalReward(RewardUseType.Add_Reward, penalty);

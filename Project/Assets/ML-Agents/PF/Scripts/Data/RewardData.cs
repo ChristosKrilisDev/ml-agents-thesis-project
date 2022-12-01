@@ -25,6 +25,9 @@ namespace ML_Agents.PF.Scripts.Data
         [Range(0f, 1f)]
         public float Epsilon = 0.4f;
 
+        [Range(0.001f, 0.1f)][Tooltip("Higher value => less rewards/step")]
+        public float StepRewardFrequency = 0.005f;
+
         [Space]
         [Header("Penalty Rewards")]
         [Range(0, -2)]

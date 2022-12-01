@@ -29,7 +29,6 @@ namespace ML_Agents.PF.Scripts.RL
             if (!rewardDataStruct.HasEpisodeEnd)
             {
                 calculateReward = GetStepRewardReward(rewardDataStruct.CurrentDistance, rewardDataStruct.InitialDistanceFromTarget);
-                Debug.Log("Step reward ");
                 return calculateReward;
             }
 
