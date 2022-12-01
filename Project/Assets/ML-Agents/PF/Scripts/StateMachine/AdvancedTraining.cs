@@ -8,8 +8,6 @@ namespace ML_Agents.PF.Scripts.StateMachine
 {
     public class AdvancedTraining : TrainingStateMachine
     {
-        private float _previousStepReward;
-
         public AdvancedTraining(PhaseType phaseType, TrainingType trainingType) : base(phaseType, trainingType)
         {
             UpdateEndEpisodeConditionsList();
@@ -17,7 +15,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         protected override void EndEpisode()
         {
-            _previousStepReward = 0;
+            PreviousStepReward = 0;
             base.EndEpisode();
         }
 
@@ -34,19 +32,19 @@ namespace ML_Agents.PF.Scripts.StateMachine
             }
 
             var newStepReward = CalculateComplexReward() / RewardData.DivRewardValue;
-            
-            if (Utils.NearlyEqual(_previousStepReward, newStepReward, RewardData.StepRewardFrequency))
+
+            if (Utils.NearlyEqual(PreviousStepReward, newStepReward, RewardData.StepRewardFrequency))
             {
                 return;
             }
 
-            if (_previousStepReward > newStepReward)
+            if (PreviousStepReward > newStepReward)
             {
                 var penalty = - RewardData.StepPenaltyPerSec / (100f * RewardData.DivRewardValue);
                 GiveInternalReward(RewardUseType.Add_Reward, penalty);
                 return;
             }
-            _previousStepReward = newStepReward;
+            PreviousStepReward = newStepReward;
             GiveInternalReward(RewardUseType.Add_Reward, newStepReward);
         }
 

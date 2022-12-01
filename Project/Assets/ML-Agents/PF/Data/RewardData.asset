@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Reward: 1
   StepReward: 1
-  Epsilon: 0.4
-  WallPenalty: -1
-  FoundGoalReward: 10
+  StepPenaltyPerSec: 1
+  DivRewardValue: 10
+  Epsilon: 0.6
+  StepRewardFrequency: 0.003
+  Penalty: -1
   ExtraDistance: 2

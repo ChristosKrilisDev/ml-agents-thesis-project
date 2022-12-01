@@ -4,6 +4,7 @@ using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.RL;
 using ML_Agents.PF.Scripts.Structs;
 using ML_Agents.PF.Scripts.UtilsScripts;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace ML_Agents.PF.Scripts.StateMachine
@@ -34,6 +35,8 @@ namespace ML_Agents.PF.Scripts.StateMachine
         public UnityAction EndEpisodeCallBack;
         public UnityAction SwitchTargetNodeCallBack;
         public UnityAction UpdateRewardDataStructCallBack;
+
+        protected float PreviousStepReward;
 
     #endregion
 
@@ -96,6 +99,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             if ((int)PhaseType >= 3)
             {
+                PreviousStepReward = 0;
                 SwitchTargetNodeCallBack?.Invoke();
             }
         }
@@ -146,6 +150,8 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         protected void GiveInternalReward(RewardUseType rewardUseType, float reward)
         {
+            Debug.Log($"{rewardUseType} : {reward}");
+
             GiveInternalRewardCallBack?.Invoke(rewardUseType, reward);
         }
 
