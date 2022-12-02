@@ -22,8 +22,10 @@ namespace ML_Agents.PF.Scripts.UtilsScripts
 
         private static void GetButtonMaterials()
         {
+#if UNITY_EDITOR
             OnButtonMaterial = AssetDatabase.LoadAssetAtPath<Material>($"{MATERIALS_ROOT_PATH}/Green.mat");
             OffButtonMaterial = AssetDatabase.LoadAssetAtPath<Material>($"{MATERIALS_ROOT_PATH}/Orange.mat");
+#endif
         }
 
     #endregion
@@ -36,8 +38,10 @@ namespace ML_Agents.PF.Scripts.UtilsScripts
 
         private static void GetPrefabsNodesMaterials()
         {
+#if UNITY_EDITOR
             FinalNode = AssetDatabase.LoadAssetAtPath<GameObject>($"{PREFABS_ROOT_PATH}/FinalGoal.prefab");
             SimpleNode = AssetDatabase.LoadAssetAtPath<GameObject>($"{PREFABS_ROOT_PATH}/BlockObj.prefab");
+#endif
         }
 
     #endregion
@@ -128,7 +132,6 @@ namespace ML_Agents.PF.Scripts.UtilsScripts
         }
 
     #endregion
-
 
     }
 }
