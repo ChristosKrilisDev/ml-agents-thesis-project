@@ -1,5 +1,10 @@
 <img src="docs/images/image-banner.png" align="middle" width="3000"/>
 
+# Training with mlagents-learn
+To view a description of all the CLI options accepted by mlagents-learn, use the --help
+
+<clipboard-copy for="blob-path">mlagents-learn --help</clipboard-copy>
+
 # Using RL To Solve Single-Source Shortest Path Problems In Game Environment
 
 
