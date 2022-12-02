@@ -4,7 +4,7 @@
 To view a description of all the CLI options accepted by mlagents-learn, use the --help
 
 ```sh
-mlagents-learn --help</clipboard-copy>
+mlagents-learn --help
 ```
 
 # Using RL To Solve Single-Source Shortest Path Problems In Game Environment
