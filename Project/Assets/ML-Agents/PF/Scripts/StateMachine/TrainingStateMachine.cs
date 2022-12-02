@@ -150,7 +150,6 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
         protected void GiveInternalReward(RewardUseType rewardUseType, float reward)
         {
-            Debug.Log($"{rewardUseType} : {reward}");
 
             GiveInternalRewardCallBack?.Invoke(rewardUseType, reward);
         }
