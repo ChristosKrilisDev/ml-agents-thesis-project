@@ -24,6 +24,8 @@ In order to observe the training process, either during training or afterward, s
 tensorboard --logdir results --port 6006
 ```
 
+*Using an [Environment Executable](https://github.com/Unity-Technologies/ml-agents/blob/main/docs/Learning-Environment-Executable.md)
+
 
 # Using RL To Solve Single-Source Shortest Path Problems In Game Environment
 
