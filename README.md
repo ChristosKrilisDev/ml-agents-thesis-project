@@ -2,18 +2,13 @@
 
 # Training with mlagents-learn
 To view a description of all the CLI options accepted by mlagents-learn, use the --help
-
 ```sh
 mlagents-learn --help
 ```
-
 The basic command for training is:
 ```sh
 mlagents-learn <trainer-config-file> --env=<env_name> --run-id=<run-identifier>
 ```
-1. Open a browser window and navigate to
-   [localhost:6006](http://localhost:6006).
-
 1. ``<trainer-config-file>`` is the file path of the trainer configuration YAML
 2. ``<env_name>``(Optional) is the name (including path) of your Unity executable containing the agents to be trained.
 3. ``<run-identifier>`` is a unique name you can use to identify the results of your training runs.
@@ -21,6 +16,9 @@ mlagents-learn <trainer-config-file> --env=<env_name> --run-id=<run-identifier>
 5. ``--force`` to re-run a previously interrupted or completed training run and re-use the same run ID.
 6. ``--resume`` to resume a previously interrupted or completed training run
 
+## Visualize Metrics
+1. Open a browser window and navigate to
+   [localhost:6006](http://localhost:6006).
 In order to observe the training process, either during training or afterward, start TensorBoard:
 ```sh
 tensorboard --logdir results --port 6006
