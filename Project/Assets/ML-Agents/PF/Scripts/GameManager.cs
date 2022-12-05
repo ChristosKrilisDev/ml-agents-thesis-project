@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.StateMachine;
@@ -12,7 +13,8 @@ namespace ML_Agents.PF.Scripts
         public PhaseType PhaseType;
         public TrainingType TrainingType;
         [Space]
-        public RewardData RewardData;
+        [SerializeField] private List<RewardDataSets> _rewardDatas;
+        [HideInInspector]public RewardData RewardData;
 
         [Space]
         [SerializeField] private bool _rlTraining = false;
@@ -32,6 +34,27 @@ namespace ML_Agents.PF.Scripts
             Utils.GatherAssets();
 
             AutoActivateTrainingAreas();
+
+            SetRewardData();
+        }
+        private void SetRewardData()
+        {
+            if (PhaseType == PhaseType.Phase_A)
+            {
+                RewardData = _rewardDatas[0].RewardData;
+            }
+            else if (PhaseType == PhaseType.Phase_B)
+            {
+                RewardData = _rewardDatas[0].RewardData;
+            }
+            else if (PhaseType == PhaseType.Phase_C)
+            {
+                RewardData = _rewardDatas[0].RewardData;
+            }
+            else if (PhaseType == PhaseType.Phase_D)
+            {
+                RewardData = _rewardDatas[0].RewardData;
+            }
         }
 
         private void AutoActivateTrainingAreas()
@@ -55,5 +78,19 @@ namespace ML_Agents.PF.Scripts
                 new AdvancedTraining(PhaseType, TrainingType) :
                 new SimpleTraining(PhaseType, TrainingType);
         }
+    }
+
+
+    [SerializeField]
+    public abstract class RewardDataSets
+    {
+        [SerializeField] private string _name;
+        [SerializeField] private RewardData _rewardData;
+        public RewardData RewardData
+        {
+            get => _rewardData;
+            set => _rewardData = value;
+        }
+
     }
 }

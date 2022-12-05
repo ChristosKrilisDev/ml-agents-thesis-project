@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: RewardData
   m_EditorClassIdentifier: 
   Reward: 1
-  StepReward: 1
-  StepPenaltyPerSec: 1
+  StepPenaltyPerSec: -1
+  StepRewardFrequency: 0.0338
   DivRewardValue: 10
   Epsilon: 0.6
-  StepRewardFrequency: 0.003
   Penalty: -1
-  ExtraDistance: 2
+  ExtraDistance: 6

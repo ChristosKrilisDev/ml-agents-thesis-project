@@ -18,15 +18,15 @@ namespace ML_Agents.PF.Scripts.StateMachine
             if (PhaseType == PhaseType.Phase_A) return;
 
             //todo : fix that shit
-            var reward = -RewardData.StepPenaltyPerSec / (ConditionsData.MaxStep / (ConditionsData.MaxStep * 1f));
+            var reward = RewardData.StepPenaltyPerSec / (ConditionsData.MaxStep / (ConditionsData.MaxStep * 1f));
 
             if (PhaseType is PhaseType.Phase_B || PhaseType is PhaseType.Phase_C)
             {
-                GiveInternalReward(RewardUseType.Add_Reward, reward / 1000f); //0.001f
+                GiveInternalReward(RewardUseType.Add_Reward, reward / 1000f); //0.0001f /-0.15f
             }
             else if (PhaseType == PhaseType.Phase_D)
             {
-                GiveInternalReward(RewardUseType.Add_Reward, reward / 100f); //0.1f
+                GiveInternalReward(RewardUseType.Add_Reward, reward / 100f); //0.001f/-1.5f
             }
         }
 
@@ -44,7 +44,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
                 //create dijkstra analytics
                 if (PhaseType == PhaseType.Phase_B)
                 {
-                    GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward / 2);
+                    GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward / 2);
 
                     //todo : fix that shit
                     //give reward per node
@@ -58,7 +58,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
                 }
                 else if (PhaseType == PhaseType.Phase_C || PhaseType == PhaseType.Phase_D)
                 {
-                    GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward / 3);
+                    GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward / 3);
                 }
 
                 if (Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength, false))

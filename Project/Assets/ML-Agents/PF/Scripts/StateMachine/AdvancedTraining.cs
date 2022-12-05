@@ -40,7 +40,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             if (PreviousStepReward > newStepReward)
             {
-                var penalty = - RewardData.StepPenaltyPerSec / (100f * RewardData.DivRewardValue);
+                var penalty = RewardData.StepPenaltyPerSec / (100f * RewardData.DivRewardValue);
                 GiveInternalReward(RewardUseType.Add_Reward, penalty);
                 return;
             }

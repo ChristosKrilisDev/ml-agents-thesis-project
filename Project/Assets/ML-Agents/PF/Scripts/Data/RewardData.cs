@@ -11,22 +11,18 @@ namespace ML_Agents.PF.Scripts.Data
         /// </summary>
 
         [Header("Reward Value")]
-        [Range(0, 10)]
-        public float Reward = 1;
+        [Range(1, 10)]
+        public int Reward = 1;
 
+        [Space]
         [Header("Step Rewards")]
-        [Range(0, 1)]
-        public float StepReward = 1;
-        [Range(0, 1)]
-        public float StepPenaltyPerSec = 1;
-
-        public int DivRewardValue = 10;
-
-        [Range(0f, 1f)]
-        public float Epsilon = 0.4f;
-
-        [Range(0.001f, 0.1f)][Tooltip("Higher value => less rewards/step")]
+        [Range(0, -2)]
+        public float StepPenaltyPerSec = -1;
+        [Range(0.0001f, 0.1f)][Tooltip("Higher value => less rewards/step")]
         public float StepRewardFrequency = 0.005f;
+        [Range(1, 10)]public int DivRewardValue = 10;
+        [Range(0.1f, 1f), Tooltip("sharp the value")]
+        public float Epsilon = 0.4f;
 
         [Space]
         [Header("Penalty Rewards")]
