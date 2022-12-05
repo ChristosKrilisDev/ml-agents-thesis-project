@@ -2895,6 +2895,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PhaseType: 1
   TrainingType: 1
+  _rewardDatas:
+  - _type: 1
+    _rewardData: {fileID: 11400000, guid: e843d74194c8be240b0136ba862b9535, type: 2}
+  - _type: 2
+    _rewardData: {fileID: 11400000, guid: 8bbc0a11c72d136458bd323d7574b436, type: 2}
+  - _type: 3
+    _rewardData: {fileID: 11400000, guid: eac5d0b4b79e823498d0540ce4cc4377, type: 2}
+  - _type: 4
+    _rewardData: {fileID: 11400000, guid: d15d1adbca6724c4990879f81c9c0e55, type: 2}
+  _rewardDataFallBack: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a,
+    type: 2}
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
   _rlTraining: 0
   _areasCount: 2

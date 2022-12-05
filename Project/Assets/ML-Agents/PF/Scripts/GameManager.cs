@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
@@ -7,6 +8,23 @@ using UnityEngine;
 
 namespace ML_Agents.PF.Scripts
 {
+    [Serializable]
+    public class RewardDataSets
+    {
+        [SerializeField] private PhaseType _type;
+        public PhaseType Type
+        {
+            get => _type;
+            set => _type = value;
+        }
+        [SerializeField] private RewardData _rewardData;
+        public RewardData RewardData
+        {
+            get => _rewardData;
+            set => _rewardData = value;
+        }
+    }
+
     public class GameManager : MonoBehaviour
     {
         [Header("Training Vars")]
@@ -14,11 +32,12 @@ namespace ML_Agents.PF.Scripts
         public TrainingType TrainingType;
         [Space]
         [SerializeField] private List<RewardDataSets> _rewardDatas;
-        [HideInInspector]public RewardData RewardData;
+        [SerializeField] private RewardData _rewardDataFallBack;
+        [HideInInspector] public RewardData RewardData;
 
         [Space]
-        [SerializeField] private bool _rlTraining = false;
-        [SerializeField, Range(1,15)] private int _areasCount;
+        [SerializeField] private bool _rlTraining;
+        [SerializeField, Range(1, 15)] private int _areasCount;
         [SerializeField] private GameObject _trainingAreasParent;
         [SerializeField] private GameObject _testArea;
 
@@ -35,26 +54,20 @@ namespace ML_Agents.PF.Scripts
 
             AutoActivateTrainingAreas();
 
-            SetRewardData();
+            SetRewardDataFallBack();
         }
-        private void SetRewardData()
+
+        private void SetRewardDataFallBack()
         {
-            if (PhaseType == PhaseType.Phase_A)
+            foreach (var dataSet in _rewardDatas)
             {
-                RewardData = _rewardDatas[0].RewardData;
+                if (dataSet.Type != PhaseType) continue;
+
+                RewardData = dataSet.RewardData;
+
+                return;
             }
-            else if (PhaseType == PhaseType.Phase_B)
-            {
-                RewardData = _rewardDatas[0].RewardData;
-            }
-            else if (PhaseType == PhaseType.Phase_C)
-            {
-                RewardData = _rewardDatas[0].RewardData;
-            }
-            else if (PhaseType == PhaseType.Phase_D)
-            {
-                RewardData = _rewardDatas[0].RewardData;
-            }
+            RewardData = _rewardDataFallBack;
         }
 
         private void AutoActivateTrainingAreas()
@@ -74,23 +87,9 @@ namespace ML_Agents.PF.Scripts
 
         public TrainingStateMachine CreateStateMachine()
         {
-            return TrainingType == TrainingType.Advanced ?(TrainingStateMachine)
+            return TrainingType == TrainingType.Advanced ? (TrainingStateMachine)
                 new AdvancedTraining(PhaseType, TrainingType) :
                 new SimpleTraining(PhaseType, TrainingType);
         }
-    }
-
-
-    [SerializeField]
-    public abstract class RewardDataSets
-    {
-        [SerializeField] private string _name;
-        [SerializeField] private RewardData _rewardData;
-        public RewardData RewardData
-        {
-            get => _rewardData;
-            set => _rewardData = value;
-        }
-
     }
 }
