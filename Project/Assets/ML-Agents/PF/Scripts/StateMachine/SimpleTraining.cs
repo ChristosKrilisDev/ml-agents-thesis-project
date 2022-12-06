@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ML_Agents.PF.Scripts.Enums;
+using ML_Agents.PF.Scripts.UtilsScripts;
 
 namespace ML_Agents.PF.Scripts.StateMachine
 {
@@ -15,6 +16,13 @@ namespace ML_Agents.PF.Scripts.StateMachine
             base.RunOnStepReward();
 
             if (PhaseType == PhaseType.Phase_A) return;
+
+            if (HasEpisodeEnded())
+            {
+                GiveInternalReward(RewardUseType.Set_Reward, RewardData.Penalty);
+                EndEpisode();
+                return;
+            }
 
             var reward = RewardData.StepPenalty / ConditionsData.MaxStep;
 
@@ -66,17 +74,24 @@ namespace ML_Agents.PF.Scripts.StateMachine
         {
             if (TrainingType != TrainingType.Simple) return;
 
-            EndEpisodeConditions = new List<bool>()
+            if ((int)PhaseType <= 2)
             {
-                ConditionsData.HasFoundCheckpoint,
-                ConditionsData.StepCount == ConditionsData.MaxStep,
-            };
-
-            EndEpisodeConditions = new List<bool>()
+                EndEpisodeConditions = new List<bool>()
+                {
+                    ConditionsData.StepCount == ConditionsData.MaxStep,
+                    ConditionsData.HasFoundCheckpoint,
+                    !Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength)
+                };
+            }
+            else
             {
-                ConditionsData.HasFoundGoal,
-                ConditionsData.StepCount == ConditionsData.MaxStep,
-            };
+                EndEpisodeConditions = new List<bool>()
+                {
+                    ConditionsData.StepCount == ConditionsData.MaxStep,
+                    ConditionsData.HasFoundGoal,
+                    !Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.FullPathLength)
+                };
+            }
         }
 
     }
