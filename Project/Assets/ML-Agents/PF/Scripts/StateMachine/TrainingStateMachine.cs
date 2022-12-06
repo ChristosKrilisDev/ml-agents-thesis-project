@@ -168,5 +168,15 @@ namespace ML_Agents.PF.Scripts.StateMachine
             return RewardDataStruct.HasEpisodeEnd;
         }
 
+        protected void DijkstraReward(RewardUseType type, int pathLength, string key)
+        {
+            //create dijkstra analytics
+            if (Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, pathLength, false))
+            {
+                GiveInternalReward(type, RewardData.Reward);
+            }
+            DijkstraDataWriter(pathLength, key);
+        }
+
     }
 }

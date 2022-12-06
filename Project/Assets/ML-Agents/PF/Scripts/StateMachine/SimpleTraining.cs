@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using ML_Agents.PF.Scripts.Enums;
-using ML_Agents.PF.Scripts.UtilsScripts;
 
 namespace ML_Agents.PF.Scripts.StateMachine
 {
@@ -17,17 +16,11 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             if (PhaseType == PhaseType.Phase_A) return;
 
-            //todo : fix that shit
-            var reward = RewardData.StepPenaltyPerSec / (ConditionsData.MaxStep / (ConditionsData.MaxStep * 1f));
+            var reward = RewardData.StepPenaltyPerSec / ConditionsData.MaxStep;
 
-            if (PhaseType is PhaseType.Phase_B || PhaseType is PhaseType.Phase_C)
-            {
-                GiveInternalReward(RewardUseType.Add_Reward, reward / 1000f); //0.0001f /-0.15f
-            }
-            else if (PhaseType == PhaseType.Phase_D)
-            {
-                GiveInternalReward(RewardUseType.Add_Reward, reward / 100f); //0.001f/-1.5f
-            }
+            if (PhaseType is PhaseType.Phase_B) GiveInternalReward(RewardUseType.Add_Reward, reward);
+            else if (PhaseType is PhaseType.Phase_C) GiveInternalReward(RewardUseType.Add_Reward, reward);
+            else if (PhaseType == PhaseType.Phase_D) GiveInternalReward(RewardUseType.Add_Reward, reward);
         }
 
         public override void RunOnCheckPointReward()
@@ -39,33 +32,17 @@ namespace ML_Agents.PF.Scripts.StateMachine
                 GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward);
                 EndEpisode();
             }
-            else
+            else if (PhaseType == PhaseType.Phase_B)
             {
-                //create dijkstra analytics
-                if (PhaseType == PhaseType.Phase_B)
-                {
-                    GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward / 2);
-
-                    //todo : fix that shit
-                    //give reward per node
-                    if (Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength, false))
-                    {
-                        GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward);
-                    }
-                    DijkstraDataWriter(ConditionsData.CheckPointPathLength, CHECK_POINT_KEY);
-
-                    EndEpisode();
-                }
-                else if (PhaseType == PhaseType.Phase_C || PhaseType == PhaseType.Phase_D)
-                {
-                    GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward / 3);
-                }
-
-                if (Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength, false))
-                {
-                    GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward);
-                }
-                DijkstraDataWriter(ConditionsData.CheckPointPathLength, CHECK_POINT_KEY);
+                //todo : give reward per node?
+                GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward);
+                DijkstraReward(RewardUseType.Set_Reward, ConditionsData.CheckPointPathLength, CHECK_POINT_KEY);
+                EndEpisode();
+            }
+            else if (PhaseType == PhaseType.Phase_C || PhaseType == PhaseType.Phase_D)
+            {
+                GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward);
+                DijkstraReward(RewardUseType.Add_Reward, ConditionsData.CheckPointPathLength, CHECK_POINT_KEY);
             }
         }
 
@@ -79,21 +56,15 @@ namespace ML_Agents.PF.Scripts.StateMachine
             }
             else if (PhaseType == PhaseType.Phase_D)
             {
-                GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward / 2);
-
-                DijkstraDataWriter(ConditionsData.FullPathLength, FINAL_GOAL_KEY);
-
-                if (Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.FullPathLength))
-                {
-                    GiveInternalReward(RewardUseType.Set_Reward, 1f);
-                }
+                GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward);
+                DijkstraReward(RewardUseType.Set_Reward, ConditionsData.FullPathLength, FINAL_GOAL_KEY);
             }
             EndEpisode();
         }
 
         protected override void UpdateEndEpisodeConditionsList()
         {
-            if(TrainingType != TrainingType.Simple) return;
+            if (TrainingType != TrainingType.Simple) return;
 
             EndEpisodeConditions = new List<bool>()
             {
