@@ -7,21 +7,17 @@ namespace Dijkstra.Scripts
 {
     public static class Dijkstra
     {
-
         /// <summary>
         /// DIJKSTRA
         /// Gets the shortest path from the starting Node to the ending Node.
         /// </summary>
-        /// <returns>The shortest path.</returns>
-        /// <param name="start">Start Node.</param>
-        /// <param name="end">End Node.</param>
-
+        /// <returns>The shortest path</returns>
+        /// <param name="start">Start Node</param>
+        /// <param name="end">End Node</param>
+        /// <param name="nodes">List of the current nodes</param>
         public static Path GetShortestPath(Node start, Node end, List<Node> nodes)
         {
-            if (start == null || end == null)
-            {
-                throw new ArgumentNullException();
-            }
+            if (start == null || end == null) throw new ArgumentNullException();
 
             var path = new Path();
 
@@ -36,9 +32,8 @@ namespace Dijkstra.Scripts
             var previous = new Dictionary<Node, Node>();
             var distances = new Dictionary<Node, float>();
 
-            for (var i = 0; i < nodes.Count; i++)
+            foreach (var node in nodes)
             {
-                var node = nodes[i];
                 unvisited.Add(node);
                 distances.Add(node, float.MaxValue);
             }
@@ -69,18 +64,16 @@ namespace Dijkstra.Scripts
                     break;
                 }
 
-                for (var i = 0; i < current.Connections.Count; i++)
+                foreach (var neighbor in current.Connections)
                 {
-                    var neighbor = current.Connections[i];
                     var length = Vector3.Distance(current.transform.position, neighbor.transform.position);
                     var alt = distances[current] + length;
 
+                    if (!(alt < distances[neighbor])) continue;
+
                     // A shorter path to the connection (neighbor) has been found
-                    if (alt < distances[neighbor])
-                    {
-                        distances[neighbor] = alt;
-                        previous[neighbor] = current;
-                    }
+                    distances[neighbor] = alt;
+                    previous[neighbor] = current;
                 }
             }
             path.Bake();
