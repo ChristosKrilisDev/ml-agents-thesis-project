@@ -16,7 +16,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             if (PhaseType == PhaseType.Phase_A) return;
 
-            var reward = RewardData.StepPenaltyPerSec / ConditionsData.MaxStep;
+            var reward = RewardData.StepPenalty / ConditionsData.MaxStep;
 
             if (PhaseType is PhaseType.Phase_B) GiveInternalReward(RewardUseType.Add_Reward, reward);
             else if (PhaseType is PhaseType.Phase_C) GiveInternalReward(RewardUseType.Add_Reward, reward);
@@ -35,7 +35,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
             else if (PhaseType == PhaseType.Phase_B)
             {
                 //todo : give reward per node?
-                GiveInternalReward(RewardUseType.Set_Reward, RewardData.Reward);
+                GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward/2f);
                 DijkstraReward(RewardUseType.Set_Reward, ConditionsData.CheckPointPathLength, CHECK_POINT_KEY);
                 EndEpisode();
             }

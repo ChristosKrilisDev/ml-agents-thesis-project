@@ -154,9 +154,9 @@ namespace ML_Agents.PF.Scripts.StateMachine
             GiveInternalRewardCallBack?.Invoke(rewardUseType, reward);
         }
 
-        protected void DijkstraDataWriter(int length, string key)
+        protected void DijkstraDataWriter(string key, bool result)
         {
-            Utils.WriteDijkstraData(ConditionsData.TraveledDistance, length, key);
+            Utils.WriteDijkstraData(key, result);
         }
 
     #endregion
@@ -171,11 +171,13 @@ namespace ML_Agents.PF.Scripts.StateMachine
         protected void DijkstraReward(RewardUseType type, int pathLength, string key)
         {
             //create dijkstra analytics
-            if (Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, pathLength, false))
+            //todo : observe result?
+            var result = Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, pathLength, false);
+            if (result)
             {
                 GiveInternalReward(type, RewardData.Reward);
             }
-            DijkstraDataWriter(pathLength, key);
+            DijkstraDataWriter(key, result);
         }
 
     }

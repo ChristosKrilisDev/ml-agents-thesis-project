@@ -125,10 +125,10 @@ namespace ML_Agents.PF.Scripts.UtilsScripts
 
     #region TENSOR BOARD DATA
 
-        public static void WriteDijkstraData(float traveledDistance, float length, string key)
+        public static void WriteDijkstraData(string key, bool result)
         {
-            var followedDijkstra = IsCurrDistLessThanPathLength(traveledDistance, length) ? 1 : 0;
-            Academy.Instance.StatsRecorder.Add(key, followedDijkstra, StatAggregationMethod.Histogram);
+            var followedDijkstra = result ? 1 : 0;
+            Academy.Instance.StatsRecorder.Add(key, followedDijkstra, StatAggregationMethod.Average);
         }
 
     #endregion
