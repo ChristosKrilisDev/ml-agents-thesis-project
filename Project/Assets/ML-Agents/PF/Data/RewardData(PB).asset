@@ -15,7 +15,7 @@ MonoBehaviour:
   Reward: 2
   StepPenaltyPerSec: -1
   StepRewardFrequency: 0.002
-  DivRewardValue: 10
+  DivRewardValue: 5
   Epsilon: 0.6
   Penalty: -2
   ExtraDistance: 6
