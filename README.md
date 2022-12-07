@@ -13,10 +13,10 @@ About the thesis project...
   
   | **Training Type** | **Simple** | **Advanced** |
   |:-----------------:|:----------:|:------------:|
-  | **Phase A**|| **SA** || **AA** |
-  | **Phase B**|| **SB** || **AB** |
-  | **Phase C**|| **SC** || **AC** |
-  | **Phase D**|| **SD** || **AD** |
+  | **Phase A**| **SA** | **AA** |
+  | **Phase B**| **SB** | **AB** |
+  | **Phase C**| **SC** | **AC** |
+  | **Phase D**| **SD** | **AD** |
   
   documentation that corresponds to the release version you're using.
 - The `com.unity.ml-agents` package is [verified](https://docs.unity3d.com/2020.1/Documentation/Manual/pack-safe.html)
