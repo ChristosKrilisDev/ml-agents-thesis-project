@@ -1,6 +1,29 @@
 <img src="docs/images/image-banner.png" align="middle" width="3000"/>
 
+# Using RL To Solve Single-Source Shortest Path Problems In Game Environment
+
+About the thesis project...
+
+**Features**
+
+- Solves sssp in video games
+- Use Dijkstra algorithm to validate the distance
+
+** Training Table **
+
+  documentation that corresponds to the release version you're using.
+- The `com.unity.ml-agents` package is [verified](https://docs.unity3d.com/2020.1/Documentation/Manual/pack-safe.html)
+  for Unity 2020.1 and later. Verified packages releases are numbered 1.0.x.
+  
+  | **Training Type** | **Simple** | **Advanced** |
+  |:-----------------:|:----------:|:------------:|
+  | **Phase A**| ** as** || **aa ** |
+  | **Phase B**|| **bs ** || **ab ** |
+  | **Phase C**|| **cs ** || **ac ** |
+  | **Phase D**|| **ds ** || **ad ** |
+
 # Training with mlagents-learn
+
 To view a description of all the CLI options accepted by mlagents-learn, use the --help
 ```sh
 mlagents-learn --help
@@ -15,22 +38,22 @@ mlagents-learn <trainer-config-file> --env=<env_name> --run-id=<run-identifier>
 4. ``initialize-from=<run-identifier> --run-id=<new-id>`` start a new training run but initialize it using an already-trained model.
 5. ``--force`` to re-run a previously interrupted or completed training run and re-use the same run ID.
 6. ``--resume`` to resume a previously interrupted or completed training run
-
-## Visualize Metrics
-1. Open a browser window and navigate to
-   [localhost:6006](http://localhost:6006).
-In order to observe the training process, either during training or afterward, start TensorBoard:
-```sh
-tensorboard --logdir results --port 6006
-```
+Note: environment is required!
 
 *Using an [Environment Executable](https://github.com/Unity-Technologies/ml-agents/blob/main/docs/Learning-Environment-Executable.md)
 
 
-# Using RL To Solve Single-Source Shortest Path Problems In Game Environment
+# Visualize Metrics
+
+In order to observe the training process, either during training or afterward, start TensorBoard:
+```sh
+tensorboard --logdir results --port 6006
+```
+Open a browser window and navigate to [localhost:6006](http://localhost:6006).
 
 
-# This Project is using the Unity ML Agent Toolkit (see below)
+# This Project is using the Unity ML Agent Toolkit
+
 **The Unity Machine Learning Agents Toolkit** (ML-Agents) is an open-source
 project that enables games and simulations to serve as environments for
 training intelligent agents. We provide implementations (based on PyTorch)
@@ -46,31 +69,12 @@ provides a central platform where advances in AI can be evaluated on Unity’s
 rich environments and then made accessible to the wider research and game
 developer communities.
 
-([latest release](https://github.com/Unity-Technologies/ml-agents/releases/tag/latest_release))
-([all releases](https://github.com/Unity-Technologies/ml-agents/releases))
 [![docs badge](https://img.shields.io/badge/docs-reference-blue.svg)](https://github.com/Unity-Technologies/ml-agents/tree/release_19_docs/docs/)
 [![license badge](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE.md)
 
-## Features
-
-- Solves sssp in video games
-- Use Dijkstra algorithm to validate the distance
-
-## Documentation
-
-  documentation that corresponds to the release version you're using.
-- The `com.unity.ml-agents` package is [verified](https://docs.unity3d.com/2020.1/Documentation/Manual/pack-safe.html)
-  for Unity 2020.1 and later. Verified packages releases are numbered 1.0.x.
-  
-  | **Training Type** | **Simple** | **Advanced** |
-  |:-----------------:|:----------:|:------------:|
-  | **Phase A**| ** as** || **aa ** |
-  | **Phase B**|| **bs ** || **ab ** |
-  | **Phase C**|| **cs ** || **ac ** |
-  | **Phase D**|| **ds ** || **ad ** |
 
 
-** SEE
+** REF **
 If you use Unity or the ML-Agents Toolkit to conduct research, we ask that you
 cite the following paper as a reference:
 
@@ -79,7 +83,6 @@ Gao, Y., Henry, H., Mattar, M., Lange, D. (2020). Unity: A General Platform for
 Intelligent Agents. _arXiv preprint
 [arXiv:1809.02627](https://arxiv.org/abs/1809.02627)._
 https://github.com/Unity-Technologies/ml-agents.
-
 
 
 ## License
