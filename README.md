@@ -13,7 +13,7 @@ About the thesis project...
   
   | **Training Type** | **Simple** | **Advanced** |
   |:-----------------:|:----------:|:------------:|
-  | **Phase A**| **SA** || **AA** |
+  | **Phase A**|| **SA** || **AA** |
   | **Phase B**|| **SB** || **AB** |
   | **Phase C**|| **SC** || **AC** |
   | **Phase D**|| **SD** || **AD** |
