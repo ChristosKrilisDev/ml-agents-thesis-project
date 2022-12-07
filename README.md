@@ -1,4 +1,4 @@
-<img src="docs/images/PFAgent_Path.png" align="middle" width="3000"/>
+<img src="docs/images/AgentPf_Path.png" align="middle" width="3000"/>
 
 # Using RL To Solve Single-Source Shortest Path Problems In Game Environment
 
