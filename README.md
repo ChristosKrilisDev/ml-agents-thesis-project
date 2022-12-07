@@ -10,10 +10,6 @@ About the thesis project...
 - Use Dijkstra algorithm to validate the distance
 
 ** Training Table **
-
-  documentation that corresponds to the release version you're using.
-- The `com.unity.ml-agents` package is [verified](https://docs.unity3d.com/2020.1/Documentation/Manual/pack-safe.html)
-  for Unity 2020.1 and later. Verified packages releases are numbered 1.0.x.
   
   | **Training Type** | **Simple** | **Advanced** |
   |:-----------------:|:----------:|:------------:|
@@ -21,6 +17,10 @@ About the thesis project...
   | **Phase B**|| **bs ** || **ab ** |
   | **Phase C**|| **cs ** || **ac ** |
   | **Phase D**|| **ds ** || **ad ** |
+  
+  documentation that corresponds to the release version you're using.
+- The `com.unity.ml-agents` package is [verified](https://docs.unity3d.com/2020.1/Documentation/Manual/pack-safe.html)
+  for Unity 2020.1 and later. Verified packages releases are numbered 1.0.x
 
 # Training with mlagents-learn
 
@@ -69,7 +69,7 @@ provides a central platform where advances in AI can be evaluated on Unity’s
 rich environments and then made accessible to the wider research and game
 developer communities.
 
-**Reference** 
+**Reference :** 
 Juliani, A., Berges, V., Teng, E., Cohen, A., Harper, J., Elion, C., Goy, C.,
 Gao, Y., Henry, H., Mattar, M., Lange, D. (2020). Unity: A General Platform for
 Intelligent Agents. _arXiv preprint
