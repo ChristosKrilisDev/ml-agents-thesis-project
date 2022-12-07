@@ -69,20 +69,15 @@ provides a central platform where advances in AI can be evaluated on Unity’s
 rich environments and then made accessible to the wider research and game
 developer communities.
 
-[![docs badge](https://img.shields.io/badge/docs-reference-blue.svg)](https://github.com/Unity-Technologies/ml-agents/tree/release_19_docs/docs/)
-[![license badge](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE.md)
-
-
-
-** REF **
-If you use Unity or the ML-Agents Toolkit to conduct research, we ask that you
-cite the following paper as a reference:
-
+**Reference** 
 Juliani, A., Berges, V., Teng, E., Cohen, A., Harper, J., Elion, C., Goy, C.,
 Gao, Y., Henry, H., Mattar, M., Lange, D. (2020). Unity: A General Platform for
 Intelligent Agents. _arXiv preprint
 [arXiv:1809.02627](https://arxiv.org/abs/1809.02627)._
 https://github.com/Unity-Technologies/ml-agents.
+
+[![docs badge](https://img.shields.io/badge/docs-reference-blue.svg)](https://github.com/Unity-Technologies/ml-agents/tree/release_19_docs/docs/)
+[![license badge](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE.md)
 
 
 ## License
