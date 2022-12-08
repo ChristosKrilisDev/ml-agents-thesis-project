@@ -1,15 +1,17 @@
 <img src="docs/images/AgentPf_Path.png" align="middle" width="3000"/>
 
-# Using RL To Solve Single-Source Shortest Path Problems In Game Environment
+# Using RL To Solve Single-Source Shortest Path Problems In Video Game Environment
 
 About the thesis project... (under construction)
 
 **Features**
 
 - Solves sssp in video games
-- Use Dijkstra algorithm to validate the distance
+- Use Dijkstra algorithm to validate the optimal distance
 
 ** Training Table **
+  
+  Training Scenarios :
   
   | **Training Type** | **Simple** | **Advanced** |
   |:-----------------:|:----------:|:------------:|
