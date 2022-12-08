@@ -2,7 +2,7 @@
 
 # Using RL To Solve Single-Source Shortest Path Problems In Game Environment
 
-About the thesis project...
+About the thesis project... (under construction)
 
 **Features**
 
