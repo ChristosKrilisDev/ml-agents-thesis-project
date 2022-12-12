@@ -1,5 +1,6 @@
 behaviors:
   PF:                       #https://github.com/Unity-Technologies/ml-agents/blob/main/docs/Training-Configuration-File.md
+  
     trainer_type: ppo       #The type of trainer to use: ppo, sac, or poca.
     hyperparameters:
       batch_size: 512 #128          #If you are using continuous actions, this value should be large (on the order of 1000s).Typical range : (Continuous - PPO): 512 - 5120; (Continuous - SAC): 128 - 1024; (Discrete, PPO & SAC): 32 - 512.
@@ -11,12 +12,16 @@ behaviors:
       num_epoch: 8 #3               #low value => slower learning Typical range(3-10) the larger the barch size, the larger this can increased
       learning_rate_schedule: linear #Determines how beta changes over time. linear | constant 
       num_epoch: 3                  # [3-10] ensure more stable updates, at the cost of slower learning.
+      
     network_settings:
       normalize: false
       hidden_units: 512 #128        #how many units / layer
-      num_layers: 5                 #how many layers inbetween input-output layers , more complex problem could be easier with CNN
+      num_layers: 3                 #how many layers inbetween input-output layers , more complex problem could be easier with CNN
       vis_encode_type: simple       # nature_cnn resnet match3 fully_connected
       conditioning_type: hyper      #Note that when using hyper the number of parameters of the network increases greatly. Therefore, it is recommended to reduce the number of hidden_units when using this conditioning_type
+      memory:
+        sequence_length: 64
+        memory_size: 128
     reward_signals:
       extrinsic:
         gamma: 0.99 #0.99    # 0.8 - 0.995 Discount factor for future rewards coming from the environment
@@ -34,6 +39,7 @@ behaviors:
           hidden_units: 64
           num_layers: 3
         learning_rate: 0.0001
+        
     keep_checkpoints: 5
     checkpoint_interval: 1000000
     max_steps: 10000000
