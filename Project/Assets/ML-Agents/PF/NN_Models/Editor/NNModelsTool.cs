@@ -53,8 +53,12 @@ namespace ML_Agents.PF.NN_Models.Editor
                 {
                     var newName = $"{folderName}_{i}";
 
-                    if (files[i].Contains(newName)) continue;
-                    AssetDatabase.RenameAsset(files[i], $"{newName}");
+                    if (files[i].Equals(newName))
+                    {
+                        Debug.Log("Skiped : " +files[i]);
+                        continue;
+                    }
+                    AssetDatabase.RenameAsset(files[i], $"_{newName}");
                 }
             }
         }
