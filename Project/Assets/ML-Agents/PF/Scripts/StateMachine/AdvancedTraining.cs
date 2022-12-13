@@ -42,7 +42,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
             }
             PreviousStepReward = newStepReward;
             GiveInternalReward(RewardUseType.Add_Reward, newStepReward);
-            Debug.Log(newStepReward);
+            // Debug.Log(newStepReward);
         }
 
         public override void RunOnCheckPointReward()
