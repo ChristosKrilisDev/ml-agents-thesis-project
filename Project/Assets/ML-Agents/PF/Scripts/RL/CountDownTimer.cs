@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
-
-namespace ML_Agents.PF.Scripts.UtilsScripts
+namespace ML_Agents.PF.Scripts.RL
 {
     public class CountDownTimer
     {
