@@ -10,6 +10,10 @@ namespace ML_Agents.PF.Scripts.Data
         /// Holds the data related to the reward system
         /// </summary>
 
+        [Header("Timer")]
+        [Range(1f, 10f)]
+        public float TimerValue = 6;
+
         [Header("Reward Value")]
         [Range(1, 10)]
         public int Reward = 1;

@@ -36,6 +36,8 @@ namespace ML_Agents.PF.Scripts.StateMachine
         public UnityAction SwitchTargetNodeCallBack;
         public UnityAction UpdateRewardDataStructCallBack;
 
+        public bool IsOutOfTime;
+
         protected float PreviousStepReward;
 
     #endregion
@@ -90,6 +92,11 @@ namespace ML_Agents.PF.Scripts.StateMachine
             UpdateRewardConditionsList();
             //step factor multiplies the final reward
             ConditionsData.StepFactor = (ConditionsData.MaxStep - ConditionsData.StepCount) / (float)ConditionsData.MaxStep;
+
+            if (IsOutOfTime)//give a very small penalty if the agent is not moving
+            {
+                GiveInternalReward(RewardUseType.Add_Reward, RewardData.StepPenalty/10);
+            }
         }
 
         public virtual void RunOnCheckPointReward()

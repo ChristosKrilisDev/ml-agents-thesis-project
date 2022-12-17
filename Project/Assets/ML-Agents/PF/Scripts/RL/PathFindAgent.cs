@@ -27,6 +27,8 @@ namespace ML_Agents.PF.Scripts.RL
         [SerializeField] private Graph _graph;
 
         private TrainingStateMachine _trainingStateMachine;
+        private CountDownTimer _countDownTimer;
+        private Coroutine _timerCoroutine;
 
         private readonly GameObject[] _nodesToFind = new GameObject[2];
         private readonly float[] _nodesDistances = new float[2];
@@ -52,6 +54,9 @@ namespace ML_Agents.PF.Scripts.RL
 
             _trainingStateMachine.ConditionsData.MaxStep = MaxStep;
             SetCallBacks();
+
+            _countDownTimer = new CountDownTimer(GameManager.Instance.RewardData.TimerValue, true); //todo : create flag exit
+            StartCoroutine(_countDownTimer.IdleMovementCountDown());
         }
 
         private void SetCallBacks()
@@ -106,6 +111,8 @@ namespace ML_Agents.PF.Scripts.RL
             sensor.AddObservation(_trainingStateMachine.ConditionsData.StepFactor); //1     float   //the higher the number, the higher the reward
             sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance); //1   float   //less distance bigger reward
 
+
+            //_countDownTimer.IsOutOfTime()
         }
 
         public override void Heuristic(in ActionBuffers actionsOut)
@@ -218,6 +225,9 @@ namespace ML_Agents.PF.Scripts.RL
 
             //collect all the data
             _trainingStateMachine.ConditionsData.MaxStep = MaxStep;
+
+            _countDownTimer.TimerValueChanged(GameManager.Instance.RewardData.TimerValue);
+            _countDownTimer.StartTimer = true;
         }
 
         private void ResetTmpVars(IReadOnlyList<int> items)
@@ -279,10 +289,7 @@ namespace ML_Agents.PF.Scripts.RL
             if (other.gameObject.CompareTag("spawnArea"))
             {
                 _trainingStateMachine.ConditionsData.TraveledDistance++;
-
-                // Debug.Log($"-- Agent --\n" +
-                //     $" {_trainingStateMachine.ConditionsData.TraveledDistance}/{_trainingStateMachine.ConditionsData.FullPathLength} " +
-                //     $"| Current node : {other.gameObject.name}");
+                _countDownTimer.TimerValueChanged(GameManager.Instance.RewardData.TimerValue);
             }
         }
 
@@ -331,6 +338,8 @@ namespace ML_Agents.PF.Scripts.RL
             {
                 ((AdvancedTraining)_trainingStateMachine).RunOnStepReward();
             }
+
+            _trainingStateMachine.IsOutOfTime = _countDownTimer.IsOutOfTime();
         }
 
         private void GiveRewardInternal(RewardUseType useRewardType, float extraRewardValue)
