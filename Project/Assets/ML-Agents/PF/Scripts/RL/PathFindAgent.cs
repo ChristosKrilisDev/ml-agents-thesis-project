@@ -28,7 +28,8 @@ namespace ML_Agents.PF.Scripts.RL
 
         private TrainingStateMachine _trainingStateMachine;
         private CountDownTimer _countDownTimer;
-        private Coroutine _timerCoroutine;
+        private Coroutine _timerCoroutine; //todo : use it to stop/start coroutine?
+        private NodeMapping _nodeMapping;
 
         private readonly GameObject[] _nodesToFind = new GameObject[2];
         private readonly float[] _nodesDistances = new float[2];
@@ -52,11 +53,14 @@ namespace ML_Agents.PF.Scripts.RL
                 throw new NullReferenceException("Conditions data are null");
             }
 
+
             _trainingStateMachine.ConditionsData.MaxStep = MaxStep;
             SetCallBacks();
 
             _countDownTimer = new CountDownTimer(GameManager.Instance.RewardData.TimerValue, true); //todo : create flag exit
             StartCoroutine(_countDownTimer.IdleMovementCountDown());
+
+            _nodeMapping = new NodeMapping(_graph.Nodes);
         }
 
         private void SetCallBacks()
@@ -224,10 +228,6 @@ namespace ML_Agents.PF.Scripts.RL
             //nodes transform has updated through the PFArea.cs above(ref nodeTransforms);
 
             //collect all the data
-            _trainingStateMachine.ConditionsData.MaxStep = MaxStep;
-
-            _countDownTimer.TimerValueChanged(GameManager.Instance.RewardData.TimerValue);
-            _countDownTimer.StartTimer = true;
         }
 
         private void ResetTmpVars(IReadOnlyList<int> items)
@@ -239,6 +239,11 @@ namespace ML_Agents.PF.Scripts.RL
             _nodesToFind[(int)IndexofTargetType.Check_Point] = null;
             _target = _nodesToFind[(int)IndexofTargetType.Agent] = _graph.Nodes[items[(int)IndexofTargetType.Check_Point]].gameObject; //on init target CP
             _nodesToFind[(int)IndexofTargetType.Check_Point] = _graph.Nodes[items[(int)IndexofTargetType.Final_Node]].gameObject; //set final node as second target
+
+            _countDownTimer.TimerValueChanged(GameManager.Instance.RewardData.TimerValue);
+            _countDownTimer.StartTimer = true;
+
+            _nodeMapping.Reset();
         }
 
         private void SetUpPath(int agentIndex, int checkPointIndex, int finalGoalIndex)
@@ -286,11 +291,14 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("spawnArea"))
-            {
-                _trainingStateMachine.ConditionsData.TraveledDistance++;
-                _countDownTimer.TimerValueChanged(GameManager.Instance.RewardData.TimerValue);
-            }
+            if (!other.gameObject.CompareTag("spawnArea")) return;
+
+            _trainingStateMachine.ConditionsData.TraveledDistance++;
+            _countDownTimer.TimerValueChanged(GameManager.Instance.RewardData.TimerValue);
+
+            if (!other.TryGetComponent(out Node node)) return;
+            Debug.Log("moved to new node " + node.name);
+            var visitedNodeResult= _nodeMapping.CheckMap(node); //todo : create mechanics for visited nodes
         }
 
         private void OnCollisionEnter(Collision collision)
