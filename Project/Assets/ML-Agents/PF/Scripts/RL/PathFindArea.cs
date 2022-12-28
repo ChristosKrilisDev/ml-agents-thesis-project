@@ -6,6 +6,7 @@ namespace ML_Agents.PF.Scripts.RL
     public class PathFindArea : MonoBehaviour
     {
         [SerializeField] private GameObject[] _spawnAreas;
+        public GameObject[] SpawnAreas => _spawnAreas;
 
         private static GameObject GoalNodePref => Utils.FinalNode;
         private static GameObject BlockPref => Utils.SimpleNode;

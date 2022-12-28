@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using Dijkstra.Scripts;
+using UnityEngine;
 namespace ML_Agents.PF.Scripts.RL
 {
     public class NodeMapping
     {
-        private readonly Dictionary<Node, bool> _nodesDictionary = new Dictionary<Node, bool>();
-        private readonly List<Node> _nodes;
+        private readonly Dictionary<GameObject, bool> _nodesDictionary = new Dictionary<GameObject, bool>();
+        private readonly GameObject[] _nodes;
 
-        public NodeMapping(List<Node> nodes)
+        public NodeMapping(GameObject[] nodes)
         {
             _nodes = nodes;
 
@@ -17,16 +18,19 @@ namespace ML_Agents.PF.Scripts.RL
             }
         }
 
-        public bool CheckMap(Node node)
+        public bool CheckMap(GameObject node)
         {
             //agent has already visited this node
-            if (_nodesDictionary.ContainsKey(node)) return true;
+            if (_nodesDictionary.ContainsKey(node) && _nodesDictionary[node] == true)
+            {
+                return true;
+            }
 
             AddVisitedNode(node);
             return false;
         }
 
-        private void AddVisitedNode(Node node)
+        private void AddVisitedNode(GameObject node)
         {
             _nodesDictionary[node] = true;
         }

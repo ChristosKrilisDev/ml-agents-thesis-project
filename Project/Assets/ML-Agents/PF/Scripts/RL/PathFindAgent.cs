@@ -53,14 +53,13 @@ namespace ML_Agents.PF.Scripts.RL
                 throw new NullReferenceException("Conditions data are null");
             }
 
-
             _trainingStateMachine.ConditionsData.MaxStep = MaxStep;
             SetCallBacks();
 
             _countDownTimer = new CountDownTimer(GameManager.Instance.RewardData.TimerValue, true); //todo : create flag exit
             StartCoroutine(_countDownTimer.IdleMovementCountDown());
 
-            _nodeMapping = new NodeMapping(_graph.Nodes);
+            _nodeMapping = new NodeMapping(_area.SpawnAreas);
         }
 
         private void SetCallBacks()
@@ -114,7 +113,6 @@ namespace ML_Agents.PF.Scripts.RL
 
             sensor.AddObservation(_trainingStateMachine.ConditionsData.StepFactor); //1     float   //the higher the number, the higher the reward
             sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance); //1   float   //less distance bigger reward
-
 
             //_countDownTimer.IsOutOfTime()
         }
@@ -296,9 +294,11 @@ namespace ML_Agents.PF.Scripts.RL
             _trainingStateMachine.ConditionsData.TraveledDistance++;
             _countDownTimer.TimerValueChanged(GameManager.Instance.RewardData.TimerValue);
 
-            if (!other.TryGetComponent(out Node node)) return;
-            Debug.Log("moved to new node " + node.name);
-            var visitedNodeResult= _nodeMapping.CheckMap(node); //todo : create mechanics for visited nodes
+            //todo: create script for spawn area, and link the node on this index.area?
+
+            var visitedNodeResult = _nodeMapping.CheckMap(other.gameObject); //todo : create mechanics for visited nodes
+            Debug.Log("moved to new node " + other.gameObject.name + " result : " + visitedNodeResult);
+
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -342,7 +342,7 @@ namespace ML_Agents.PF.Scripts.RL
             {
                 ((SimpleTraining)_trainingStateMachine).RunOnStepReward();
             }
-            else if(_trainingStateMachine.GetType() == typeof(AdvancedTraining))
+            else if (_trainingStateMachine.GetType() == typeof(AdvancedTraining))
             {
                 ((AdvancedTraining)_trainingStateMachine).RunOnStepReward();
             }
@@ -378,7 +378,7 @@ namespace ML_Agents.PF.Scripts.RL
                 _trainingStateMachine.FinalRewardConditions.ToArray(),
                 Utils.GetDistanceDifference(gameObject, _target),
                 _nodesDistances[_targetNodeIndex]
-                );
+            );
         }
 
     #endregion
