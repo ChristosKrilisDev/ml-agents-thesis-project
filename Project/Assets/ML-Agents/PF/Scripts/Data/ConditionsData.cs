@@ -19,6 +19,8 @@
         public bool HasFoundGoal;
         public bool HasFoundCheckpoint;
 
+        public bool HasRevisitedNode;
+
         public ConditionsData()
         {
             Reset();
@@ -35,6 +37,7 @@
             HasTouchedWall= false;
             HasFoundGoal= false;
             HasFoundCheckpoint= false;
+            HasRevisitedNode = false;
         }
 
     }

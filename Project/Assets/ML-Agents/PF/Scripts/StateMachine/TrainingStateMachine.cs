@@ -4,7 +4,6 @@ using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.RL;
 using ML_Agents.PF.Scripts.Structs;
 using ML_Agents.PF.Scripts.UtilsScripts;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace ML_Agents.PF.Scripts.StateMachine
@@ -35,6 +34,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
         public UnityAction EndEpisodeCallBack;
         public UnityAction SwitchTargetNodeCallBack;
         public UnityAction UpdateRewardDataStructCallBack;
+        public UnityAction RevisitedCallBack;
 
         public bool IsOutOfTime;
 
@@ -167,6 +167,15 @@ namespace ML_Agents.PF.Scripts.StateMachine
         }
 
     #endregion
+
+        public void OnRevisitedNode(bool result)
+        {
+            ConditionsData.HasRevisitedNode = result;
+
+            if(!result) return;
+
+            GiveInternalReward(RewardUseType.Add_Reward, RewardData.Penalty/2f);
+        }
 
         public bool HasEpisodeEnded()
         {

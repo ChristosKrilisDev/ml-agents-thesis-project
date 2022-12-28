@@ -114,6 +114,8 @@ namespace ML_Agents.PF.Scripts.RL
             sensor.AddObservation(_trainingStateMachine.ConditionsData.StepFactor); //1     float   //the higher the number, the higher the reward
             sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance); //1   float   //less distance bigger reward
 
+            sensor.AddObservation(_trainingStateMachine.ConditionsData.HasRevisitedNode); //1 bool
+
             //_countDownTimer.IsOutOfTime()
         }
 
@@ -297,8 +299,7 @@ namespace ML_Agents.PF.Scripts.RL
             //todo: create script for spawn area, and link the node on this index.area?
 
             var visitedNodeResult = _nodeMapping.CheckMap(other.gameObject); //todo : create mechanics for visited nodes
-            Debug.Log("moved to new node " + other.gameObject.name + " result : " + visitedNodeResult);
-
+            _trainingStateMachine.OnRevisitedNode(visitedNodeResult);
         }
 
         private void OnCollisionEnter(Collision collision)
