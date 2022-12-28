@@ -296,9 +296,8 @@ namespace ML_Agents.PF.Scripts.RL
             _trainingStateMachine.ConditionsData.TraveledDistance++;
             _countDownTimer.TimerValueChanged(GameManager.Instance.RewardData.TimerValue);
 
-            //todo: create script for spawn area, and link the node on this index.area?
 
-            var visitedNodeResult = _nodeMapping.CheckMap(other.gameObject); //todo : create mechanics for visited nodes
+            var visitedNodeResult = _nodeMapping.CheckMap(other.gameObject);
             _trainingStateMachine.OnRevisitedNode(visitedNodeResult);
         }
 
