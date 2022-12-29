@@ -32,6 +32,7 @@ TagManager:
   - tile
   - pfobj
   - spawnArea
+  - reward
   layers:
   - Default
   - TransparentFX

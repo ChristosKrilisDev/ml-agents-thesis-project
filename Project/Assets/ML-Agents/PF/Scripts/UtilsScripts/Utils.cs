@@ -8,6 +8,8 @@ namespace ML_Agents.PF.Scripts.UtilsScripts
     public static class Utils
     {
 
+        //NOTE : GatherAssets works only on editor!
+
         public static void GatherAssets()
         {
             GetButtonMaterials();
@@ -35,12 +37,14 @@ namespace ML_Agents.PF.Scripts.UtilsScripts
         private const string PREFABS_ROOT_PATH = "Assets/ML-Agents/PF/Prefabs";
         public static GameObject FinalNode;
         public static GameObject SimpleNode;
+        public static GameObject RewardNode;
 
         private static void GetPrefabsNodesMaterials()
         {
 #if UNITY_EDITOR
             FinalNode = AssetDatabase.LoadAssetAtPath<GameObject>($"{PREFABS_ROOT_PATH}/FinalGoal.prefab");
             SimpleNode = AssetDatabase.LoadAssetAtPath<GameObject>($"{PREFABS_ROOT_PATH}/BlockObj.prefab");
+            RewardNode = AssetDatabase.LoadAssetAtPath<GameObject>($"{PREFABS_ROOT_PATH}/RewardNode.prefab");
 #endif
         }
 

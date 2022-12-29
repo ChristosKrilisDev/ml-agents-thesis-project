@@ -115,7 +115,6 @@ namespace ML_Agents.PF.Scripts.RL
             sensor.AddObservation(_trainingStateMachine.ConditionsData.TraveledDistance); //1   float   //less distance bigger reward
 
             sensor.AddObservation(_trainingStateMachine.ConditionsData.HasRevisitedNode); //1 bool
-
             //_countDownTimer.IsOutOfTime()
         }
 
@@ -223,7 +222,7 @@ namespace ML_Agents.PF.Scripts.RL
             //Create all the other objects
             for (var i = 0; i < 6; i++)
             {
-                _area.CreateBlockNode(items[next++]) /*.Hide(next)*/;
+                _area.CreateBlockNode(items[next++]);
             }
             //nodes transform has updated through the PFArea.cs above(ref nodeTransforms);
 
@@ -253,22 +252,43 @@ namespace ML_Agents.PF.Scripts.RL
             _graph.CheckPointNode = _graph.Nodes[checkPointIndex];
             _graph.EndNode = _graph.Nodes[finalGoalIndex];
 
-            var pathLen1 = GetShortestPathLength(_graph.StartNode, _graph.CheckPointNode);
-            var pathLen2 = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
-            var fullLength = pathLen1 + pathLen2;
+            var startHalfPath = GetShortestPathLength(_graph.StartNode, _graph.CheckPointNode);
+            var finalHalfPath = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
+            ActivateNodeRewards(startHalfPath);
+            ActivateNodeRewards(finalHalfPath);
 
-            _trainingStateMachine.ConditionsData.CheckPointPathLength = pathLen1;
-            _trainingStateMachine.ConditionsData.FullPathLength = fullLength;
+            _trainingStateMachine.ConditionsData.CheckPointPathLength = (int)startHalfPath.Length;
+            _trainingStateMachine.ConditionsData.FullPathLength = (int)(startHalfPath.Length + finalHalfPath.Length);
             // Debug.Log($"#Player#{pathLen1} + {pathLen2} = {fullLength}");
         }
 
-        private int GetShortestPathLength(Node from, Node to)
+        private void ActivateNodeRewards(Path path) //TODO : fix that shit
+        {
+            for (var index = 1; index < path.PathNodes.Count-1; index++)
+            {
+                var pathNode = path.PathNodes[index];
+
+                for (var i = 1; i < _area.Nodes.Length-1; i++)
+                {
+                    var areaNode = _area.Nodes[i];
+
+                    if (areaNode.name == pathNode.name)
+                    {
+                        Debug.Log("Path NOde : " + pathNode.name + " --- node : " + areaNode.name);
+
+                        _area.CreateRewardNode(areaNode.transform);
+                    }
+                }
+            }
+        }
+
+        private Path GetShortestPathLength(Node from, Node to)
         {
             var path = _graph.GetShortestPath(from, to);
 
-            if (path.Length <= 0) return -1;
+            if (path.Length <= 0) return null;
 
-            return (int)path.Length;
+            return path;
         }
 
         private void SwitchTargetNode()
@@ -291,6 +311,14 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void OnTriggerEnter(Collider other)
         {
+            if (other.gameObject.CompareTag("reward"))
+            {
+                //add reward
+                //TODO : fix reward/node
+                AddReward(GameManager.Instance.RewardData.Reward);
+                DestroyImmediate(other.gameObject);
+            }
+
             if (!other.gameObject.CompareTag("spawnArea")) return;
 
             _trainingStateMachine.ConditionsData.TraveledDistance++;

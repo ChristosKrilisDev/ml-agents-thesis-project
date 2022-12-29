@@ -187,7 +187,6 @@ namespace ML_Agents.PF.Scripts.StateMachine
         protected void DijkstraReward(RewardUseType type, int pathLength, string key)
         {
             //create dijkstra analytics
-            //todo : observe result?
             var result = Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, pathLength, false);
             if (result)
             {
