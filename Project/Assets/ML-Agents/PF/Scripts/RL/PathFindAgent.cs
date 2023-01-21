@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dijkstra.Scripts;
+using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.StateMachine;
 using ML_Agents.PF.Scripts.UtilsScripts;
@@ -264,11 +265,14 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void ActivateNodeRewards(Path path) //TODO : fix that shit
         {
-            for (var index = 1; index < path.PathNodes.Count-1; index++)
+            //if(ActivatePathReward) return;
+            //TODO : create 2 lists with the nodes from each path
+
+            for (var index = 1; index < path.PathNodes.Count - 1; index++)
             {
                 var pathNode = path.PathNodes[index];
 
-                for (var i = 1; i < _area.Nodes.Length-1; i++)
+                for (var i = 1; i < _area.Nodes.Length - 1; i++)
                 {
                     var areaNode = _area.Nodes[i];
 
@@ -311,19 +315,19 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("reward"))
+            if (other.gameObject.CompareTag(TagData.PATH_REWARD_TAG))
             {
                 //add reward
                 //TODO : fix reward/node
-                AddReward(GameManager.Instance.RewardData.Reward);
-                DestroyImmediate(other.gameObject);
+                //move reward to SM
+                AddReward(GameManager.Instance.RewardData.PathReward);
+                Destroy(other.gameObject);
             }
 
-            if (!other.gameObject.CompareTag("spawnArea")) return;
+            if (!other.gameObject.CompareTag(TagData.SPAWN_AREA_TAG)) return;
 
             _trainingStateMachine.ConditionsData.TraveledDistance++;
             _countDownTimer.TimerValueChanged(GameManager.Instance.RewardData.TimerValue);
-
 
             var visitedNodeResult = _nodeMapping.CheckMap(other.gameObject);
             _trainingStateMachine.OnRevisitedNode(visitedNodeResult);
@@ -331,11 +335,11 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.CompareTag("wall")) { OnHarmfulCollision(); }
+            if (collision.gameObject.CompareTag(TagData.WALL_TAG)) { OnHarmfulCollision(); }
 
-            if (collision.gameObject.CompareTag("switchOff")) { OnCheckPointAchieved(); }
+            if (collision.gameObject.CompareTag(TagData.SWITCH_OFF_TAG)) { OnCheckPointAchieved(); }
 
-            if (collision.gameObject.CompareTag("goal")) { OnFinalGoalAchieved(); }
+            if (collision.gameObject.CompareTag(TagData.GOAL_TAG)) { OnFinalGoalAchieved(); }
         }
 
     #endregion

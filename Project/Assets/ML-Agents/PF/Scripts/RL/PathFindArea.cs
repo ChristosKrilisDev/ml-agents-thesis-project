@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.UtilsScripts;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace ML_Agents.PF.Scripts.RL
         private static GameObject BlockPref => Utils.SimpleNode;
         private static GameObject RewardNodePref => Utils.RewardNode;
 
-        private const string OBJECT_TAG = "pfobj";
+
 
         private Transform[] _nodes;
         public Transform[] Nodes => _nodes;
@@ -39,10 +40,10 @@ namespace ML_Agents.PF.Scripts.RL
             return this;
         }
 
-        public PathFindArea CreateRewardNode(Transform pos)
+        public PathFindArea CreateRewardNode(Transform nodePos)
         {
-            // CreateNode(RewardNodePref, spawnIndex);
-            Instantiate(RewardNodePref, Vector3.zero, Quaternion.Euler(0f, 0f, 0f), pos);
+            var pathReward = Instantiate(RewardNodePref, Vector3.zero, Quaternion.Euler(0f, 0f, 0f),transform);
+            pathReward.transform.position = nodePos.position;
             return this;
         }
 
@@ -77,8 +78,8 @@ namespace ML_Agents.PF.Scripts.RL
         {
             foreach (Transform child in transform)
             {
-                if (child.CompareTag(OBJECT_TAG)) Destroy(child.gameObject);
-                if (child.CompareTag("reward")) Destroy(child.gameObject);
+                if (child.CompareTag(TagData.OBJECT_TAG)) Destroy(child.gameObject);
+                if (child.CompareTag(TagData.PATH_REWARD_TAG)) Destroy(child.gameObject);
             }
         }
     }

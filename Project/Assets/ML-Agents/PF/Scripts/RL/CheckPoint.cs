@@ -1,3 +1,4 @@
+using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.UtilsScripts;
 using UnityEngine;
 
@@ -5,9 +6,6 @@ namespace ML_Agents.PF.Scripts.RL
 {
     public class CheckPoint : MonoBehaviour
     {
-        private const string SWITCH_ON_TAG = "switchOn";
-        private const string SWITCH_OFF_TAG = "switchOff";
-
         private PathFindArea _areaComponent;
         private GameObject _goalNode;
         private Renderer _renderer;
@@ -48,7 +46,7 @@ namespace ML_Agents.PF.Scripts.RL
         {
             if((int)GameManager.Instance.PhaseType <= 2) return;
 
-            if (other.gameObject.CompareTag("agent") && !HasPressed)
+            if (other.gameObject.CompareTag(TagData.AGENT_TAG) && !HasPressed)
                 ToggleState(false);
         }
 
@@ -59,7 +57,7 @@ namespace ML_Agents.PF.Scripts.RL
             _goalNode.SetActive(!isInitState);
 
             _renderer.material = isInitState ? _offMaterial : _onMaterial;
-            tag = isInitState ? SWITCH_OFF_TAG : SWITCH_ON_TAG;
+            tag = isInitState ? TagData.SWITCH_OFF_TAG : TagData.SWITCH_ON_TAG;
         }
     }
 }

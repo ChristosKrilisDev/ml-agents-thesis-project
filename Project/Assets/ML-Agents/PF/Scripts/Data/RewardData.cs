@@ -40,6 +40,11 @@ namespace ML_Agents.PF.Scripts.Data
         [Range(0.1f, 1f), Tooltip("sharp the value")]
         public float Epsilon = 0.4f;
 
+        [Header("Passive Path Rewards")]
+        public bool ActivatePathReward = true;
+        public float PathReward = 0.1f;
+
+
 
 
 
