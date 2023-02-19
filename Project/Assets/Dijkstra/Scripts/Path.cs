@@ -21,6 +21,7 @@ namespace Dijkstra.Scripts
         {
             var calculated = new List<Node>();
             var flagCounter = 0;
+            var counter = -1;
 
             _length = 0f;
 
@@ -30,10 +31,14 @@ namespace Dijkstra.Scripts
 
                 foreach (var connection in node.Connections)
                 {
+                    counter++;
                     //last node dosnt need to be calculated, add in the path and break
                     if (flagCounter == _pathNodes.Count)
                     {
                         calculated.Add(node);
+                        node.NextNode = null;
+                        node.PrevNode = _pathNodes[counter-1];
+
                         break;
                     }
 
@@ -41,9 +46,18 @@ namespace Dijkstra.Scripts
 
                     _length += 1;
                     calculated.Add(node);
+
+                    node.NextNode = _pathNodes[counter+1];
+                    node.PrevNode = counter == 0 ? null : _pathNodes[counter-1];
+
                     break;
                 }
             }
+        }
+
+        private void AddNodesPathConnections()
+        {
+
         }
 
         public override string ToString()

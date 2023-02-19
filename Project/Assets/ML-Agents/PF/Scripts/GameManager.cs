@@ -45,6 +45,7 @@ namespace ML_Agents.PF.Scripts
 
         private void Awake()
         {
+
             if (Instance == null)
             {
                 Instance = this;

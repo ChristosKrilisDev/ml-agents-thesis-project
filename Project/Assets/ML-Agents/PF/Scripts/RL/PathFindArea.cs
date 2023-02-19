@@ -7,6 +7,7 @@ namespace ML_Agents.PF.Scripts.RL
 {
     public class PathFindArea : MonoBehaviour
     {
+        [SerializeField] private PathRewardManager _pathRewardManager;
         [SerializeField] private GameObject[] _spawnAreas;
         public GameObject[] SpawnAreas => _spawnAreas;
 
@@ -40,10 +41,14 @@ namespace ML_Agents.PF.Scripts.RL
             return this;
         }
 
-        public PathFindArea CreateRewardNode(Transform nodePos)
+        //todo :
+        //revile rewards after hitting the check Point, or hide them if phase >= 3
+        // move add reward to State machine from agent OnTriiger ender
+        public PathFindArea CreateRewardNode(Transform nodePos, Transform prevNodePos)
         {
-            var pathReward = Instantiate(RewardNodePref, Vector3.zero, Quaternion.Euler(0f, 0f, 0f),transform);
-            pathReward.transform.position = nodePos.position;
+            _pathRewardManager.SpawnRewards(nodePos, prevNodePos);
+            // var pathReward = Instantiate(RewardNodePref, Vector3.zero, Quaternion.Euler(0f, 0f, 0f),transform);
+            // pathReward.transform.position = nodePos.position;
             return this;
         }
 
@@ -79,7 +84,8 @@ namespace ML_Agents.PF.Scripts.RL
             foreach (Transform child in transform)
             {
                 if (child.CompareTag(TagData.OBJECT_TAG)) Destroy(child.gameObject);
-                if (child.CompareTag(TagData.PATH_REWARD_TAG)) Destroy(child.gameObject);
+                // if (child.CompareTag(TagData.PATH_REWARD_TAG)) Destroy(child.gameObject);
+                _pathRewardManager.Reset();
             }
         }
     }

@@ -12,5 +12,8 @@ namespace Dijkstra.Scripts
             get => _connections;
             set => _connections = value;
         }
+
+        public Node PrevNode; //remove?
+        public Node NextNode;
     }
 }

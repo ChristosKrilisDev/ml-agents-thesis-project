@@ -32,6 +32,9 @@ namespace ML_Agents.PF.Scripts.RL
         private Coroutine _timerCoroutine; //todo : use it to stop/start coroutine?
         private NodeMapping _nodeMapping;
 
+        private Path _startHalfPath;
+        private Path _finalHalfPath;
+
         private readonly GameObject[] _nodesToFind = new GameObject[2];
         private readonly float[] _nodesDistances = new float[2];
         private GameObject _target;
@@ -173,6 +176,7 @@ namespace ML_Agents.PF.Scripts.RL
 
         public override void OnEpisodeBegin()
         {
+
             _area.CleanArea();
             _trainingStateMachine.ConditionsData.Reset();
 
@@ -248,42 +252,34 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void SetUpPath(int agentIndex, int checkPointIndex, int finalGoalIndex)
         {
+
             //calculate the distance player - Checkpoint - goal
             _graph.StartNode = _graph.Nodes[agentIndex];
             _graph.CheckPointNode = _graph.Nodes[checkPointIndex];
             _graph.EndNode = _graph.Nodes[finalGoalIndex];
 
-            var startHalfPath = GetShortestPathLength(_graph.StartNode, _graph.CheckPointNode);
-            var finalHalfPath = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
-            ActivateNodeRewards(startHalfPath);
-            ActivateNodeRewards(finalHalfPath);
+            _startHalfPath = GetShortestPathLength(_graph.StartNode, _graph.CheckPointNode);
+            _finalHalfPath = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
+            ActivateNodeRewards(_startHalfPath, true);
 
-            _trainingStateMachine.ConditionsData.CheckPointPathLength = (int)startHalfPath.Length;
-            _trainingStateMachine.ConditionsData.FullPathLength = (int)(startHalfPath.Length + finalHalfPath.Length);
+            _trainingStateMachine.ConditionsData.CheckPointPathLength = (int)_startHalfPath.Length;
+            _trainingStateMachine.ConditionsData.FullPathLength = (int)(_startHalfPath.Length + _finalHalfPath.Length);
             // Debug.Log($"#Player#{pathLen1} + {pathLen2} = {fullLength}");
         }
 
-        private void ActivateNodeRewards(Path path) //TODO : fix that shit
+        private void ActivateNodeRewards(Path path, bool isFirstHalf = false)
         {
-            //if(ActivatePathReward) return;
-            //TODO : create 2 lists with the nodes from each path
-
-            for (var index = 1; index < path.PathNodes.Count - 1; index++)
+            for (var index = 0; index < path.PathNodes.Count; index++)
             {
                 var pathNode = path.PathNodes[index];
 
-                for (var i = 1; i < _area.Nodes.Length - 1; i++)
+                if (pathNode.NextNode != null)
                 {
-                    var areaNode = _area.Nodes[i];
-
-                    if (areaNode.name == pathNode.name)
-                    {
-                        Debug.Log("Path NOde : " + pathNode.name + " --- node : " + areaNode.name);
-
-                        _area.CreateRewardNode(areaNode.transform);
-                    }
+                    if (isFirstHalf && index == path.PathNodes.Count - 1) return;
+                    _area.CreateRewardNode(pathNode.transform, pathNode.NextNode.transform);
                 }
             }
+
         }
 
         private Path GetShortestPathLength(Node from, Node to)
@@ -317,9 +313,7 @@ namespace ML_Agents.PF.Scripts.RL
         {
             if (other.gameObject.CompareTag(TagData.PATH_REWARD_TAG))
             {
-                //add reward
-                //TODO : fix reward/node
-                //move reward to SM
+                //todo : move reward to SM
                 AddReward(GameManager.Instance.RewardData.PathReward);
                 Destroy(other.gameObject);
             }
@@ -356,7 +350,7 @@ namespace ML_Agents.PF.Scripts.RL
         {
             _trainingStateMachine.ConditionsData.HasFoundCheckpoint = true;
             _targetNodeIndex++;
-
+            ActivateNodeRewards(_finalHalfPath); //activate after the cp coll;
             _trainingStateMachine.RunOnCheckPointReward();
         }
 

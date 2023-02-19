@@ -2893,7 +2893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0d2cfd998b8eb49b560f4cc301fc5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PhaseType: 1
+  PhaseType: 3
   TrainingType: 1
   _rewardDatas:
   - _type: 1
@@ -8542,6 +8542,11 @@ PrefabInstance:
         type: 3}
       propertyPath: DecisionPeriod
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7853871858758187010, guid: bd804431e808a492bb5658bcd296e58e,
+        type: 3}
+      propertyPath: _spawnAmount
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
