@@ -7,7 +7,7 @@
         public const string SPAWN_AREA_TAG = "spawnArea";
 
         public const string WALL_TAG = "wall";
-        public const string GOAL_TAG = "spawnArea";
+        public const string GOAL_TAG = "goal";
         public const string AGENT_TAG = "agent";
 
         public const string SWITCH_ON_TAG = "switchOn";
