@@ -313,7 +313,8 @@ namespace ML_Agents.PF.Scripts.RL
             if (other.gameObject.CompareTag(TagData.PATH_REWARD_TAG))
             {
                 //todo : move reward to SM
-                AddReward(GameManager.Instance.RewardData.PathReward);
+                var individualValue = GameManager.Instance.RewardData.PathRewardTotalValue / GameManager.Instance.RewardData.SpawnPathRewardAmount;
+                AddReward(individualValue);
                 Destroy(other.gameObject);
             }
 

@@ -2893,7 +2893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0d2cfd998b8eb49b560f4cc301fc5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PhaseType: 3
+  PhaseType: 4
   TrainingType: 1
   _rewardDatas:
   - _type: 1

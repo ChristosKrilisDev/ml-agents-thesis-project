@@ -41,11 +41,9 @@ namespace ML_Agents.PF.Scripts.Data
         public float Epsilon = 0.4f;
 
         [Header("Passive Path Rewards")]
-        public bool ActivatePathReward = true;
-        public float PathReward = 0.1f;
-
-
-
+        public bool UsePathRewardData = true;
+        [Range(1f, 10f)]public float PathRewardTotalValue = 1f;
+        [Range(1f, 10f)]public int SpawnPathRewardAmount = 1;
 
 
     }

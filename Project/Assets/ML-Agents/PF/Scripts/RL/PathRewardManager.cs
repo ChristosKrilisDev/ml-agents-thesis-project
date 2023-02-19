@@ -7,18 +7,15 @@ namespace ML_Agents.PF.Scripts.RL
 {
     public class PathRewardManager : MonoBehaviour
     {
-        public bool DisableSpawning;
 
         [SerializeField, Range(0,10)] private int _spawnAmount = 3;
-
         private GameObject _rewardNodePref;
-
-        private List<GameObject> _spawnedRewards = new List<GameObject>();
+        private readonly List<GameObject> _spawnedRewards = new List<GameObject>();
 
         private void Awake()
         {
             _rewardNodePref = Utils.RewardNode;
-
+            _spawnAmount = GameManager.Instance.RewardData.SpawnPathRewardAmount;
             // for (int i = 0; i <= _spawnAmount; i++)
             // {
             //     var obj =Instantiate(_rewardNodePref);
@@ -30,6 +27,7 @@ namespace ML_Agents.PF.Scripts.RL
 
         public void SpawnRewards(Transform startPos, Transform endPos) //todo : add pull pattern
         {
+            if (!GameManager.Instance.RewardData.UsePathRewardData) return;
 
             var endPosVector = Vector3.one +  endPos.localPosition;
             var startPosVector = Vector3.one +  startPos.localPosition;
