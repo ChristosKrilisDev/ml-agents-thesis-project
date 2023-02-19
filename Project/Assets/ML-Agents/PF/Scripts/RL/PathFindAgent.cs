@@ -273,11 +273,9 @@ namespace ML_Agents.PF.Scripts.RL
             for (var index = 0; index < path.PathNodes.Count; index++)
             {
                 var pathNode = path.PathNodes[index];
-                Debug.Log(pathNode.name);
 
                 if (pathNode.NextNode == null) continue;
                 if (isFirstHalf && path.PathNodes.Count >= 2 && index == path.PathNodes.Count - 1) return;
-                Debug.Log(pathNode.name + " passed");
                 _area.CreateRewardNode(pathNode.transform, pathNode.NextNode.transform);
             }
 
