@@ -40,8 +40,8 @@ namespace ML_Agents.PF.Scripts.RL
             var dir = (endPosVector - startPosVector).normalized;
             var fragment = distance / _spawnAmount;
 
-            Debug.Log($"start pos {startPos.name} || end pos {endPos.name} || distance : {distance} \n|| fragments => {fragment} || {dir} => direction");
-            Debug.Log(" -------------- ");
+            // Debug.Log($"start pos {startPos.name} || end pos {endPos.name} || distance : {distance} \n|| fragments => {fragment} || {dir} => direction");
+            // Debug.Log(" -------------- ");
 
             var listOfPints = new List<Vector3>();
 
@@ -51,7 +51,7 @@ namespace ML_Agents.PF.Scripts.RL
             {
                 listOfPints.Add((newPos));
                 newPos += dir * fragment;
-                Debug.Log(" V : "+listOfPints[i]);
+                // Debug.Log(" V : "+listOfPints[i]);
             }
 
             if(listOfPints.Count <= 0) return;

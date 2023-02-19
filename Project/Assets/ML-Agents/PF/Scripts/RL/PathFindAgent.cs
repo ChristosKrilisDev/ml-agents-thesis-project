@@ -259,8 +259,8 @@ namespace ML_Agents.PF.Scripts.RL
             _graph.EndNode = _graph.Nodes[finalGoalIndex];
 
             _startHalfPath = GetShortestPathLength(_graph.StartNode, _graph.CheckPointNode);
-            _finalHalfPath = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
             ActivateNodeRewards(_startHalfPath, true);
+            _finalHalfPath = GetShortestPathLength(_graph.CheckPointNode, _graph.EndNode);
 
             _trainingStateMachine.ConditionsData.CheckPointPathLength = (int)_startHalfPath.Length;
             _trainingStateMachine.ConditionsData.FullPathLength = (int)(_startHalfPath.Length + _finalHalfPath.Length);
@@ -269,15 +269,16 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void ActivateNodeRewards(Path path, bool isFirstHalf = false)
         {
+            Debug.Log(path.PathNodes.Count);
             for (var index = 0; index < path.PathNodes.Count; index++)
             {
                 var pathNode = path.PathNodes[index];
+                Debug.Log(pathNode.name);
 
-                if (pathNode.NextNode != null)
-                {
-                    if (isFirstHalf && index == path.PathNodes.Count - 1) return;
-                    _area.CreateRewardNode(pathNode.transform, pathNode.NextNode.transform);
-                }
+                if (pathNode.NextNode == null) continue;
+                if (isFirstHalf && path.PathNodes.Count >= 2 && index == path.PathNodes.Count - 1) return;
+                Debug.Log(pathNode.name + " passed");
+                _area.CreateRewardNode(pathNode.transform, pathNode.NextNode.transform);
             }
 
         }
