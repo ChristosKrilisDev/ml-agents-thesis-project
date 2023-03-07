@@ -8,14 +8,14 @@ namespace ML_Agents.PF.Scripts.RL
     public class PathRewardManager : MonoBehaviour
     {
 
-        private int _spawnAmount = 3;
+        private int _spawnAmount;
         private GameObject _rewardNodePref;
         private readonly List<GameObject> _spawnedRewards = new List<GameObject>();
 
-        private void Awake()
+        private void Start()
         {
-            _rewardNodePref = Utils.RewardNode;
             _spawnAmount = GameManager.Instance.RewardData.SpawnPathRewardAmount;
+            _rewardNodePref = Utils.RewardNode;
             // for (int i = 0; i <= _spawnAmount; i++)
             // {
             //     var obj =Instantiate(_rewardNodePref);
