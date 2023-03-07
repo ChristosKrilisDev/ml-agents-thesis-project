@@ -15,7 +15,7 @@ MonoBehaviour:
   TimerValue: 6
   Reward: 2
   Penalty: -1
-  StepPenalty: -1
+  StepPenalty: -4
   ExtraDistance: 3
   StepRewardFrequency: 0.002
   DivRewardValue: 10

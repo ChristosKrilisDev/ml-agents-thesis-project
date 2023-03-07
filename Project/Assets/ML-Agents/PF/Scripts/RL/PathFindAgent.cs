@@ -324,6 +324,13 @@ namespace ML_Agents.PF.Scripts.RL
             _countDownTimer.TimerValueChanged(GameManager.Instance.RewardData.TimerValue);
 
             var visitedNodeResult = _nodeMapping.CheckMap(other.gameObject);
+
+            if (GameManager.Instance &&visitedNodeResult)
+            {
+                //visualize
+                other.gameObject.transform.GetComponent<MeshRenderer>().enabled = true;
+            }
+
             _trainingStateMachine.OnRevisitedNode(visitedNodeResult);
         }
 
@@ -348,6 +355,7 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void OnCheckPointAchieved()
         {
+            _nodeMapping.Reset();
             _trainingStateMachine.ConditionsData.HasFoundCheckpoint = true;
             _targetNodeIndex++;
             ActivateNodeRewards(_finalHalfPath); //activate after the cp coll;

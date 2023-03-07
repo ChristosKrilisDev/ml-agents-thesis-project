@@ -24,7 +24,7 @@ namespace ML_Agents.PF.Scripts.Data
 
         [Space]
         [Header("Step Rewards")]
-        [Range(-3f, 0), Tooltip("The max penalty reward")]
+        [Range(-10f, 0), Tooltip("The max penalty reward")]
         public float StepPenalty = -1.5f;
 
         [Space]

@@ -8,7 +8,7 @@ namespace ML_Agents.PF.Scripts.RL
     public class PathRewardManager : MonoBehaviour
     {
 
-        [SerializeField, Range(0,10)] private int _spawnAmount = 3;
+        private int _spawnAmount = 3;
         private GameObject _rewardNodePref;
         private readonly List<GameObject> _spawnedRewards = new List<GameObject>();
 

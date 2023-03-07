@@ -81,6 +81,11 @@ namespace ML_Agents.PF.Scripts.RL
 
         public void CleanArea()
         {
+            foreach (var area in _spawnAreas)
+            {
+                area.gameObject.transform.GetComponent<MeshRenderer>().enabled = false;
+            }
+
             foreach (Transform child in transform)
             {
                 if (child.CompareTag(TagData.OBJECT_TAG)) Destroy(child.gameObject);

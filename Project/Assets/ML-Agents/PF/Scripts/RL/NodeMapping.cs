@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using Dijkstra.Scripts;
 using UnityEngine;
+
 namespace ML_Agents.PF.Scripts.RL
 {
+
     public class NodeMapping
     {
         private readonly Dictionary<GameObject, bool> _nodesDictionary = new Dictionary<GameObject, bool>();

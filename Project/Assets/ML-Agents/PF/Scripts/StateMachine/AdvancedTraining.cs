@@ -2,7 +2,6 @@
 using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.UtilsScripts;
 using Unity.MLAgents;
-using UnityEngine;
 
 namespace ML_Agents.PF.Scripts.StateMachine
 {

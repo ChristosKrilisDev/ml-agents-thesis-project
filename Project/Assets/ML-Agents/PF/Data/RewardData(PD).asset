@@ -15,11 +15,11 @@ MonoBehaviour:
   TimerValue: 6
   Reward: 2
   Penalty: -1
-  StepPenalty: -1
+  StepPenalty: -6
   ExtraDistance: 3
   StepRewardFrequency: 0.002
   DivRewardValue: 10
   Epsilon: 0.6
   UsePathRewardData: 1
-  PathRewardValue: 0.1
+  PathRewardTotalValue: 1
   SpawnPathRewardAmount: 5

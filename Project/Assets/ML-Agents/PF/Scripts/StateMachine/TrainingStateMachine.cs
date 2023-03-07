@@ -95,7 +95,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             if (IsOutOfTime)//give a very small penalty if the agent is not moving
             {
-                GiveInternalReward(RewardUseType.Add_Reward, RewardData.StepPenalty/10);
+                GiveInternalReward(RewardUseType.Add_Reward, RewardData.StepPenalty / ConditionsData.MaxStep);
             }
         }
 
