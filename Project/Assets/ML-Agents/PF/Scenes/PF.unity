@@ -2894,7 +2894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PhaseType: 1
-  TrainingType: 1
+  TrainingType: 2
   _rewardDatas:
   - _type: 1
     _rewardData: {fileID: 11400000, guid: e843d74194c8be240b0136ba862b9535, type: 2}
@@ -2908,7 +2908,7 @@ MonoBehaviour:
     type: 2}
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
   _rlTraining: 1
-  _areasCount: 1
+  _areasCount: 3
   _trainingAreasParent: {fileID: 929064095}
   _testArea: {fileID: 1289305690}
 --- !u!4 &686440863
@@ -8511,6 +8511,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114399412043818042, guid: bd804431e808a492bb5658bcd296e58e,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 253c87c5602b5d146b54efc7f8c01f52,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
 --- !u!1001 &2136627952

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: RewardData(PA)
   m_EditorClassIdentifier: 
   TimerValue: 6
-  Reward: 2
-  Penalty: -1
+  Reward: 10
+  Penalty: -2
   StepPenalty: -2
   ExtraDistance: 6
   StepRewardFrequency: 0.002

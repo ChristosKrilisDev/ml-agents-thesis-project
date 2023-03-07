@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RewardData(PB)
   m_EditorClassIdentifier: 
   TimerValue: 6
-  Reward: 2
+  Reward: 10
   Penalty: -2
   StepPenalty: -4
   ExtraDistance: 3
@@ -22,4 +22,4 @@ MonoBehaviour:
   Epsilon: 0.6
   UsePathRewardData: 1
   PathRewardTotalValue: 2
-  SpawnPathRewardAmount: 5
+  SpawnPathRewardAmount: 3
