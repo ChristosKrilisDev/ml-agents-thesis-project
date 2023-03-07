@@ -7,7 +7,7 @@ behaviors:
       buffer_size: 4096 #2048       # Typical range: PPO: 2048 - 409600; SAC: 50000 - 1000000
       learning_rate: 0.0003         # 1e-5 - 1e-3 | This should typically be decreased if training is unstable, and the reward does not consistently increase.
       beta: 0.01                    # Strength of the entropy regularization, which makes the policy "more random." This ensures that agents properly explore the action space during training
-      epsilon: 0.2                  # Influences how rapidly the policy can evolve during training. Setting this value small will result in more stable updates, but will also slow the training process.
+      epsilon: 0.3                  # Influences how rapidly the policy can evolve during training. Setting this value small will result in more stable updates, but will also slow the training process.
       lambd: 0.95                   #Regularization parameter (lambda) used when calculating the Generalized Advantage Estimate |  high bias = low | high varience = high values
       num_epoch: 8 #3               #low value => slower learning Typical range(3-10) the larger the barch size, the larger this can increased
       learning_rate_schedule: linear #Determines how beta changes over time. linear | constant 
@@ -20,8 +20,8 @@ behaviors:
       vis_encode_type: simple       # nature_cnn resnet match3 fully_connected
       conditioning_type: hyper      #Note that when using hyper the number of parameters of the network increases greatly. Therefore, it is recommended to reduce the number of hidden_units when using this conditioning_type
       memory:
-        sequence_length: 4         #Typical range: 4 - 128
-        memory_size: 32            #Typical range: 32 - 256
+        sequence_length: 8         #Typical range: 4 - 128
+        memory_size: 64            #Typical range: 32 - 256
         
     reward_signals:
       extrinsic:
@@ -44,6 +44,6 @@ behaviors:
     keep_checkpoints: 5
     checkpoint_interval: 1000000
     max_steps: 10000000
-    time_horizon: 128       #This number should be large enough to capture all the important behavior within a sequence of an agent's actions.
+    time_horizon: 256       #This number should be large enough to capture all the important behavior within a sequence of an agent's actions.
     summary_freq: 10000
     threaded: true          #Allow environments to step while updating the model. For best performance, leave setting to false when using self-play
