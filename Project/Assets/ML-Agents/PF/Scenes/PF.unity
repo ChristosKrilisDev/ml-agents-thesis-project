@@ -2908,7 +2908,7 @@ MonoBehaviour:
     type: 2}
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
   _rlTraining: 1
-  _areasCount: 3
+  _areasCount: 5
   _trainingAreasParent: {fileID: 929064095}
   _testArea: {fileID: 1289305690}
 --- !u!4 &686440863
