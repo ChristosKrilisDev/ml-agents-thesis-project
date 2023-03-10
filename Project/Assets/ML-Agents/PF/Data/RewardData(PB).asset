@@ -22,4 +22,4 @@ MonoBehaviour:
   Epsilon: 0.6
   UsePathRewardData: 1
   PathRewardTotalValue: 2
-  SpawnPathRewardAmount: 3
+  SpawnPathRewardAmount: 5
