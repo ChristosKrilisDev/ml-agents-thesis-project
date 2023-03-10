@@ -35,23 +35,23 @@ namespace ML_Agents.PF.Scripts.RL
             _goalNode = _areaComponent.CreateGoalNode(goalSpawnIndex); //pre-create final node to get all nodes
 
             var pos = transform.localPosition;
-            transform.localPosition = new Vector3(pos.x , 0 , pos.z);
+            transform.localPosition = new Vector3(pos.x, 0, pos.z);
 
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
             ToggleState(true);
         }
 
-        private void OnCollisionEnter(Collision other)
-        {
-            if((int)GameManager.Instance.PhaseType <= 2) return;
 
-            if (other.gameObject.CompareTag(TagData.AGENT_TAG) && !HasPressed)
-                ToggleState(false);
+        public void OnHit()
+        {
+            if ((int)GameManager.Instance.PhaseType <= 2) return;
+            if (!HasPressed) ToggleState(false);
         }
 
         private void ToggleState(bool isInitState)
         {
+            gameObject.SetActive(isInitState);
             _boxCollider.enabled = isInitState;
             HasPressed = !isInitState;
             _goalNode.SetActive(!isInitState);

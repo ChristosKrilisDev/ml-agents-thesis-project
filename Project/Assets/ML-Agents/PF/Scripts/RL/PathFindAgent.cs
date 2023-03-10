@@ -269,7 +269,6 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void ActivateNodeRewards(Path path, bool isFirstHalf = false)
         {
-            Debug.Log(path.PathNodes.Count);
             for (var index = 0; index < path.PathNodes.Count; index++)
             {
                 var pathNode = path.PathNodes[index];
@@ -353,12 +352,15 @@ namespace ML_Agents.PF.Scripts.RL
             _trainingStateMachine.RunOnHarmfulCollision();
         }
 
+
         private void OnCheckPointAchieved()
         {
+            _checkPoint.OnHit();
             _nodeMapping.Reset();
+
+            ActivateNodeRewards(_finalHalfPath);
             _trainingStateMachine.ConditionsData.HasFoundCheckpoint = true;
             _targetNodeIndex++;
-            ActivateNodeRewards(_finalHalfPath); //activate after the cp coll;
             _trainingStateMachine.RunOnCheckPointReward();
         }
 
