@@ -33,22 +33,22 @@ namespace Dijkstra.Scripts
 
         public void ConnectNodes()
         {
-            var cp = 0; //check point, 2 == right edge, 0 == right edge
+            var cp = 0; //check point, 2 == right edge, 0 == left edge
 
             for (var i = 0; i < _nodes.Count; i++)
             {
                 //reset checkpoint when reach step value
                 if (cp >= GRID_STEP) cp = 0;
 
-                //right
                 if (i + CONNECTION_RANGE < _nodes.Count)
                 {
+                    //you have a right connection
                     if (cp < GRID_STEP - 1) _nodes[i].Connections.Add(_nodes[i + CONNECTION_RANGE]);
                 }
 
-                //left
                 if (i - CONNECTION_RANGE >= 0)
                 {
+                    //you have a left connection
                     if (cp != 0) _nodes[i].Connections.Add(_nodes[i - CONNECTION_RANGE]);
                 }
 
