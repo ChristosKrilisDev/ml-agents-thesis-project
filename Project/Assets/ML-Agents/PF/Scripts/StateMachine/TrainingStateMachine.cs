@@ -4,6 +4,7 @@ using ML_Agents.PF.Scripts.Enums;
 using ML_Agents.PF.Scripts.RL;
 using ML_Agents.PF.Scripts.Structs;
 using ML_Agents.PF.Scripts.UtilsScripts;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace ML_Agents.PF.Scripts.StateMachine
@@ -93,9 +94,10 @@ namespace ML_Agents.PF.Scripts.StateMachine
             //step factor multiplies the final reward
             ConditionsData.StepFactor = (ConditionsData.MaxStep - ConditionsData.StepCount) / (float)ConditionsData.MaxStep;
 
-            if (IsOutOfTime)//give a very small penalty if the agent is not moving
+            if (IsOutOfTime)//give a very small penalty if the agent is in the same node for too long
             {
-                GiveInternalReward(RewardUseType.Add_Reward, RewardData.StepPenalty / ConditionsData.MaxStep);
+                Debug.Log("out of time");
+                GiveInternalReward(RewardUseType.Add_Reward, (RewardData.StepPenalty / ConditionsData.MaxStep)* RewardData.TimePenaltyMultiplier);
             }
         }
 
@@ -126,7 +128,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
             }
             else
             {
-                GiveInternalReward(RewardUseType.Add_Reward, RewardData.Penalty / 2);
+                GiveInternalReward(RewardUseType.Add_Reward, RewardData.Penalty/10);
             }
         }
 
@@ -146,18 +148,18 @@ namespace ML_Agents.PF.Scripts.StateMachine
             return RewardFunction.GetComplexReward(RewardDataStruct);
         }
 
-        protected void OnTerminalCondition(RewardUseType rType)
+        protected void OnTerminalCondition()
         {
             //this will update the Reward Data struct with the final reward condition
             UpdateRewardDataStructCallBack?.Invoke();
             var reward = RewardFunction.GetComplexReward(RewardDataStruct);
-            GiveInternalReward(rType, reward);
+            GiveInternalReward(RewardUseType.Set_Reward, reward);
             EndEpisode();
         }
 
         protected void GiveInternalReward(RewardUseType rewardUseType, float reward)
         {
-
+            Debug.Log($"used reward of type {rewardUseType} with value : {reward}");
             GiveInternalRewardCallBack?.Invoke(rewardUseType, reward);
         }
 
@@ -174,7 +176,9 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             if(!result) return;
 
-            GiveInternalReward(RewardUseType.Add_Reward, RewardData.Penalty/2f);
+            //if it out of time and resets timer by moving to next node, add points
+            if (IsOutOfTime) GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward/10f);
+            else GiveInternalReward(RewardUseType.Add_Reward, RewardData.RevisitNodePenalty);
         }
 
         public bool HasEpisodeEnded()

@@ -29,13 +29,13 @@ namespace ML_Agents.PF.Scripts.StateMachine
                 return;
             }
 
-            var newStepReward = CalculateComplexReward() / RewardData.DivRewardValue;
+            var newStepReward = CalculateComplexReward() * RewardData.StepRewardMultiplier;
 
             if (Utils.NearlyEqual(PreviousStepReward, newStepReward, RewardData.StepRewardFrequency)) return;
 
             if (PreviousStepReward > newStepReward)
             {
-                var penalty = RewardData.StepPenalty / RewardData.DivRewardValue;
+                var penalty = RewardData.StepPenalty / ConditionsData.MaxStep;
                 GiveInternalReward(RewardUseType.Add_Reward, penalty);
                 return;
             }
@@ -52,13 +52,13 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             if (PhaseType == PhaseType.Phase_A)
             {
-                OnTerminalCondition(RewardUseType.Set_Reward);
+                OnTerminalCondition();
             }
             else if (PhaseType == PhaseType.Phase_B)
             {
                 var result = Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.CheckPointPathLength, false);
                 DijkstraDataWriter(CHECK_POINT_KEY, result);
-                OnTerminalCondition(RewardUseType.Set_Reward);
+                OnTerminalCondition();
             }
             else if ((int)PhaseType >= 3)
             {
@@ -79,13 +79,13 @@ namespace ML_Agents.PF.Scripts.StateMachine
 
             if (PhaseType == PhaseType.Phase_C)
             {
-                OnTerminalCondition(RewardUseType.Set_Reward);
+                OnTerminalCondition();
             }
             else if (PhaseType == PhaseType.Phase_D)
             {
                 var result = Utils.IsCurrDistLessThanPathLength(ConditionsData.TraveledDistance, ConditionsData.FullPathLength, false);
                 DijkstraDataWriter(FINAL_GOAL_KEY , result);
-                OnTerminalCondition(RewardUseType.Set_Reward);
+                OnTerminalCondition();
             }
         }
 

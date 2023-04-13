@@ -13,7 +13,8 @@ namespace ML_Agents.PF.Scripts.Data
         [Header("Timer")]
         [Range(1f, 10f)]
         public float TimerValue = 6;
-
+        [Range(1f, 10f)]
+        public float TimePenaltyMultiplier = 1f;
         [Header("Reward Value")]
         [Range(1, 10)]
         public int Reward = 1;
@@ -21,6 +22,8 @@ namespace ML_Agents.PF.Scripts.Data
         [Header("Penalty Rewards")]
         [Range(0, -2)]
         public float Penalty = -1;
+        [Range(2, -2)]
+        public float RevisitNodePenalty = -1;
 
         [Space]
         [Header("Step Rewards")]
@@ -36,7 +39,7 @@ namespace ML_Agents.PF.Scripts.Data
         [Header("Advanced Step Reward")]
         [Range(0.0001f, 0.1f)][Tooltip("Higher value => less rewards/step")]
         public float StepRewardFrequency = 0.005f;
-        [Range(1, 10)]public int DivRewardValue = 10;
+        [Range(1, 10)]public int StepRewardMultiplier = 1;
         [Range(0.1f, 1f), Tooltip("sharp the value")]
         public float Epsilon = 0.4f;
 

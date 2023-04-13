@@ -2907,7 +2907,7 @@ MonoBehaviour:
   _rewardDataFallBack: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a,
     type: 2}
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
-  _rlTraining: 1
+  _rlTraining: 0
   _areasCount: 5
   _trainingAreasParent: {fileID: 929064095}
   _testArea: {fileID: 1289305690}
@@ -8473,7 +8473,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.7512283
+      value: -0.91
       objectReference: {fileID: 0}
     - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8481,7 +8481,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.232101
+      value: -7.46
       objectReference: {fileID: 0}
     - target: {fileID: 4603070702628152, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8515,8 +8515,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 253c87c5602b5d146b54efc7f8c01f52,
-        type: 3}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
 --- !u!1001 &2136627952

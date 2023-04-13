@@ -29,11 +29,13 @@ namespace ML_Agents.PF.Scripts.RL
             if (!rewardDataStruct.HasEpisodeEnd)
             {
                 calculateReward = GetStepRewardReward(rewardDataStruct.CurrentDistance, rewardDataStruct.InitialDistanceFromTarget);
+
                 return calculateReward;
             }
 
             CreateConditionsList(rewardDataStruct, out var conditions);
             calculateReward = GetTerminalConditionReward(conditions);
+            Debug.Log("FINAL REWARD : "+calculateReward);
 
             return calculateReward;
         }
@@ -60,6 +62,7 @@ namespace ML_Agents.PF.Scripts.RL
         private static float GetTerminalConditionReward(List<bool> conditions)
         {
             float reward = 0;
+
             for (var i = 0; i < conditions.Count; i++)
             {
                 //conditions are reversed ordered,
@@ -67,7 +70,7 @@ namespace ML_Agents.PF.Scripts.RL
                 if (!conditions[i]) continue;
 
                 //C1 => r, C2 => r/2, C3 => r/3
-                reward = RewardData.Reward / (i+1f);
+                reward = RewardData.Reward / (i + 1f);
 
                 // Debug.Log("Terminal reward = " + reward + " takes  : " +i);
                 break;

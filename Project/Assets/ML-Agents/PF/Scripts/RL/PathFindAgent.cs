@@ -314,6 +314,7 @@ namespace ML_Agents.PF.Scripts.RL
                 //todo : move reward to SM
                 var individualValue = GameManager.Instance.RewardData.PathRewardTotalValue / GameManager.Instance.RewardData.SpawnPathRewardAmount;
                 AddReward(individualValue);
+                Debug.Log("Flag reward " + individualValue);
                 Destroy(other.gameObject);
             }
 
