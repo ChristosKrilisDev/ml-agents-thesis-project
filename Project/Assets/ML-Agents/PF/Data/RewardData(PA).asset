@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7111a2c75fed43c2936bbe6074d60763, type: 3}
   m_Name: RewardData(PA)
   m_EditorClassIdentifier: 
-  TimerValue: 4
-  TimePenaltyMultiplier: -1.5
+  TimerValue: 5
+  TimePenaltyMultiplier: 1
   Reward: 10
-  Penalty: -2
-  RevisitNodePenalty: -0.5
-  StepPenalty: -2
-  ExtraDistance: 6
-  StepRewardFrequency: 0.004
+  Penalty: -1
+  UseRevisitPenalty: 1
+  RevisitNodePenalty: -0.2
+  StepPenalty: -1
+  ExtraDistance: 15
+  StepRewardFrequency: 0.05
   StepRewardMultiplier: 2
   Epsilon: 0.7
   UsePathRewardData: 1

@@ -14,14 +14,14 @@ behaviors:
       num_epoch: 3                  # [3-10] ensure more stable updates, at the cost of slower learning.
       
     network_settings:
-      normalize: false
+      normalize: true
       hidden_units: 512 #128        #how many units / layer
-      num_layers: 5                 #how many layers inbetween input-output layers , more complex problem could be easier with CNN
+      num_layers: 4                 #how many layers inbetween input-output layers , more complex problem could be easier with CNN
       vis_encode_type: simple       # nature_cnn resnet match3 fully_connected
       conditioning_type: hyper      #Note that when using hyper the number of parameters of the network increases greatly. Therefore, it is recommended to reduce the number of hidden_units when using this conditioning_type
       memory:
-        sequence_length: 8         #Typical range: 4 - 128
-        memory_size: 64            #Typical range: 32 - 256
+        sequence_length: 32 #8         #Typical range: 4 - 128
+        memory_size: 128 #64            #Typical range: 32 - 256
         
     reward_signals:
       extrinsic:

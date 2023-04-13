@@ -9,7 +9,6 @@ namespace ML_Agents.PF.Scripts.Data
         /// <summary>
         /// Holds the data related to the reward system
         /// </summary>
-
         [Header("Timer")]
         [Range(1f, 10f)]
         public float TimerValue = 6;
@@ -22,6 +21,9 @@ namespace ML_Agents.PF.Scripts.Data
         [Header("Penalty Rewards")]
         [Range(0, -2)]
         public float Penalty = -1;
+
+        [Space]
+        public bool UseRevisitPenalty = true;
         [Range(2, -2)]
         public float RevisitNodePenalty = -1;
 
@@ -32,22 +34,21 @@ namespace ML_Agents.PF.Scripts.Data
 
         [Space]
         [Header("Extra Params")]
-        [Range(0, 6)]
+        [Range(0, 15)]
         public int ExtraDistance = 2;
 
         [Space]
         [Header("Advanced Step Reward")]
-        [Range(0.0001f, 0.1f)][Tooltip("Higher value => less rewards/step")]
+        [Range(0.0001f, 0.1f)] [Tooltip("Higher value => less rewards/step")]
         public float StepRewardFrequency = 0.005f;
-        [Range(1, 10)]public int StepRewardMultiplier = 1;
+        [Range(1, 10)] public int StepRewardMultiplier = 1;
         [Range(0.1f, 1f), Tooltip("sharp the value")]
         public float Epsilon = 0.4f;
 
         [Header("Passive Path Rewards")]
         public bool UsePathRewardData = true;
-        [Range(1f, 10f)]public float PathRewardTotalValue = 1f;
-        [Range(1f, 10f)]public int SpawnPathRewardAmount = 1;
-
+        [Range(1f, 10f)] public float PathRewardTotalValue = 1f;
+        [Range(1f, 10f)] public int SpawnPathRewardAmount = 1;
 
     }
 }

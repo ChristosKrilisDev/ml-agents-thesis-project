@@ -97,7 +97,7 @@ namespace ML_Agents.PF.Scripts.StateMachine
             if (IsOutOfTime)//give a very small penalty if the agent is in the same node for too long
             {
                 Debug.Log("out of time");
-                GiveInternalReward(RewardUseType.Add_Reward, (RewardData.StepPenalty / ConditionsData.MaxStep)* RewardData.TimePenaltyMultiplier);
+                GiveInternalReward(RewardUseType.Add_Reward, ((RewardData.StepPenalty / ConditionsData.MaxStep)* RewardData.TimePenaltyMultiplier)*-1f);
             }
         }
 
@@ -177,8 +177,10 @@ namespace ML_Agents.PF.Scripts.StateMachine
             if(!result) return;
 
             //if it out of time and resets timer by moving to next node, add points
-            if (IsOutOfTime) GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward/10f);
-            else GiveInternalReward(RewardUseType.Add_Reward, RewardData.RevisitNodePenalty);
+            if (IsOutOfTime) GiveInternalReward(RewardUseType.Add_Reward, RewardData.Reward/5f);
+            if(!RewardData.UseRevisitPenalty) return;
+
+            GiveInternalReward(RewardUseType.Add_Reward, RewardData.RevisitNodePenalty);
         }
 
         public bool HasEpisodeEnded()

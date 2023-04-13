@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: RewardData(PB)
   m_EditorClassIdentifier: 
   TimerValue: 4
-  TimePenaltyMultiplier: 2
+  TimePenaltyMultiplier: 1
   Reward: 10
   Penalty: -2
+  UseRevisitPenalty: 1
   RevisitNodePenalty: -0.5
   StepPenalty: -3
   ExtraDistance: 4
