@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -42,23 +44,25 @@ namespace ML_Agents.PF.NN_Models.Editor
             foreach (var folder in subFolders)
             {
                 var files = Directory.GetFiles(folder, FILE_TAG, SearchOption.TopDirectoryOnly);
+                var reversedFiles = files.Reverse().ToArray();
 
-                if (files.Length <= 0) return;
+                if (!reversedFiles.Any()) return;
 
                 var folderName = subFolders[counter].Substring(subFolders[0].Length - 2);
                 counter++;
-                Debug.Log($"Folder : {folderName}");
+                // Debug.Log($"Folder : {folderName}");
 
-                for (var i = 0; i < files.Length; i++)
+                for (var i = 0; i < reversedFiles.Length; i++)
                 {
                     var newName = $"{folderName}_{i}";
 
-                    if (files[i].Equals(newName))
+                    Debug.Log($"--- {reversedFiles[i].ToLower()} | {newName.ToLower()}");
+                    if (string.Equals(reversedFiles[i], newName, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Debug.Log("Skiped : " +files[i]);
+                        Debug.Log("Skiped : " +reversedFiles[i]);
                         continue;
                     }
-                    AssetDatabase.RenameAsset(files[i], $"_{newName}");
+                    AssetDatabase.RenameAsset(reversedFiles[i], $"_{newName}");
                 }
             }
         }
