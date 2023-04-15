@@ -27,17 +27,17 @@ namespace ML_Agents.PF.NN_Models.Editor
         {
             var advancedPath = $"{ROOT_PATH}/{ADVANCED_NN_NAME}";
             var subFolders = AssetDatabase.GetSubFolders(advancedPath);
-            RenameAssets(subFolders);
+            RenameAssets(subFolders, ADVANCED_NN_NAME);
         }
 
         private static void RenameSimpleNnModels()
         {
             var path = $"{ROOT_PATH}/{SIMPLE_NN_NAME}";
             var subFolders = AssetDatabase.GetSubFolders(path);
-            RenameAssets(subFolders);
+            RenameAssets(subFolders, SIMPLE_NN_NAME);
         }
 
-        private static void RenameAssets(string[] subFolders)
+        private static void RenameAssets(string[] subFolders, string typePath)
         {
             var counter = 0;
 
@@ -55,15 +55,22 @@ namespace ML_Agents.PF.NN_Models.Editor
                 for (var i = 0; i < reversedFiles.Length; i++)
                 {
                     var newName = $"{folderName}_{i}";
+                    var lc = reversedFiles[i].ToLower();
 
-                    Debug.Log($"--- {reversedFiles[i].ToLower()} | {newName.ToLower()}");
-                    if (string.Equals(reversedFiles[i], newName, StringComparison.CurrentCultureIgnoreCase))
+                    if (lc.Contains("pf.onnx"))
                     {
-                        Debug.Log("Skiped : " +reversedFiles[i]);
+                        AssetDatabase.RenameAsset(reversedFiles[i], $"_{newName}");
+                        AssetDatabase.DeleteAsset($"{ROOT_PATH}/{typePath}/_{folderName}/PF.onnx");
                         continue;
                     }
+
+                    if (reversedFiles[i].Contains(folderName)) continue;
+                    if (string.Equals(reversedFiles[i], newName, StringComparison.CurrentCultureIgnoreCase)) continue;
+
                     AssetDatabase.RenameAsset(reversedFiles[i], $"_{newName}");
+
                 }
+
             }
         }
 
