@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using ML_Agents.PF.Scripts.Data;
 using ML_Agents.PF.Scripts.UtilsScripts;
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace ML_Agents.PF.Scripts.RL
     {
         [SerializeField] private PathRewardManager _pathRewardManager;
         [SerializeField] private GameObject[] _spawnAreas;
+        [SerializeField]private List<Wall> _walls;
+
         public GameObject[] SpawnAreas => _spawnAreas;
 
         private static GameObject GoalNodePref => Utils.FinalNode;
@@ -78,6 +81,21 @@ namespace ML_Agents.PF.Scripts.RL
         {
             _nodes[spawnIndex].position = node.transform.position;
         }
+
+
+        public void RandomizeWalls()
+        {
+
+            if (GameManager.Instance.RewardData.HideWalls == false)
+            {
+                foreach (var wall in _walls) wall.Hide();
+                return;
+            }
+
+            if (GameManager.Instance.RewardData.UseRandomWallWidth == false) return;
+            foreach (var wall in _walls) wall.RandomizeSize();
+        }
+
 
         public void CleanArea()
         {

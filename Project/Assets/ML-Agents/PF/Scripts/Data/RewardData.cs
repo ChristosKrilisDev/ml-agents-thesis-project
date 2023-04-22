@@ -50,5 +50,9 @@ namespace ML_Agents.PF.Scripts.Data
         [Range(1f, 10f)] public float PathRewardTotalValue = 1f;
         [Range(1f, 10f)] public int SpawnPathRewardAmount = 1;
 
+        [Header("Randomness")]
+        public bool UseRandomWallWidth = true;
+        public bool HideWalls = false;
+
     }
 }

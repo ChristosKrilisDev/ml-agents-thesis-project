@@ -187,6 +187,7 @@ namespace ML_Agents.PF.Scripts.RL
             var nodesTransforms = toNodeTransformList as Transform[] ?? toNodeTransformList.ToArray();
 
             _area.SetNodesPosition(ref nodesTransforms);
+            _area.RandomizeWalls();
             Spawn(items);
 
             //create the 2D graph
