@@ -13,13 +13,18 @@ MonoBehaviour:
   m_Name: RewardData(PC)
   m_EditorClassIdentifier: 
   TimerValue: 2
+  TimePenaltyMultiplier: 1
   Reward: 5
   Penalty: -2
+  UseRevisitPenalty: 1
+  RevisitNodePenalty: -1
   StepPenalty: -4
   ExtraDistance: 6
   StepRewardFrequency: 0.002
-  DivRewardValue: 10
+  StepRewardMultiplier: 1
   Epsilon: 0.5
   UsePathRewardData: 1
   PathRewardTotalValue: 1
   SpawnPathRewardAmount: 10
+  UseRandomWallWidth: 1
+  HideWalls: 0

@@ -26,3 +26,5 @@ MonoBehaviour:
   UsePathRewardData: 1
   PathRewardTotalValue: 2
   SpawnPathRewardAmount: 5
+  UseRandomWallWidth: 0
+  HideWalls: 0

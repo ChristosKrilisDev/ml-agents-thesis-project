@@ -86,7 +86,7 @@ namespace ML_Agents.PF.Scripts.RL
         public void RandomizeWalls()
         {
 
-            if (GameManager.Instance.RewardData.HideWalls == false)
+            if (GameManager.Instance.RewardData.HideWalls)
             {
                 foreach (var wall in _walls) wall.Hide();
                 return;
