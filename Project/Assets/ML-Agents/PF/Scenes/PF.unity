@@ -2893,7 +2893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0d2cfd998b8eb49b560f4cc301fc5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PhaseType: 1
+  PhaseType: 2
   TrainingType: 2
   _rewardDatas:
   - _type: 1
@@ -2908,7 +2908,7 @@ MonoBehaviour:
     type: 2}
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
   _rlTraining: 0
-  _areasCount: 3
+  _areasCount: 4
   _trainingAreasParent: {fileID: 929064095}
   _testArea: {fileID: 1289305690}
 --- !u!4 &686440863
@@ -6922,7 +6922,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1633286454}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 3, y: 50.8, z: -8.5}
+  m_LocalPosition: {x: -1.33, y: 50.8, z: -8.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4943717996348261}
@@ -8515,10 +8515,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: 85135fc8193cfbe498a3fb845dc7d4f7,
+        type: 3}
     - target: {fileID: 114399412043818042, guid: bd804431e808a492bb5658bcd296e58e,
         type: 3}
       propertyPath: m_BehaviorType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1552494144378508757, guid: bd804431e808a492bb5658bcd296e58e,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1552494144378508757, guid: bd804431e808a492bb5658bcd296e58e,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1552494144378508757, guid: bd804431e808a492bb5658bcd296e58e,
+        type: 3}
+      propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
