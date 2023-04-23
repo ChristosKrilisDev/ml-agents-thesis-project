@@ -46,7 +46,7 @@ namespace ML_Agents.PF.NN_Models.Editor
                 var files = Directory.GetFiles(folder, FILE_TAG, SearchOption.TopDirectoryOnly);
                 var reversedFiles = files.Reverse().ToArray();
 
-                if (!reversedFiles.Any()) return;
+                if (!reversedFiles.Any()) continue;
 
                 var folderName = subFolders[counter].Substring(subFolders[0].Length - 2);
                 counter++;
