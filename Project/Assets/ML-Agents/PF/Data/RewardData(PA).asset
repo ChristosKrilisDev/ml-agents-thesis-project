@@ -24,7 +24,7 @@ MonoBehaviour:
   StepRewardMultiplier: 2
   Epsilon: 0.7
   UsePathRewardData: 1
-  PathRewardTotalValue: 2
-  SpawnPathRewardAmount: 5
+  PathRewardTotalValue: 5
+  SpawnPathRewardAmount: 6
   UseRandomWallWidth: 0
-  HideWalls: 0
+  HideWalls: 1

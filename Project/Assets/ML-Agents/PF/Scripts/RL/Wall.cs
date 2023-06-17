@@ -18,7 +18,7 @@ namespace ML_Agents.PF.Scripts.RL
         [SerializeField] private bool _randomize = true;
 
         private const int MAX_WIDTH = 20;
-        private const int INITIAL_WIDTH = 8;
+        private const int INITIAL_WIDTH = 15;
 
         private Transform _initialTransform;
 
