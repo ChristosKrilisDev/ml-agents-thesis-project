@@ -12,19 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7111a2c75fed43c2936bbe6074d60763, type: 3}
   m_Name: RewardData(PA)
   m_EditorClassIdentifier: 
-  TimerValue: 5
-  TimePenaltyMultiplier: 1
-  Reward: 10
-  Penalty: -1
+  TimerValue: 3
+  TimePenaltyMultiplier: 2.5
+  Reward: 5
+  Penalty: -2
   UseRevisitPenalty: 1
-  RevisitNodePenalty: -0.2
-  StepPenalty: -1
-  ExtraDistance: 15
-  StepRewardFrequency: 0.05
-  StepRewardMultiplier: 2
+  RevisitNodePenalty: -1.5
+  StepPenalty: -5
+  ExtraDistance: 5
+  StepRewardFrequency: 0.04
+  StepRewardMultiplier: 1
   Epsilon: 0.7
   UsePathRewardData: 1
-  PathRewardTotalValue: 5
-  SpawnPathRewardAmount: 6
-  UseRandomWallWidth: 0
-  HideWalls: 1
+  PathRewardTotalValue: 1
+  SpawnPathRewardAmount: 4
+  UseRandomWallWidth: 1
+  HideWalls: 0
+  BlockAreas: 1

@@ -6,6 +6,7 @@ namespace Dijkstra.Scripts
     public sealed class Node : MonoBehaviour
     {
         [SerializeField] private List<Node> _connections = new List<Node>();
+        public int AreaIndex = -999;
 
         public List<Node> Connections
         {

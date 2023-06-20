@@ -17,7 +17,7 @@ namespace ML_Agents.PF.Scripts.RL
         [SerializeField] private Anchor _anchor;
         [SerializeField] private bool _randomize = true;
 
-        private const int MAX_WIDTH = 20;
+        // private const int MAX_WIDTH = 18;
         private const int INITIAL_WIDTH = 15;
 
         private Transform _initialTransform;
@@ -33,7 +33,7 @@ namespace ML_Agents.PF.Scripts.RL
 
             var initialScale = transform.localScale;
 
-            var randomWidth = Random.Range(INITIAL_WIDTH, MAX_WIDTH);
+            var randomWidth = Random.Range(INITIAL_WIDTH, GameManager.Instance.RewardData.MaxWallWidth);
             var newRandomScale = new Vector3(initialScale.x, initialScale.y, randomWidth);
             transform.localScale = newRandomScale;
 

@@ -2908,7 +2908,7 @@ MonoBehaviour:
     type: 2}
   RewardData: {fileID: 11400000, guid: 33a9d75cbdac28a40adad67a8f7e683a, type: 2}
   _rlTraining: 1
-  _areasCount: 3
+  _areasCount: 2
   _trainingAreasParent: {fileID: 929064095}
   _testArea: {fileID: 1289305690}
 --- !u!4 &686440863
@@ -8511,6 +8511,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114399412043818042, guid: bd804431e808a492bb5658bcd296e58e,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 51d74a6fb95ffb648943814622ef66d7,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd804431e808a492bb5658bcd296e58e, type: 3}
 --- !u!1001 &2136627952

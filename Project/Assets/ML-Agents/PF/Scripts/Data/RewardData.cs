@@ -52,7 +52,10 @@ namespace ML_Agents.PF.Scripts.Data
 
         [Header("Randomness")]
         public bool UseRandomWallWidth = true;
+        [Range(15,20)]public int MaxWallWidth= 18;
         public bool HideWalls = false;
+        public bool BlockAreas = false;
+        public bool BlockAfterLeave= false;
 
     }
 }

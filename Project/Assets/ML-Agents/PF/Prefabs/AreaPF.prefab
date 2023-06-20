@@ -1180,7 +1180,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: cc5a3cf6d00fb994ab09e13e0e38027a, type: 3}
   m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: PF
@@ -1737,6 +1737,7 @@ MonoBehaviour:
   - {fileID: 3909462561523908288}
   - {fileID: 2576828725008443123}
   - {fileID: 7130386854391468042}
+  _block: {fileID: 6277475922807024092, guid: a2e011c709c8b0748bde3ff5e551991a, type: 3}
 --- !u!114 &7853871858758187010
 MonoBehaviour:
   m_ObjectHideFlags: 0

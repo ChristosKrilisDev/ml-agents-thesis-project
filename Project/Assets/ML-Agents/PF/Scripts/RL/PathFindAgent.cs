@@ -193,18 +193,11 @@ namespace ML_Agents.PF.Scripts.RL
             //create the 2D graph
             _graph.ConnectNodes();
             //item[0] => player | item[1] => checkPoint | item[2] => final node
-            SetUpPath
-            (
-                items[(int)IndexofTargetType.Agent],
+            SetUpPath(items[(int)IndexofTargetType.Agent],
                 items[(int)IndexofTargetType.Check_Point],
-                items[(int)IndexofTargetType.Final_Node]
-            );
+                items[(int)IndexofTargetType.Final_Node]);
 
-            SetUpDistanceDifferences
-            (
-                items[(int)IndexofTargetType.Check_Point],
-                items[(int)IndexofTargetType.Final_Node]
-            );
+            SetUpDistanceDifferences(items[(int)IndexofTargetType.Check_Point], items[(int)IndexofTargetType.Final_Node]);
 
             ResetTmpVars(items);
         }
@@ -237,6 +230,7 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void ResetTmpVars(IReadOnlyList<int> items)
         {
+            _prevArea = null;
             _target = null;
             _targetNodeIndex = 0;
 
@@ -265,7 +259,15 @@ namespace ML_Agents.PF.Scripts.RL
 
             _trainingStateMachine.ConditionsData.CheckPointPathLength = (int)_startHalfPath.Length;
             _trainingStateMachine.ConditionsData.FullPathLength = (int)(_startHalfPath.Length + _finalHalfPath.Length);
+
             // Debug.Log($"#Player#{pathLen1} + {pathLen2} = {fullLength}");
+
+            //todo : add for second loop
+            for (int j = 0; j < _startHalfPath.PathNodes.Count; j++)
+            {
+                _area.HideBlockArea(_startHalfPath.PathNodes[j].AreaIndex);
+            }
+
         }
 
         private void ActivateNodeRewards(Path path, bool isFirstHalf = false)
@@ -275,6 +277,7 @@ namespace ML_Agents.PF.Scripts.RL
                 var pathNode = path.PathNodes[index];
 
                 if (pathNode.NextNode == null) continue;
+
                 if (isFirstHalf && path.PathNodes.Count >= 2 && index == path.PathNodes.Count - 1) return;
                 _area.CreateRewardNode(pathNode.transform, pathNode.NextNode.transform);
             }
@@ -306,6 +309,8 @@ namespace ML_Agents.PF.Scripts.RL
 
     #endregion
 
+        [SerializeField]private Transform _prevArea;
+
     #region Collition Methods
 
         private void OnTriggerEnter(Collider other)
@@ -321,12 +326,15 @@ namespace ML_Agents.PF.Scripts.RL
 
             if (!other.gameObject.CompareTag(TagData.SPAWN_AREA_TAG)) return;
 
+            _area.BlockAfterLeave(_prevArea);
+            _prevArea = other.transform;
+
             _trainingStateMachine.ConditionsData.TraveledDistance++;
             _countDownTimer.TimerValueChanged(GameManager.Instance.RewardData.TimerValue);
 
             var visitedNodeResult = _nodeMapping.CheckMap(other.gameObject);
 
-            if (GameManager.Instance &&visitedNodeResult)
+            if (GameManager.Instance && visitedNodeResult)
             {
                 //visualize
                 other.gameObject.transform.GetComponent<MeshRenderer>().enabled = true;
@@ -353,7 +361,6 @@ namespace ML_Agents.PF.Scripts.RL
             _trainingStateMachine.ConditionsData.HasTouchedWall = true;
             _trainingStateMachine.RunOnHarmfulCollision();
         }
-
 
         private void OnCheckPointAchieved()
         {
@@ -411,12 +418,7 @@ namespace ML_Agents.PF.Scripts.RL
 
         private void UpdateRewardDataStruct()
         {
-            _trainingStateMachine.RewardDataStruct.SetData(
-                _trainingStateMachine.HasEpisodeEnded(),
-                _trainingStateMachine.FinalRewardConditions.ToArray(),
-                Utils.GetDistanceDifference(gameObject, _target),
-                _nodesDistances[_targetNodeIndex]
-            );
+            _trainingStateMachine.RewardDataStruct.SetData(_trainingStateMachine.HasEpisodeEnded(), _trainingStateMachine.FinalRewardConditions.ToArray(), Utils.GetDistanceDifference(gameObject, _target), _nodesDistances[_targetNodeIndex]);
         }
 
     #endregion
