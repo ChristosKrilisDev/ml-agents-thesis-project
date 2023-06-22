@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5680369525109235187}
   - component: {fileID: 6370617208440305155}
   - component: {fileID: 8530792980240008382}
+  - component: {fileID: 6887432661499611006}
   m_Layer: 0
   m_Name: BlockPath
   m_TagString: wall
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6277475922807024092}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.9311, y: 0.3006, z: -7.4433}
-  m_LocalScale: {x: 31.556664, y: 8.215228, z: 31.260307}
+  m_LocalScale: {x: 33.40183, y: 8.215228, z: 33.35012}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -95,3 +96,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6887432661499611006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6277475922807024092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6200e68c51e346e983b7a91509dbed2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsPlayerIn: 0

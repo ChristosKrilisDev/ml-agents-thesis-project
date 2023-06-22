@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Dijkstra.Scripts;
 using JetBrains.Annotations;
@@ -109,8 +110,20 @@ namespace ML_Agents.PF.Scripts.RL
 
                 Debug.Log("ADDED : Block");
                 var block = Instantiate(_block, area.transform, true);
+                StartCoroutine(ActivateBlock(block.gameObject.GetComponent<Block>()));
                 block.transform.localPosition = Vector3.zero;
                 _blocks.Add(block);
+            }
+        }
+
+        IEnumerator ActivateBlock(Block block)
+        {
+            block.Init();
+            yield return new WaitUntil(()=> block.IsPlayerIn == false);
+
+            if (block != null)
+            {
+                block.ChangeToWall();
             }
         }
 
