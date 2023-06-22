@@ -10,7 +10,7 @@ namespace ML_Agents.PF.Scripts.RL
 
         private int _spawnAmount;
         private GameObject _rewardNodePref;
-        private readonly List<GameObject> _spawnedRewards = new List<GameObject>();
+        private List<GameObject> _spawnedRewards = new List<GameObject>();
 
         private void Start()
         {
@@ -70,6 +70,8 @@ namespace ML_Agents.PF.Scripts.RL
             {
                 Destroy(obj);
             }
+
+            _spawnedRewards = new List<GameObject>();
         }
 
     }

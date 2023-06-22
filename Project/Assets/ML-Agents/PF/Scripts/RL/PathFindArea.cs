@@ -49,8 +49,14 @@ namespace ML_Agents.PF.Scripts.RL
         //todo :
         //revile rewards after hitting the check Point, or hide them if phase >= 3
         // move add reward to State machine from agent OnTriiger ender
+
+        public void ResetPathRewards()
+        {
+            _pathRewardManager.Reset();
+        }
         public PathFindArea CreateRewardNode(Transform nodePos, Transform prevNodePos)
         {
+
             _pathRewardManager.SpawnRewards(nodePos, prevNodePos);
 
             // var pathReward = Instantiate(RewardNodePref, Vector3.zero, Quaternion.Euler(0f, 0f, 0f),transform);
@@ -89,7 +95,7 @@ namespace ML_Agents.PF.Scripts.RL
             }
         }
 
-        public void AddBlockArea(int area)
+        private void AddBlockArea(int area)
         {
             if (GameManager.Instance.RewardData.BlockAreas)
             {
@@ -130,6 +136,28 @@ namespace ML_Agents.PF.Scripts.RL
         public void HideBlockArea(int index)
         {
             _blocks[index].gameObject.SetActive(false);
+        }
+
+        public void OnFinalGoalSetUp()
+        {
+
+            if (_blocks.Count > 0)
+            {
+                foreach (var block in _blocks)
+                {
+                    Destroy(block);
+                }
+            }
+            _blocks = new List<GameObject>();
+
+
+            int index = 0;
+            foreach (var area in _spawnAreas)
+            {
+                AddBlockArea(index++);
+                area.gameObject.transform.GetComponent<MeshRenderer>().enabled = false;
+            }
+
         }
 
         public void RandomizeWalls()

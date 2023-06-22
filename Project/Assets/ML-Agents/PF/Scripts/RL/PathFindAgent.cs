@@ -262,12 +262,15 @@ namespace ML_Agents.PF.Scripts.RL
 
             // Debug.Log($"#Player#{pathLen1} + {pathLen2} = {fullLength}");
 
-            //todo : add for second loop
-            for (int j = 0; j < _startHalfPath.PathNodes.Count; j++)
-            {
-                _area.HideBlockArea(_startHalfPath.PathNodes[j].AreaIndex);
-            }
+            HideListBlocks(_startHalfPath.PathNodes);
+        }
 
+        private void HideListBlocks(List<Node> nodesList)
+        {
+            for (int j = 0; j < nodesList.Count; j++)
+            {
+                _area.HideBlockArea(nodesList[j].AreaIndex);
+            }
         }
 
         private void ActivateNodeRewards(Path path, bool isFirstHalf = false)
@@ -367,10 +370,15 @@ namespace ML_Agents.PF.Scripts.RL
             _checkPoint.OnHit();
             _nodeMapping.Reset();
 
+            _area.ResetPathRewards();
             ActivateNodeRewards(_finalHalfPath);
             _trainingStateMachine.ConditionsData.HasFoundCheckpoint = true;
             _targetNodeIndex++;
             _trainingStateMachine.RunOnCheckPointReward();
+
+
+            _area.OnFinalGoalSetUp();
+            HideListBlocks(_finalHalfPath.PathNodes);
         }
 
         private void OnFinalGoalAchieved()
