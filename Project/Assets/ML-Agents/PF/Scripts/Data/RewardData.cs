@@ -19,7 +19,7 @@ namespace ML_Agents.PF.Scripts.Data
         public int Reward = 1;
 
         [Header("Penalty Rewards")]
-        [Range(0, -2)]
+        [Range(0, -5)]
         public float Penalty = -1;
 
         [Space]
