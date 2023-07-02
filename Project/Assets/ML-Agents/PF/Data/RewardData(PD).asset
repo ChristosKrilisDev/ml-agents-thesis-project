@@ -27,4 +27,7 @@ MonoBehaviour:
   PathRewardTotalValue: 1
   SpawnPathRewardAmount: 5
   UseRandomWallWidth: 1
+  MaxWallWidth: 18
   HideWalls: 0
+  BlockAreas: 1
+  BlockAfterLeave: 1

@@ -41,13 +41,13 @@ behaviors:
           num_layers: 3
         learning_rate: 0.0003
       gail:
-        strength: 0.0
+        strength: 0.1
         gamma: 0.99
         demo_path: Project/Demos/PFdemo.demo
     
     behavioral_cloning:
         demo_path: Project/Demos/PFdemo.demo
-        strength: 0.0
+        strength: 0.1
         steps: 150000   
         
     keep_checkpoints: 5
