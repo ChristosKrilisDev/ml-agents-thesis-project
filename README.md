@@ -20,7 +20,9 @@
   | **Phase D**| **SD** | **AD** |
 
 
-  See the [Getting Started Guide](GettingStartedGuide.md) for more detailed informations about installation and setting up the project..
+# Installation and Set Up
+
+  See the [Getting Started Guide](GettingStartedGuide) for more detailed informations about installation and setting up the project.
   
 # Training with mlagents-learn
 
