@@ -2,7 +2,7 @@
 
 
 
-#Training with mlagents-learn
+# Training with mlagents-learn
   
   documentation that corresponds to the release version you're using.
 - The `com.unity.ml-agents` package is [verified](https://docs.unity3d.com/2020.1/Documentation/Manual/pack-safe.html)
