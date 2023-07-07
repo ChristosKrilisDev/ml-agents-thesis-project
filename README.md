@@ -33,7 +33,7 @@ You will need to:
     1. Navigating to the menu ``<Window>`` -> ``<Package Manager>``.
     2. Enable ``<Preview Packages>`` in the ``<Advanced>`` dropdown.
     4. Find the latest Preview release of the package.
-    5. Hit Install.
+    5. Hit Download and Install.
 * Install the mlagents Python package
     1. Installing MLAgents
       ```sh
