@@ -15,9 +15,9 @@ You will need to:
     5. Hit Download and Install.
 * Install the mlagents Python package
     1. Installing MLAgents
-      ```sh
+    ```sh
       python -m pip install mlagents==0.27.0
-      ```
+    ```
     2. if you installed this correctly, you should be able to run
        ```sh
        mlagents-learn --help
