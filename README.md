@@ -1,17 +1,16 @@
 <img src="docs/images/AgentPf_Path.png" align="middle" width="3000"/>
 
-# Using RL To Solve Single-Source Shortest Path Problems In Video Game Environment
+# Solving Shortest Path Problems in Video Game Environments Using Reinforcement Learning
 
-About the thesis project... (under construction)
 
 **Features**
 
-- Solves sssp in video games
-- Use Dijkstra algorithm to validate the optimal distance
+- Train RL models to solve Single-Source Shortest Path Problems
+- Use the Dijkstra algorithm to validate the optimal path
 
-** Training Table **
-  
-  Training Scenarios :
+**Training Table**
+
+  Training Models, Phases and Naming :
   
   | **Training Type** | **Simple** | **Advanced** |
   |:-----------------:|:----------:|:------------:|
@@ -20,11 +19,12 @@ About the thesis project... (under construction)
   | **Phase C**| **SC** | **AC** |
   | **Phase D**| **SD** | **AD** |
   
+
+# Training with mlagents-learn
+
   documentation that corresponds to the release version you're using.
 - The `com.unity.ml-agents` package is [verified](https://docs.unity3d.com/2020.1/Documentation/Manual/pack-safe.html)
   for Unity 2020.1 and later. Verified packages releases are numbered 1.0.x
-
-# Training with mlagents-learn
 
 To view a description of all the CLI options accepted by mlagents-learn, use the --help
 ```sh
