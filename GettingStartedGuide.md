@@ -19,6 +19,6 @@ You will need to:
       python -m pip install mlagents==0.27.0
     ```
     2. if you installed this correctly, you should be able to run
-       ```sh
+    ```sh
        mlagents-learn --help
-       ```
+    ```
