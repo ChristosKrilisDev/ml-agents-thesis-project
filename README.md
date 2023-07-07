@@ -18,8 +18,10 @@
   | **Phase B**| **SB** | **AB** |
   | **Phase C**| **SC** | **AC** |
   | **Phase D**| **SD** | **AD** |
-  
 
+
+  See the [Getting Started Guide](GettingStarted.md) for more detailed informations about installation and setting up the project.
+  
 # Training with mlagents-learn
 
   documentation that corresponds to the release version you're using.
