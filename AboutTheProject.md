@@ -1,8 +1,4 @@
-
-
-
-
-# Training with mlagents-learn
+# Training with Mlagents
   
   documentation that corresponds to the release version you're using.
 - The `com.unity.ml-agents` package is [verified](https://docs.unity3d.com/2020.1/Documentation/Manual/pack-safe.html)
@@ -25,3 +21,35 @@ mlagents-learn <trainer-config-file> --env=<env_name> --run-id=<run-identifier>
 Note: environment is required!
 
 *Using an [Environment Executable](https://github.com/Unity-Technologies/ml-agents/blob/main/docs/Learning-Environment-Executable.md)
+
+
+# About the project
+
+
+Select ``<GameManager>`` from ``<Hierachy>`` window.
+  1. Change Training Phase or/and Training Type
+  2. Enable Training
+
+
+How to change Training rewards/penalty/signlas :
+
+You can change the training reward/penalty values by selecting a Reward Data.scriptableObject.
+Select ``<RewardData>`` from ``<Project>`` window in the Data folder (Asset/ML-Agents/PF/Data)
+  1. Timer Value (the time needs to pass before agent gets penalty for not changing node)
+  2. Time penalty multiplier
+  3. Reward
+  4. Penalty
+  5. Use Revisited Penalty (boolean)
+  6. Revisited Penalty
+  7. Step Penalty
+  8. Extra Distance
+  9. Step Reward Frequency
+  10. Step Reward Multiple
+  11. Epsilon
+  12. Use Path Rewards Data
+  13. Path Rewards Total Value
+  14. Spawn Path Rewards Counter
+  15. Use Random Wall Width
+  16. Max Wall Width
+  17. BA
+  18. BAL
