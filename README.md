@@ -24,12 +24,10 @@
 
   See the [Getting Started Guide](GettingStartedGuide.md) for more detailed informations about installation and setting up the project.
   
-# Training with mlagents-learn
+# Training with Mlagents
 
-  
   See the [About the project](AboutThePorject.md) for more detailed informations about installation and setting up the project.
-
-
+  
 # Visualize Metrics
 
 In order to observe the training process, either during training or afterward, start TensorBoard:
