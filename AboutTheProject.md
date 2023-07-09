@@ -29,11 +29,11 @@ This document provides instructions for modifying training settings and adjustin
 ## Modifying Training Settings
 
 To change the training phase or type, follow these steps:
-  1.Open the ``Hierarchy`` window
-  2.Select the ``GameManager``
-  3.Modify the desired Training Phase and/or Training Type
-  4.Enable Training CheckBox
-  5.Set the desired amount of training environments using the slider (value of 1 equal to 9 environments)
+  1. Open the ``Hierarchy`` window
+  2. Select the ``GameManager``
+  3. Modify the desired Training Phase and/or Training Type
+  4. Enable Training CheckBox
+  5. Set the desired amount of training environments using the slider (value of 1 equal to 9 environments)
 
 
 ## Adjusting Training Rewards/Penalties/Signals
@@ -45,24 +45,24 @@ To customize the reward/penalty values, perform the following steps:
   1. Locate the ``RewardData.scriptableObject`` in the ``Data`` folder of the Project window (Asset/ML-Agents/PF/Data).
   2. Open the ``RewardData`` scriptableObject you wish to change (there are 4 files, one for each phase)**.
   3. Modify the following parameters:
-    - ``Timer Value``: The time required to elapse before the agent receives a penalty for remaining on the same node.
-    - ``Time Penalty Multiplier``: A factor applied to the penalty for staying on a node beyond the timer value.
-    - ``Reward``: The reward value given to the agent.
-    - ``Penalty``: The penalty value applied to the agent.
-    - ``Use Revisited Penalty``: Toggle for enabling penalty when the agent revisits an old node.
-	- ``Revisited Penalty``: The penalty triggered when the agent revisits a previous node.
-	- ``Step Penalty``: The cumulative penalty incurred by the agent when the maximum step count is exceeded.!!
-	- ``Extra Distance``: Additional distance the agent must travel to find the optimal path.!!
-	- ``Step Reward Frequency``: Higher values result in reduced reward/distance.
-	- ``Step Reward Multiple``: Multiplier applied to the step reward.
-	- ``Epsilon``: Epsilon value for controlling exploration-exploitation trade-off.
-	- ``Use Path Rewards Data``: Toggle for utilizing path rewards data.
-	- ``Path Rewards Total Value``: The total reward value distributed among each path reward object (reward value/Spawn Path Rewards Counter).
-	- ``Spawn Path Rewards Counter``: Counter for spawning path rewards.
-	- ``Use Random Wall Width``: Toggle for randomizing wall widths.
-	- ``Max Wall Width``: Maximum width for randomized walls.
-	- ``BA`` (Block Areas): Blocks areas not part of the optimal path.
-	- ``BAL`` (Block Area After Leaving): Blocks areas after the agent departs from a node.
+    1. ``Timer Value``: The time required to elapse before the agent receives a penalty for remaining on the same node.
+    1. ``Time Penalty Multiplier``: A factor applied to the penalty for staying on a node beyond the timer value.
+    2. ``Reward``: The reward value given to the agent.
+    3. ``Penalty``: The penalty value applied to the agent.
+    4. ``Use Revisited Penalty``: Toggle for enabling penalty when the agent revisits an old node.
+	  5. ``Revisited Penalty``: The penalty triggered when the agent revisits a previous node.
+	  6. ``Step Penalty``: The cumulative penalty incurred by the agent when the maximum step count is exceeded.!!
+	  7. ``Extra Distance``: Additional distance the agent must travel to find the optimal path.!!
+	  8. ``Step Reward Frequency``: Higher values result in reduced reward/distance.
+	  9. ``Step Reward Multiple``: Multiplier applied to the step reward.
+	  10. ``Epsilon``: Epsilon value for controlling exploration-exploitation trade-off.
+	  11. ``Use Path Rewards Data``: Toggle for utilizing path rewards data.
+	  12. ``Path Rewards Total Value``: The total reward value distributed among each path reward object (reward value/Spawn Path Rewards Counter).
+	  13. ``Spawn Path Rewards Counter``: Counter for spawning path rewards.
+  	14. ``Use Random Wall Width``: Toggle for randomizing wall widths.
+  	15. ``Max Wall Width``: Maximum width for randomized walls.
+	  16. ``BA`` (Block Areas): Blocks areas not part of the optimal path.
+	  17. ``BAL`` (Block Area After Leaving): Blocks areas after the agent departs from a node.
   
 
 
