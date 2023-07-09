@@ -26,7 +26,7 @@
   
 # Training with Mlagents
 
-  See the [About the project](AboutThePorject.md) for more detailed informations about installation and setting up the project.
+  See the [About the project](AboutTheProject.md) for more detailed informations about installation and setting up the project.
   
 # Visualize Metrics
 
