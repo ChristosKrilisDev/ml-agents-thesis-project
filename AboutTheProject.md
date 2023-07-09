@@ -53,3 +53,13 @@ Select ``<RewardData>`` from ``<Project>`` window in the Data folder (Asset/ML-A
   16. Max Wall Width, randomize walls
   17. BA, Block Area
   18. BAL, Block Area After leaving a node
+
+
+
+# Renaming The Models
+
+After you finish training your models you can drag and drop them inside the Models Folder (see Screenshot)
+![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/868093f9-006d-447d-8a53-aac8085091a8)
+
+Normally, the trained models will be saved at ``<\ml-agents-thesis-project\results>``. The default name will be ``PF``. After you place each model on the correct folder, you can use the ``Rename NN-Models`` tool to automatically rename the models(The letter NN model will have an increased number in the end of the name)
+![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/112d979c-69e8-4849-ba68-2f3dc14bb5ef)
