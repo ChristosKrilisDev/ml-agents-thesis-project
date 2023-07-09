@@ -30,6 +30,9 @@ Select ``<GameManager>`` from ``<Hierachy>`` window.
 
 How to change Training rewards/penalty/signlas :
 
+![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/42fdaabc-0e39-4951-91bc-0ce907ab8c26)
+
+
 You can change the training reward/penalty values by selecting a Reward Data.scriptableObject.
 Select ``<RewardData>`` from ``<Project>`` window in the Data folder (Asset/ML-Agents/PF/Data)
   1. Timer Value, the time needs to pass before agent gets penalty for staying on the same node
