@@ -1,9 +1,6 @@
-# Training with Mlagents
-  
-  documentation that corresponds to the release version you're using.
-- The `com.unity.ml-agents` package is [verified](https://docs.unity3d.com/2020.1/Documentation/Manual/pack-safe.html)
-  for Unity 2020.1 and later. Verified packages releases are numbered 1.0.x
+![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/0255e5b0-d1a5-4341-9474-5d62ea7746a7)# Training with Mlagents
 
+  
 To view a description of all the CLI options accepted by mlagents-learn, use the --help
 ```sh
 mlagents-learn --help
@@ -35,21 +32,21 @@ How to change Training rewards/penalty/signlas :
 
 You can change the training reward/penalty values by selecting a Reward Data.scriptableObject.
 Select ``<RewardData>`` from ``<Project>`` window in the Data folder (Asset/ML-Agents/PF/Data)
-  1. Timer Value (the time needs to pass before agent gets penalty for not changing node)
+  1. Timer Value, the time needs to pass before agent gets penalty for staying on the same node
   2. Time penalty multiplier
   3. Reward
   4. Penalty
-  5. Use Revisited Penalty (boolean)
-  6. Revisited Penalty
-  7. Step Penalty
-  8. Extra Distance
-  9. Step Reward Frequency
+  5. Use Revisited Penalty
+  6. Revisited Penalty, penalty triggered when agent revisit a old node
+  7. Step Penalty, the total penalty agent will get over the Max steps count.
+  8. Extra Distance, extra distance agent has to find the optimal path
+  9. Step Reward Frequency, higher values => less reward/distance
   10. Step Reward Multiple
   11. Epsilon
   12. Use Path Rewards Data
-  13. Path Rewards Total Value
+  13. Path Rewards Total Value, the total reward (reward value/Spawn Path Rewards Counter) that each path reward object will have
   14. Spawn Path Rewards Counter
   15. Use Random Wall Width
-  16. Max Wall Width
-  17. BA
-  18. BAL
+  16. Max Wall Width, randomize walls
+  17. BA, Block Area
+  18. BAL, Block Area After leaving a node
