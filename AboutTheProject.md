@@ -1,4 +1,4 @@
-![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/0255e5b0-d1a5-4341-9474-5d62ea7746a7)# Training with Mlagents
+# Training with Mlagents
 
   
 To view a description of all the CLI options accepted by mlagents-learn, use the --help
