@@ -29,10 +29,10 @@ This document provides instructions for modifying training settings and adjustin
 ## Modifying Training Settings
 
 To change the training phase or type, follow these steps:
-  1.Open the ``Hierarchy`` window.
-  2.Select the ``GameManager``.
-  3.Modify the desired Training Phase and/or Training Type.
-  4.Enable Training CheckBox.
+  1.Open the ``Hierarchy`` window
+  2.Select the ``GameManager``
+  3.Modify the desired Training Phase and/or Training Type
+  4.Enable Training CheckBox
   5.Set the desired amount of training environments using the slider (value of 1 equal to 9 environments)
 
 
