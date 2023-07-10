@@ -50,8 +50,8 @@ To customize the reward/penalty values, perform the following steps:
 	- ``Penalty``: The penalty value applied to the agent.
 	- ``Use Revisited Penalty``: Toggle for enabling penalty when the agent revisits an old node.
 	- ``Revisited Penalty``: The penalty triggered when the agent revisits a previous node.
-	- ``Step Penalty``: The cumulative penalty incurred by the agent when the maximum step count is exceeded.!!
-	- ``Extra Distance``: Additional distance the agent must travel to find the optimal path.!!
+	- ``Step Penalty``: The cumulative penalty the agent takes for the legnth of each episode.
+	- ``Extra Distance``: Additional distance the agent have travel to find the optimal path before the episode terminates.
 	- ``Step Reward Frequency``: Higher values result in reduced reward/distance.
 	- ``Step Reward Multiple``: Multiplier applied to the step reward.
 	- ``Epsilon``: Epsilon value for controlling exploration-exploitation trade-off.
