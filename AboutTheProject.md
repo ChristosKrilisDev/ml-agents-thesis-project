@@ -85,21 +85,6 @@ There are several key game object "tags" you should be aware of:
 - ``Reward``: Tag assigned to items with rewards.
 
 
-## Start The Training
-
-Before you begin training your model, ensure that you have followed the Getting Started Guide. 
-Once you have done so, follow these steps:
-
-1. Open a command line and navigate to the root folder of your project (the path should end with ..\ml-agents-thesis-project).
-2. If you have installed the necessary Python packages and set up a Virtual Environment, activate it.
-3. Set the desired Training Phase, Training Type, and the number of environments within Unity.
-4. Ensure that the RL Training checkbox is checked.
-5. Verify that the agent prefab has the Behavior Type set to Default. You can find this setting on the Behavior Parameters component attached to the agent game object.
-6. In the command line, use the mlagents-learn commands (see the Training with Mlagents section above) to initiate the Python API.
-7. Press the Play button in Unity to start the training process.
-8. Training will commence, and once completed, you're done!
-
-
 ## Visualize Dijkstra Tool
 
 To visualize a specific area using the Dijkstra tool, follow these steps:
@@ -125,3 +110,39 @@ Once you have completed training your models, follow these steps to rename and o
     - ![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/112d979c-69e8-4849-ba68-2f3dc14bb5ef)
 
 
+
+
+
+# Start The Training
+
+Before you begin training your model, ensure that you have followed the Getting Started Guide. 
+Once you have done so, follow these steps:
+
+1. Open a command line and navigate to the root folder of your project (the path should end with ..\ml-agents-thesis-project).
+2. If you have installed the necessary Python packages and set up a Virtual Environment, activate it.
+3. Set the desired Training Phase, Training Type, and the number of environments within Unity.
+4. Ensure that the RL Training checkbox is checked.
+5. Verify that the agent prefab has the Behavior Type set to Default. You can find this setting on the Behavior Parameters component attached to the agent game object.
+6. In the command line, use the mlagents-learn commands (see the Training with Mlagents section above) to initiate the Python API.
+7. Press the Play button in Unity to start the training process.
+8. Training will commence, and once completed, you're done!
+
+
+# Visualize Metrics
+
+
+To observe the training process, whether during training or afterward, you can start TensorBoard and visualize the metrics by following these steps:
+
+1. Open a command line or terminal window.
+2. Navigate to the root folder of your project (the path should end with ..\ml-agents-thesis-project).
+3. If you have installed the necessary Python packages and set up a Virtual Environment, activate it.
+4. Execute the following command to start TensorBoard:
+  - ```sh
+    tensorboard --logdir results --port 6006
+    ```
+5. Open a web browser and navigate to [localhost:6006](http://localhost:6006) or click on the provided link in the command line output.
+6. The TensorBoard web interface will load, allowing you to explore and visualize various training metrics, including graphs, histograms, scalars, and more.
+7. Use the navigation and filtering options within TensorBoard to focus on specific metrics or compare different training sessions.
+8. Keep TensorBoard running as long as you want to observe the training progress or review past training sessions.
+
+Note: The ``results`` is a folder located to ``..\ml-agents-thesis-project\``.
