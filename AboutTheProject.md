@@ -4,7 +4,7 @@
 This document provides instructions for modifying training settings and adjusting reward/penalty values of the project.
 
 
-## Training with Mlagents
+### Training with Mlagents
 
 To view a description of all the CLI options accepted by mlagents-learn, use the --help
 ```sh
@@ -25,7 +25,7 @@ Note: environment is required!
 *Using an [Environment Executable](https://github.com/Unity-Technologies/ml-agents/blob/main/docs/Learning-Environment-Executable.md)
 
 
-## Modifying Training Settings
+### Modifying Training Settings
 
 To change the training phase or type, follow these steps:
   1. Open the ``Hierarchy`` window
@@ -35,7 +35,7 @@ To change the training phase or type, follow these steps:
   5. Set the desired amount of training environments using the slider (value of 1 equal to 9 environments)
 
 
-## Adjusting Training Rewards/Penalties/Signals
+### Adjusting Training Rewards/Penalties/Signals
 
 To customize the reward/penalty values, perform the following steps:
 
@@ -64,7 +64,7 @@ To customize the reward/penalty values, perform the following steps:
 	- ``BAL`` (Block Area After Leaving): Blocks areas after the agent departs from a node.
 
 
-## Agent and Environment Overview
+### Agent and Environment Overview
 
 The Agent utilizes Raycasting to gather information from its environment. You have the flexibility to adjust the Raycast values based on your requirements. Follow these steps to modify the Raycast values:
 
@@ -85,7 +85,7 @@ There are several key game object "tags" you should be aware of:
 - ``Reward``: Tag assigned to items with rewards.
 
 
-## Visualize Dijkstra Tool
+### Visualize Dijkstra Tool
 
 To visualize a specific area using the Dijkstra tool, follow these steps:
 
@@ -99,7 +99,7 @@ If, for any reason, the tool does not function properly, you can try preloading 
 ![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/68206dce-4413-49b8-9dd2-f6c7e2a49f29)
 
 
-## Renaming The Models Tool
+### Renaming The Models Tool
 
 Once you have completed training your models, follow these steps to rename and organize them within the project:
 1. Locate the ``Models`` Folder and open it.
@@ -108,6 +108,7 @@ Once you have completed training your models, follow these steps to rename and o
 4. Drag and drop each trained model into the appropriate folder within the Models Folder.
 5. To automatically rename the models, utilize the ``Rename NN-Models`` tool available in the top toolbar of the Unity Engine.
     - ![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/112d979c-69e8-4849-ba68-2f3dc14bb5ef)
+
 
 
 
