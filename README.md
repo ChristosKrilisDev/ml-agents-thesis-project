@@ -28,13 +28,6 @@
 
   See the [About the project](AboutTheProject.md) for more detailed informations about installation and setting up the project.
   
-# Visualize Metrics
-
-In order to observe the training process, either during training or afterward, start TensorBoard:
-```sh
-tensorboard --logdir results --port 6006
-```
-Open a browser window and navigate to [localhost:6006](http://localhost:6006).
 
 
 # This Project is using the Unity ML Agent Toolkit
