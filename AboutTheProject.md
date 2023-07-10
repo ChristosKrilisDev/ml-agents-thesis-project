@@ -63,6 +63,7 @@ To customize the reward/penalty values, perform the following steps:
 	- ``BA`` (Block Areas): Blocks areas not part of the optimal path.
 	- ``BAL`` (Block Area After Leaving): Blocks areas after the agent departs from a node.
 
+
 ## Agent and Environment Overview
 
 The Agent utilizes Raycasting to gather information from its environment. You have the flexibility to adjust the Raycast values based on your requirements. Follow these steps to modify the Raycast values:
@@ -83,7 +84,20 @@ There are several key game object "tags" you should be aware of:
 - ``SpawnArea``: Tag assigned to spawn areas or nodes.
 - ``Reward``: Tag assigned to items with rewards.
 
+
 ## Start The Training
+
+Before you begin training your model, ensure that you have followed the Getting Started Guide. 
+Once you have done so, follow these steps:
+
+1. Open a command line and navigate to the root folder of your project (the path should end with ..\ml-agents-thesis-project).
+2. If you have installed the necessary Python packages and set up a Virtual Environment, activate it.
+3. Set the desired Training Phase, Training Type, and the number of environments within Unity.
+4. Ensure that the RL Training checkbox is checked.
+5. Verify that the agent prefab has the Behavior Type set to Default. You can find this setting on the Behavior Parameters component attached to the agent game object.
+6. In the command line, use the mlagents-learn commands (see the Training with Mlagents section above) to initiate the Python API.
+7. Press the Play button in Unity to start the training process.
+8. Training will commence, and once completed, you're done!
 
 
 ## Visualize Dijkstra Tool
