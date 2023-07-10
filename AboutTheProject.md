@@ -67,20 +67,21 @@ To customize the reward/penalty values, perform the following steps:
 
 The Agent utilizes Raycasting to gather information from its environment. You have the flexibility to adjust the Raycast values based on your requirements. Follow these steps to modify the Raycast values:
 
-1. Open the area prefab located in ML-Agents/Prefabs/Area.
-2. Within the prefab, select the Agent game object.
-   - Alternatively, you can locate and select the Agent game object in the Hierarchy window. However, ensure you press "Apply Changes" to update the changes to the prefab.
+1. Open the ``Area`` prefab located in ``ML-Agents/Prefabs/Area``.
+2. Within the prefab, select the ``Agent`` game object.
+   - Alternatively, you can locate and select the Agent game object in the Hierarchy window. However, ensure you press ``Apply Change`` to update the changes to the prefab.
+
 
 There are several key game object "tags" you should be aware of:
 
-- Agent: Represents the agent itself.
-- Wall: Tag assigned to deadly objects that the agent must avoid coming into contact with.
-- Goal: Tag assigned to objects that the agent needs to find.
-- SwitchOn: Tag assigned to the first goal object. When the agent touches it, the final goal is revealed.
-- SwitchOff: Tag assigned to the first goal object. It changes its value when the agent interacts with it.
-- PFObj: Tag assigned to small objects with rewards.
-- SpawnArea: Tag assigned to spawn areas or nodes.
-- Reward: Tag assigned to items with rewards.
+- ``Agent``: Represents the agent itself.
+- ``Wall``: Tag assigned to deadly objects that the agent must avoid coming into contact with.
+- ``Goal``: Tag assigned to objects that the agent needs to find.
+- ``SwitchOn``: Tag assigned to the first goal object. When the agent touches it, the final goal is revealed.
+- ``SwitchOff``: Tag assigned to the first goal object. It changes its value when the agent interacts with it.
+- ``PFObj``: Tag assigned to small objects with rewards.
+- ``SpawnArea``: Tag assigned to spawn areas or nodes.
+- ``Reward``: Tag assigned to items with rewards.
 
 ## Start The Training
 
