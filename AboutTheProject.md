@@ -63,7 +63,20 @@ To customize the reward/penalty values, perform the following steps:
 	- ``Max Wall Width``: Maximum width for randomized walls.
 	- ``BA`` (Block Areas): Blocks areas not part of the optimal path.
 	- ``BAL`` (Block Area After Leaving): Blocks areas after the agent departs from a node.
-  
+
+
+# Visualize Dijkstra Tool
+
+To visualize a specific area using the Dijkstra tool, follow these steps:
+
+
+1. Open the ``Hierarchy`` window and locate the desired area you want to visualize.
+2. Select the ``Graph-Dijkstra``, which is a child object of the ``AreaPF`` game object.
+3. Press the ``Play`` button in Unity to activate the Dijkstra tool.
+
+If, for any reason, the tool does not function properly, you can try preloading the Unity layout.
+
+![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/68206dce-4413-49b8-9dd2-f6c7e2a49f29)
 
 
 # Renaming The Models
@@ -71,10 +84,10 @@ To customize the reward/penalty values, perform the following steps:
 
 Once you have completed training your models, follow these steps to rename and organize them within the project:
 1. Locate the ``Models`` Folder and open it.
-  - ![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/868093f9-006d-447d-8a53-aac8085091a8)
+    - ![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/868093f9-006d-447d-8a53-aac8085091a8)
 3. By default, the trained models are saved in the ``<\ml-agents-thesis-project\results>`` directory, with the name "PF".
 4. Drag and drop each trained model into the appropriate folder within the Models Folder.
 5. To automatically rename the models, utilize the ``Rename NN-Models`` tool available in the top toolbar of the Unity Engine.
-  - ![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/112d979c-69e8-4849-ba68-2f3dc14bb5ef)
+    - ![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/112d979c-69e8-4849-ba68-2f3dc14bb5ef)
 
 
