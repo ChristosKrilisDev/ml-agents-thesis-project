@@ -6,7 +6,6 @@ This document provides instructions for modifying training settings and adjustin
 
 ## Training with Mlagents
 
-  
 To view a description of all the CLI options accepted by mlagents-learn, use the --help
 ```sh
 mlagents-learn --help
@@ -64,6 +63,27 @@ To customize the reward/penalty values, perform the following steps:
 	- ``BA`` (Block Areas): Blocks areas not part of the optimal path.
 	- ``BAL`` (Block Area After Leaving): Blocks areas after the agent departs from a node.
 
+## Agent and Environment Overview
+
+The Agent utilizes Raycasting to gather information from its environment. You have the flexibility to adjust the Raycast values based on your requirements. Follow these steps to modify the Raycast values:
+
+1. Open the area prefab located in ML-Agents/Prefabs/Area.
+2. Within the prefab, select the Agent game object.
+   - Alternatively, you can locate and select the Agent game object in the Hierarchy window. However, ensure you press "Apply Changes" to update the changes to the prefab.
+
+There are several key game object "tags" you should be aware of:
+
+- Agent: Represents the agent itself.
+- Wall: Tag assigned to deadly objects that the agent must avoid coming into contact with.
+- Goal: Tag assigned to objects that the agent needs to find.
+- SwitchOn: Tag assigned to the first goal object. When the agent touches it, the final goal is revealed.
+- SwitchOff: Tag assigned to the first goal object. It changes its value when the agent interacts with it.
+- PFObj: Tag assigned to small objects with rewards.
+- SpawnArea: Tag assigned to spawn areas or nodes.
+- Reward: Tag assigned to items with rewards.
+
+## Start The Training
+
 
 ## Visualize Dijkstra Tool
 
@@ -79,8 +99,7 @@ If, for any reason, the tool does not function properly, you can try preloading 
 ![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/68206dce-4413-49b8-9dd2-f6c7e2a49f29)
 
 
-## Renaming The Models
-
+## Renaming The Models Tool
 
 Once you have completed training your models, follow these steps to rename and organize them within the project:
 1. Locate the ``Models`` Folder and open it.
