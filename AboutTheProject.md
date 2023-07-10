@@ -1,4 +1,10 @@
-# Training with Mlagents
+# Project Overview
+
+
+This document provides instructions for modifying training settings and adjusting reward/penalty values of the project.
+
+
+## Training with Mlagents
 
   
 To view a description of all the CLI options accepted by mlagents-learn, use the --help
@@ -18,12 +24,6 @@ mlagents-learn <trainer-config-file> --env=<env_name> --run-id=<run-identifier>
 Note: environment is required!
 
 *Using an [Environment Executable](https://github.com/Unity-Technologies/ml-agents/blob/main/docs/Learning-Environment-Executable.md)
-
-
-# Project Overview
-
-
-This document provides instructions for modifying training settings and adjusting reward/penalty values of the project.
 
 
 ## Modifying Training Settings
@@ -65,7 +65,7 @@ To customize the reward/penalty values, perform the following steps:
 	- ``BAL`` (Block Area After Leaving): Blocks areas after the agent departs from a node.
 
 
-# Visualize Dijkstra Tool
+## Visualize Dijkstra Tool
 
 To visualize a specific area using the Dijkstra tool, follow these steps:
 
@@ -79,7 +79,7 @@ If, for any reason, the tool does not function properly, you can try preloading 
 ![image](https://github.com/ChristosKrilisDev/ml-agents-thesis-project/assets/60070820/68206dce-4413-49b8-9dd2-f6c7e2a49f29)
 
 
-# Renaming The Models
+## Renaming The Models
 
 
 Once you have completed training your models, follow these steps to rename and organize them within the project:
